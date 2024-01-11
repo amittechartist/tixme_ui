@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/tixme_ui/*"
+  to = "/index.html"
+  status = 200

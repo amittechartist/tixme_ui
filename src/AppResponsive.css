@@ -1,0 +1,51 @@
+@media only screen and (max-width: 900px) {
+    .user_type_btn {
+        padding: 9px 17px 3px 17px;
+        font-size: 14px;
+    }
+    .header-right .header-profile img {
+        width: 25px;
+        height: 25px;
+    }
+    span.user_name {
+        font-size: 11px;
+    }
+    .whiteblueicon_box {
+        padding: 2px 0px;
+    }
+    .dash-header-btns .whiteblueicontitle {
+        font-size: 14px;
+        margin-right: 0;
+    }
+    .dash-header-btns .whitestar-icon {
+        display: none;
+    }
+    .header-right .nav-item {
+        height: 85%;
+    }
+    .list-data {
+        padding: 20px 40px;
+    }
+    .event_list_box_main .location-name{
+        margin-left: 13px;
+        padding-top: 25px;
+        margin-bottom: 20px;
+    }
+    .event_list_box_main .organizer-name-sec {
+        display: contents;
+    }
+    .event_list_box_main .list-ticket-count {    
+        text-align: right;
+        font-size: 14px;
+    }
+    .event_list_box_main .mob-style {
+        display: grid;
+        justify-content: center;
+    }
+    .list-Ticket-amount {
+        font-size: 13px;
+    }
+    .list-Total-Ticket {
+        font-size: 11px;
+    }
+}

@@ -1,0 +1,54 @@
+.re {
+    position: relative
+}
+
+.about11 {
+    width: 100% !important;
+}
+
+@media (min-width:900px) {
+    .re2 {
+        position: relative
+    }
+    .about2 {
+        width: 100% !important;
+    }
+}
+
+@media (min-width:900px) and (max-width:970px) {
+    .long-text {
+        padding-top: 450px;
+
+    }
+}
+
+@media (min-width: 970px) and (max-width: 1100px) {
+    .long-text {
+        padding-top: 550px;
+
+    }
+}
+
+@media (max-width: 1100px) {
+    .web-icon-about {
+        width: 80px !important;
+    }
+
+    .about_top_section {
+        flex-direction: column;
+    }
+
+    .long-text {
+        width: 100%;
+    }
+
+    .re {
+        width: unset;
+    }
+}
+
+@media (max-width: 1500px) {
+    .about_banner_text {
+        line-height: 64px !important;
+    }
+}

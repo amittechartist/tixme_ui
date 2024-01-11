@@ -1,0 +1,1153 @@
+@media only screen and (max-width: 900px) {
+    .header-item-overlay {
+        z-index: 34;
+        position: fixed;
+        width: 100%;
+        background: #ffffff;
+        top: 0;
+        left: 0;
+        right: 0;
+        opacity: 0.75;
+        height: 66px;
+    }
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 66px;
+        background-color: #ffffff;
+        position: sticky;
+        width: 100%;
+        top: 0;
+        z-index: 35;
+    }
+    .flip-text-animation {
+        height: 50px;
+    }
+
+    p.banner_shop_desc {
+        font-size: 9px;
+        line-height: 11px;
+        display: flex;
+        align-items: center;
+    }
+
+    .in-event-page-cart-sec .price-section {
+        max-width: 60px;
+    }
+
+    p.category-title {
+        font-size: 9px;
+        right: 18px;
+    }
+
+    .event-title-home {
+        top: -17px;
+        left: 27px;
+    }
+
+    p.banner_text {
+        font-size: 15px;
+        line-height: 38px;
+        padding-bottom: 0px;
+    }
+
+    .find-nearby-section {
+        background-image: none;
+        border: 1px solid #b9d1f5;
+        border-radius: 9px;
+        height: auto;
+        padding: 16px;
+    }
+
+    select.theme-dropdown {
+        width: auto;
+        margin-bottom: 14px;
+    }
+
+    select.category-select {
+        width: 216px
+    }
+
+    select.location-select {
+        width: 100px
+    }
+
+    input.theme-input {
+        border: 1px solid #B8B9B9;
+        height: 45px;
+        width: 285px;
+        border-radius: 11px;
+        margin-right: 20px;
+        padding-left: 15px;
+        background: #ffffff !important;
+        color: #6495ED;
+    }
+
+    input.theme-input {
+        width: 285px;
+    }
+
+    .category-items-box {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .event-title-home img {
+        width: 18px;
+    }
+
+    .event-category-img {
+
+        font-size: 10px;
+    }
+
+    span.on-img-date-val {
+        top: 2px;
+    }
+
+    span.on-img-date img {
+        height: auto;
+        width: 19px;
+        margin-right: 8px;
+    }
+
+    .location-name {
+
+        left: 15px;
+        top: 7px;
+    }
+
+    .event-box-mobile {
+        margin: 0px 00px;
+    }
+
+    .event-title-home {
+        font-size: 26px;
+        position: relative;
+    }
+
+    .event-box-mobile .event-box-style {
+        margin: 0px 14px;
+    }
+
+    img.organiger-logo {
+        height: auto;
+        width: 45px;
+    }
+
+    .organizer-name {
+        font-size: 15px;
+    }
+
+    .event-name span {
+        font-size: 13px;
+        margin-top: 12px;
+        margin-bottom: 0;
+    }
+
+    .event-name p {
+        font-size: 11px;
+        margin-bottom: 0;
+    }
+
+    .More-events .ticket-price-area-bg {
+        background-position: 0px 73px;
+    }
+
+    span.on-img-date-val {
+        top: 4px;
+    }
+
+    .on-img-date {
+        right: 11px;
+    }
+
+    .More-events .event-name p {
+        font-size: 12px !important;
+        color: #000;
+        padding-bottom: 24px;
+    }
+
+    .location span {
+        font-size: 10px;
+    }
+
+    .price {
+        font-size: 23px;
+    }
+
+    .cut-price {
+        font-size: 15px;
+    }
+
+    .location {
+        margin-bottom: 0;
+    }
+
+    .count-box {
+        padding: 32px 36px;
+        width: auto;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .count-box-title {
+        font-size: 30px;
+        position: relative;
+        top: -18px;
+    }
+
+    .footer-right-box ul li {
+        font-size: 14px;
+    }
+
+    .count-box-count {
+        font-size: 25px;
+        margin-right: -7px;
+        margin-top: -15px;
+    }
+
+    .OurPartnerIcon-title {
+        height: auto;
+        width: 250px;
+    }
+
+    .OurPartnerIcon-title-box {
+        text-align: center;
+        margin: 0px !important;
+    }
+
+    .partner-slider img {
+        height: auto;
+        width: 55px;
+        margin-bottom: 24px;
+    }
+
+    .partner-slider img {
+
+        margin: 0px 0px !important;
+    }
+
+    .subsacribe-box {
+        height: auto;
+        width: 100%;
+        margin-top: 0;
+        margin-bottom: 50px;
+    }
+
+    .subsacribe-content {
+        padding: 0;
+    }
+
+    span.Want-to-receive {
+        font-size: 9px;
+        line-height: 19px;
+        margin-top: 25px;
+    }
+
+    .button-join .bg-style-white {
+        padding: 4px 8px !important;
+    }
+
+    .footer-input {
+        height: 28px;
+        width: 135px;
+        margin-right: 8px;
+        padding: 1px 14px;
+        display: inline;
+        border-radius: 5px;
+    }
+
+    .Find-Near-form {
+        width: fit-content;
+        flex-direction: column;
+    }
+
+    .event-list-bg {
+        background-image: none;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        height: auto;
+    }
+
+    img.LogoIcon-footer {
+        right: 0px;
+        top: 0;
+        height: 81px;
+    }
+
+    .subsscribe-box-style {
+        position: relative;
+        top: 28px;
+        padding-bottom: 30px;
+    }
+
+    .subsscribe-form-input-area {
+        margin: 6px 1px !important;
+    }
+
+    .subscribe-btn {
+        position: relative;
+        top: 18px;
+    }
+
+    .website_top_menu-footer .nav-item {
+        margin-bottom: 18px;
+    }
+
+    img.footer-logo {
+        height: auto;
+        width: 111px;
+    }
+
+    .Welcome_to_text {
+        font-size: 12px;
+        padding-right: 0;
+        line-height: 17px;
+    }
+
+    .footer-box-style {
+        border-radius: 30px;
+        padding: 11px;
+    }
+
+    .left-footer-logo-box {
+        padding-right: 20px;
+        padding-left: 20px;
+        margin-bottom: 20px;
+    }
+
+    .right-footer-logo-box {
+        padding-right: 32px;
+        padding-left: 32px;
+    }
+
+    .footer-short-text {
+        position: absolute;
+        bottom: -14px;
+    }
+
+    .event-title {
+        font-size: 26px;
+        margin: 0 !important;
+    }
+
+    .event-category-title {
+        padding: 8px 21px;
+        font-size: 12px;
+    }
+
+    span.event-duration.d-block {
+        font-size: 9px;
+    }
+
+    span.event-time.d-block {
+        font-size: 12px;
+    }
+
+    .event-time-area {
+        margin-bottom: 23px;
+    }
+
+    .desc-sec p {
+        font-size: 10px;
+    }
+
+    .event-category-title-mobile {
+        font-size: 8px;
+    }
+
+    .right-box-title p {
+        font-size: 16px;
+    }
+
+    .event-view-page .organizer-name-sec {
+        height: 30px;
+    }
+
+    .event-view-page .event-name span {
+        font-size: 14px;
+        margin-top: 13px;
+        margin-bottom: 0;
+    }
+
+    .button-join .bg-style {
+        padding: 10px 14px !important;
+        font-size: 9px;
+    }
+
+    .whitestar-icon img {
+        height: auto;
+        width: 15px;
+    }
+
+    .button-border {
+        padding: 6px 8px !important;
+        font-size: 11px;
+    }
+
+    .big-screen {
+        display: none;
+    }
+
+    ul.website_top_menu li {
+        display: inline-block;
+        margin: 0px 6px;
+    }
+
+    .mobile-screen {
+        display: block;
+    }
+
+    .mobile-screen {
+        display: block;
+        position: relative;
+        height: auto;
+        width: 75px;
+        margin: 0px -9px !important;
+    }
+
+    .footer-title {
+        font-size: 22px;
+    }
+
+    .category-section {
+        margin: 0px 10px;
+    }
+
+    .category-box-responsive {
+        margin-top: 0px !important;
+    }
+
+    .footer-head .mb-5 {
+        margin-bottom: 0px !important;
+    }
+
+    a.button-join img {
+        height: auto;
+        width: 12px;
+    }
+
+    .mob-sc-css-head-btn {
+        margin-left: -25px;
+    }
+
+    li.nav-item.mob-sc-css-head-btn-mar {
+        margin-left: 45px;
+        margin-right: -23px;
+    }
+
+    .header-btn-res a.button-join img {
+        height: auto;
+        width: 16px;
+    }
+
+    .website_top_menu {
+        float: inline-start;
+    }
+
+    img.web-icon-about {
+        display: none;
+    }
+
+    .about_banner_text {
+        font-size: 35px !important;
+        padding: 0px;
+        line-height: 48px !important;
+    }
+
+    .about_banner_short_text {
+        font-size: 15px;
+        position: relative;
+        top: 0px;
+        right: 0px;
+    }
+
+    img.about11 {
+        height: auto;
+        width: -webkit-fill-available;
+        border-radius: 26px;
+        position: relative;
+        bottom: inherit;
+        top: 0;
+    }
+
+    p.about_banner_short_text {
+        padding-left: 4px;
+        color: #000;
+        font-size: 15px;
+        position: relative;
+        top: inherit;
+        right: initial;
+    }
+
+    .As_a_leading_sec {
+        padding: 0px 0px;
+        text-align: left;
+        margin-top: 0px;
+    }
+
+    .As_a_leading_sec h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #434546;
+        line-height: 32px;
+    }
+
+    img.about2 {
+        height: auto;
+        width: -webkit-fill-available;
+        border-radius: 26px;
+    }
+
+    .about2_box h3 {
+        font-size: 30px;
+        padding-right: 0px;
+        font-weight: 400;
+        color: #0047ab;
+        padding-top: 33px;
+    }
+
+    h3.title-banner-h3 {
+        padding: 3px 0px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 29px;
+    }
+
+    .summernote-content h5 {
+        font-size: 18px;
+    }
+
+    .faq-box span.faq-title {
+        font-size: 12px;
+    }
+
+    .faq-box span.faq-sl-no {
+        font-size: 20px;
+        margin-right: 11px;
+    }
+
+    .faq-box p.faq-text {
+        color: #000;
+        font-size: 9px;
+        padding: 0px 0px;
+    }
+
+    .contact-2 {
+        padding: 0px 30px
+    }
+
+    .contact-1 {
+        padding: 0px 30px
+    }
+
+    .contact-3 {
+        padding: 0px 30px
+    }
+
+    .contact-4 {
+        padding: 0px 30px
+    }
+
+    .contact-5 {
+        padding: 0px 30px
+    }
+
+    .contact-title {
+        font-size: 18px;
+    }
+
+    p.contact-desc {
+        font-size: 12px;
+    }
+
+    .Want-to-receive span {
+        display: inline;
+    }
+
+    .subsscribe-box-style img {
+        display: none;
+    }
+
+    /* Position and sizing of burger button */
+    .bm-burger-button {
+        position: absolute;
+        width: 30px;
+        height: 24px;
+        left: 30px;
+        top: 23px;
+    }
+
+    /* Color/shape of burger icon bars */
+    .bm-burger-bars {
+        background: #373a47;
+    }
+
+    /* Color/shape of burger icon bars on hover*/
+    .bm-burger-bars-hover {
+        background: #a90000;
+    }
+
+    /* Position and sizing of clickable cross button */
+    .bm-cross-button {
+        height: 24px;
+        width: 24px;
+    }
+
+    /* Color/shape of close button cross */
+    .bm-cross {
+        background: #bdc3c7;
+    }
+
+    /*
+  Sidebar wrapper styles
+  Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+  */
+    .bm-menu-wrap {
+        position: fixed;
+        height: 100%;
+    }
+
+    /* General sidebar styles */
+    .bm-menu {
+        background: #fff;
+        padding: 2.5em 1.5em 0;
+        font-size: 1.15em;
+    }
+
+    /* Morph shape necessary with bubble or elastic */
+    .bm-morph-shape {
+        fill: #373a47;
+    }
+
+    /* Wrapper for item list */
+    .bm-item-list {
+        color: #b8b7ad;
+        padding: 0.8em;
+    }
+
+    /* Individual item */
+    .bm-item {
+        display: inline-block;
+    }
+
+    /* Styling of overlay */
+    .bm-overlay {
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .only-mobile {
+        display: initial;
+    }
+
+    .only-pc {
+        display: none;
+    }
+
+    .bm-burger-button {
+        display: initial;
+    }
+
+    .only-mobile .menu-item {
+        color: #0047AB;
+        font-weight: 300;
+        font-size: 20px;
+        padding: 15px 0px;
+    }
+
+    .signup-page-padding {
+        padding: 43px 32px;
+    }
+
+    .header-logo-in-sidebar {
+        margin-bottom: 37px;
+    }
+
+    .rectangle_bg {
+        display: none;
+    }
+
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .home_banner {
+        padding: 0px 20px;
+    }
+
+    .container-fluid {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    img.ticket-bg {
+        width: auto;
+        height: 60px;
+    }
+
+    .ticket-category-bg {
+        top: 9px;
+        left: 19px;
+        height: auto;
+        width: 72px;
+        right: auto;
+    }
+
+    .find-near-box {
+        font-size: 26px;
+        padding-left: 0;
+        padding-top: 0;
+    }
+
+    .Find-Near-form {
+        margin: 0;
+    }
+
+    img.footer-star-icon {
+        height: auto;
+        width: 45px;
+    }
+
+    .footer-title {
+        top: 1px;
+    }
+
+    .content-data-event {
+        padding: 0px 10px;
+    }
+
+    .price-section p {
+        font-size: 11px;
+    }
+
+    .ticket-price-area-bg {
+        background-position: 0px 36px;
+    }
+
+    .bg-style-white {
+        font-size: 12px;
+        padding: 9px 12px !important;
+    }
+
+    .content-data-about {
+        padding: 0px 10px;
+    }
+
+    .our_values_title {
+        font-size: 30px;
+    }
+
+    .about2_box p {
+        padding-right: 0;
+        font-size: 14px;
+        margin-top: 0;
+    }
+
+    h3.sec-main-title {
+        font-size: 51px;
+        color: #0047ab;
+        margin-left: 10px;
+        margin-bottom: 4px;
+        margin-top: 0;
+        font-weight: 600;
+    }
+
+    p.our_values_desc {
+        font-size: 15px;
+    }
+
+}
+
+@media only screen and (max-width: 800px) and (min-width: 766px) {
+    p.banner_text {
+        font-size: 30px;
+        line-height: 42px;
+        padding-bottom: 0;
+    }
+
+    .category-section {
+        margin-top: 0;
+        margin-left: 65px;
+    }
+
+    img.ticket-bg {
+        width: auto;
+        height: 71px;
+    }
+
+    .ticket-category-bg {
+        top: 20px;
+        width: 76px;
+    }
+
+    p.category-title {
+        font-size: 10px;
+        right: 28px;
+    }
+
+    select.theme-dropdown {
+        width: 174px;
+        margin-bottom: 10px;
+    }
+
+    input.theme-input {
+        width: 171px;
+    }
+
+    .event-list-bg {
+        background-image: none;
+    }
+
+    .header-logo {
+        position: relative;
+        left: 26px;
+        height: auto;
+        width: 100px;
+        top: -4px;
+    }
+
+    .rectangle_bg {
+        top: 64px;
+    }
+
+    .home_banner {
+        padding: 0px 5px;
+    }
+
+    p.banner_shop_desc {
+        font-size: 18px;
+    }
+
+    /* Position and sizing of burger button */
+    .bm-burger-button {
+        position: absolute;
+        width: 30px;
+        height: 24px;
+        right: 30px;
+        top: 23px;
+    }
+
+    /* Color/shape of burger icon bars */
+    .bm-burger-bars {
+        background: #373a47;
+    }
+
+    /* Color/shape of burger icon bars on hover*/
+    .bm-burger-bars-hover {
+        background: #a90000;
+    }
+
+    /* Position and sizing of clickable cross button */
+    .bm-cross-button {
+        height: 24px;
+        width: 24px;
+    }
+
+    /* Color/shape of close button cross */
+    .bm-cross {
+        background: #bdc3c7;
+    }
+
+    /*
+  Sidebar wrapper styles
+  Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+  */
+    .bm-menu-wrap {
+        position: fixed;
+        height: 100%;
+    }
+
+    /* General sidebar styles */
+    .bm-menu {
+        background: #fff;
+        padding: 2.5em 1.5em 0;
+        font-size: 1.15em;
+    }
+
+    /* Morph shape necessary with bubble or elastic */
+    .bm-morph-shape {
+        fill: #373a47;
+    }
+
+    /* Wrapper for item list */
+    .bm-item-list {
+        color: #b8b7ad;
+        padding: 0.8em;
+    }
+
+    /* Individual item */
+    .bm-item {
+        display: inline-block;
+    }
+
+    /* Styling of overlay */
+    .bm-overlay {
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .only-mobile {
+        display: initial;
+    }
+
+    .only-pc {
+        display: none;
+    }
+
+    .bm-burger-button {
+        display: initial;
+    }
+    .signup-form-section {
+        margin-top: 25px;
+    }
+}
+
+@media only screen and (max-width: 1480px) and (min-width: 800px) {
+    p.banner_text {
+        font-size: 60px;
+        line-height: 94px;
+        padding-bottom: 13px;
+    }
+
+    .rectangle_bg {
+        top: 35px;
+    }
+
+    .website_top_menu .nav-item {
+        font-size: 16px;
+    }
+
+    .header-logo {
+        left: 24%;
+        width: 170px;
+    }
+
+    p.category-title {
+        font-weight: 600;
+        color: #0047ab;
+        font-size: 14px;
+        position: relative;
+        right: 31px;
+    }
+
+    .event-box-mobile {
+        margin: 0px 20px;
+    }
+
+    .event-box-style {
+        margin: 0px 5px;
+    }
+
+    span.on-img-date img {
+        width: 23px;
+    }
+
+    span.on-img-date-val {
+        font-size: 17px;
+    }
+
+    .on-img-date {
+        right: 14px;
+    }
+
+    .event-category-img {
+        font-size: 13px;
+    }
+
+    .price-section p {
+        font-size: 16px;
+    }
+
+    .price {
+        font-size: 14px;
+    }
+
+    .event-title-home {
+        font-size: 28px;
+        top: 14px;
+        left: 66px;
+    }
+
+    .event-list-bg {
+        padding-top: 125px;
+    }
+
+    .count-box {
+        background-size: 100%;
+        height: 181px;
+        width: 210px;
+        background-size: 100% 100%;
+    }
+
+    .partner-slider .mx-3 {
+        margin: 5px !important;
+    }
+
+    .count-box-title {
+        font-size: 45px;
+    }
+
+    .count-box-count {
+        font-size: 39px;
+    }
+
+    .partner-slider img {
+        width: 160px;
+        margin: 0px 10px;
+    }
+
+    img.LogoIcon-footer {
+        right: -42px;
+        top: -150px;
+        height: 457px;
+    }
+
+    .Want-to-receive span {
+        display: inline;
+    }
+
+    span.Want-to-receive {
+        font-size: 30px;
+    }
+
+    .footer-title {
+        font-size: 41px;
+        top: 10px;
+    }
+
+    img.footer-star-icon {
+        height: auto;
+        width: 42px;
+    }
+
+    .footer-box-style {
+        padding: 20px 0px 60px 30px;
+    }
+
+    .footer-right-box ul li {
+        font-size: 21px;
+    }
+
+    .content-data-event {
+        padding: 0px 10px;
+    }
+
+    .eventpage-box-style {
+        padding: 14px 3px;
+    }
+
+    p.time-box-date {
+        font-size: 21px;
+        margin: 0px 8px;
+        height: 44px;
+        width: 44px;
+    }
+
+    .time-box-text {
+        font-size: 9px;
+        margin-top: 5px;
+    }
+
+    .event-page-organizer-deta.d-block {
+        font-size: 10px;
+    }
+
+    .event-page-ticket .right-box-con {
+        padding: 0px 21px;
+    }
+
+    .event-page-ticket .cart-increment-button {
+        position: relative;
+        top: -20px;
+        left: -7px;
+        width: max-content;
+    }
+
+    .event-page-ticket .d-flex {
+        display: inline-flex !important;
+    }
+
+    .event-page-ticket .event-time {
+        color: #000;
+        font-size: 10px;
+    }
+
+    .event-page-ticket .event-duration {
+        font-size: 9px !important;
+    }
+
+    .event-page-ticket .main-title {
+        font-size: 15px;
+        margin: 0px 9px;
+    }
+
+    .paynow-btn-box {
+        margin: 11px !important;
+    }
+
+    .ticket-price-area-bg {
+        background-position: 0px -13px;
+    }
+
+    img.web-icon-about {
+        top: 68px;
+        left: 30px;
+    }
+
+    p.about_banner_text {
+        font-weight: 500;
+        font-size: 34px;
+    }
+
+    p.about_banner_short_text {
+        padding-left: 26px;
+        font-size: 19px;
+    }
+
+    .As_a_leading_sec {
+        padding: 0px 50px;
+        text-align: left;
+        margin-top: 50px;
+    }
+
+    img.about2 {
+        width: 300px;
+    }
+
+    .about2_box h3 {
+        font-size: 48px;
+    }
+
+    .about2_box p {
+        padding-right: 0;
+        font-size: 14px;
+    }
+
+    .our_values_title {
+        font-size: 23px;
+    }
+
+    p.our_values_desc {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    .signup-form-section {
+        margin-top: 48px;
+    }
+
+    .partner-slider-margin {
+        margin-top: -60px;
+    }
+
+    .border-top-doted {
+        /*margin-left: 16px;*/
+    }
+    
+}
