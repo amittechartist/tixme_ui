@@ -229,7 +229,7 @@ p.banner_text {
 }
 
 .event-duration {
-    color: rgba(0, 71, 171, 1);
+    color: #fff;
     font-weight: 600;
 }
 
@@ -242,7 +242,7 @@ p.banner_text {
 }
 
 .event-time {
-    color: #000;
+    color: #fff;
 }
 
 .border-right {
@@ -370,7 +370,7 @@ span.on-img-date-val {
 
 .event-banner {
     width: 100%;
-    height: 400px;
+    height: 300px;
     border-radius: 20px;
 }
 
@@ -1390,4 +1390,11 @@ p.cursor-pointer.my-location-btn {
 }
 .eventpage-location-name {
     font-size: 14px;
+}
+.date_filter {
+    background: transparent !important;
+    padding-left: 9px !important;
+}
+.event-desc.event-page-margin {
+    margin-top: 148px;
 }

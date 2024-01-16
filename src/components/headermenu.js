@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "./assets/Logo.svg";
 import Search from "./assets/search.png";
 import Account from "./assets/account.svg";
+import OrganizerSignupmob from '../component/Organizersignupmob';
 import menu from "./assets/menu.svg";
 import plus from "./assets/plus.svg";
 import { Link } from "react-router-dom";
 import { app_url, apiurl, organizer_url, customer_url } from "../common/Helpers";
+import HeaderLocation from '../component/HeaderLocation';
 const Header = () => {
   const customer_token = localStorage.getItem("userauth");
-  const organizername = localStorage.getItem("organizername"); 
+  const organizername = localStorage.getItem("organizername");
+  const customer_name = localStorage.getItem("username");
+  const [openmenu, setOpenmenu] = useState(false);
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-white bg-white d-lg-none mx-4 rounded-8 top-10 d-block mb-5">
@@ -20,15 +24,25 @@ const Header = () => {
               src={Search}
               alt="Not found "
             />
-            <img className="m-account me-md-3 me-2" src={Account} alt="" />
+            {customer_token || organizername ? (
+              <>
+                {customer_token ? (
+                  <Link to={customer_url + "dashboard"}><img className="m-account me-md-3 me-2" src={Account} alt="" /></Link>
+                ) : (
+                  <>
+                    {organizername ? (
+                      <Link to={organizer_url + "dashboard"}><img className="m-account me-md-3 me-2" src={Account} alt="" /></Link>
+                    ) : ''}
+                  </>
+                )}
+              </>
+            ) : (
+              <Link to={app_url + 'auth/login-signup'}><img className="m-account me-md-3 me-2" src={Account} alt="" /></Link>
+            )}
             <button
               className="navbar-toggler"
               type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
+              onClick={() => setOpenmenu(!openmenu)}
             >
               <span>
                 <img className="m-account" src={menu} alt="" />
@@ -36,14 +50,14 @@ const Header = () => {
             </button>
           </div>
           <div
-            className="collapse navbar-collapse mt-3"
+            className={openmenu ? 'collapse navbar-collapse mt-3 show' : 'collapse navbar-collapse mt-3'}
             id="navbarSupportedContent"
           >
             <ul className="navbar-nav">
               <li className="nav-item d-flex align-items-center justify-content-start">
                 <Link
                   className="nav-link text-primary-theme pe-1 font-nav"
-                  to="/"
+                  to={app_url}
                 >
                   Home
                   <img className="nav-plus" src={plus} alt="" />
@@ -73,37 +87,36 @@ const Header = () => {
                   <img className="nav-plus" src={plus} alt="" />
                 </Link>
               </li>
-              <li className="nav-item border rounded border-primary align-self-start px-2 my-1">
-                <Link
-                  className="nav-link text-primary-theme pt-1 pb-1p font-nav"
-                  to={app_url + 'auth/organizer/signup'}
-                >
-                  List your event
-                </Link>
-              </li>
-              <li className="nav-item d-flex align-items-center justify-content-start">
+              <OrganizerSignupmob prorps={'mobheadermenu'} />
+              <li className="nav-item">
 
                 {customer_token || organizername ? (
                   <>
                     {customer_token ? (
-                      <Link
-                        className="nav-link text-primary-theme pe-1 font-nav"
-                        to={customer_url + "dashboard"}
-                      >
-                        My account
-                        <img className="nav-plus" src={plus} alt="" />
-                      </Link>
+                      <>
+                        <p className="mb-0 text-dark d-">Customer Account</p>
+                        <Link
+                          className="nav-link text-primary-theme pe-1 font-nav"
+                          to={customer_url + "dashboard"}
+                        >
+                          {customer_name}
+                          <img className="nav-plus" src={plus} alt="" />
+                        </Link>
+                      </>
                     ) : (
                       <></>
                     )}
                     {organizername ? (
-                      <Link
-                        className="nav-link text-primary-theme pe-1 font-nav"
-                        to={organizer_url + "dashboard"}
-                      >
-                        My account
-                        <img className="nav-plus" src={plus} alt="" />
-                      </Link>
+                      <>
+                        <p className="mb-0 text-dark">Organizer Account</p>
+                        <Link
+                          className="nav-link text-primary-theme pe-1 font-nav"
+                          to={organizer_url + "dashboard"}
+                        >
+                          {organizername}
+                          <img className="nav-plus" src={plus} alt="" />
+                        </Link>
+                      </>
                     ) : (
                       <></>
                     )}
@@ -119,19 +132,11 @@ const Header = () => {
                 )}
 
               </li>
-              <li className="nav-item d-flex align-items-center justify-content-start">
-                <a
-                  className="nav-link text-primary-theme pe-1 font-nav"
-                  href="contact-us.html"
-                >
-                  Location
-                  <img className="nav-plus" src={plus} alt="" />
-                </a>
-              </li>
+              <HeaderLocation prorps={'mob'} />
             </ul>
           </div>
         </div>
-      </nav>
+      </nav >
     </>
   );
 };

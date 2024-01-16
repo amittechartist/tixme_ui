@@ -1,23 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Select from 'react-select'
-import HeaderLocation from '../component/HeaderLocation';
-import Logo from "./assets/Logo.svg";
-import OrganizerSignupmob from '../component/Organizersignupmob';
-import NewLoginicon from "../assets/topwebpeopleicon.png";
-import plus from "./assets/plus.svg";
-import { MdMyLocation } from "react-icons/md";
-import { Link } from "react-router-dom";
-import { FaTimes } from 'react-icons/fa';
-import { FaShoppingCart } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button, Col, Row } from "react-bootstrap";
 import { app_url, apiurl, organizer_url, customer_url } from "../common/Helpers";
-import { FaEllipsis } from "react-icons/fa6";
-const Header = () => {
-
+import { MdMyLocation } from "react-icons/md";
+import { FaTimes } from 'react-icons/fa';
+import plus from "../assets/plus.svg";
+import Select from 'react-select'
+const Locationbtn = ({ prorps }) => {
+    const country_name = localStorage.getItem("countryname");
     const [location, setLocation] = useState(null);
     const [newmodal, setNewModal] = useState(false);
-
     const [MyCountry, setMyCountry] = useState();
     const [MyCity, setMyCity] = useState();
     const [MyState, setMyState] = useState();
@@ -25,16 +17,6 @@ const Header = () => {
     const [CurrentState, setCurrentState] = useState();
     const [CurrentCity, setCurrentCity] = useState();
 
-    const customer_token = localStorage.getItem("userauth");
-    const customer_name = localStorage.getItem("username");
-
-    const organizername = localStorage.getItem("organizername");
-    const country_name = localStorage.getItem("countryname");
-    const accountTargetUrl = customer_token
-        ? customer_url + "dashboard"
-        : organizername
-            ? organizer_url + "dashboard"
-            : app_url + "auth/customer/login";
     useEffect(() => {
         const getCurrentLocation = () => {
             if (navigator.geolocation) {
@@ -109,32 +91,6 @@ const Header = () => {
         // Call the function to get current location
         getCurrentLocation();
     }, []); // Empty dependency array to ensure useEffect runs only once
-
-    const [Totalcart, setTotalcart] = useState(0);
-    const cartCheck = localStorage.getItem('cart');
-
-    function CartListItem() {
-        if (cartCheck) {
-            const { items, quantities } = JSON.parse(cartCheck);
-            setTotalcart(items.length)
-        }
-        return (
-            <li className="nav-item align-self-center me-7 cursor-pointer">
-                <Link to={app_url + 'cart-details'}>
-                    <div className="position-relative">
-                        <FaShoppingCart size={30} color="#003B8F" />
-                        {Totalcart > 0 && (
-                            <div className="cart-count">{Totalcart}</div>
-                        )}
-                    </div>
-                </Link>
-            </li>
-        );
-    }
-
-    useEffect(() => {
-        CartListItem()
-    }, [cartCheck]);
     const getMyLoc = async () => {
         setMyCountry(CurrentCountry);
         setMyCity(CurrentCity);
@@ -187,8 +143,6 @@ const Header = () => {
     useEffect(() => {
         fetchCountry();
     }, []);
-
-
     return (
         <>
             <Modal isOpen={newmodal} toggle={() => setNewModal(!newmodal)} centered>
@@ -232,97 +186,34 @@ const Header = () => {
                     </Button>
                 </ModalFooter>
             </Modal >
-            <nav class="navbar navbar-expand-lg navbar-white bg-white mx-4 rounded-8 top-10 d-lg-block d-none">
-                <div class="container-fluid pe-0">
-                    <Link to={app_url}><img class="home_logo nav-logo ms-lg-5 ms-2" src={Logo} alt="" /></Link>
-                    <button
-                        class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 position-relative">
-                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5 me-3">
-                                <Link
-                                    class="nav-link text-primary-theme pe-1 font-nav"
-                                    to={app_url}
-                                >
-                                    Home  <img class="nav-plus" src={plus} alt="" />
-                                </Link>
-                            </li>
-                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5 me-3">
-                                <Link class="nav-link text-primary-theme pe-1 font-nav" to={app_url + 'events'}>
-                                    Events{" "}
-                                    <img class="nav-plus" src={plus} alt="" />
-                                </Link>
-                            </li>
-                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5 me-3">
-                                <Link
-                                    class="nav-link text-primary-theme pe-1 font-nav"
-                                    to={app_url + 'aboutus'}
-                                >
-                                    About Us
-                                    <img class="nav-plus" src={plus} alt="" />
-                                </Link>
-                            </li>
-                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5 me-3">
-                                <Link
-                                    class="nav-link text-primary-theme pe-1 font-nav"
-                                    to={app_url + 'contact'}
-                                >
-                                    Contact Us
-                                    <img class="nav-plus" src={plus} alt="" />
-                                </Link>
-                            </li>
-                            <OrganizerSignupmob prorps={'pcheadermenu'} />
+            {prorps == 'pc' ? (
+                <>
+                    <div class="pc-header-location d-flex align-items-center justify-content-center" onClick={() => setNewModal(!newmodal)}>
 
-                            <CartListItem />
-                            <li class="nav-item position-absolute end-0 bg-white nav-box me-0 d-flex flex-column justify-content-center align-items-center rounded-8">
-                                {customer_token || organizername ? (
-                                    <>
-                                        {customer_token ? (
-                                            <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav" to={customer_url + "dashboard"}>
-                                                <p className="mb-0 text-dark">Customer Account</p>
-                                                <span className="font-bold">{customer_name}</span>
-                                            </Link>
-                                        ) : (
-                                            <>
-                                                {organizername ? (
-                                                    <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav" to={organizer_url + "dashboard"}>
-                                                        <p className="mb-0 text-dark">Organizer Account</p>
-                                                        <span className="font-bold"> {organizername}</span>
-                                                    </Link>
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </>
-                                        )}
-                                    </>
-                                ) : (
-                                    <>
-                                        {/* <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav" to={app_url + 'auth/login-signup'}>
-                                        Login/Sign Up
-                                    </Link>  */}
-                                        <Link to={app_url + 'auth/login-signup'} className='top-login-sign-btn d-flex align-items-center justify-content-center' >
-                                            <span className="top-login-sign-btn-icon"><FaEllipsis /></span><span><img src={NewLoginicon}></img></span>
-                                        </Link>
-                                    </>
-                                )}
-
-                                <HeaderLocation prorps={'pc'} />
-                            </li>
-                        </ul>
+                        <img class="nav-loc" src={location} alt="" />
+                        <a
+                            class="nav-link text-primary-theme px-1 font-nav-small"
+                            href="#"
+                            style={{ marginTop: '-10px' }}
+                        >
+                            {country_name ? country_name : 'Location'}
+                            <img class="nav-plus" src={plus} alt="" />
+                        </a>
                     </div>
-                </div>
-            </nav>
+                </>
+            ) : (
+                <>
+                    <li className="nav-item d-flex align-items-center justify-content-start" onClick={() => setNewModal(!newmodal)}>
+                        <a
+                            className="nav-link text-primary-theme pe-1 font-nav"
+                        >
+                            {country_name ? country_name : 'Location'}
+                            <img className="nav-plus" src={plus} alt="" />
+                        </a>
+                    </li>
+                </>
+            )}
         </>
-    );
-};
-
-export default Header;
+    )
+}
+export default Locationbtn;

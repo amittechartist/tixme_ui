@@ -786,7 +786,7 @@ const Type = ({ title, editid }) => {
             if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
-            if (!Tax) {
+            if (!Tax  && Tickettype == 1) {
                 return toast.error('Enter tax amount or 0');
             }
             setLoader(true);

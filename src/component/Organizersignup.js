@@ -1,30 +1,17 @@
-import React, { useEffect, useState } from "react";
-import HeaderMenu from '../../../components/headermenu';
-import MobileMenu from '../../../components/mobilemenu';
-import 'react-phone-input-2/lib/style.css';
-import { Link } from "react-router-dom";
-import { FiLogIn } from "react-icons/fi";
-import { FiPlus } from "react-icons/fi";
-import OrganizerSignup from '../../../component/Organizersignup';
-import { app_url, apiurl, isEmail } from '../../../common/Helpers';
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import toast from 'react-hot-toast';
 import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
-import { FaTimes } from 'react-icons/fa';
-import arrow from "../../../assets/arrow.svg";
-import TopIcon from "../../../assets/new/top.png"
-import {
-    Modal,
-    Input,
-    ModalBody,
-    ModalHeader
-} from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { app_url, apiurl, organizer_url, customer_url, isEmail } from "../common/Helpers";
 import Select from 'react-select'
+import { FaTimes } from 'react-icons/fa';
 import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import withReactContent from 'sweetalert2-react-content';
 import { Button, Col, Row } from "react-bootstrap";
-const About = () => {
+import arrow from "../assets/arrow.svg";
+const Locationbtn = ({ prorps }) => {
     const navigate = useNavigate();
     const [ContactModal, setContactModal] = useState(false);
     const [Confirmemail, setConfirmemail] = useState();
@@ -215,77 +202,15 @@ const About = () => {
                     </Row>
                 </ModalBody>
             </Modal>
-            {/* <!-- mobile nav --> */}
-            <HeaderMenu />
-            <div class="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
-                <MobileMenu />
-                <h1 class="banner-h fw-bold text-white text-uppercase mb-0 pb-0 animate__animated animate__bounce">
-                    Login / Sign up
-                </h1>
-                <div class="banner-child bg-white px-0" style={{ border: '1px solid #eee' }}>
-                    <div className="TixmeBox">
-                        <h4>TIXME</h4>
-                        <p>Your one stop solution for managing and conducting events</p>
+                <button class="GetLatestUpdateButton CustomerButton" onClick={() => setContactModal(!ContactModal)}>
+                    <div class="left text-center">
+                        <small class="ms-2">CONTACT US</small>
                     </div>
-                    <div className='row p-5 py-5'>
-                        <div className="col-12 col-md-4 col-lg-4 mt-5">
-                            <div className="GetCustomerButtonBox">
-                                <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Customer</h4>
-                                <Link to={app_url + 'auth/customer/login'}><button class="GetLatestUpdateButton CustomerButton">
-                                    <div class="left text-center">
-                                        <small class="ms-2">LOGIN</small>
-                                    </div>
-                                    <div class="right">
-                                        <img src={arrow} alt="" style={{ width: "15px" }} />
-                                    </div>
-                                </button></Link>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-4 col-lg-4 mt-5">
-                            <div className="GetCustomerButtonBox">
-                                <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Customer</h4>
-                                <Link to={app_url + 'auth/customer/signup'}><button class="GetLatestUpdateButton CustomerButton">
-                                    <div class="left text-center">
-                                        <small class="ms-2">SINGUP</small>
-                                    </div>
-                                    <div class="right">
-                                        <img src={arrow} alt="" style={{ width: "15px" }} />
-                                    </div>
-                                </button>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-4 col-lg-4 mt-5">
-                            <div className="GetCustomerButtonBox">
-                                <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Organizer</h4>
-                                <Link to={app_url + 'auth/organizer/login'}><button class="GetLatestUpdateButton CustomerButton">
-                                    <div class="left text-center">
-                                        <small class="ms-2">LOGIN</small>
-                                    </div>
-                                    <div class="right">
-                                        <img src={arrow} alt="" style={{ width: "15px" }} />
-                                    </div>
-                                </button></Link>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-4 col-lg-4 mt-5 m-auto">
-                            <div className="GetCustomerButtonBox mt-3">
-                                <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Organizer</h4>
-                                <OrganizerSignup/>
-                            </div>
-                        </div>
+                    <div class="right">
+                        <img src={arrow} alt="" style={{ width: "15px" }} />
                     </div>
-                </div>
-            </div>
-            {/* </div> */}
-            <div class="space-height" style={{ height: '600px' }}></div>
-
+                </button>
         </>
-    );
-};
-
-export default About;
+    )
+}
+export default Locationbtn;

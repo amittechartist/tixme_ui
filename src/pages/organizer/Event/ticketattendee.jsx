@@ -39,7 +39,7 @@ const Dashboard = ({ title }) => {
     const [OrderData, setOrderData] = useState();
     const [CustomerData, setCustomerData] = useState();
     const [Isscan, setIsscan] = useState(false);
-    const { id, name } = useParams();
+    const { id, name, ticket_name } = useParams();
     const [modal, setModal] = useState(false);
     const [ShowQr, setShowQr] = useState(false);
 
@@ -105,7 +105,8 @@ const Dashboard = ({ title }) => {
         try {
             setLoader(true);
             const requestData = {
-                eventid: id
+                eventid: id,
+                ticket_name: ticket_name ? ticket_name : null
             };
             fetch(apiurl + 'order/event/orders-list', {
                 method: 'POST',
@@ -240,7 +241,7 @@ const Dashboard = ({ title }) => {
                             <label htmlFor="" className="text-black">Start Date</label>
                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input" placeholder="Select date" readOnly value={viewStartdate} />
+                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate} />
                                 <div className="date-style-picker">
                                     <Flatpickr
                                         value={Startdate}
@@ -255,7 +256,7 @@ const Dashboard = ({ title }) => {
                             <label htmlFor="" className="text-black">End Date</label>
                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input" placeholder="Select date" readOnly value={viewEndtdate} />
+                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewEndtdate} />
                                 <div className="date-style-picker">
                                     <Flatpickr
                                         value={Endtdate}
@@ -439,7 +440,7 @@ const Dashboard = ({ title }) => {
                                                     <div className="input-group mb-3 input-warning-o">
                                                         <span className="input-group-text search-box-icon-1"><FaRegCreditCard /></span>
                                                         <select
-                                                            className="form-control"
+                                                            className="form-select"
                                                             onChange={e => handleVisibilityChange(e.target.value)}
                                                             defaultValue=""
                                                         >
@@ -447,7 +448,6 @@ const Dashboard = ({ title }) => {
                                                             <option value="2">Free</option>
                                                             <option value="1">Paid</option>
                                                         </select>
-                                                        <span className="input-group-text search-box-icon-1"><FiChevronDown /></span>
                                                     </div>
                                                 </Col>
                                                 <Col md={6}>

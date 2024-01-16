@@ -145,7 +145,7 @@ const Dashboard = ({ title }) => {
             if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
-            if (!Tax) {
+            if (!Tax  && Tickettype == 1) {
                 return toast.error('Enter tax amount or 0');
             }
             setApiLoader(true);
@@ -208,7 +208,7 @@ const Dashboard = ({ title }) => {
             if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
-            if (!Tax) {
+            if (!Tax  && Tickettype == 1) {
                 return toast.error('Enter tax amount or 0');
             }
             setApiLoader(true);
@@ -373,7 +373,7 @@ const Dashboard = ({ title }) => {
                                                     <>
                                                         {Listitems.map((item, index) => (
                                                             <Col md={12} className="event_list_box_main in-ticket-list-1">
-                                                                <button onClick={() => navigate(`${organizer_url}event/mange-attendee/${Eventdata._id}/${Eventdata.name}/${Eventdata.name}`)} className="list-active-ticket-btn" type="button">Attendee  <img src={ArrowPng} className="arraw-svg ml-3" alt="" /></button>
+                                                                <button onClick={() => navigate(`${organizer_url}event/mange-attendee/${Eventdata._id}/${Eventdata.name}/${item.name}`)} className="list-active-ticket-btn" type="button">Attendee  <img src={ArrowPng} className="arraw-svg ml-3" alt="" /></button>
                                                                 <div className="event_list_box">
                                                                     <Row>
                                                                         <Col md={4}>
@@ -466,7 +466,7 @@ const Dashboard = ({ title }) => {
                                 <label htmlFor="" className="text-black">Start date</label>
                                 <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                     <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                    <input type="text" class="form-control date-border-redius date-border-redius-input" placeholder="" readOnly value={ticketstartdate} />
+                                    <input type="text" class="form-control date-border-redius date-border-redius-input date_filter" placeholder="" readOnly value={ticketstartdate} />
                                     <div className="date-style-picker">
                                         <Flatpickr
                                             value={TicketStartdate}
@@ -482,7 +482,7 @@ const Dashboard = ({ title }) => {
                                 <label htmlFor="" className="text-black">Start time</label>
                                 <div class="input-group mb-3 input-warning-o">
                                     <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                    <input type="text" class="form-control date-border-redius-input" placeholder="" readOnly value={ticketstarttime} />
+                                    <input type="text" class="form-control date-border-redius-input date_filter" placeholder="" readOnly value={ticketstarttime} />
                                 </div>
                             </Col>
                             <Col md={12} className="mb-2"></Col>
@@ -490,7 +490,7 @@ const Dashboard = ({ title }) => {
                                 <label htmlFor="" className="text-black">End date</label>
                                 <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                     <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                    <input type="text" class="form-control date-border-redius date-border-redius-input" placeholder="" readOnly value={ticketenddate} />
+                                    <input type="text" class="form-control date-border-redius date-border-redius-input date_filter" placeholder="" readOnly value={ticketenddate} />
                                     <div className="date-style-picker">
                                         <Flatpickr
                                             value={TicketEndtdate}
@@ -506,7 +506,7 @@ const Dashboard = ({ title }) => {
                                 <label htmlFor="" className="text-black">End time</label>
                                 <div class="input-group mb-3 input-warning-o">
                                     <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                    <input type="text" class="form-control date-border-redius-input" placeholder="" readOnly value={ticketendtime} />
+                                    <input type="text" class="form-control date-border-redius-input date_filter" placeholder="" readOnly value={ticketendtime} />
                                 </div>
                             </Col>
                             <Col md={12}>

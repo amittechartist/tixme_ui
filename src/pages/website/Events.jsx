@@ -161,6 +161,8 @@ const Home = () => {
         startdate = '';
         rangestartdate = '';
         enddate = '';
+        setSearchInput('');
+        navigate(app_url + 'events')
         fetchEvent()
     }
 
@@ -453,75 +455,79 @@ const Home = () => {
                                     {Eventlist.length > 0 ? (
                                         <Row className="event-box-mobile">
                                             {Eventlist.map((item, index) => (
-                                                <div className="col-xl-6 col-md-6 col-12 cursor-pointer" onClick={() => viewEvent(item._id, item.name)}>
-                                                    <div className="bg-white rounded-10 shadow-bottom">
+                                                <div className="col-xl-4 col-md-3 col-12 cursor-pointer" onClick={() => viewEvent(item._id, item.name)}>
+                                                    <div className="bg-white rounded-10 shadow-bottom pb-3" style={{ height: '100%' }}>
                                                         <div style={{ position: 'relative' }}>
                                                             <span className="event-category-img">{item.category_name}</span>
-
                                                             <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                                                            <div className="d-flex align-items-center justify-content-end mt-n4 me-3" style={{ position: 'relative', top: '35px' }}>
-                                                                <img className="card-icon me-2" src={calendar} alt="" />
-                                                                <p className="text-primary-color fw-bold me-lg-4 me-lg-3 me-0 mb-0 mt-md-0">
-                                                                    {onlyDayMonth(item.start_date)}
-                                                                </p>
+                                                            <div className="d-flex align-items-center event-date-small-box">
+                                                                <span className="event-date-small">
+                                                                    <img className="card-icon me-2" src={calendar} alt="" />
+                                                                    <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                                                                        {onlyDayMonth(item.start_date)}
+                                                                    </span>
+                                                                </span>
                                                             </div>
                                                         </div>
-                                                        <div className="d-flex align-items-center justify-content-start border-bttom-dotted w-origin ms-3 mt-1 pb-2">
-                                                            <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                                                            <div className="d-flex flex-column align-items-start justify-content-start">
-                                                                <small className="small mb-0">Originated by</small>
-                                                                <p className="text-primary-color fw-bold me-lg-4 me-lg-3 me-1 mb-0 mt-n1">
-                                                                    By {item.organizer_name}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="row">
-                                                            <div className="col-md-7">
-                                                                <div className="d-flex align-items-center justify-content-start me-3 ms-3 my-2">
-                                                                    <img className="card-icon me-1" src={location} alt="" />
-                                                                    <p className="text-primary-color fw-bold me-lg-4 me-lg-3 me-1 mb-0 event-cart-location">
-                                                                        {item.location}
+                                                        <div className="row px-2 mt-2">
+                                                            <div className="col-md-7 d-flex align-items-center">
+                                                                <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                                                                <div className="d-flex flex-column align-items-start justify-content-start">
+                                                                    <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                                                                    <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                                                                        By {item.organizer_name}
                                                                     </p>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-md-5 pl-2">
-                                                                <div className="bg-fade rounded py-3 pl-5 event-cart-price-box">
+                                                            <div className="col-md-5">
+                                                                <div className="bg-fade rounded pl-5 event-cart-price-box">
                                                                     <p className="small fw-bold mb-0 pb-0">Onwards</p>
                                                                     {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
                                                                     <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="d-flex justify-content-start align-items-start">
-                                                            <div
-                                                                className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2 border-end pe-3"
-                                                                style={{ flexShrink: 0, width: "auto" }}
-                                                            >
-                                                                <img className="card-icon2 me-2" src={clock} alt="" />
-                                                                <div>
-                                                                    <p className="small text-primary-color fw-bold mb-0 pb-0">
-                                                                        Event Time
+                                                        <div className="row mt-1">
+                                                            <div className="col-md-12">
+                                                                <div className="d-flex align-items-center justify-content-start my-2">
+                                                                    <img className="card-icon me-1" src={location} alt="" />
+                                                                    <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                                                                        {item.location}
                                                                     </p>
-                                                                    <p className="small mb-0">{item.start_time}</p>
                                                                 </div>
                                                             </div>
-                                                            <div
-                                                                className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2"
-                                                                style={{ flexShrink: 0, width: "auto" }}
-                                                            >
-                                                                <img className="card-icon2 me-2" src={hourglass} alt="" />
-                                                                <div>
-                                                                    <p className="small text-primary-color fw-bold mb-0 pb-0">
-                                                                        Event Duration
-                                                                    </p>
-                                                                    <p className="small mb-0">{item.event_duration}</p>
-                                                                </div>
-                                                            </div>
+
                                                         </div>
+                                                        {/* <div className="d-flex justify-content-start align-items-start">
+                          <div
+                            className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2 border-end pe-3"
+                            style={{ flexShrink: 0, width: "auto" }}
+                          >
+                            <img className="card-icon2 me-2" src={clock} alt="" />
+                            <div>
+                              <p className="small text-primary-color fw-bold mb-0 pb-0">
+                                Event Time
+                              </p>
+                              <p className="small mb-0">{item.start_time}</p>
+                            </div>
+                          </div>
+                          <div
+                            className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2"
+                            style={{ flexShrink: 0, width: "auto" }}
+                          >
+                            <img className="card-icon2 me-2" src={hourglass} alt="" />
+                            <div>
+                              <p className="small text-primary-color fw-bold mb-0 pb-0">
+                                Event Duration
+                              </p>
+                              <p className="small mb-0">{item.event_duration}</p>
+                            </div>
+                          </div>
+                        </div> */}
                                                         <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-                                                        <p className="desc mx-3 pb-3">
-                                                            {shortPer(item.event_desc, 100)}
-                                                        </p>
+                                                        {/* <p className="desc mx-3 pb-3">
+                          {shortPer(item.event_desc, 100)}
+                        </p> */}
                                                     </div>
                                                 </div>
                                             ))}

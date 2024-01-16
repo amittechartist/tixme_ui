@@ -587,7 +587,7 @@ const Dashboard = ({ title }) => {
                             <label htmlFor="" className="text-black">Start Date</label>
                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input" placeholder="Select date" readOnly value={viewStartdate} />
+                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate} />
                                 <div className="date-style-picker">
                                     <Flatpickr
                                         value={Startdate}
@@ -602,7 +602,7 @@ const Dashboard = ({ title }) => {
                             <label htmlFor="" className="text-black">End Date</label>
                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input" placeholder="Select date" readOnly value={viewEndtdate} />
+                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewEndtdate} />
                                 <div className="date-style-picker">
                                     <Flatpickr
                                         value={Endtdate}
@@ -748,9 +748,7 @@ const Dashboard = ({ title }) => {
                                                                                         <span className="on-img-date-val">{item.eventData[0].start_date}</span>
                                                                                     </span>
                                                                                 </div>
-                                                                                <div className="text-end mr-5 pt-4">
-                                                                                    <button onClick={() => { setModalTT(!modalTT); fetchOrderData(item._id, 2); setTransferid(item._id) }} className="mb-0 mr-5  btn btn-success list-Ticket-mng-1" type="button">Transfer Ticket</button>
-                                                                                </div>
+                                                                                
                                                                             </div>
                                                                         </Col>
                                                                     </Row>

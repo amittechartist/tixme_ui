@@ -836,7 +836,7 @@ img.list-thum-img {
 }
 
 .desc_data .event-duration {
-  color: rgba(0, 71, 171, 1);
+  color: #fff;
   font-weight: 600;
   font-size: 13px;
 }
@@ -1277,9 +1277,9 @@ font-size: 36px;
   font-size: 12px; /* Adjust the font size as needed */
   font-weight: bold;
 }
-.nav-control {
+/* .nav-control {
   display: none;
-}
+} */
 .home_logo {
     height: auto;
     width: 180px;
@@ -1375,4 +1375,45 @@ p.sssas {
 }
 .event-cart-display-price {
   font-size: 19px;
+}
+.pc-header-location {
+  position: relative;
+  z-index: 9;
+  top: 11px;
+  background: #fff;
+  padding: 0px 12px;
+  left: 0px;
+  border-radius: 0px 0px 10px 10px;
+  width: 160px;
+}
+.top-login-sign-btn:hover span.top-login-sign-btn-icon {
+  color: #65a1ff;
+}
+.top-login-sign-btn {
+  -webkit-box-shadow: 2px 2px 8px -4px rgba(66,66,66,1);
+  -moz-box-shadow: 2px 2px 8px -4px rgba(66,66,66,1);
+  box-shadow: 2px 2px 8px -4px rgba(66,66,66,1);
+  border-radius: 36px;
+  padding: 0px 12px 0px 19px;
+  
+  cursor: pointer;
+}
+span.top-login-sign-btn-icon {
+  font-size: 29px;
+  line-height: 0px;
+  color: #cde1ff;
+  transition: color 0.5s ease;
+}
+.top-login-sign-btn img {
+  height: 40px;
+  width: 40px;
+  margin: 4px 4px 4px 9px;
+}
+.animation-home-banner {
+  margin-left: 79px;
+  font-size: 35px;
+  padding: 16px 0px 82px 15px;
+  border: 2px dashed  #fff;
+  width: 700px;
+  border-radius: 19px;
 }

@@ -21,6 +21,7 @@ const Dashboard = ({ title }) => {
     const [packages, setPackages] = useState([]);
     const [loader, setLoader] = useState(true);
     const [CouponLoader, setCouponLoader] = useState(false);
+    const [CouponLoaderTwo, setCouponLoaderTwo] = useState(false);
     const [CouponList, setCouponList] = useState([]);
     const [Packloader, setPackloader] = useState(true);
 
@@ -64,28 +65,28 @@ const Dashboard = ({ title }) => {
     }
     const fetchcouponData = async () => {
         try {
-            setCouponLoader(true);
+            setCouponLoaderTwo(true);
             fetch(apiurl + 'website/get-coupon-list', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                    'Authorization': `Bearer ${Beartoken}`, // Set the Content-Type header to JSON
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Beartoken}`,
                 }
             })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
                         setCouponList(data.data);
-                        setCouponLoader(false);
                     }
+                    setCouponLoaderTwo(false);
                 })
                 .catch(error => {
                     console.error('Insert error:', error);
-                    setCouponLoader(false);
+                    setCouponLoaderTwo(false);
                 });
         } catch (error) {
             console.error('Api error:', error);
-            setCouponLoader(false);
+            setCouponLoaderTwo(false);
         }
     }
     const fetchMycouponList = async () => {
@@ -131,6 +132,8 @@ const Dashboard = ({ title }) => {
                         setPercentage(data.data);
                         setmypoint(data.mypoint);
                         setnextTarget(data.nextTarget);
+                    } else {
+
                     }
                     setPackloader(false)
                 })
@@ -301,16 +304,28 @@ const Dashboard = ({ title }) => {
                                                     </Col>
                                                     {Couponstate == 'new' ? (
                                                         <>
-                                                            {CouponList.map((item, index) => (
-                                                                <Col md={6} className="mb-5">
-                                                                    <div className="tickret-show-box">
-                                                                        <img src={Ticketimg} alt="" className="ticketimg-bg" />
-                                                                        <p className="mb-0" style={{ fontSize: '25px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.name}</p>
-                                                                        <p className="">Points amount {item.point}</p>
-                                                                        <button onClick={() => CheckRedeem(item._id)} className="redem-btn">Redeem</button>
-                                                                    </div>
-                                                                </Col>
-                                                            ))}
+                                                            {CouponLoaderTwo ? (
+                                                                <div className="linear-background w-100"> </div>
+                                                            ) : (
+                                                                <>
+                                                                    {CouponList.length == 0 ? (
+                                                                        <Norecord />
+                                                                    ) : (
+                                                                        <>
+                                                                            {CouponList.map((item, index) => (
+                                                                                <Col md={6} className="mb-5">
+                                                                                    <div className="tickret-show-box">
+                                                                                        <img src={Ticketimg} alt="" className="ticketimg-bg" />
+                                                                                        <p className="mb-0" style={{ fontSize: '25px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.name}</p>
+                                                                                        <p className="">Points amount {item.point}</p>
+                                                                                        <button onClick={() => CheckRedeem(item._id)} className="redem-btn">Redeem</button>
+                                                                                    </div>
+                                                                                </Col>
+                                                                            ))}
+                                                                        </>
+                                                                    )}
+                                                                </>
+                                                            )}
                                                         </>
                                                     ) : ''}
                                                     {Couponstate == 'old' ? (
@@ -330,7 +345,7 @@ const Dashboard = ({ title }) => {
                                                                                             <p className="">Points amount {item.coupondata[0].point}</p>
                                                                                             <span className="token-no-span">{item.tokenno}</span>
                                                                                             {item.isvalid == 0 ? (<button type="button" onClick={() => HandelCopyTxt(item.tokenno)} className="redem-copy-btn"><FiCopy /> Copy</button>) : (<button type="button" disabled className="btn btn-dark">Expired</button>)}
-                                                                                            
+
                                                                                         </div>
                                                                                     </Col>
                                                                                 ))

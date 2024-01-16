@@ -28,6 +28,14 @@ import "flatpickr/dist/themes/material_green.css";
 import Select from 'react-select'
 import { Link, useNavigate } from "react-router-dom";
 const Dashboard = ({ title }) => {
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+    const statusOptions = [
+        { value: '', label: 'Any' },
+        { value: '1', label: 'Active' },
+        { value: '2', label: 'Deactive' }
+    ];
+
     const [Loader, setLoader] = useState(false);
     const navigate = useNavigate();
     const [Listitems, setListitems] = useState([]);
@@ -257,13 +265,14 @@ const Dashboard = ({ title }) => {
 
 
     const handleVisibilityChange = (selectedVisibility) => {
-        if (selectedVisibility !== '') {
+        if (selectedVisibility.value !== '') {
             const filteredEvents = allEvents.filter(event =>
-                event.visibility.toString() === selectedVisibility);
+                event.visibility.toString() === selectedVisibility.value);
             setListitems(filteredEvents);
         } else {
             // If no option is selected, show all events
             setListitems(allEvents);
+            console.log("sss");
         }
     };
 
@@ -307,7 +316,7 @@ const Dashboard = ({ title }) => {
 
     return (
         <>
-         <Modal isOpen={Daterange} toggle={() => setDaterange(!Daterange)} centered>
+            <Modal isOpen={Daterange} toggle={() => setDaterange(!Daterange)} centered>
                 <ModalHeader toggle={!Daterange}>Select date</ModalHeader>
                 <ModalBody>
                     <Row>
@@ -315,7 +324,7 @@ const Dashboard = ({ title }) => {
                             <label htmlFor="" className="text-black">Start Date</label>
                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input" placeholder="Select date" readOnly value={viewStartdate} />
+                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate} />
                                 <div className="date-style-picker">
                                     <Flatpickr
                                         value={Startdate}
@@ -330,7 +339,7 @@ const Dashboard = ({ title }) => {
                             <label htmlFor="" className="text-black">End Date</label>
                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input" placeholder="Select date" readOnly value={viewEndtdate} />
+                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewEndtdate} />
                                 <div className="date-style-picker">
                                     <Flatpickr
                                         value={Endtdate}
@@ -386,24 +395,19 @@ const Dashboard = ({ title }) => {
                                                 <Col md={2}>
                                                     <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
-                                                        <input type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range"  />
+                                                        <input type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
                                                     </div>
                                                 </Col>
-                                                <Col md={2}>
-                                                    <div className="input-group mb-3 input-warning-o">
-                                                        <span className="input-group-text search-box-icon-1"><FiFlag /></span>
-                                                        <select
-                                                            className="form-control"
-                                                            onChange={e => handleVisibilityChange(e.target.value)}
-                                                            defaultValue=""
-                                                        >
-                                                            <option value="">Select Status</option>
-                                                            <option value="1">Active</option>
-                                                            <option value="2">Deactive</option>
-                                                        </select>
-                                                        <span className="input-group-text search-box-icon-1"><FiChevronDown /></span>
-                                                    </div>
+                                                <Col md={2} className="react-select-h mb-3">
+                                                    <Select
+                                                        className="react-select"
+                                                        onChange={handleVisibilityChange}
+                                                        options={statusOptions}
+                                                        menuIsOpen={isDropdownVisible} // Control the menu visibility
+                                                        onMenuOpen={() => setIsDropdownVisible(true)}
+                                                        onMenuClose={() => setIsDropdownVisible(false)}
+                                                    />
                                                 </Col>
 
                                                 <Col md={2}>

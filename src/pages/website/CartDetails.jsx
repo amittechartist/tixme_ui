@@ -10,13 +10,15 @@ import Button from 'react-bootstrap/Button';
 import Footer from '../../components/footer';
 import HeaderMenu from '../../components/headermenu';
 import MobileMenu from '../../components/mobilemenu';
-import { apiurl, onlyDayMonth, shortPer, app_url, isEmail } from "../../common/Helpers";
+import { apiurl, onlyDayMonth, shortPer, app_url, isEmail, get_percentage } from "../../common/Helpers";
 import { Link, useNavigate } from "react-router-dom";
 const Home = () => {
     const Beartoken = localStorage.getItem('userauth');
     const country_name = localStorage.getItem("countryname");
+
     const pgatway_name = localStorage.getItem("payment_gatway");
-    
+    const currency_symble = localStorage.getItem("currency_symble");
+
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
     const [isFirstRender, setIsFirstRender] = useState(false);
@@ -117,6 +119,7 @@ const Home = () => {
     const [LoginFname, setLoginFname] = useState('');
     const [LoginLname, setLoginLname] = useState('');
     const [LoginLoader, setLoginLoader] = useState(false);
+    const [OneTimegettax, setOneTimegettax] = useState(true);
     const HandelLoginasguest = async () => {
         try {
             if (!LoginEmail || !isEmail(LoginEmail)) {
@@ -161,7 +164,70 @@ const Home = () => {
         }
     }
     // login as guest
+    // get-taxes
+    const [taxlist, setTaxlist] = useState([]);
+    const [TaxlistLoader, setTaxlistLoader] = useState(true);
+    const [totaltaxamount, setTotaltaxamount] = useState();
+    const getTaxes = async () => {
+        try {
+            setTaxlistLoader(true);
+            fetch(apiurl + 'order/get-taxes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        setTaxlist(data.data);
+                        if (data.data) {
+                            const totalTax = data.data.reduce((accumulator, item) => {
+                                return accumulator + (item.taxamount || 0);
+                            }, 0);
 
+                            setTotaltaxamount(totalTax);
+                        }
+                    }
+                    setTaxlistLoader(false);
+                    setOneTimegettax(false)
+                })
+                .catch(error => {
+                    console.error('error:', error);
+                    setTaxlistLoader(false);
+                    setOneTimegettax(false)
+                });
+        } catch (error) {
+            console.error('error:', error);
+            setTaxlistLoader(false);
+            setOneTimegettax(false)
+        }
+    }
+    useEffect(() => {
+        if(OneTimegettax){
+            
+        }
+    
+        // Function to calculate and update taxlist with percentage_amount
+        const updateTaxListWithPercentage = () => {
+            if (taxlist.length > 0 && totaltaxamount > 0) {
+                const updatedTaxList = taxlist.map(item => ({
+                    ...item,
+                    percentage_amount: (item.taxamount / totaltaxamount) * 100
+                }));
+                setTaxlist(updatedTaxList);
+                console.log("zxx",updatedTaxList);
+            }
+        }
+    
+        if (totaltaxamount > 0 && !OneTimegettax) {
+            updateTaxListWithPercentage();
+            console.log("1");
+        }
+    
+        calculateTotalPrice();
+    }, [totaltaxamount, OneTimegettax]); // Added taxlist as a dependency
+    
     useEffect(() => {
         if (moneyLoader) {
             calculateTotalPrice();
@@ -189,9 +255,8 @@ const Home = () => {
             }
         }
     }, [country_name]);
-    console.log("pp", PaymentGatwayname);
     useEffect(() => {
-        getUserdata()
+        // getUserdata()
         loadCartFromLocalStorage();
         window.scrollTo(0, 0);
     }, []);
@@ -254,9 +319,6 @@ const Home = () => {
         }
     }
 
-
-
-
     const addToCart = (item) => {
         // Initialize cartItems as an empty array if it's undefined
         const existingItem = cartItems.find((cartItem) => cartItem.name === item.name);
@@ -294,44 +356,37 @@ const Home = () => {
         setIsFirstRender(true);
     };
     const calculateTotalPrice = () => {
+        getTaxes();
         if (!cartItems || cartItems.length === 0) {
             setAllItemsTotalPrice(0);
             setEventTotalPrice(0);
             return;
         }
-        const total = cartItems.reduce((accumulator, currentItem) => {
+        let total = cartItems.reduce((accumulator, currentItem) => {
             return accumulator + currentItem.price * currentItem.quantity;
         }, 0);
+
+        let TotalTax = 0;
+        if (totaltaxamount > 0) {
+            TotalTax = Math.round((total * totaltaxamount) / 100);
+        }
         if (rewardPoints) {
-            // Calculate discount amount
-            // const discountAmount = (total * DiscountPer) / 100;
             const discountAmount = rewardPoints;
-
-            // Calculate subtotal after discount
-            const subtotal = total - discountAmount;
-
-            // Round the subtotal to the nearest whole number
+            const subtotal = total + TotalTax - discountAmount;
             const roundedSubtotal = Math.round(subtotal);
-
-            // Set the total price with the rounded subtotal
             setAllItemsTotalPrice(total);
-
-            // You may want to set the discount amount and subtotal in state as well if needed
             setDiscountAmount(discountAmount);
             setSubtotal(roundedSubtotal);
         } else {
-            // If no discount, set the total directly
             setAllItemsTotalPrice(total);
-
-            // Reset discount amount and subtotal if needed
             setDiscountAmount(0);
-            setSubtotal(total);
+            setSubtotal(total + TotalTax);
         }
     };
 
     const saveCartToLocalStorage = async () => {
         try {
-            if(!pgatway_name){
+            if (!pgatway_name) {
                 toast.error("Server issue try again");
                 localStorage.removeItem('cart')
                 navigate(app_url);
@@ -364,12 +419,12 @@ const Home = () => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        if(data.payment_type && data.payment_type == "Free"){
+                        if (data.payment_type && data.payment_type == "Free") {
                             localStorage.removeItem('payment_gatway');
                             localStorage.removeItem('cart')
                             localStorage.setItem("paymentid_token", data.payment_id);
                             navigate(app_url + 'order-successful-page');
-                        }else{
+                        } else {
                             localStorage.removeItem('cart')
                             localStorage.removeItem('payment_gatway');
                             localStorage.setItem("paymentid_token", data.payment_id)
@@ -476,7 +531,12 @@ const Home = () => {
                                                                         <p className="mb-0 cart-ticket-name">{item.name}</p>
                                                                     </Col>
                                                                     <Col md={4}>
-                                                                        <span className="cart-price">Price : ${item.price}</span>
+                                                                        {item.price > 0 ? (
+                                                                            <span className="cart-price">Price : {currency_symble} {item.price}</span>
+                                                                        ) : (
+                                                                        <span className="cart-price">Price : Free</span>
+                                                                        )}
+                                                                        
                                                                     </Col>
                                                                     <Col md={4}>
                                                                         <div className="d-inline-block">
@@ -507,7 +567,7 @@ const Home = () => {
                                                                 <h5 className="cart-amount-small-title">Subtotal</h5>
                                                             </Col>
                                                             <Col md={6} className="my-2 text-end">
-                                                                <h5 className="cart-amount-small-amount">Rs. {allItemsTotalPrice}</h5>
+                                                                <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}</h5>
                                                             </Col>
                                                             {/* {Iswallet ? (
                                                                 <>
@@ -542,13 +602,34 @@ const Home = () => {
                                                                 </Col>
 
                                                             ) : ''} */}
+                                                            {allItemsTotalPrice > 0 ? (
+                                                                <>
+                                                                    {TaxlistLoader ? (
+                                                                        <div className="linear-background w-100" style={{ height: '100px' }}> </div>
+                                                                    ) : (
+                                                                        <>
+                                                                            {taxlist.map((item, index) => (
+                                                                                <>
+                                                                                    <Col md={6} className="my-2">
+                                                                                        <h5 className="cart-amount-small-title">{item.name}</h5>
+                                                                                    </Col>
+                                                                                    <Col md={6} className="my-2 text-end">
+                                                                                        <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount,allItemsTotalPrice)}</h5>
+                                                                                    </Col>
+                                                                                </>
+                                                                            ))}
+
+                                                                        </>
+                                                                    )}
+                                                                </>
+                                                            ) : ''}
                                                             {DiscountAmount ? (
                                                                 <>
                                                                     <Col md={6} className="my-2">
                                                                         <h5 className="cart-amount-small-title">Discount</h5>
                                                                     </Col>
                                                                     <Col md={6} className="my-2 text-end">
-                                                                        <h5 className="cart-amount-small-amount">{DiscountAmount}</h5>
+                                                                        <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}</h5>
                                                                     </Col>
                                                                 </>
                                                             ) : ''}
@@ -559,7 +640,7 @@ const Home = () => {
                                                                 <h3 className="cart-amount-small-title theme-color font-600">Total</h3>
                                                             </Col>
                                                             <Col md={6} className="text-end">
-                                                                <h3 className="cart-amount-small-amount theme-color font-600">Rs. {Subtotal}</h3>
+                                                                <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}</h3>
                                                             </Col>
                                                             <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">
                                                                 <Row>

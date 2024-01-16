@@ -7,7 +7,19 @@ import toast from 'react-hot-toast';
 import { apiurl, admin_url } from '../../../common/Helpers';
 import { Link } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
+import {
+    Modal,
+    Input,
+    ModalBody,
+    ModalHeader
+} from 'reactstrap';
 const Dashboard = ({ title }) => {
+
+    const [EditTitle, setEditTitle] = useState();
+    const [EditAmount, setEditAmount] = useState();
+    const [EditId, setEditId] = useState();
+    const [EditModal, setEditModal] = useState(false);
+
     const [Categoryname, setCategoryname] = useState();
     const [Listitem, setListitem] = useState([]);
     const [taxtitle, setTaxtitle] = useState();
@@ -54,13 +66,13 @@ const Dashboard = ({ title }) => {
             console.error('Api error:', error);
         }
     };
-    const HandelFormupdate = async (id) => {
+    const HandelFormupdate = async () => {
         try {
             setLoader(true);
             const requestData = {
-                name: taxtitle ? taxtitle : null,
-                taxamount: taxamount ? taxamount : null,
-                id: id
+                name: EditTitle ? EditTitle : null,
+                taxamount: EditAmount ? EditAmount : null,
+                id: EditId
             };
             fetch(apiurl + 'admin/tax-update', {
                 method: 'POST',
@@ -79,6 +91,7 @@ const Dashboard = ({ title }) => {
                         fetchTaxlist();
                         setTaxtitle('');
                         setTaxamount('');
+                        setEditModal(!EditModal);
                     } else {
                         toast.error(data.message);
                     }
@@ -119,11 +132,48 @@ const Dashboard = ({ title }) => {
             console.error('Api error:', error);
         }
     };
+    const HandelOpenEditmodal = async (id, titleis, amountis ) => {
+        setEditTitle(titleis)
+        setEditAmount(amountis)
+        setEditId(id);
+        setEditModal(!EditModal);
+    };
+
     useEffect(() => {
         fetchTaxlist();
     }, []);
     return (
         <>
+            <Modal isOpen={EditModal} toggle={() => setEditModal(!EditModal)} centered>
+                <ModalHeader toggle={!EditModal}>Select date</ModalHeader>
+                <ModalBody>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div>
+                                <label htmlFor="" className="text-black">Tax title</label>
+                                <input type="text" class="form-control input-default" placeholder="Enter title" value={EditTitle} onChange={(e) => setEditTitle(e.target.value)} />
+                            </div>
+                            <div>
+                                <label htmlFor="" className="text-black">Tax percentage (%)</label>
+                                <input type="text" class="form-control input-default" placeholder="Enter tax amount" value={EditAmount} onChange={(e) => setEditAmount(e.target.value)} />
+                            </div>
+                            <div className="mt-3">
+                                {Loader ? (
+                                    <button className="w-100 theme-btn">
+                                        <span className="theme-btn-icon"><FiPlus /></span> <span>Please wait...</span>
+                                    </button>
+                                ) : (
+                                    <button className="w-100 theme-btn" onClick={() => HandelFormupdate()}>
+                                        <span className="theme-btn-icon"><FiPlus /></span> <span>Update</span>
+                                    </button>
+                                )}
+
+                            </div>
+
+                        </div>
+                    </div>
+                </ModalBody>
+            </Modal>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
                     <Row className="justify-content-center">
@@ -138,14 +188,14 @@ const Dashboard = ({ title }) => {
                                                 ) : (
                                                     <>
                                                         {Listitem.map((item, index) => (
-                                                            <Col md={4}>
+                                                            <Col md={6}>
                                                                 <div>
                                                                     <label htmlFor="" className="text-black">Tax title</label>
-                                                                    <input type="text" class="form-control input-default" placeholder="Enter title" value={taxtitle ? taxtitle : item.name} onChange={(e) => setTaxtitle(e.target.value ? e.target.value : item.name)} />
+                                                                    <input type="text" readOnly class="form-control input-default" placeholder="Enter title" value={taxtitle ? taxtitle : item.name} onChange={(e) => setTaxtitle(e.target.value ? e.target.value : item.name)} />
                                                                 </div>
                                                                 <div>
-                                                                    <label htmlFor="" className="text-black">Tax amount</label>
-                                                                    <input type="text" class="form-control input-default" placeholder="Enter tax amount" value={taxamount ? taxamount : item.taxamount} onChange={(e) => setTaxamount(e.target.value ? e.target.value : item.taxamount)} />
+                                                                    <label htmlFor="" className="text-black">Tax percentage (%)</label>
+                                                                    <input type="text" readOnly class="form-control input-default" placeholder="Enter tax amount" value={taxamount ? taxamount : item.taxamount} onChange={(e) => setTaxamount(e.target.value ? e.target.value : item.taxamount)} />
                                                                 </div>
                                                                 <div className="mt-3">
                                                                     {Loader ? (
@@ -153,8 +203,8 @@ const Dashboard = ({ title }) => {
                                                                             <span className="theme-btn-icon"><FiPlus /></span> <span>Please wait...</span>
                                                                         </button>
                                                                     ) : (
-                                                                        <button className="w-100 theme-btn" onClick={() => HandelFormupdate(item._id)}>
-                                                                            <span className="theme-btn-icon"><FiPlus /></span> <span>Update</span>
+                                                                        <button className="w-100 theme-btn" onClick={() => HandelOpenEditmodal(item._id, item.name, item.taxamount)}>
+                                                                            <span className="theme-btn-icon"><FiPlus /></span> <span>Edit</span>
                                                                         </button>
                                                                     )}
 
@@ -171,7 +221,7 @@ const Dashboard = ({ title }) => {
                                                     <input type="text" class="form-control input-default" placeholder="Enter title" value={taxtitle} onChange={(e) => setTaxtitle(e.target.value)} />
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="" className="text-black">Tax amount</label>
+                                                    <label htmlFor="" className="text-black">Tax percentage (%)</label>
                                                     <input type="text" class="form-control input-default" placeholder="Enter tax amount" value={taxamount} onChange={(e) => setTaxamount(e.target.value)} />
                                                 </div>
                                                 <div className="mt-3">

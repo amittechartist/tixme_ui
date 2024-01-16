@@ -3,7 +3,7 @@ import Footer from '../../components/footer';
 import HeaderMenu from '../../components/headermenu';
 import MobileMenu from '../../components/mobilemenu';
 import { apiurl, onlyDayMonth, shortPer, app_url } from "../../common/Helpers";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Nouserphoto from '../../common/image/nouser.png';
 import locationIcon from "../../assets/location (5) 1.svg";
 import Container from "react-bootstrap/Container";
@@ -11,43 +11,37 @@ import { useParams } from 'react-router-dom';
 import { Button } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import TimerComponent from '../../component/event/timer';
-
+import CoundownDiv from '../../component/coundown';
 import Noimg from "../../common/image/noimg.jpg";
 import calendar from "../../assets/calendar.svg";
-import eventLogo from "../../assets/eventLogo.svg";
-import clock from "../../assets/clock.svg";
-import hourglass from "../../assets/hourglass.svg";
-
-import Eventlogo from "../../common/icon/eventlogo.svg";
 import Timelogo from "../../common/icon/time 1.svg";
 import Hourglasslogo from "../../common/icon/hourglass.svg";
 import LocationIcon from "../../common/icon/location.svg";
-import Eventimg from "../../common/event.jpg";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, Marker } from '@react-google-maps/api';
 import DateIcon from "../../common/icon/date 2.svg";
 import MapIcon from "../../common/icon/mapicon.svg";
-import { BsHeart, BsFillHeartFill } from "react-icons/bs";
-import HeartIcon from "../../common/icon/heart.svg";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import ShareIcon from "../../common/icon/share.svg";
 import EventImg from "../../common/event1.png";
 import MailIcon from "../../common/icon/mail.svg";
-import whitestart from "../../common/icon/whitestart.svg";
 import FlagIcon from "../../common/icon/flag.svg";
 import Flip from "react-reveal/Flip";
 import Fade from "react-reveal/Fade";
 import Slide from "react-reveal/Slide";
-import CountUp from "react-countup";
 import Whitestarbtn from "../../component/Whitestarbtn";
 import toast from "react-hot-toast";
 
+import locationIconevent from "./eventpageicon/location.png";
+import hourglassIcon from "./eventpageicon/hourglass.png";
+import timeIcon from "./eventpageicon/time.png";
+import dataIcon from "./eventpageicon/data.png";
+import mapIcon from "./eventpageicon/map.png";
 const Home = () => {
   const navigate = useNavigate();
   const Beartoken = localStorage.getItem('userauth');
   const { id, name } = useParams();
   const [Apiloader, setApiloader] = useState(true);
-  const [FollowApi, setFollowApi] = useState(true);
+  const [FollowApi, setFollowApi] = useState(false);
   const [Eventsaveapi, setEventsaveapi] = useState(true);
   const [isFirstRender, setIsFirstRender] = useState(false);
   const [Eventdata, setEventdata] = useState();
@@ -127,7 +121,7 @@ const Home = () => {
         toast.error("You need to login first");
         return false;
       }
-      setFollowApi(true)
+      // setFollowApi(true)
       const requestData = {
         organizerid: Organizerdata._id
       }
@@ -145,18 +139,17 @@ const Home = () => {
             setOrganizerdata(data.data);
             if (data.typestatus == 1) {
               // 1 = not following
-              setFollowtype(false);
+
             } else if (data.typestatus == 2) {
               // 2 = following
-              setFollowtype(true);
+
             } else {
               toast.error("Internal Server Error");
             }
-            setFollowApi(false)
-
           } else {
 
           }
+          setFollowApi(false)
         })
         .catch((error) => {
           console.error("Insert error:", error);
@@ -465,10 +458,13 @@ const Home = () => {
 
     if (Eventdata.currencycode === "USD") {
       localStorage.setItem('payment_gatway', 'Stripe');
+      localStorage.setItem('currency_symble', '$');
     } else if (Eventdata.currencycode === "SGD") {
       localStorage.setItem('payment_gatway', 'hitpay');
+      localStorage.setItem('currency_symble', 'S$');
     } else if (Eventdata.currencycode === "INR") {
       localStorage.setItem('payment_gatway', 'rezorpay');
+      localStorage.setItem('currency_symble', '₹');
     }
 
     if (existingItem) {
@@ -557,6 +553,7 @@ const Home = () => {
     const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(location)}`;
     window.open(mapsUrl, "_blank");
   };
+  console.log(FollowApi);
   return (
     <>
       {" "}
@@ -588,7 +585,7 @@ const Home = () => {
         </ModalFooter>
       </Modal >
       <HeaderMenu />
-      <div className="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
+      <div className="mx-lg-4 my-lg-3 banner-event bg-primary-color rounded-8 position-relative">
         <MobileMenu />
         {Apiloader ? (
           <div className="linear-background w-100"> </div>
@@ -598,51 +595,52 @@ const Home = () => {
             <h3 className="banner-h2 text-white rounded-8 px-4 py-3 animate__animated animate__bounce">
               {Eventdata.category_name}
             </h3>
-            <div className="banner-child bg-white">
-              <div className="py-4">
-                <div className="organizer-name-sec px-2 py-2">
-                  <div className="d-inline-flex align-items-center border-right event-time-area py-2">
-                    <div className="d-inline-block mr-1">
-                      <img height={30} width={30} src={DateIcon} alt="" />
-                    </div>
-                    <div className="d-inline-block">
-                      <span className="event-duration d-block">{Eventdata.start_date}</span>
-                    </div>
+            <div className="py-2" style={{ margin: '10px 0px 0px 66px' }}>
+              <div className="organizer-name-sec px-2 py-2">
+                <div className="d-inline-flex align-items-center border-right event-time-area py-2">
+                  <div className="d-inline-block mr-1">
+                    <img height={30} width={'auto'} src={dataIcon} alt="" />
                   </div>
-                  <div className="d-inline-flex align-items-center border-right event-time-area px-2">
-                    <div className="d-inline-block mr-1">
-                      <img height={30} width={30} src={Timelogo} alt="" />
-                    </div>
-                    <div className="d-inline-block">
-                      <span className="event-duration d-block">Event Time</span>
-                      <span className="event-time d-block">{Eventdata.start_time}</span>
-                    </div>
+                  <div className="d-inline-block">
+                    <span className="event-duration d-block">{Eventdata.start_date}</span>
                   </div>
-                  <div className="d-inline-flex align-items-center border-right event-time-area">
-                    <div className="d-inline-block mr-1">
-                      <img height={30} width={30} src={Hourglasslogo} alt="" />
-                    </div>
-                    <div className="d-inline-block">
-                      <span className="event-duration d-block">Event Duration</span>
-                      <span className="event-time d-block">{Eventdata.event_duration}</span>
-                    </div>
+                </div>
+                <div className="d-inline-flex align-items-center border-right event-time-area px-2">
+                  <div className="d-inline-block mr-1">
+                    <img height={30} width={'auto'} src={timeIcon} alt="" />
                   </div>
-                  <div className="d-inline-flex align-items-center">
-                    <div className="d-inline-block mr-1">
-                      <img height={30} width={30} src={LocationIcon} alt="" />
-                    </div>
-                    <div className="d-inline-block">
-                      <span className="event-duration d-block eventpage-location-name">
-                        {Eventdata.location}
-                      </span>
-                      <span onClick={openGoogleMaps} className="event-time d-block cursor-pointer py-0">Get direction</span>
-                    </div>
-                    <div className="d-inline-block mr-1 ml-3">
-                      <img height={30} width={30} src={MapIcon} alt="" />
-                    </div>
+                  <div className="d-inline-block">
+                    <span className="event-duration d-block">Event Time</span>
+                    <span className="event-time d-block">{Eventdata.start_time}</span>
+                  </div>
+                </div>
+                <div className="d-inline-flex align-items-center border-right event-time-area">
+                  <div className="d-inline-block mr-1">
+                    <img height={30} width={'auto'} className="ml-2" src={hourglassIcon} alt="" />
+                  </div>
+                  <div className="d-inline-block">
+                    <span className="event-duration d-block">Event Duration</span>
+                    <span className="event-time d-block">{Eventdata.event_duration}</span>
+                  </div>
+                </div>
+                <div className="d-inline-flex align-items-center">
+                  <div className="d-inline-block mr-1">
+                    <img height={30} width={'auto'} src={locationIconevent} alt="" />
+                  </div>
+                  <div className="d-inline-block">
+                    <span className="event-duration d-block eventpage-location-name">
+                      {Eventdata.location}
+                    </span>
+                    <span onClick={openGoogleMaps} className="event-time d-block cursor-pointer py-0">Get direction</span>
+                  </div>
+                  <div className="d-inline-block mr-1 ml-3">
+                    <img height={30} width={30} src={mapIcon} alt="" />
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="banner-child-event">
+              <img className="mt-2 event-banner" src={Eventdata.banner_image ? Eventdata.banner_image : EventImg} alt="" />
             </div>
           </>
         )}
@@ -653,10 +651,10 @@ const Home = () => {
         <div className="mx-lg-4 my-lg-3 ">
           <Row>
             <Col md={12}>
-              <img className="mt-2 event-banner" src={Eventdata.banner_image ? Eventdata.banner_image : EventImg} alt="" />
+
             </Col>
           </Row>
-          <div className="event-desc mt-4">
+          <div className="event-desc event-page-margin">
             <Container fluid>
               <Row>
                 <Col md={9}>
@@ -764,10 +762,10 @@ const Home = () => {
                                                     />
                                                   </div>
                                                   <div className="d-inline-block">
-                                                    <span className="event-duration d-block">
+                                                    <span className="event-duration d-block text-dark">
                                                       Event Date
                                                     </span>
-                                                    <span className="event-time d-block">
+                                                    <span className="event-time d-block text-dark">
                                                       {item.start_date}
                                                     </span>
                                                   </div>
@@ -782,10 +780,10 @@ const Home = () => {
                                                     />
                                                   </div>
                                                   <div className="d-inline-block">
-                                                    <span className="event-duration d-block">
+                                                    <span className="event-duration d-block text-dark">
                                                       Event Duration
                                                     </span>
-                                                    <span className="event-time d-block">
+                                                    <span className="event-time d-block text-dark">
                                                       {item.event_duration}
                                                     </span>
                                                   </div>
@@ -836,29 +834,9 @@ const Home = () => {
                   </Row>
                 </Col>
                 <Col md={3}>
-                  <div className="start-in-box eventpage-box-style mb-5">
-                    <div className="right-box-title">
-                      <p><Flip left cascade>Starts In</Flip></p>
-                    </div>
-                    <div className="right-box-con mt-4">
-                      <div className="time-box d-inline-block text-center">
-                        <p className="time-box-date"><CountUp separator="" start={1} end={10} /></p>
-                        <p className="time-box-text">Days</p>
-                      </div>
-                      <div className="time-box d-inline-block text-center">
-                        <p className="time-box-date"><CountUp separator="" start={1} end={5} /></p>
-                        <p className="time-box-text">Hours</p>
-                      </div>
-                      <div className="time-box d-inline-block text-center">
-                        <p className="time-box-date"><CountUp separator="" start={1} end={33} /></p>
-                        <p className="time-box-text">Minutes</p>
-                      </div>
-                      <div className="time-box d-inline-block text-center">
-                        <p className="time-box-date"><CountUp separator="" start={1} end={16} /></p>
-                        <p className="time-box-text">Seconds</p>
-                      </div>
-                    </div>
-                  </div>
+                  {Eventdata.start_mindate && Eventdata.is_clock_countdown ? (
+                    <CoundownDiv props={Eventdata.start_mindate} />
+                  ) : ''}
                   <div className="organised-by-box eventpage-box-style">
                     <div className="organizer-name-sec d-flex align-items-center px-2 py-2">
                       <div className="d-inline-block mr-3">
@@ -955,38 +933,6 @@ const Home = () => {
                                   </span>
                                 </div>
                               </div>
-                              <div className="organizer-name-sec px-2 py-2 margin-css ">
-                                <div className="event-name">
-                                  <p className="mb-0">Discount available :</p>
-                                </div>
-                                <div className="d-inline-flex align-items-center border-right event-time-area">
-                                  <div className="d-inline-block mr-1">
-                                    <img height={20} width={20} src={Timelogo} alt="" />
-                                  </div>
-                                  <div className="d-inline-block">
-                                    <span className="event-duration d-block">
-                                      Event Time
-                                    </span>
-                                    <span className="event-time d-block">{Eventdata.start_time}</span>
-                                  </div>
-                                </div>
-                                <div className="d-inline-flex align-items-center">
-                                  <div className="d-inline-block mr-1">
-                                    <img
-                                      height={20}
-                                      width={20}
-                                      src={Hourglasslogo}
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="d-inline-block">
-                                    <span className="event-duration d-block font-13">
-                                      Event Duration
-                                    </span>
-                                    <span className="event-time d-block">{Eventdata.event_duration}</span>
-                                  </div>
-                                </div>
-                              </div>
                             </div>
                             <div className="dashed-border-devider my-2"></div>
                           </>
@@ -1018,74 +964,79 @@ const Home = () => {
                   <h2 className="desc-sec theme-color">Other events you may like</h2>
                 </Col>
                 {Eventlist.map((item, index) => (
-                  <div className="col-xl-4 col-md-6 col-12 cursor-pointer" onClick={() => viewEvent(item._id, item.name)}>
-                    <div className="bg-white rounded-10 shadow-bottom">
+                  <div className="col-xl-3 col-md-3 col-12 cursor-pointer" onClick={() => viewEvent(item._id, item.name)}>
+                    <div className="bg-white rounded-10 shadow-bottom pb-3" style={{ height: '100%' }}>
                       <div style={{ position: 'relative' }}>
                         <span className="event-category-img">{item.category_name}</span>
                         <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                        <div className="d-flex align-items-center justify-content-end mt-n4 me-3" style={{ position: 'relative', top: '35px' }}>
-                          <img className="card-icon me-2" src={calendar} alt="" />
-                          <p className="text-primary-color fw-bold me-lg-4 me-lg-3 me-0 mb-0 mt-md-0">
-                            {onlyDayMonth(item.start_date)}
-                          </p>
+                        <div className="d-flex align-items-center event-date-small-box">
+                          <span className="event-date-small">
+                            <img className="card-icon me-2" src={calendar} alt="" />
+                            <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                              {onlyDayMonth(item.start_date)}
+                            </span>
+                          </span>
                         </div>
                       </div>
-                      <div className="d-flex align-items-center justify-content-start border-bttom-dotted w-origin ms-3 mt-1 pb-2">
-                        <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                        <div className="d-flex flex-column align-items-start justify-content-start">
-                          <small className="small mb-0">Originated by</small>
-                          <p className="text-primary-color fw-bold me-lg-4 me-lg-3 me-1 mb-0 mt-n1">
-                            By {item.organizer_name}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-7">
-                          <div className="d-flex align-items-center justify-content-start me-3 ms-3 my-2">
-                            <img className="card-icon me-1" src={locationIcon} alt="" />
-                            <p className="text-primary-color fw-bold me-lg-4 me-lg-3 me-1 mb-0 event-cart-location">
-                              {item.location}
+                      <div className="row px-2 mt-2">
+                        <div className="col-md-7 d-flex align-items-center">
+                          <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                          <div className="d-flex flex-column align-items-start justify-content-start">
+                            <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                            <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                              By {item.organizer_name}
                             </p>
                           </div>
                         </div>
-                        <div className="col-md-5 pl-2">
-                          <div className="bg-fade rounded py-3 pl-5 event-cart-price-box">
+                        <div className="col-md-5">
+                          <div className="bg-fade rounded pl-5 event-cart-price-box">
                             <p className="small fw-bold mb-0 pb-0">Onwards</p>
                             {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
                             <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
                           </div>
                         </div>
                       </div>
-                      <div className="d-flex justify-content-start align-items-start">
-                        <div
-                          className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2 border-end pe-3"
-                          style={{ flexShrink: 0, width: "auto" }}
-                        >
-                          <img className="card-icon2 me-2" src={clock} alt="" />
-                          <div>
-                            <p className="small text-primary-color fw-bold mb-0 pb-0">
-                              Event Time
+                      <div className="row mt-1">
+                        <div className="col-md-12">
+                          <div className="d-flex align-items-center justify-content-start my-2">
+                            <img className="card-icon me-1" src={locationIcon} alt="" />
+                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              {item.location}
                             </p>
-                            <p className="small mb-0">{item.start_time}</p>
                           </div>
                         </div>
-                        <div
-                          className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2"
-                          style={{ flexShrink: 0, width: "auto" }}
-                        >
-                          <img className="card-icon2 me-2" src={hourglass} alt="" />
-                          <div>
-                            <p className="small text-primary-color fw-bold mb-0 pb-0">
-                              Event Duration
-                            </p>
-                            <p className="small mb-0">{item.event_duration}</p>
-                          </div>
-                        </div>
+
                       </div>
+                      {/* <div className="d-flex justify-content-start align-items-start">
+                          <div
+                            className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2 border-end pe-3"
+                            style={{ flexShrink: 0, width: "auto" }}
+                          >
+                            <img className="card-icon2 me-2" src={clock} alt="" />
+                            <div>
+                              <p className="small text-primary-color fw-bold mb-0 pb-0">
+                                Event Time
+                              </p>
+                              <p className="small mb-0">{item.start_time}</p>
+                            </div>
+                          </div>
+                          <div
+                            className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2"
+                            style={{ flexShrink: 0, width: "auto" }}
+                          >
+                            <img className="card-icon2 me-2" src={hourglass} alt="" />
+                            <div>
+                              <p className="small text-primary-color fw-bold mb-0 pb-0">
+                                Event Duration
+                              </p>
+                              <p className="small mb-0">{item.event_duration}</p>
+                            </div>
+                          </div>
+                        </div> */}
                       <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-                      <p className="desc mx-3 pb-3">
-                        {shortPer(item.event_desc, 100)}
-                      </p>
+                      {/* <p className="desc mx-3 pb-3">
+                          {shortPer(item.event_desc, 100)}
+                        </p> */}
                     </div>
                   </div>
                 ))}

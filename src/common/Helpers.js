@@ -7,8 +7,16 @@ export const customer_url = app_url + 'customer/';
 // export const apiurl = 'http://localhost:5001/api/v1/';
 // export const imgurl = 'http://localhost:5001/uploads/';
 
+
 export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
 export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
+
+
+
+export function get_percentage(per, total) {
+    const TotalTax = Math.round((total * per) / 100);
+    return TotalTax;
+}
 
 export function isEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;

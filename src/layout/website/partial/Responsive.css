@@ -1,4 +1,15 @@
 @media only screen and (max-width: 900px) {
+    .animation-home-banner {
+        margin-left: 24px;
+        font-size: 18px;
+        padding: 16px 0px 40px 15px;
+        border: 2px dashed  #fff;
+        width: 337px;
+        border-radius: 10px;
+    }
+    .nav-control {
+  display: inline;
+}
     .header-item-overlay {
         z-index: 34;
         position: fixed;
