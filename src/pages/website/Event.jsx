@@ -38,6 +38,8 @@ import dataIcon from "./eventpageicon/data.png";
 import mapIcon from "./eventpageicon/map.png";
 const Home = () => {
   const navigate = useNavigate();
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  console.log(screenWidth);
   const Beartoken = localStorage.getItem('userauth');
   const { id, name } = useParams();
   const [Apiloader, setApiloader] = useState(true);
@@ -595,7 +597,7 @@ const Home = () => {
             <h3 className="banner-h2 text-white rounded-8 px-4 py-3 animate__animated animate__bounce">
               {Eventdata.category_name}
             </h3>
-            <div className="py-2" style={{ margin: '10px 0px 0px 66px' }}>
+            <div className="py-2 singel-event-page-head-box">
               <div className="organizer-name-sec px-2 py-2">
                 <div className="d-inline-flex align-items-center border-right event-time-area py-2">
                   <div className="d-inline-block mr-1">

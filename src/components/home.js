@@ -13,7 +13,7 @@ import expedia from "./assets/expedia.svg";
 import ArrowDown from './assets/arrowdrop.svg'
 import arrow from "./assets/arrow.svg";
 import { useTransition, animated } from 'react-spring';
-import location from "./assets/location (5) 1.svg";
+import locationIcon from "./assets/location (5) 1.svg";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Footer from './footer';
 import Slider from "react-slick";
@@ -22,7 +22,7 @@ import Nouserphoto from '../common/image/nouser.png';
 import MobileMenu from './mobilemenu';
 import Alert from 'react-bootstrap/Alert';
 import Arts from '../common/category/Group 1171274918.svg';
-import Business from '../common/category/Business & Networking.svg';
+import Business from '../common/category/Busimess11.png';
 import Food from '../common/category/Group 1171274941.svg';
 import Music from '../common/category/Group 1171274913.svg';
 import NIGHTLIFE from '../common/category/Group 1171274914.svg';
@@ -627,7 +627,7 @@ const Home = () => {
                         <div className="row mt-1">
                           <div className="col-md-12">
                             <div className="d-flex align-items-center justify-content-start my-2">
-                              <img className="card-icon me-1" src={location} alt="" />
+                              <img className="card-icon me-1" src={locationIcon} alt="" />
                               <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
                                 {item.location}
                               </p>
@@ -681,13 +681,13 @@ const Home = () => {
       <div className="count-sec">
         <div className="row">
           <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-            <div className="border-end bottom-line border-primary pb-md-0 pb-4">
+            <div className="border-style-home-page pb-md-0 pb-4">
               <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">EVENT HOSTED</h6>
               <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
             </div>
           </div>
           <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-            <div className="border-end bottom-line border-primary pb-md-0 pb-4">
+            <div className="border-style-home-page pb-md-0 pb-4">
               <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Ticket Sold</h6>
               <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
             </div>

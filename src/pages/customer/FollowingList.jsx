@@ -5,6 +5,7 @@ import { apiurl, customer_url, isEmail, app_url } from '../../common/Helpers';
 import Searchicon from '../../common/icon/searchicon.png';
 import Norecord from '../../component/Norecordui';
 import Eventlogo from "../../common/icon/eventlogo.svg";
+import Nouserphoto from '../../common/image/nouser.png';
 import Swal from 'sweetalert2'
 import toast from "react-hot-toast";
 import withReactContent from 'sweetalert2-react-content'
@@ -23,7 +24,7 @@ const Dashboard = ({ title }) => {
         // Now filter the events based on the search term
         if (value) {
             const filteredEvents = Alllist.filter(event =>
-                event.organizername.toLowerCase().includes(value.toLowerCase()));
+                event.orderData[0].name.toLowerCase().includes(value.toLowerCase()));
             setListitems(filteredEvents);
         } else {
             // If the search term is empty, reset to show all events
@@ -94,7 +95,6 @@ const Dashboard = ({ title }) => {
                 .then(data => {
                     if (data.success == true) {
                         setListitems(data.data);
-                        console.log("s",data.data);
                         setAlllist(data.data);
                     } else {
                     }
@@ -160,12 +160,12 @@ const Dashboard = ({ title }) => {
                                                                                 <img
                                                                                     height={70}
                                                                                     width={70}
-                                                                                    src={Eventlogo}
+                                                                                    src={item.orderData[0].profile_picture ? item.orderData[0].profile_picture : Nouserphoto}
                                                                                     alt=""
                                                                                     className="organiger-logo mb-2"
                                                                                 />
                                                                                 {/* <p className="org-name">{item.organizername}</p> */}
-                                                                                <Link to={`${customer_url}organizer-events/${item.organizerid}`}><p className="org-name">{item.organizername}</p></Link>
+                                                                                <Link to={`${customer_url}organizer-events/${item.organizerid}`}><p className="org-name">{item.orderData[0].name}</p></Link>
                                                                                 <p className="org-event-count">{item.eventDataCount} Events</p>
                                                                                 <button onClick={() => CheckDelete(item.organizerid)} type="button" class="Unfollow-btn-1">Unfollow</button>
                                                                             </div>

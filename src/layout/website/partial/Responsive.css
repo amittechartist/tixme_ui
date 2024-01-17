@@ -1,4 +1,12 @@
 @media only screen and (max-width: 900px) {
+    .border-style-home-page {
+        border-right: none;
+        border-bottom: 1px solid #003b8f;
+        margin: 0px 5px;
+    }
+    .singel-event-page-head-box{
+        margin: 10px 0px 0px 10px;
+    }
     .animation-home-banner {
         margin-left: 24px;
         font-size: 18px;

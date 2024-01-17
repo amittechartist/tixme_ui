@@ -1398,3 +1398,9 @@ p.cursor-pointer.my-location-btn {
 .event-desc.event-page-margin {
     margin-top: 148px;
 }
+.border-style-home-page {
+    border-right: 1px solid #003b8f;
+}
+.singel-event-page-head-box{
+    margin: 10px 0px 0px 66px
+}

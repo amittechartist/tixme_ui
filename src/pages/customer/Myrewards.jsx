@@ -5,6 +5,8 @@ import { apiurl } from '../../common/Helpers';
 import Nouserphoto from '../../common/image/nouser.png';
 import RewardBg from '../../common/image/reqard.svg';
 import Silver from '../../common/image/star/Group 1171274979.svg';
+import Gold from '../../common/image/star/Group 1171274980.svg';
+import Prem from '../../common/image/star/Group 1171274981.svg';
 import Swal from 'sweetalert2';
 import Norecord from '../../component/Norecordui';
 import withReactContent from 'sweetalert2-react-content';
@@ -24,15 +26,19 @@ const Dashboard = ({ title }) => {
     const [CouponLoaderTwo, setCouponLoaderTwo] = useState(false);
     const [CouponList, setCouponList] = useState([]);
     const [Packloader, setPackloader] = useState(true);
+    const [Packloaderxxx, setPackloaderxxx] = useState(true);
 
     const [Percentage, setPercentage] = useState();
     const [mypoint, setmypoint] = useState();
+    const [currentPackage, setcurrentPackage] = useState();
     const [nextTarget, setnextTarget] = useState();
     const [Couponstate, setCouponstate] = useState('new');
 
     const [MyCouponList, setMyCouponList] = useState([]);
     const [MyCouponlistLoader, setMyCouponlistLoader] = useState(true);
 
+
+    const [Packagelist, setPackagelist] = useState([]);
 
 
     const fetchData = async () => {
@@ -119,6 +125,7 @@ const Dashboard = ({ title }) => {
     const fetchPackage = async () => {
         try {
             setPackloader(true)
+            setPackloaderxxx(true)
             fetch(apiurl + 'order/calculate-per', {
                 method: 'POST',
                 headers: {
@@ -132,6 +139,38 @@ const Dashboard = ({ title }) => {
                         setPercentage(data.data);
                         setmypoint(data.mypoint);
                         setnextTarget(data.nextTarget);
+                        setcurrentPackage(data.currentPackage);
+                    } else {
+
+                    }
+                    setPackloader(false)
+                    setPackloaderxxx(false)
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                    setPackloader(false)
+                    setPackloaderxxx(false)
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+            setPackloader(false)
+            setPackloaderxxx(false)
+        }
+    }
+    const fetchAllpackage = async () => {
+        try {
+            setPackloader(true)
+            fetch(apiurl + 'order/get-package-withpercentage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                    'Authorization': `Bearer ${Beartoken}`, // Set the Content-Type header to JSON
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        setPackagelist(data.data);
                     } else {
 
                     }
@@ -149,8 +188,10 @@ const Dashboard = ({ title }) => {
     useEffect(() => {
         fetchData();
         fetchPackage();
-        fetchcouponData();
-        fetchMycouponList();
+        fetchcouponData(); //list of active coupon
+        fetchMycouponList(); // my redeem coupon list
+        // get-pachage-withpercentage
+        fetchAllpackage();
     }, []);
     function CheckRedeem(id) {
         MySwal.fire({
@@ -232,38 +273,45 @@ const Dashboard = ({ title }) => {
                                                             </Col>
                                                             <Col md={6}>
                                                                 <div className="text-end">
-                                                                    <div><span className="view-coupon-btn">View Coupon</span><p className="reward-point-text">Rewards Points</p></div>
                                                                     <p className="reward-point-count">{userdata.wallet ? userdata.wallet : 0}</p>
                                                                 </div>
                                                             </Col>
-                                                            <Col md={12} className="pb-3">
-                                                                <Row style={{ borderBottom: '1px solid #000' }}>
-                                                                    <Col md={4} xl={4} sm={4} className="text-center">
-                                                                        <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
-                                                                            <p className="rewarx-box-c-title">Your status</p>
-                                                                            <p className="rewarx-box-c-sts"><span>{userdata.plan_name ? userdata.plan_name + ' TIER' : ''}</span></p>
-                                                                        </div>
-                                                                    </Col>
-                                                                    <Col md={4} xl={4} sm={4} className="text-center">
-                                                                        <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
-                                                                            <p className="rewarx-box-c-title">Points Available</p>
-                                                                            <p className="rewarx-box-c-sts">{nextTarget.pointsToNextTarget}</p>
-                                                                        </div>
-                                                                    </Col>
-                                                                    <Col md={4} className="text-center">
-                                                                        <div>
-                                                                            <p className="rewarx-box-c-title">Next TIER</p>
-                                                                            <p className="rewarx-box-c-sts">{nextTarget.name} TIER</p>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
+                                                            {Packloaderxxx ? (
+                                                                <></>
+                                                            ) : (
+                                                                <>
+                                                                <Col md={12} className="pb-3">
+                                                                    <Row style={{ borderBottom: '1px solid #000' }}>
+                                                                        <Col md={4} xl={4} sm={4} className="text-center">
+                                                                            <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
+                                                                                <p className="rewarx-box-c-title">Your status</p>
+                                                                                <p className="rewarx-box-c-sts"><span>{currentPackage.name ? currentPackage.name + ' TIER' : ''}</span></p>
+                                                                            </div>
+                                                                        </Col>
+                                                                        <Col md={4} xl={4} sm={4} className="text-center">
+                                                                            <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
+                                                                                <p className="rewarx-box-c-title">Points to reach {nextTarget.name}</p>
+                                                                                <p className="rewarx-box-c-sts">{nextTarget.pointsToNextTarget}</p>
+                                                                            </div>
+                                                                        </Col>
+                                                                        <Col md={4} className="text-center">
+                                                                            <div>
+                                                                                <p className="rewarx-box-c-title">Next TIER</p>
+                                                                                <p className="rewarx-box-c-sts">{nextTarget.name} TIER</p>
+                                                                            </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </Col>
+                                                            
+
                                                             <Col md={6}>
                                                                 <p className="Booking-progress-towards">Booking progress towards  <span>{nextTarget.name} TIER</span></p>
                                                             </Col>
                                                             <Col md={6} className="text-end">
                                                                 <p className="Booking-progress-towards"><span>{nextTarget.purchaseAmount}</span> Points for {nextTarget.name} TIER</p>
                                                             </Col>
+                                                            </>
+                                                            )}
                                                             {Packloader ? '' : (
                                                                 <Col md={12} className="mt-4">
                                                                     <div className="reward-box" style={{ position: 'relative' }}>
@@ -271,12 +319,23 @@ const Dashboard = ({ title }) => {
                                                                             <img src={Silver} alt="" />
                                                                             <p className="reward_star_text" style={{ fontSize: '18px' }}>{userdata.plan_name ? userdata.plan_name + ' TIER' : 'Next ' + nextTarget.name}</p>
                                                                         </span>
-                                                                        {/* <span className="reward_star"><img src={Gold} alt="" />
-                                                                    <p className="reward_star_text">gold TIER</p>
-                                                                    </span> */}
-                                                                        {/* <span className="reward_star"><img src={Prem} alt="" />
-                                                                    <p className="reward_star_text">Platinum TIER</p>
-                                                                    </span> */}
+                                                                        {/* fetch scal data     */}
+                                                                        {Packagelist.map((item, index) => (
+                                                                            item.name === "Gold" && (
+                                                                                <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
+                                                                                    <img src={Gold} alt="" />
+                                                                                    <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Gold TIER</p>
+                                                                                </span>
+                                                                            )
+                                                                            ||
+                                                                            item.name === "Platinum" && (
+                                                                                <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
+                                                                                    <img src={Prem} alt="" />
+                                                                                    <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Platinum TIER</p>
+                                                                                </span>
+                                                                            )
+                                                                        ))}
+
                                                                         <img src={RewardBg} style={{ height: '100%', width: '100%', objectFit: 'contain' }} alt="" />
                                                                     </div>
                                                                 </Col>

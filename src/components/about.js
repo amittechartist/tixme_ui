@@ -18,10 +18,10 @@ import location from "./assets/location (5) 1.svg";
 import Footer from './footer';
 import HeaderMenu from './headermenu';
 import MobileMenu from './mobilemenu';
-import Journey1 from '../assets/new/1.png'
-import Journey2 from '../assets/new/2.png'
-import Journey3 from '../assets/new/3.png'
-import Journey4 from '../assets/new/4.png'
+import Journey1 from '../common/image/aboutus/Low Fee.svg'
+import Journey2 from '../common/image/aboutus/Support (5).svg'
+import Journey3 from '../common/image/aboutus/Techonolgy.svg'
+import Journey4 from '../common/image/aboutus/Membership.svg'
 const About = () => {
   return (
     <>
@@ -52,19 +52,19 @@ const About = () => {
           <div className="row newAboutJourney">
                 <div className="col-6 col-lg-3">
                   <img className="img-fluid" src={Journey1} alt="" />
-                  <span>Journey is Secure</span>
+                  <span>Low Fee</span>
                 </div>               
                 <div className="col-6 col-lg-3">
                   <img className="img-fluid" src={Journey2} alt="" />
-                  <span>The Path is Clear</span>
+                  <span>Excllent Customer Support</span>
                 </div>               
                 <div className="col-6 col-lg-3 mt-4 mt-md-0">
                   <img className="img-fluid" src={Journey3} alt="" />
-                  <span>Memories are Destined</span>
+                  <span>High Cutting Edge Technology</span>
                 </div>               
                 <div className="col-6 col-lg-3 mt-4 mt-md-0">
                   <img className="img-fluid" src={Journey4} alt="" />
-                  <span>Secure your Ticket</span>
+                  <span>Membership Provided</span>
                 </div>               
           </div>
           <p>
