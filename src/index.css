@@ -187,7 +187,7 @@ a {
 }
 
 .about-img {
-  height: 500px;
+  height: 250px;
 }
 
 .about-p {
@@ -961,7 +961,7 @@ input:focus {
 }
 
 .GetLatestUpdateButton {
-  background-color: #0047AB;
+  background-color: #0047ab;
   color: #fff;
   display: flex;
   align-items: center;
@@ -976,11 +976,11 @@ input:focus {
 }
 
 .GetLatestUpdateButton:hover {
-  background-color: #072d63;
+  background-color: #0047ab;
 }
 
 .GetLatestUpdateButton .right {
-  background-color: #6495ED;
+  background-color: #6495ed;
   position: absolute;
   width: 30px;
   height: 100%;

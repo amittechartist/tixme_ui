@@ -523,7 +523,7 @@ const Home = () => {
                 style={{ height: '40px' }}
                 value={SearchInput}
               />
-              <button onClick={handleButtonClick}>
+              <button className="dfssfdsfdsf" onClick={handleButtonClick} type="button" style={{background: '#f0f0f0'}}>
                 <img src={InputSearchIcon} alt="" />
               </button>
             </div>

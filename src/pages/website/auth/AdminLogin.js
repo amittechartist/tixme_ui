@@ -128,8 +128,6 @@ const About = () => {
                     <div className='row form-area'>
                         <div className="col-md-6">
                             <div>
-                                <h5 className="mb-5" style={{ fontWeight: '600', color: '#000' }}>Do you already have an account? please log in with your email address.</h5>
-
                                 <div className="form-group">
                                     <p>Username</p>
                                     <input className="form-control" type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)}></input>
@@ -154,7 +152,7 @@ const About = () => {
                         </div>
                         <div className="col-md-6">
                             <div className="text-center">
-                            <img className="no-result-img" src={SignupImg} style={lottewidth} />
+                            <img className="no-result-img admin-login-img" src={SignupImg} />
                             </div>
                         </div>
                     </div>

@@ -504,7 +504,7 @@ const Home = () => {
         <>
             {" "}
             <HeaderMenu />
-            <div className="mx-lg-4 my-lg-3 bg-primary-color rounded-8 position-relative" style={{ height: '150px' }}>
+            <div className="mx-lg-4 my-lg-3 bg-primary-color rounded-8 position-relative mob-d-none" style={{ height: '150px' }}>
                 <MobileMenu />
             </div>
             <div>
@@ -563,12 +563,12 @@ const Home = () => {
                                                 <Card>
                                                     <Card.Body>
                                                         <Row>
-                                                            <Col md={6} className="my-2">
+                                                            <div  className="my-2 col-6">
                                                                 <h5 className="cart-amount-small-title">Subtotal</h5>
-                                                            </Col>
-                                                            <Col md={6} className="my-2 text-end">
+                                                            </div>
+                                                            <div className="my-2 text-end  col-6">
                                                                 <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}</h5>
-                                                            </Col>
+                                                            </div>
                                                             {/* {Iswallet ? (
                                                                 <>
                                                                     <Col md={12}>
@@ -610,12 +610,12 @@ const Home = () => {
                                                                         <>
                                                                             {taxlist.map((item, index) => (
                                                                                 <>
-                                                                                    <Col md={6} className="my-2">
+                                                                                    <div className="my-2 col-md-6 col-6">
                                                                                         <h5 className="cart-amount-small-title">{item.name}</h5>
-                                                                                    </Col>
-                                                                                    <Col md={6} className="my-2 text-end">
+                                                                                    </div>
+                                                                                    <div className="col-md-6 col-6 my-2 text-end">
                                                                                         <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount,allItemsTotalPrice)}</h5>
-                                                                                    </Col>
+                                                                                    </div>
                                                                                 </>
                                                                             ))}
 
@@ -625,23 +625,23 @@ const Home = () => {
                                                             ) : ''}
                                                             {DiscountAmount ? (
                                                                 <>
-                                                                    <Col md={6} className="my-2">
+                                                                    <div  className="my-2 col-6">
                                                                         <h5 className="cart-amount-small-title">Discount</h5>
-                                                                    </Col>
-                                                                    <Col md={6} className="my-2 text-end">
+                                                                    </div>
+                                                                    <div  className="my-2 text-end  col-6">
                                                                         <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}</h5>
-                                                                    </Col>
+                                                                    </div>
                                                                 </>
                                                             ) : ''}
                                                             <Col md={12} className="py-3">
                                                                 <div className="border-bottom"></div>
                                                             </Col>
-                                                            <Col md={6}>
+                                                            <div className="col-6">
                                                                 <h3 className="cart-amount-small-title theme-color font-600">Total</h3>
-                                                            </Col>
-                                                            <Col md={6} className="text-end">
+                                                            </div>
+                                                            <div className="col-6 text-end">
                                                                 <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}</h3>
-                                                            </Col>
+                                                            </div>
                                                             <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">
                                                                 <Row>
                                                                     <Col md={8}>
@@ -653,9 +653,9 @@ const Home = () => {
                                                                         ) : (
                                                                             <>
                                                                                 {Iscoupon ? (
-                                                                                    <button onClick={() => HandelRemoveToken()} type="button" className="btn btn-danger w-100" >Remove</button>
+                                                                                    <button onClick={() => HandelRemoveToken()} type="button" className="btn btn-danger w-100 mt-2 theme-bg" >Remove</button>
                                                                                 ) : (
-                                                                                    <button onClick={() => HandelCouponCheck()} type="button" className="btn btn-primary w-100" >Apply</button>
+                                                                                    <button onClick={() => HandelCouponCheck()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Apply</button>
                                                                                 )}
                                                                             </>
                                                                         )}
@@ -670,7 +670,7 @@ const Home = () => {
                                                                         {IsCountryName ? (
                                                                             <div className="mt-3 paynow-btn-box">
                                                                                 <span onClick={() => saveCartToLocalStorage()}>
-                                                                                    <Whitestarbtn title={'Pay now'} />
+                                                                                    <button onClick={() => saveCartToLocalStorage()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Pay now</button>
                                                                                 </span>
                                                                             </div>
                                                                         ) : (
@@ -702,9 +702,9 @@ const Home = () => {
                                                                         </Col>
                                                                         <Col md={12}>
                                                                             {LoginLoader ? (
-                                                                                <button className="btn btn-primary w-100" type="button">Please wait...</button>
+                                                                                <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
                                                                             ) : (
-                                                                                <button className="btn btn-primary w-100" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
+                                                                                <button className="btn btn-primary w-100 theme-bg  my-2" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
                                                                             )}
                                                                         </Col>
                                                                         <Col md={12} className="mt-2">

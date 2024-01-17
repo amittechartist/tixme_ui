@@ -525,7 +525,7 @@ p.Ticket-title {
 }
 
 .cart-plus {
-    background: #0047AB59;
+    background: #0047AB;
     color: #fff;
 }
 
@@ -1403,4 +1403,7 @@ p.cursor-pointer.my-location-btn {
 }
 .singel-event-page-head-box{
     margin: 10px 0px 0px 66px
+}
+.dfssfdsfdsf:hover{
+    background: #f0f0f0 !important;
 }

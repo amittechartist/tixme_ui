@@ -1417,3 +1417,21 @@ span.top-login-sign-btn-icon {
   width: 700px;
   border-radius: 19px;
 }
+.theme-bg{
+  background: #0047AB !important;
+}
+.xxx-conta{
+  position: relative;
+  width: 200px;
+  height: 40px,;
+  cursor: pointer,;
+  border: 1px solid #eee;
+  borderRadius: 10px
+}
+.xxx-event-page-top-loader {
+  margin: 78px 23px 0px 23px;
+}
+img.cart-btn-img {
+  height: auto;
+  width: 40px;
+}

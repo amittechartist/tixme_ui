@@ -2,7 +2,30 @@
     .border-style-home-page {
         border-right: none;
         border-bottom: 1px solid #003b8f;
-        margin: 0px 5px;
+        margin: 0px 30px;
+    }
+    .admin-login-img{
+        height: auto;
+        width: 300px;
+    }
+    .banner-child-event {
+        margin: 0px 10px;
+        border-radius: 10px;
+    }
+    .event-banner {
+        height: 100px;
+    }
+    .banner-event {
+        height: 390px;
+    }
+    p.sssas {
+        margin-bottom: 0px;
+        font-size: 12px;
+    }
+    img.flag-icon {
+        left: -6px;
+        top: -13px;
+        width: 40px;
     }
     .singel-event-page-head-box{
         margin: 10px 0px 0px 10px;
@@ -368,10 +391,18 @@
         font-size: 12px;
     }
 
-    .event-time-area {
+    /* .event-time-area {
         margin-bottom: 23px;
+    } */
+    .event-desc.event-page-margin {
+        margin-top: 50px;
     }
-
+    .mob-d-none{
+        display: none;
+    }
+    .form-area {
+        padding: 20px 20px;
+    }
     .desc-sec p {
         font-size: 10px;
     }

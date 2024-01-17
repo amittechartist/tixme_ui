@@ -183,26 +183,21 @@ const Contact = () => {
                 </div>
               </div>
               {Loader ? (
-                <button
-                  style={{ width: "100px" }}
-                  type="button"
-                  className="btn btn-primary text-capitalize py-0 px-0 d-flex rounded-6 align-items-center news-button mt-3"
-                >
-                  <small className="ms-2">Wait...</small>
-                  <div className="bg-ligh-blue rounded-6 h-100 d-flex align-items-center px-2 ms-auto">
-                    <img style={{ width: "15px" }} src={arrow} alt="" />
+                <button className="GetLatestUpdateButton">
+                  <div className="left">
+                    <small className="ms-2">Please wait...</small>
+                  </div>
+                  <div className="right">
+                    <img style={{ width: "18px" }} src={arrow} alt="" />
                   </div>
                 </button>
               ) : (
-                <button
-                  style={{ width: "100px" }}
-                  type="button"
-                  onClick={() => HandelContactForm()}
-                  className="btn btn-primary text-capitalize py-0 px-0 d-flex rounded-6 align-items-center news-button mt-3"
-                >
-                  <small className="ms-2">SEND</small>
-                  <div className="bg-ligh-blue rounded-6 h-100 d-flex align-items-center px-2 ms-auto">
-                    <img style={{ width: "15px" }} src={arrow} alt="" />
+                <button className="GetLatestUpdateButton" onClick={() => HandelContactForm()}>
+                  <div className="left">
+                    <small className="ms-2">Send</small>
+                  </div>
+                  <div className="right">
+                    <img style={{ width: "18px" }} src={arrow} alt="" />
                   </div>
                 </button>
               )}
@@ -214,15 +209,15 @@ const Contact = () => {
       <div className="address-sec banner-child-address py-5">
         {/* <TabComp /> */}
         <div className="d-flex justify-content-center">
-          <div onClick={() => setTabno(1)} className={tabno == 1 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss' : 'mx-lg-4 mx-2 animate__animated animate__bounce'} style={{position: 'relative', width: '200px', height: '40px', cursor: 'pointer', border: '1px solid #eee', borderRadius: '10px'}}>
+          <div onClick={() => setTabno(1)} className={tabno == 1 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
             <p className="sssas">India</p>
             <img className="flag-icon" src={Indiaflag}></img>
           </div>
-          <div onClick={() => setTabno(2)} className={tabno == 2 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss' : 'mx-lg-4 mx-2 animate__animated animate__bounce'} style={{position: 'relative', width: '200px', height: '40px', cursor: 'pointer', border: '1px solid #eee', borderRadius: '10px'}}>
+          <div onClick={() => setTabno(2)} className={tabno == 2 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
             <p className="sssas">singapore</p>
             <img className="flag-icon" src={Indiaflag}></img>
           </div>
-          <div onClick={() => setTabno(3)} className={tabno == 3 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss' : 'mx-lg-4 mx-2 animate__animated animate__bounce'} style={{position: 'relative', width: '200px', height: '40px', cursor: 'pointer', border: '1px solid #eee', borderRadius: '10px'}}>
+          <div onClick={() => setTabno(3)} className={tabno == 3 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
             <p className="sssas">USA</p>
             <img className="flag-icon" src={Indiaflag}></img>
           </div>

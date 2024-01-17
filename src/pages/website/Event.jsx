@@ -39,7 +39,6 @@ import mapIcon from "./eventpageicon/map.png";
 const Home = () => {
   const navigate = useNavigate();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  console.log(screenWidth);
   const Beartoken = localStorage.getItem('userauth');
   const { id, name } = useParams();
   const [Apiloader, setApiloader] = useState(true);
@@ -590,57 +589,119 @@ const Home = () => {
       <div className="mx-lg-4 my-lg-3 banner-event bg-primary-color rounded-8 position-relative">
         <MobileMenu />
         {Apiloader ? (
-          <div className="linear-background w-100"> </div>
+          <div className="xxx-event-page-top-loader">
+            <div className="linear-background w-100" style={{ height: '330px' }}> </div>
+          </div>
         ) : (
           <>
             <h1 className="banner-h text-white text-start text-uppercase">{Eventdata.display_name}</h1>
             <h3 className="banner-h2 text-white rounded-8 px-4 py-3 animate__animated animate__bounce">
               {Eventdata.category_name}
             </h3>
-            <div className="py-2 singel-event-page-head-box">
-              <div className="organizer-name-sec px-2 py-2">
-                <div className="d-inline-flex align-items-center border-right event-time-area py-2">
-                  <div className="d-inline-block mr-1">
-                    <img height={30} width={'auto'} src={dataIcon} alt="" />
+            {screenWidth > 900 ? (
+              <div className="py-2 singel-event-page-head-box">
+                <div className="organizer-name-sec px-2 py-2">
+                  <div className="d-inline-flex align-items-center border-right event-time-area py-2">
+                    <div className="d-inline-block mr-1">
+                      <img height={30} width={'auto'} src={dataIcon} alt="" />
+                    </div>
+                    <div className="d-inline-block">
+                      <span className="event-duration d-block">{Eventdata.start_date}</span>
+                    </div>
                   </div>
-                  <div className="d-inline-block">
-                    <span className="event-duration d-block">{Eventdata.start_date}</span>
+                  <div className="d-inline-flex align-items-center border-right event-time-area px-2">
+                    <div className="d-inline-block mr-1">
+                      <img height={30} width={'auto'} src={timeIcon} alt="" />
+                    </div>
+                    <div className="d-inline-block">
+                      <span className="event-duration d-block">Event Time</span>
+                      <span className="event-time d-block">{Eventdata.start_time}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="d-inline-flex align-items-center border-right event-time-area px-2">
-                  <div className="d-inline-block mr-1">
-                    <img height={30} width={'auto'} src={timeIcon} alt="" />
+                  <div className="d-inline-flex align-items-center border-right event-time-area">
+                    <div className="d-inline-block mr-1">
+                      <img height={30} width={'auto'} className="ml-2" src={hourglassIcon} alt="" />
+                    </div>
+                    <div className="d-inline-block">
+                      <span className="event-duration d-block">Event Duration</span>
+                      <span className="event-time d-block">{Eventdata.event_duration}</span>
+                    </div>
                   </div>
-                  <div className="d-inline-block">
-                    <span className="event-duration d-block">Event Time</span>
-                    <span className="event-time d-block">{Eventdata.start_time}</span>
-                  </div>
-                </div>
-                <div className="d-inline-flex align-items-center border-right event-time-area">
-                  <div className="d-inline-block mr-1">
-                    <img height={30} width={'auto'} className="ml-2" src={hourglassIcon} alt="" />
-                  </div>
-                  <div className="d-inline-block">
-                    <span className="event-duration d-block">Event Duration</span>
-                    <span className="event-time d-block">{Eventdata.event_duration}</span>
-                  </div>
-                </div>
-                <div className="d-inline-flex align-items-center">
-                  <div className="d-inline-block mr-1">
-                    <img height={30} width={'auto'} src={locationIconevent} alt="" />
-                  </div>
-                  <div className="d-inline-block">
-                    <span className="event-duration d-block eventpage-location-name">
-                      {Eventdata.location}
-                    </span>
-                    <span onClick={openGoogleMaps} className="event-time d-block cursor-pointer py-0">Get direction</span>
-                  </div>
-                  <div className="d-inline-block mr-1 ml-3">
-                    <img height={30} width={30} src={mapIcon} alt="" />
+                  <div className="d-inline-flex align-items-center">
+                    <div className="d-inline-block mr-1">
+                      <img height={30} width={'auto'} src={locationIconevent} alt="" />
+                    </div>
+                    <div className="d-inline-block">
+                      <span className="event-duration d-block eventpage-location-name">
+                        {Eventdata.location}
+                      </span>
+                      <span onClick={openGoogleMaps} className="event-time d-block cursor-pointer py-0">Get direction</span>
+                    </div>
+                    <div className="d-inline-block mr-1 ml-3">
+                      <img height={30} width={30} src={mapIcon} alt="" />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="row px-3 py-3">
+                  <div className="col-6 d-flex align-items-center justify-content-center">
+                    <div>
+                      <div className="d-inline-flex align-items-center event-time-area py-2">
+                        <div className="d-inline-block mr-1">
+                          <img height={30} width={'auto'} src={dataIcon} alt="" />
+                        </div>
+                        <div className="d-inline-block">
+                          <span className="event-duration d-block">{Eventdata.start_date}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-6  d-flex align-items-center justify-content-center">
+                    <div>
+                      <div className="d-inline-flex align-items-centerevent-time-area">
+                        <div className="d-inline-block mr-1">
+                          <img height={30} width={'auto'} src={timeIcon} alt="" />
+                        </div>
+                        <div className="d-inline-block">
+                          <span className="event-duration d-block">Event Time</span>
+                          <span className="event-time d-block">{Eventdata.start_time}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-6  d-flex align-items-center justify-content-center">
+                    <div>
+                      <div className="d-inline-flex align-items-center event-time-area">
+                        <div className="d-inline-block mr-1">
+                          <img height={30} width={'auto'} className="ml-2" src={hourglassIcon} alt="" />
+                        </div>
+                        <div className="d-inline-block">
+                          <span className="event-duration d-block">Event Duration</span>
+                          <span className="event-time d-block">{Eventdata.event_duration}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-6  d-flex align-items-center justify-content-center">
+                    <div>
+                      <div className="d-inline-flex align-items-center">
+                        <div className="d-inline-block mr-1">
+                          <img height={30} width={'auto'} src={locationIconevent} alt="" />
+                        </div>
+                        <div className="d-inline-block">
+                          <span className="event-duration d-block eventpage-location-name">
+                            {Eventdata.location}
+                          </span>
+                          <span onClick={openGoogleMaps} className="event-time d-block cursor-pointer py-0">Get direction</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
             <div className="banner-child-event">
               <img className="mt-2 event-banner" src={Eventdata.banner_image ? Eventdata.banner_image : EventImg} alt="" />
             </div>
@@ -648,7 +709,9 @@ const Home = () => {
         )}
       </div>
       {Apiloader ? (
-        <div className="linear-background w-100"> </div>
+        <div style={{margin: '30px 26px'}}>
+          <div className="linear-background w-100"> </div>
+        </div>
       ) : (
         <div className="mx-lg-4 my-lg-3 ">
           <Row>
@@ -706,7 +769,7 @@ const Home = () => {
                             </Col>
                             <Col md={12}>
                               <div className="tags pt-4 pb-5">
-                                <ul>
+                                <ul className="p-0">
                                   {Eventdata.tags.map((item, index) => (
                                     <li className="d-inline-block m-1 mb-3">
                                       <span className="event-category-title event-category-title-mobile font-13">
@@ -792,7 +855,7 @@ const Home = () => {
                                                 </div>
                                               </div>
                                             </Col>
-                                            <Col md={12}>
+                                            <Col md={12} className="my-2">
                                               <div className="event-name  ml-2">
                                                 <span>{item.display_name}</span>
                                                 <p className="font-10">

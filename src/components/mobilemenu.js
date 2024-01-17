@@ -13,6 +13,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button, Col, Row } from "react-bootstrap";
 import { app_url, apiurl, organizer_url, customer_url } from "../common/Helpers";
 import { FaEllipsis } from "react-icons/fa6";
+import Cratimg from '../common/image/newcartimg.svg';
 const Header = () => {
 
     const [location, setLocation] = useState(null);
@@ -122,7 +123,8 @@ const Header = () => {
             <li className="nav-item align-self-center me-7 cursor-pointer">
                 <Link to={app_url + 'cart-details'}>
                     <div className="position-relative">
-                        <FaShoppingCart size={30} color="#003B8F" />
+                        {/* <FaShoppingCart size={30} color="#003B8F" /> */}
+                        <img src={Cratimg} className="cart-btn-img"></img>
                         {Totalcart > 0 && (
                             <div className="cart-count">{Totalcart}</div>
                         )}
