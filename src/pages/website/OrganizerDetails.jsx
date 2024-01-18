@@ -1,22 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
-import Container from "react-bootstrap/Container";
+import { useSearchParams, useParams } from 'react-router-dom';
+import NoRecord from '../../component/Norecordui'
+import card from "../../assets/card.png";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import OrganizerProfile from "../../component/organizer/organizerprofile";
-import Eventlogo from '../../common/icon/eventlogo.svg';
-import Timelogo from '../../common/icon/time 1.svg';
-import Hourglasslogo from '../../common/icon/hourglass.svg';
-import LocationIcon from '../../common/icon/location.svg';
-import Eventimg from '../../common/event.jpg';
-import MailIcon from "../../common/icon/mail.svg";
-import DateIcon from '../../common/icon/date 2.svg';
-import { app_url, apiurl,onlyDayMonth } from "../../common/Helpers";
-const Page = ({ title }) => {
+import Container from "react-bootstrap/Container";
+import Select from 'react-select'
+import calendar from "../../assets/calendar.svg";
+import eventLogo from "../../assets/eventLogo.svg";
+import clock from "../../assets/clock.svg";
+import hourglass from "../../assets/hourglass.svg";
+import location from "../../assets/location (5) 1.svg";
+import InputSearchIcon from '../../assets/inputSearch.png'
+import Footer from '../../components/footer';
+import HeaderMenu from '../../components/headermenu';
+import MobileMenu from '../../components/mobilemenu';
+import Alert from 'react-bootstrap/Alert';
+import { Range, getTrackBackground } from "react-range";
+import Whitestartbtn from "../../component/Whitestarbtn";
+import DateIcon from "../../common/icon/date 2.svg";
+import Nouserphoto from '../../common/image/nouser.png';
+import Accordion from 'react-bootstrap/Accordion';
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_green.css";
+import { apiurl, onlyDayMonth, shortPer, app_url, get_date_time } from "../../common/Helpers";
+import { Link, useNavigate } from "react-router-dom";
+import Noimg from "../../common/image/noimg.jpg";
+const Home = () => {
   const { id, name } = useParams();
   const [profiledata, setProfiledata] = useState();
   const [Loader, setLoader] = useState(true);
   const [eventlist, seteventlist] = useState([]);
+  const navigate = useNavigate();
+  const viewEvent = async (id, name) => {
+    navigate(`${app_url}event/${id}/${name}`)
+  }
+
   const getdata = async () => {
     try {
       const requestData = {
@@ -32,12 +51,11 @@ const Page = ({ title }) => {
         .then(response => response.json())
         .then(data => {
           if (data.success == true) {
-            setLoader(false);
             setProfiledata(data.data);
             seteventlist(data.events);
           } else {
-            setLoader(false);
           }
+          setLoader(false);
         })
         .catch(error => {
           setLoader(false);
@@ -52,176 +70,107 @@ const Page = ({ title }) => {
   }, [])
   return (
     <>
-      <Container>
-        <Row>
-          <Col
-            md={12}
-            className="title-banner d-flex justify-content-center py-5 mb-5"
-          >
-            <h3 className="title-banner-h3">{title}</h3>
-          </Col>
-          <Col md={8}>
-            <h3 className="All-Events-title">All Events</h3>
-            <Row>
-              <Col md={12} className="event-category-list">
-                <ul>
-                  <li className="d-inline-block active">All</li>
-                  <li className="d-inline-block">Category a</li>
-                  <li className="d-inline-block">Category b</li>
-                </ul>
-              </Col>
-              <Col md={12} className="mt-3">
-                <div className="border-botton-devider my-2"></div>
-              </Col>
-            </Row>
-            <Row className="mt-5">
-              {eventlist.map((item, index) => (
-                <Col md={6} className="mb-3">
-                  <div className="event-box-style">
-                    <div className="event-image-part">
-                      <img className="event-image" src={Eventimg} alt="" />
-                      <span className="event-category-img">{item.category_name}</span>
-                      <span className="on-img-date">
-                        <img src={DateIcon} alt="" />
-                        <span className="on-img-date-val">{onlyDayMonth(item.start_date)}</span>
-                      </span>
-                    </div>
-                    <div className="organizer-name-sec d-flex align-items-center px-2 py-2">
-                      <div className="d-inline-block mr-3">
-                        <img
-                          height={70}
-                          width={70}
-                          src={Eventlogo}
-                          alt=""
-                          className="organiger-logo"
-                        />
-                      </div>
-                      <div className="d-inline-block">
-                        <span className="organizer-by d-block">Organised by</span>
-                        <span className="organizer-name d-block">dsd</span>
-                      </div>
-                    </div>
-                    <div className="organizer-name-sec px-2 py-2">
-                      <div className="d-inline-flex align-items-center border-right event-time-area">
-                        <div className="d-inline-block mr-1">
-                          <img height={30} width={30} src={Timelogo} alt="" />
-                        </div>
-                        <div className="d-inline-block">
-                          <span className="event-duration d-block">
-                            Event Time
-                          </span>
-                          <span className="event-time d-block">{item.start_time}</span>
-                        </div>
-                      </div>
-                      <div className="d-inline-flex align-items-center">
-                        <div className="d-inline-block mr-1">
-                          <img
-                            height={30}
-                            width={30}
-                            src={Hourglasslogo}
-                            alt=""
-                          />
-                        </div>
-                        <div className="d-inline-block">
-                          <span className="event-duration d-block">
-                            Event Duration
-                          </span>
-                          <span className="event-time d-block">{item.event_duration}</span>
-                        </div>
-                      </div>
-                      <div className="event-name">
-                        <span>{item.display_name}</span>
-                        <p>
-                          {/* Lorem ipsum is a pseudo-Latin text used in web design,
-                          typography, layout.. */}
-                          {item.event_desc}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="ticket-price-area mt-3">
-                      <Row>
-                        <Col md={7} xs={7} className="border-top-doted">
-                          <div className="location d-flex align-items-center text-center">
-                            <img
-                              height={30}
-                              width={30}
-                              src={LocationIcon}
-                              alt=""
-                            />{" "}
-                            <span>{item.location}</span>
+      {" "}
+      <HeaderMenu />
+      <div className="mx-lg-4 my-lg-3 banner-organizer-page bg-primary-color rounded-8 position-relative">
+        <MobileMenu />
+        <h1 className="banner-h text-white text-start text-uppercase">Organizers profile</h1>
+      </div>
+      <Row className="mx-4" style={{ marginTop: '50px' }}>
+        <div className="row p-3">
+          <div className="col-md-12">
+            {Loader ? (
+              <>
+                <Row>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                  </Col>
+                </Row>
+              </>
+            ) : (
+              <>
+                {eventlist.length > 0 ? (
+                  <Row className="event-box-mobile">
+                    {eventlist.map((item, index) => (
+                      <div className="col-xl-3 col-md-3 col-12 cursor-pointer" onClick={() => viewEvent(item._id, item.name)}>
+                        <div className="bg-white rounded-10 shadow-bottom pb-3" style={{ height: '100%' }}>
+                          <div style={{ position: 'relative' }}>
+                            <span className="event-category-img">{item.category_name}</span>
+                            <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                            <div className="d-flex align-items-center event-date-small-box">
+                              <span className="event-date-small">
+                                <img className="card-icon me-2" src={calendar} alt="" />
+                                <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                                  {onlyDayMonth(item.start_date)}
+                                </span>
+                              </span>
+                            </div>
                           </div>
-                        </Col>
-                        <Col md={5} xs={5}>
-                          <div className="price-section text-center">
-                            <p>Ticket Price</p>
-                            <span className="price">$99</span>
-                            <span className="cut-price">$100</span>
+                          <div className="row px-2 mt-2">
+                            <div className="col-md-7 d-flex align-items-center">
+                              <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                              <div className="d-flex flex-column align-items-start justify-content-start">
+                                <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                                <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                                  By {item.organizer_name}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="col-md-5">
+                              <div className="bg-fade rounded pl-5 event-cart-price-box">
+                                <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                                <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
+                              </div>
+                            </div>
                           </div>
-                        </Col>
-                      </Row>
-                    </div>
-                  </div>
-                </Col>
-              ))}
+                          <div className="row mt-1">
+                            <div className="col-md-12">
+                              <div className="d-flex align-items-center justify-content-start my-2">
+                                <img className="card-icon me-1" src={location} alt="" />
+                                <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                                  {item.location}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </Row>
+                ) : (
+                  <>
+                    <Col md={12}>
+                      <NoRecord />
+                    </Col>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+          <div className="col-md-4">
 
-            </Row>
-          </Col>
-          <Col md={4}>
-            <div className="organised-by-box eventpage-box-style">
-              <div className="organizer-name-sec d-flex align-items-center px-2 py-2">
-                <div className="d-inline-block mr-3">
-                  <img
-                    height={70}
-                    width={70}
-                    src={Eventlogo}
-                    alt=""
-                    className="organiger-logo"
-                  />
-                </div>
-                <div className="d-inline-block">
-                  <span className="organizer-by d-block">Organizer Profile</span>
-                  <span className="organizer-name d-block">dsdsd</span>
-                </div>
-              </div>
-              <div className="border-botton-devider my-2"></div>
-              <div className="right-box-con mt-4">
-                <div className="d-flex align-items-center">
-                  <div className="d-inline-block mr-4">
-                    <p className="followers-title">Followers</p>
-                    <p className="followers-count">{profiledata.followers ? profiledata.followers : 0}</p>
-                  </div>
-                  <div className="d-inline-block">
-                    <button type="button" className="follow-btn">
-                      Follow
-                    </button>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center py-2">
-                  <div className="d-inline-block mr-1">
-                    <img height={30} width={30} src={LocationIcon} alt="" />
-                  </div>
-                  <div className="d-inline-block">
-                    <span className="event-page-organizer-deta d-block">
-                      {profiledata.address ? profiledata.address : 'Address not found !'}
-                    </span>
-                  </div>
-                </div>
-                <div className="d-inline-flex align-items-center py-2">
-                  <div className="d-inline-block mr-1">
-                    <img height={30} width={30} src={MailIcon} alt="" />
-                  </div>
-                  <div className="d-inline-block">
-                    <span className="event-page-organizer-deta d-block">
-                      {profiledata.email}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+          </div>
+        </div>
+      </Row>
+      <Footer />
     </>
   );
 };
-export default Page;
+
+export default Home;

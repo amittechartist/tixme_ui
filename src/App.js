@@ -121,10 +121,10 @@ function App() {
           <Route path={app_url + 'privacy-policy'} element={<Policy />} />
           <Route path={app_url + 'faq'} element={<Faqs />} />
           <Route path={app_url + 'contact'} element={<Contact />} />
-          <Route path={app_url + 'organizers'} element={<WebsiteLayout> <Organizers title={'Organizers'} /> </WebsiteLayout>} />
+          <Route path={app_url + 'organizers'} element={<Organizers title={'Organizers'} />} />
           <Route path={app_url + 'raise-ticket'} element={<WebsiteLayout> <Raiseticket title={'Raise Ticket'} /> </WebsiteLayout>} />
           <Route path={app_url + 'events'} element={<Events title={'Events'} />} />
-          <Route path={`${app_url}organizer-profile/:id/:name`} element={<WebsiteLayout> <OrganizerDetails title={'Organizer Profile'} /> </WebsiteLayout>} />
+          <Route path={`${app_url}organizer-profile/:id/:name`} element={<OrganizerDetails title={'Organizer Profile'} />} />
           <Route path={app_url + 'cart-details'} element={<CartDetails title={'Your Cart'} />} />
           <Route path={`${app_url}cart-details-fill/:orderid`} element={<CartDataFill title={'Your Cart'} />} />
           <Route path={app_url + 'order-successful-page'} element={<OrderSuccessful title={'Payment status'} />} />

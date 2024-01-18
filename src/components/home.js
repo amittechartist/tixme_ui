@@ -22,7 +22,7 @@ import Nouserphoto from '../common/image/nouser.png';
 import MobileMenu from './mobilemenu';
 import Alert from 'react-bootstrap/Alert';
 import Arts from '../common/category/Group 1171274918.svg';
-import Business from '../common/category/Busimess11.png';
+import Business from '../common/category/Busimess11.svg';
 import Food from '../common/category/Group 1171274941.svg';
 import Music from '../common/category/Group 1171274913.svg';
 import NIGHTLIFE from '../common/category/Group 1171274914.svg';
@@ -703,7 +703,7 @@ const Home = () => {
         </div>
       </div>
       <div className="partner-sec">
-        <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce">
+        <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce" style={{padding: '0px 14px 0px 0px'}}>
           OUR PARTNER
         </h3>
         <div className="partnetSlider">

@@ -3,7 +3,7 @@ import Footer from '../../components/footer';
 import HeaderMenu from '../../components/headermenu';
 import MobileMenu from '../../components/mobilemenu';
 import { apiurl, onlyDayMonth, shortPer, app_url } from "../../common/Helpers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Nouserphoto from '../../common/image/nouser.png';
 import locationIcon from "../../assets/location (5) 1.svg";
 import Container from "react-bootstrap/Container";
@@ -915,7 +915,7 @@ const Home = () => {
                       </div>
                       <div className="d-inline-block">
                         <span className="organizer-by d-block">Organised by</span>
-                        <span className="organizer-name d-block">By {Organizerdata.first_name}</span>
+                        <Link to={`${app_url}organizer-profile/${Organizerdata._id}/${Organizerdata.first_name}`}><span className="organizer-name d-block">By {Organizerdata.first_name}</span></Link>
                       </div>
                     </div>
                     <div className="border-botton-devider my-2"></div>

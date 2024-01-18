@@ -36,6 +36,9 @@ body {
 .banner {
   height: 450px;
 }
+.banner-organizer-page {
+  height: 250px;
+}
 .banner-event {
   height: 550px;
 }

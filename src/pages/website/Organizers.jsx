@@ -1,11 +1,32 @@
 import React, { useEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
+import { useSearchParams } from 'react-router-dom';
+import NoRecord from '../../component/Norecordui'
+import card from "../../assets/card.png";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Userimagefrom from "../../common/image/user.png";
-import { app_url, apiurl } from "../../common/Helpers";
-import { Link } from "react-router-dom";
-const Page = ({ title }) => {
+import Container from "react-bootstrap/Container";
+import Select from 'react-select'
+import calendar from "../../assets/calendar.svg";
+import eventLogo from "../../assets/eventLogo.svg";
+import clock from "../../assets/clock.svg";
+import hourglass from "../../assets/hourglass.svg";
+import location from "../../assets/location (5) 1.svg";
+import InputSearchIcon from '../../assets/inputSearch.png'
+import Footer from '../../components/footer';
+import HeaderMenu from '../../components/headermenu';
+import MobileMenu from '../../components/mobilemenu';
+import Alert from 'react-bootstrap/Alert';
+import { Range, getTrackBackground } from "react-range";
+import Whitestartbtn from "../../component/Whitestarbtn";
+import DateIcon from "../../common/icon/date 2.svg";
+import Nouserphoto from '../../common/image/nouser.png';
+import Accordion from 'react-bootstrap/Accordion';
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/material_green.css";
+import { apiurl, onlyDayMonth, shortPer, app_url, get_date_time } from "../../common/Helpers";
+import { Link, useNavigate } from "react-router-dom";
+import Noimg from "../../common/image/noimg.jpg";
+const Home = () => {
   const [organizers, setOrganizers] = useState([]);
   const fetchorganizer = async () => {
     try {
@@ -35,36 +56,36 @@ const Page = ({ title }) => {
   }, [])
   return (
     <>
-      <Container>
-        <Row>
-          <Col
-            md={12}
-            className="title-banner d-flex justify-content-center py-5"
-          >
-            <h3 className="title-banner-h3">{title}</h3>
-          </Col>
-          <Col md={12} className="mt-5 mb-4">
-            <h3>Total organizer showing: 1</h3>
-          </Col>
+      {" "}
+      <HeaderMenu />
+      <div className="mx-lg-4 my-lg-3 banner-organizer-page bg-primary-color rounded-8 position-relative">
+        <MobileMenu />
+        <h1 className="banner-h text-white text-start text-uppercase">Explore our organizers</h1>
+      </div>
+      <Row className="mx-4" style={{ marginTop: '50px' }}>
+        <div className="row p-3">
           {organizers.map((items, index) => (
-            <Col md={4} key={index}>
+            <div className="col-12 col-md-2" key={index}>
               <div className="organizer-box text-center">
-                <img src={Userimagefrom} className="organizer-dp" alt="" />
-                <p className="organizer-box-name">{items.name}</p>
-                <p className="organizer-box-event-count">1 Event</p>
-                <Link
-                  className="organizer-box-link"
-                  to={`${app_url}organizer-profile/${items._id}/${items.first_name}`}
-                >
-                  View Profile
-                </Link>
+                <img src={items.profile_picture ? items.profile_picture : Noimg} className="organizer-dp" alt="" style={{ borderRadius: '8px' }} />
+                <p className="organizer-box-name mb-0">{items.name}</p>
+                <p className="organizer-box-event-count  mb-2">{items.eventDataCount} Event</p>
+                <div className="mx-2">
+                  <Link
+                    className="btn w-100 theme-bg text-white"
+                    to={`${app_url}organizer-profile/${items._id}/${items.first_name}`}
+                  >
+                    View Profile
+                  </Link>
+                </div>
               </div>
-            </Col>
+            </div>
           ))}
-
-        </Row>
-      </Container>
+        </div>
+      </Row>
+      <Footer />
     </>
   );
 };
-export default Page;
+
+export default Home;

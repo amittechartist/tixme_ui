@@ -84,7 +84,7 @@ const About = () => {
       </div>
       {/* </div> */}
       <div class="space-height"></div>
-      <div class=" sponser-sec banner-child py-5" id="sponsorSection">
+      <div class=" sponser-sec banner-child py-5">
         <div class="row w-100 m-auto">
           <div class="col-lg-4 text-lg-center text-start">
             <img class="mb-lg-0 mb-4" src={Silver} alt="" />

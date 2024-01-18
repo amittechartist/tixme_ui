@@ -44,6 +44,9 @@ const Footer = () => {
               <Link to={app_url + 'events'}>
                 <span className="text-primary-color mt-3">Event</span>
               </Link>
+              <Link to={app_url + 'organizers'}>
+                <span className="text-primary-color mt-3">Organizers</span>
+              </Link>
             </div>
           </div>
           <div className="col-lg-2 col-12 footer-link ps-lg-0 ps-4 mt-lg-0 mt-5">
