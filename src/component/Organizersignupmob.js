@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import plus from "../assets/plus.svg";
 import toast from 'react-hot-toast';
 import PhoneInput from 'react-phone-input-2';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -205,7 +206,8 @@ const Locationbtn = ({ prorps }) => {
             {prorps == 'pcheadermenu' ? (
                 <li class="nav-item border rounded border-primary align-self-center me-3" onClick={() => setContactModal(!ContactModal)}>
                     <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav">
-                        List your event
+                        List your event{" "}
+                        <img class="nav-plus" src={plus} alt="" />
                     </Link>
                 </li>
             ) : ''}

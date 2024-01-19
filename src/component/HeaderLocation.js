@@ -8,6 +8,8 @@ import plus from "../assets/plus.svg";
 import Select from 'react-select'
 const Locationbtn = ({ prorps }) => {
     const country_name = localStorage.getItem("countryname");
+    
+    
     const [location, setLocation] = useState(null);
     const [newmodal, setNewModal] = useState(false);
     const [MyCountry, setMyCountry] = useState();
@@ -97,9 +99,15 @@ const Locationbtn = ({ prorps }) => {
         setMyState(CurrentState);
         setNewModal(!newmodal)
         localStorage.setItem('countryname', CurrentCountry);
+        // currencyList
+        const countryData = currencyList.find(country => country.name === CurrentCountry);
+        if (countryData) {
+            localStorage.setItem('mycurrency', countryData.symbol);
+        }
         window.location.reload();
     }
     const [countryList, setcountryList] = useState([{ value: "", label: "Country" }]);
+    const [currencyList, setcurrencyList] = useState([]);
     const [Country, setCountry] = useState();
     const [Countryname, setCountryname] = useState();
     const fetchCountry = async () => {
@@ -114,6 +122,7 @@ const Locationbtn = ({ prorps }) => {
                 .then(data => {
                     if (data.success == true) {
                         const countryData = data.data;
+                        setcurrencyList(data.data);
                         const CountryOption = countryData.map(category => ({
                             value: category.name,
                             label: category.name
@@ -137,6 +146,10 @@ const Locationbtn = ({ prorps }) => {
         setCountry(selectedValue);
         setCountryname(selectedValue.label);
         localStorage.setItem('countryname', selectedValue.label);
+        const countryData = currencyList.find(country => country.name === selectedValue.label);
+        if (countryData) {
+            localStorage.setItem('mycurrency', countryData.symbol);
+        }
         setNewModal(!newmodal)
         window.location.reload();
     };

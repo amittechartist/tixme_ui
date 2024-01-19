@@ -91,6 +91,15 @@ const Home = () => {
     }
   }, [selectedState, selectedCountry]);
 
+  const handelSetHomelocation = () => {
+    if(selectedCity.label){
+      setCityname(selectedCity.label);
+    }else if(selectedState.label){
+      
+    }
+    setCountryname(selectedCountry.label);
+  }
+
   const [UpdatesLoader, setUpdatesLoader] = useState(false);
   const [Updatesprivacy, setUpdatesprivacy] = useState(false);
   const [UpdatesName, setUpdatesName] = useState();
@@ -383,7 +392,7 @@ const Home = () => {
   }
   useEffect(() => {
     fetchEvent();
-  }, [filtercategory, Countryname]);
+  }, [filtercategory, Countryname, Cityname]);
   useEffect(() => {
     fetchCategory();
   }, []);
@@ -419,7 +428,7 @@ const Home = () => {
             <Col md={12}>
               <div className="border-bottom py-2"></div>
               <div className="text-center">
-                <p className="reset-password-link text-center pt-3">Or</p>
+                <p className="reset-password-link text-center pt-3">OR</p>
               </div>
             </Col>
             <Col md={12}>
@@ -465,7 +474,7 @@ const Home = () => {
               </div>
             </Col>
             <Col md={12}>
-              <button type="button" className="btn btn-primary w-100" onClick={() => { setCountryname(selectedCountry.label); setNewModal(!newmodal); setCityname(''); }}>Set Location</button>
+              <button type="button" className="btn btn-primary w-100 theme-bg" onClick={() => { handelSetHomelocation(); setNewModal(!newmodal); }}>Set Location</button>
             </Col>
           </Row>
         </ModalBody>
@@ -478,27 +487,29 @@ const Home = () => {
       <HeaderMenu />
       <div className="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
         <MobileMenu />
-        <h1 className="banner-h text-white text-start text-uppercase">Beyond Tickets :</h1>
-        <div className="animation-home-banner">
-          {transitions((style, i) => (
-            <animated.div
-              style={{
-                ...style,
-                position: 'absolute',
-                width: '100%',
-                color: '#fff'
-                // textAlign: 'center'
-              }}
-            >
-              {texts[i]}
-            </animated.div>
-          ))}
+        <div className='d-md-flex flex-md-1 align-items-center BeyondTickets-sec'>
+          <h1 className="banner-h text-white text-start text-uppercase">Beyond Tickets :</h1>
+          <div className="animation-home-banner">
+            {transitions((style, i) => (
+              <animated.div
+                style={{
+                  ...style,
+                  position: 'absolute',
+                  width: '100%',
+                  color: '#fff'
+                  // textAlign: 'center'
+                }}
+              >
+                {texts[i]}
+              </animated.div>
+            ))}
+          </div>
         </div>
         <div className="banner-child bg-white">
           <h5 className="text-primary-color fw-bold space-sec pt-4 animate__animated animate__bounce">
             Find Near By Events
           </h5>
-          <div className="d-flex space-sec2 flex-lg-row flex-column mt-lg-0 mt-3">
+          <div className="d-flex space-sec2 flex-lg-row flex-column mt-lg-0 mt-3 d-none">
             <div className="selectDiv" >
               <select
                 className="form-select category me-4"
@@ -523,7 +534,7 @@ const Home = () => {
                 style={{ height: '40px' }}
                 value={SearchInput}
               />
-              <button className="dfssfdsfdsf" onClick={handleButtonClick} type="button" style={{background: '#f0f0f0'}}>
+              <button className="dfssfdsfdsf" onClick={handleButtonClick} type="button" style={{ background: '#f0f0f0' }}>
                 <img src={InputSearchIcon} alt="" />
               </button>
             </div>
@@ -574,7 +585,7 @@ const Home = () => {
             <h5 className="text-primary-color fw-bold pt-4 me-4 mb-1">{Cityname ? Cityname : (Countryname ? Countryname : 'Location')}</h5>
           </div>
         </div>
-        <div className="row px-0 mt-lg-5 mt-2 gx-lg-5 gy-4 mx-cards my-margen">
+        <div className="row px-0 mt-lg-4 mt-0 gx-lg-5 gy-3 mx-cards my-margen">
           {Eventloader ? (
             <>
               <div className="mb-5 col-md-4">
@@ -703,7 +714,7 @@ const Home = () => {
         </div>
       </div>
       <div className="partner-sec">
-        <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce" style={{padding: '0px 14px 0px 0px'}}>
+        <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce" style={{ padding: '0px 14px 0px 0px' }}>
           OUR PARTNER
         </h3>
         <div className="partnetSlider">

@@ -269,7 +269,7 @@ const Header = () => {
                                     class="nav-link text-primary-theme pe-1 font-nav"
                                     to={app_url + 'aboutus'}
                                 >
-                                    About Us
+                                    About Us{" "}
                                     <img class="nav-plus" src={plus} alt="" />
                                 </Link>
                             </li>
@@ -278,7 +278,7 @@ const Header = () => {
                                     class="nav-link text-primary-theme pe-1 font-nav"
                                     to={app_url + 'contact'}
                                 >
-                                    Contact Us
+                                    Contact Us{" "}
                                     <img class="nav-plus" src={plus} alt="" />
                                 </Link>
                             </li>

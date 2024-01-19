@@ -1366,6 +1366,7 @@ p.sssas {
   font-size: 21px;
   text-transform: uppercase;
   text-align: center;
+  margin-bottom: 0px;
 }
 .event-cart-location {
     font-size: 13px;
@@ -1410,12 +1411,13 @@ span.top-login-sign-btn-icon {
   margin: 4px 4px 4px 9px;
 }
 .animation-home-banner {
-  margin-left: 79px;
-  font-size: 35px;
-  padding: 16px 0px 82px 15px;
+  margin-left: 17px;
+  font-size: 30px;
+  padding: 9px 15px;
   border: 2px dashed  #fff;
-  width: 700px;
-  border-radius: 19px;
+  width: 547px;
+  border-radius: 8px;
+  height: 70px; 
 }
 .theme-bg{
   background: #0047AB !important;
@@ -1424,9 +1426,9 @@ span.top-login-sign-btn-icon {
   position: relative;
   width: 200px;
   height: 40px,;
-  cursor: pointer,;
+  cursor: pointer;
   border: 1px solid #eee;
-  borderRadius: 10px
+  border-radius: 10px
 }
 .xxx-event-page-top-loader {
   margin: 78px 23px 0px 23px;
@@ -1434,4 +1436,14 @@ span.top-login-sign-btn-icon {
 img.cart-btn-img {
   height: auto;
   width: 40px;
+}
+.copy-n{
+  user-select: none;
+}
+.tag-active {
+  background: #0047ab;
+  color: #fff !important;
+}
+.BeyondTickets-sec {
+  margin-top: 70px;
 }

@@ -26,8 +26,13 @@ import "flatpickr/dist/themes/material_green.css";
 import { apiurl, onlyDayMonth, shortPer, app_url, get_date_time } from "../../common/Helpers";
 import { Link, useNavigate } from "react-router-dom";
 import Noimg from "../../common/image/noimg.jpg";
+import MultiRangeSlider from "../../component/multiRangeSlider/MultiRangeSlider";
 const Home = () => {
+  
     const [searchParams] = useSearchParams();
+    const [minValue, setMinValue] = useState(1);
+    const [maxValue, setMaxValue] = useState(1000);
+    const [wantPricefilter, setWantPricefilter] = useState(false);
     const searchQuery = searchParams.get('query');
     const categoryid = searchParams.get('categoryId');
     useEffect(() => {
@@ -106,11 +111,15 @@ const Home = () => {
             console.error('Api error:', error);
         }
     }
+    const HandelPriceFilter = () => {
+        setWantPricefilter(true);
+        fetchEvent();
+    }
     const fetchEvent = async () => {
         try {
             setEventloader(true)
             const requestData = {
-                limit: 10,
+                limit: 50,
                 organizerid: null,
                 category: filtercategory ? filtercategory : null,
                 eventtype: Eventtype ? Eventtype : null,
@@ -121,7 +130,8 @@ const Home = () => {
                 display_name: SearchInput ? SearchInput : (searchQuery ? searchQuery : null),
                 fromdate: Datetype == "Pick between two dates" ? rangestartdate : null,
                 todate: Datetype == "Pick between two dates" ? enddate : null,
-                price: PriceFilter > 0 ? PriceFilter : null,
+                minprice: wantPricefilter ? minValue : null,
+                maxprice: wantPricefilter ? maxValue : null,
 
             }
             fetch(apiurl + "website/all-events-list", {
@@ -150,6 +160,7 @@ const Home = () => {
     };
 
     const Resetfilter = async () => {
+
         setDatetype('');
         setEventtype('');
         setTicketstype('');
@@ -157,13 +168,17 @@ const Home = () => {
         setValues([0]);
         setFilterCategory('');
         setPriceFilter('');
+        setMinValue('1');
+        setMaxValue('1000');
         setDatevalue({ value: "", label: "Select" });
         startdate = '';
         rangestartdate = '';
         enddate = '';
         setSearchInput('');
+        setWantPricefilter(false);
         navigate(app_url + 'events')
-        fetchEvent()
+        // fetchEvent()
+        window.location.reload();
     }
 
     const DatefilterOption = [
@@ -196,8 +211,15 @@ const Home = () => {
 
     useEffect(() => {
         fetchEvent();
-    }, [filtercategory, Eventtype, Ticketstype, Dateapitype, startdate, enddate, PriceFilter, countryName, searchQuery]);
+    }, [filtercategory, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, countryName, searchQuery]);
     const [activeKey, setActiveKey] = useState(null);
+
+    function handleEnterPress(event) {
+        if (event.keyCode === 13 || event.which === 13) {
+            fetchEvent();
+        }
+    }
+
     return (
         <>
             {" "}
@@ -216,8 +238,8 @@ const Home = () => {
                                             {
                                                 Listitems.map((item, index) => {
                                                     const isFirstItem = filtercategory === item._id;
-                                                    const className = isFirstItem ? 'active hobby-box ' : 'hobby-box ';
-                                                    return <a className={className} onClick={() => setFilterCategory(item._id)} key={index}>{item.name}</a>;
+                                                    const className = isFirstItem ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n';
+                                                    return <a className={className} onClick={(newKey) => {setFilterCategory(item._id); setActiveKey(newKey)}} key={index}>{item.name}</a>;
                                                 })
                                             }
                                         </div>
@@ -240,14 +262,15 @@ const Home = () => {
                                             <p className="mb-0">Search anything</p>
                                             <div id="inputForm1Div">
                                                 <input
-                                                    type="search"
+                                                    type="text"
                                                     id="form1"
                                                     className="form-control border-b5 mt-lg-0"
                                                     placeholder="Search anything"
                                                     onChange={(e) => setSearchInput(e.target.value)}
                                                     value={SearchInput}
+                                                    onKeyDown={handleEnterPress}
                                                 />
-                                                <button onClick={() => fetchEvent()}>
+                                                <button className="dfssfdsfdsf" type="button" onClick={() => fetchEvent()}>
                                                     <img src={InputSearchIcon} alt="" />
                                                 </button>
                                             </div>
@@ -257,8 +280,8 @@ const Home = () => {
                                         <div>
                                             <p className="mb-0">Event mode</p>
                                             <div className="filterbutton-container">
-                                                <a onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'active hobby-box' : 'hobby-box'}>Online</a>
-                                                <a onClick={() => setEventtype(Eventtype == 2 ? '' : 2)} className={Eventtype == 2 ? 'active hobby-box' : 'hobby-box'}>In-Person</a>
+                                                <a onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
+                                                <a onClick={() => setEventtype(Eventtype == 2 ? '' : 2)} className={Eventtype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>In-Person</a>
                                             </div>
                                         </div>
                                     </Col>
@@ -266,8 +289,8 @@ const Home = () => {
                                         <div>
                                             <p className="mb-0">Price</p>
                                             <div className="filterbutton-container">
-                                                <a onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'active hobby-box' : 'hobby-box'}>Free</a>
-                                                <a onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'active hobby-box' : 'hobby-box'}>Paid</a>
+                                                <a onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
+                                                <a onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
                                             </div>
                                         </div>
                                     </Col>
@@ -340,7 +363,7 @@ const Home = () => {
                                     <Col md={12} className="mb-2"></Col>
                                     <Col md={12}>
                                         <p className="mb-0">Select Price rage</p>
-                                        <div
+                                        {/* <div
                                             style={{
                                                 display: "flex",
                                                 justifyContent: "center",
@@ -413,10 +436,18 @@ const Home = () => {
                                                 )}
                                             />
 
-                                        </div>
+                                        </div> */}
+                                        <MultiRangeSlider
+                                            min={1}
+                                            max={1000}
+                                            onChange={({ min, max }) => {
+                                                setMinValue(min);
+                                                setMaxValue(max);
+                                            }}
+                                        />
                                     </Col>
                                     <Col md={12} className="mt-5">
-                                        <button className="btn btn-primary mx-1" onClick={() => setPriceFilter(values[0].toFixed(0) > 0 ? values[0].toFixed(0) : null)}>Filter price</button>
+                                        <button className="btn btn-primary mx-1" onClick={() => HandelPriceFilter()}>Filter price</button>
                                         <button className="btn btn-dark  mx-1" onClick={Resetfilter}>Reset filter</button>
                                     </Col>
                                 </Row>

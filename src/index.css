@@ -123,7 +123,7 @@ a {
 
 /* Banner headings */
 .banner-h {
-  padding: 4rem 5rem 1.5rem 5rem;
+  padding: 2rem 0rem 1.5rem 5rem;
   font-family: "Gilroy-Bold";
   font-weight: 500;
 }
@@ -216,7 +216,7 @@ a {
 }
 
 .space-sec {
-  padding: 1rem 5rem;
+  padding: 1rem 2rem;
 }
 
 .space-sec2 {
@@ -267,7 +267,7 @@ input#form1 {
   border: 1px solid #003b8f;
   border-radius: 12px;
   border-top: none;
-  transition: 0.3s ease-in-out;
+
   cursor: grab;
 }
 
@@ -276,12 +276,14 @@ input#form1 {
   flex-direction: column;
 }
 
-.event-card:hover {
-  transform: scale(1.1);
+.event-card:hover .event-img {
+  transform: scale(1.1) !important;
+  transition: 0.3s ease-in-out !important;
 }
 
 .event-img {
   height: 80px;
+  transition: 0.3s ease-in-out;
 }
 
 ::placeholder {
@@ -331,7 +333,7 @@ select {
 .event-sec {
   /* background: url(./assets/EventsBG.png); */
   background-size: 100% 100%;
-  margin-top: 15rem;
+  margin-top: 8rem;
   background-repeat: no-repeat;
 }
 
@@ -661,7 +663,7 @@ input:focus {
   }
 
   .event-sec {
-    margin-top: 15rem;
+    margin-top: 4rem;
   }
 
   .mx-cards {
@@ -831,7 +833,7 @@ input:focus {
   }
 
   .event-sec {
-    margin-top: 17rem;
+    margin-top: 8rem;
   }
 
   .mx-cards {
