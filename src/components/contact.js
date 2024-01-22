@@ -4,6 +4,8 @@ import singapore from "./assets/singapore.svg";
 import USA from "./assets/USA.svg";
 import arrow from "./assets/arrow.svg";
 import Indiaflag from "../common/image/India.svg";
+import Usaflag from "../common/image/usaf.svg";
+import Singapureflag from "../common/image/singapur.svg";
 import Footer from './footer';
 import HeaderMenu from './headermenu';
 import MobileMenu from './mobilemenu';
@@ -215,11 +217,11 @@ const Contact = () => {
           </div>
           <div onClick={() => setTabno(2)} className={tabno == 2 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
             <p className="sssas">singapore</p>
-            <img className="flag-icon" src={Indiaflag}></img>
+            <img className="flag-icon" src={Singapureflag}></img>
           </div>
           <div onClick={() => setTabno(3)} className={tabno == 3 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
             <p className="sssas">USA</p>
-            <img className="flag-icon" src={Indiaflag}></img>
+            <img className="flag-icon" src={Usaflag}></img>
           </div>
           {/* <img onClick={() => setTabno(1)} className="mx-lg-4 mx-2 animate__animated animate__bounce" src={india} alt="" />
           <img onClick={() => setTabno(2)} className="mx-lg-4 mx-2 animate__animated animate__bounce" src={singapore} alt="" />

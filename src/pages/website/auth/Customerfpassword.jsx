@@ -1,51 +1,17 @@
 import React, { useEffect, useState } from "react";
-import aboutUs from "../../../assets/about-us-pic.svg";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Silver from "../../../assets/Sliver.svg";
-import Gold from "../../../assets/Gold.svg";
-import Platinum from "../../../assets/Platinum.svg";
-import google from "../../../assets/google.svg";
-import airBNB from "../../../assets/airBNB.svg";
-import booking from "../../../assets/booking.com.svg";
-import expedia from "../../../assets/expedia.svg";
-import TUI from "../../../assets/TUI.svg";
-import arrow from "../../../assets/arrow.svg";
-import Logo from "../../../assets/Logo.svg";
-import Search from "../../../assets/search.png";
-import Account from "../../../assets/account.svg";
-import menu from "../../../assets/menu.svg";
-import plus from "../../../assets/plus.svg";
-import location from "../../../assets/location (5) 1.svg";
-import Footer from '../../../components/footer';
 import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
-import { FaEnvelope } from "react-icons/fa6";
 import toast from 'react-hot-toast';
-import { apiurl, app_url, isEmail, organizer_url } from '../../../common/Helpers';
-import WhitestarBtn from '../../../component/Whitestarbtn';
+import { apiurl, app_url, isEmail } from '../../../common/Helpers';
 import { Link, useNavigate } from "react-router-dom";
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
-import NoResult from '../../../lotte/xxx.json';
-import Lottie from "lottie-react";
-import Select from 'react-select'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import { auth, googleProvider, facebookProvider } from '../../../firebase';
-import GoogleLogo from '../../../common/icon/google.png';
-import { signInWithPopup } from 'firebase/auth';
 const About = () => {
-    const lottewidth = {
-        width: 'auto',
-        height: '320px'
-    }
     const navigate = useNavigate();
     const [Email, setEmail] = useState();
     const [otp, setOTP] = useState();
     const [Password, setPassword] = useState();
     const [ConfirmPassword, setConfirmPassword] = useState();
-
     const [Loader, setLoader] = useState(false);
     const [Otploader, setOtploader] = useState(false);
     const [Newpassloader, setNewpassloader] = useState(false);
@@ -219,7 +185,7 @@ const About = () => {
                 </h1>
                 <div class="banner-child bg-white px-0" style={{ border: '1px solid #eee' }}>
                     <div className=''>
-                        <Row className="login-area signup-page-padding">
+                        <Row className="signup-page-padding">
                             <Col md={3}></Col>
                             <Col md={6} className="">
                                 <div className="login-area-sec">
@@ -269,24 +235,18 @@ const About = () => {
                                     <div className="form-group">
                                         {Loader ? (
                                             <span>
-                                                <WhitestarBtn title={'Please wait...'} />
+                                                <button type='button' className="signup-page-button">Please wait...</button>
                                             </span>
                                         ) : (
                                             <>
                                                 {Newpassloader ? (
-                                                    <span onClick={handelNewPassword}>
-                                                        <WhitestarBtn title={'New password'} />
-                                                    </span>
+                                                     <button type='button' className="signup-page-button" onClick={handelNewPassword}>New password</button>
                                                 ) : (
                                                     <>
                                                         {Otploader ? (
-                                                            <span onClick={checkUserOtp}>
-                                                                <WhitestarBtn title={'Verify OTP'} />
-                                                            </span>
+                                                             <button type='button' className="signup-page-button" onClick={checkUserOtp}>Verify OTP</button>
                                                         ) : (
-                                                            < span onClick={checkUserEmail}>
-                                                                <WhitestarBtn title={'Reset password'} />
-                                                            </span>
+                                                             <button type='button' className="signup-page-button" onClick={checkUserEmail}>Reset password</button>
                                                         )}
                                                     </>
                                                 )}
@@ -302,9 +262,7 @@ const About = () => {
             </div>
             {/* </div> */}
             <div class="space-height" style={{ height: '600px' }}></div>
-
         </>
     );
 };
-
 export default About;

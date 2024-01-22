@@ -5,16 +5,13 @@ import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
 import toast from 'react-hot-toast';
 import { apiurl, app_url, isEmail, organizer_url } from '../../../common/Helpers';
-import WhitestarBtn from '../../../component/Whitestarbtn';
 import { Link, useNavigate } from "react-router-dom";
-import 'react-phone-input-2/lib/style.css';
-const About = () => {    
+const About = () => {
     const navigate = useNavigate();
     const [Email, setEmail] = useState();
     const [otp, setOTP] = useState();
     const [Password, setPassword] = useState();
     const [ConfirmPassword, setConfirmPassword] = useState();
-
     const [Loader, setLoader] = useState(false);
     const [Otploader, setOtploader] = useState(false);
     const [Newpassloader, setNewpassloader] = useState(false);
@@ -233,30 +230,21 @@ const About = () => {
                                         </>
                                     )}
                                     <p className="forgot-password-text">Wait, I remember my password <Link to={app_url + 'auth/organizer/login'} className='reset-password-link'>Login</Link></p>
-
-                                    <p className="forgot-password-text">Don't have an account? <Link to={app_url + 'auth/organizer/signup'} className='reset-password-link'>Signup</Link></p>
-
                                     <div className="form-group">
                                         {Loader ? (
                                             <span>
-                                                <WhitestarBtn title={'Please wait...'} />
+                                                <button type='button' className="signup-page-button">Please wait...</button>
                                             </span>
                                         ) : (
                                             <>
                                                 {Newpassloader ? (
-                                                    <span onClick={handelNewPassword}>
-                                                        <WhitestarBtn title={'New password'} />
-                                                    </span>
+                                                    <button type='button' className="signup-page-button" onClick={handelNewPassword}>New password</button>
                                                 ) : (
                                                     <>
                                                         {Otploader ? (
-                                                            <span onClick={checkUserOtp}>
-                                                                <WhitestarBtn title={'Verify OTP'} />
-                                                            </span>
+                                                            <button type='button' className="signup-page-button" onClick={checkUserOtp}>Verify OTP</button>
                                                         ) : (
-                                                            < span onClick={checkUserEmail}>
-                                                                <WhitestarBtn title={'Reset password'} />
-                                                            </span>
+                                                            <button type='button' className="signup-page-button" onClick={checkUserEmail}>Reset password</button>
                                                         )}
                                                     </>
                                                 )}
@@ -273,7 +261,6 @@ const About = () => {
             </div>
             {/* </div> */}
             <div class="space-height" style={{ height: '600px' }}></div>
-
         </>
     );
 };

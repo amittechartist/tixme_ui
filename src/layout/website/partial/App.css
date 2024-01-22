@@ -242,7 +242,7 @@ p.banner_text {
 }
 
 .event-time {
-    color: #fff;
+    color: #0047ab;
 }
 
 .border-right {
@@ -391,7 +391,7 @@ span.on-img-date-val {
     background: linear-gradient(#d5e7ff, white) padding-box, linear-gradient(to bottom, #0047AB, #ffffff) border-box;
     border-radius: 15px;
     border: 2px solid transparent;
-    padding: 14px 29px;
+    padding: 14px 10px;
 }
 
 .right-box-title p {
@@ -1396,7 +1396,7 @@ p.cursor-pointer.my-location-btn {
     padding-left: 9px !important;
 }
 .event-desc.event-page-margin {
-    margin-top: 148px;
+    margin-top: 168px;
 }
 .border-style-home-page {
     border-right: 1px solid #003b8f;

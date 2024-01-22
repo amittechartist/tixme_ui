@@ -1,50 +1,42 @@
 import React, { useEffect, useState } from "react";
-import aboutUs from "../../../assets/about-us-pic.svg";
-import Silver from "../../../assets/Sliver.svg";
-import Gold from "../../../assets/Gold.svg";
-import Platinum from "../../../assets/Platinum.svg";
-import google from "../../../assets/google.svg";
-import airBNB from "../../../assets/airBNB.svg";
-import booking from "../../../assets/booking.com.svg";
-import expedia from "../../../assets/expedia.svg";
-import TUI from "../../../assets/TUI.svg";
-import arrow from "../../../assets/arrow.svg";
-import Logo from "../../../assets/Logo.svg";
-import Search from "../../../assets/search.png";
-import Account from "../../../assets/account.svg";
-import menu from "../../../assets/menu.svg";
-import plus from "../../../assets/plus.svg";
-import location from "../../../assets/location (5) 1.svg";
-import Footer from '../../../components/footer';
 import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
 import { FaEnvelope } from "react-icons/fa6";
 import toast from 'react-hot-toast';
-import { apiurl, app_url, isEmail, organizer_url } from '../../../common/Helpers';
+import { apiurl, app_url, isEmail } from '../../../common/Helpers';
 import { Link, useNavigate } from "react-router-dom";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import SignupImg from '../../../common/image/signup.svg';
-import Lottie from "lottie-react";
 import { Country, State, City } from 'country-state-city';
 import Select from 'react-select';
-
 const About = () => {
-    const lottewidth = {
-        width: 'auto',
-        height: '320px'
-    }
-
+    const navigate = useNavigate();
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [selectedState, setSelectedState] = useState(null);
     const [selectedCity, setSelectedCity] = useState(null);
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
+    const [SignUpstep, SetSignUpstep] = useState(2);
+    const [Loader, setLoader] = useState(false);
+    const [Confirmemail, setConfirmemail] = useState();
+    const [Email, setEmail] = useState();
+    const [Phonenumber, setPhonenumber] = useState();
+    const [Firstname, setFirstname] = useState();
+    const [Lastname, setLastname] = useState();
+    const [Password, setPassword] = useState();
+    const [ConfirmPassword, setConfirmPassword] = useState();
+    const [WhatsappNumber, setWhatsappNumber] = useState();
+    const [Address1, setAddress1] = useState();
+    const [Pincode, setPincode] = useState();
+    const [Terms, setTerms] = useState(false);
+    const [Marketing, setMarketing] = useState(false);
+    const [Hobby, setHobby] = useState([]);
+    const [selectedHobbies, setSelectedHobbies] = useState([]);
     useEffect(() => {
         setCountries(Country.getAllCountries().map(({ isoCode, name }) => ({ value: isoCode, label: name })));
     }, []);
-
     useEffect(() => {
         if (selectedCountry) {
             setStates(State.getStatesOfCountry(selectedCountry.value).map(({ isoCode, name }) => ({ value: isoCode, label: name })));
@@ -53,7 +45,6 @@ const About = () => {
         }
         setSelectedState(null);
     }, [selectedCountry]);
-
     useEffect(() => {
         if (selectedState) {
             setCities(City.getCitiesOfState(selectedCountry.value, selectedState.value).map(({ name }) => ({ value: name, label: name })));
@@ -61,31 +52,6 @@ const About = () => {
             setCities([]);
         }
     }, [selectedState, selectedCountry]);
-
-    const navigate = useNavigate();
-    const [SignUpstep, SetSignUpstep] = useState(2);
-    const [Loader, setLoader] = useState(false);
-    const [Confirmemail, setConfirmemail] = useState();
-    const [Email, setEmail] = useState();
-    const [Phonenumber, setPhonenumber] = useState();
-    const [Firstname, setFirstname] = useState();
-    const [Lastname, setLastname] = useState();
-
-    const [Password, setPassword] = useState();
-    const [ConfirmPassword, setConfirmPassword] = useState();
-    const [WhatsappNumber, setWhatsappNumber] = useState();
-    const [Address1, setAddress1] = useState();
-    const [Pincode, setPincode] = useState();
-
-    const [fCity, setfCity] = useState();
-    const [fState, setfState] = useState();
-    const [fCountry, setfCountry] = useState();
-
-    const [Terms, setTerms] = useState(false);
-    const [Marketing, setMarketing] = useState(false);
-    const [Hobby, setHobby] = useState([]);
-    const [selectedHobbies, setSelectedHobbies] = useState([]);
-
     const HandelSignupstepback = async (no) => {
         SetSignUpstep(Number(no) - 1);
     }
@@ -96,7 +62,7 @@ const About = () => {
             }
         }
         if (no == 2) {
-            
+
             if (!Firstname || !Lastname || !Email || !Confirmemail || !Phonenumber) {
                 return toast.error('Required field must not be empty');
             }
@@ -162,7 +128,6 @@ const About = () => {
                     }
                 })
                 .catch(error => {
-
                     toast.error('Insert error: ' + error.message);
                     console.error('Insert error:', error);
                 });
@@ -268,7 +233,6 @@ const About = () => {
 
         setSelectedHobbies(updatedHobbies);
     };
-
     useEffect(() => {
         fetchHobby();
         window.scrollTo(0, 0);
@@ -286,21 +250,14 @@ const About = () => {
                     <div className='row form-area'>
                         <div className="col-md-6">
                             <div>
-                                <h3 className="mb-5" style={{ fontWeight: '600', color: '#000' }}>Create an customer account</h3>
+                                <h3 className="mb-md-5 mb-2 auth-page-title1" style={{ fontWeight: '600', color: '#000' }}>Create an customer account</h3>
                                 {SignUpstep == 2 || SignUpstep == 1 ? (
                                     <>
                                         {SignUpstep == 2 ? (
                                             <>
-                                                <div class="input-group mb-3 input-warning-o">
-                                                    <span class="input-group-text">
-                                                        <FaEnvelope />
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        placeholder="Yourname@gmail.com"
-                                                        value={Email} onChange={(e) => setEmail(e.target.value)}
-                                                    />
+                                                <div className="form-group">
+                                                    <p>Email address <span className="text-danger">*</span></p>
+                                                    <input className="form-control" type="text" placeholder="Yourname@gmail.com" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
                                                 </div>
                                                 <div className="form-group">
                                                     <p>Confirm Email address <span className="text-danger">*</span></p>
@@ -328,12 +285,12 @@ const About = () => {
                                                     />
                                                 </div>
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="exampleCheck1" onChange={(e) => setTerms(e.target.checked)} />
+                                                    <input type="checkbox" checked={Terms} class="form-check-input" id="exampleCheck1" onChange={(e) => setTerms(e.target.checked)} />
                                                     <label class="form-check-label" for="exampleCheck1">Agree to terms, privacy policy</label>
                                                 </div>
 
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="exampleCheck2" onChange={(e) => setMarketing(e.target.checked)} />
+                                                    <input type="checkbox" checked={Marketing} class="form-check-input" id="exampleCheck2" onChange={(e) => setMarketing(e.target.checked)} />
                                                     <label class="form-check-label" for="exampleCheck2">Agree to receive marketing</label>
                                                 </div>
                                             </>
@@ -382,6 +339,7 @@ const About = () => {
                                                 placeholder="Select City"
                                                 isDisabled={!selectedState}
                                                 onChange={setSelectedCity}
+                                                value={selectedCity}
                                             />
                                         </div>
                                         <div className="form-group">
@@ -396,14 +354,14 @@ const About = () => {
                                 ) : (
                                     ''
                                 )}
-                                
+
 
                                 {SignUpstep != 4 ? (
                                     <>
                                         <div className='button-area mt-4'>
 
                                             {SignUpstep >= 3 ? (
-                                                <button type='button' className="signup-page-button mr-3" onClick={() => HandelSignupstepback(SignUpstep)}>Back</button>
+                                                <button type='button' className="signup-page-button mr-3 mb-2" onClick={() => HandelSignupstepback(SignUpstep)}>Back</button>
                                             ) : ''}
 
                                             {SignUpstep == 4 ? (
@@ -413,9 +371,9 @@ const About = () => {
                                             ) : (
                                                 <>
                                                     {SignUpstep <= 3 ? (
-                                                        <button type='button' className="signup-page-button" onClick={() => HandelSignupstep(SignUpstep)}>Next</button>
+                                                        <button type='button' className="signup-page-button  mb-2" onClick={() => HandelSignupstep(SignUpstep)}>Next</button>
                                                     ) : (
-                                                        <button type='button' className="signup-page-button" onClick={() => HandelSignupstep(SignUpstep)}>Skip / Next</button>
+                                                        <button type='button' className="signup-page-button  mb-2" onClick={() => HandelSignupstep(SignUpstep)}>Skip / Next</button>
                                                     )}
                                                 </>
                                             )}
@@ -431,52 +389,52 @@ const About = () => {
                         {SignUpstep != 4 ? (
                             <div className="col-md-6">
                                 <div className="text-center">
-                                    <img className="no-result-img" src={SignupImg} style={lottewidth} />
+                                    <img className="no-result-img admin-login-img" src={SignupImg} />
                                 </div>
                             </div>
                         ) : (<>
 
                         </>)}
                         {SignUpstep == 4 ? (
-                                    <>
-                                        <div className="col-md-12 px-5-">
-                                            <div className="form-group">
-                                                <p>Select hobby</p>
-                                                {Hobby.map((item, index) => (
-                                                    <span
-                                                        key={item.name}
-                                                        className={`hobby-box ${selectedHobbies.includes(item.name) ? 'hobby-active' : ''}`}
-                                                        onClick={() => toggleHobby(item.name)}
-                                                    >
-                                                        {item.name}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </>
-                                ) : ''}
+                            <>
+                                <div className="col-md-12 px-5-">
+                                    <div className="form-group">
+                                        <p>Select hobby</p>
+                                        {Hobby.map((item, index) => (
+                                            <span
+                                                key={item.name}
+                                                className={`hobby-box ${selectedHobbies.includes(item.name) ? 'hobby-active' : ''}`}
+                                                onClick={() => toggleHobby(item.name)}
+                                            >
+                                                {item.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
+                        ) : ''}
                         {SignUpstep == 4 ? (
                             <div className="col-md-12">
                                 <div className='button-area mt-4'>
 
                                     {SignUpstep >= 3 ? (
-                                        <button type='button' className="signup-page-button mr-3" onClick={() => HandelSignupstepback(SignUpstep)}>Back</button>
+                                        <button type='button' className="signup-page-button mr-3  mb-2" onClick={() => HandelSignupstepback(SignUpstep)}>Back</button>
                                     ) : ''}
 
                                     {SignUpstep == 4 ? (
                                         <>
                                             {Loader ? (
-                                                <button type='button' className="signup-page-button">Please wait...</button>
+                                                <button type='button' className="signup-page-button  mb-2">Please wait...</button>
                                             ) : (
-                                                <button type='button' className="signup-page-button" onClick={() => HandelCustomersignup()}>Create account</button>
+                                                <button type='button' className="signup-page-button  mb-2" onClick={() => HandelCustomersignup()}>Create account</button>
                                             )}
                                         </>
                                     ) : (
                                         <>
                                             {SignUpstep <= 3 ? (
-                                                <button type='button' className="signup-page-button" onClick={() => HandelSignupstep(SignUpstep)}>Next</button>
+                                                <button type='button' className="signup-page-button  mb-2" onClick={() => HandelSignupstep(SignUpstep)}>Next</button>
                                             ) : (
-                                                <button type='button' className="signup-page-button" onClick={() => HandelSignupstep(SignUpstep)}>Skip / Next</button>
+                                                <button type='button' className="signup-page-button  mb-2" onClick={() => HandelSignupstep(SignUpstep)}>Skip / Next</button>
                                             )}
                                         </>
                                     )}

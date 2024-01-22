@@ -209,7 +209,7 @@ const Locationbtn = ({ prorps }) => {
                             href="#"
                             style={{ marginTop: '-10px' }}
                         >
-                            {country_name ? country_name : 'Location'}
+                            {country_name ? country_name : 'Location'}  {" "}
                             <img class="nav-plus" src={plus} alt="" />
                         </a>
                     </div>
@@ -220,7 +220,7 @@ const Locationbtn = ({ prorps }) => {
                         <a
                             className="nav-link text-primary-theme pe-1 font-nav"
                         >
-                            {country_name ? country_name : 'Location'}
+                            {country_name ? country_name : 'Location'} {" "}
                             <img className="nav-plus" src={plus} alt="" />
                         </a>
                     </li>

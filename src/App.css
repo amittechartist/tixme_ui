@@ -274,7 +274,10 @@ span.input-group-text {
   overflow: hidden;
   width: 100%;
 }
-
+.input-group.mb-3.input-warning-o {
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
 .date-border-redius {
   border-radius: 0px 10px 10px 0px !important;
 }
@@ -676,7 +679,7 @@ span.user_drop_icon {
 }
 
 .input-warning-o .form-control {
-  padding: 0.375rem 0px;
+  padding: 0.375rem 5px;
 }
 
 .theme-btn-warning {
@@ -836,7 +839,7 @@ img.list-thum-img {
 }
 
 .desc_data .event-duration {
-  color: #fff;
+  color: #000;
   font-weight: 600;
   font-size: 13px;
 }
@@ -904,12 +907,12 @@ img.list-thum-img {
 }
 
 button.Unfollow-btn-1 {
-  background: #fff;
+  background: #0047ab;
   border: 2px solid #0047ab;
   border-radius: 7px;
   padding: 3px 20px;
   font-weight: 600;
-  color: #0047ab;
+  color: #ffffff;
 }
 
 .reward-ui-box {
@@ -1195,9 +1198,7 @@ button.signup-page-button {
   padding: 100px 100px;
 }
 
-.input-group {
-  border: 1px solid #eee;
-}
+
 
 .page-titles a {
   color: #fff !important;
@@ -1380,12 +1381,12 @@ p.sssas {
 .pc-header-location {
   position: relative;
   z-index: 9;
-  top: 11px;
+  top: 6px;
   background: #fff;
-  padding: 0px 12px;
-  left: 0px;
+  padding: 10px 0px 0px 0px;
+  left: -1px;
   border-radius: 0px 0px 10px 10px;
-  width: 160px;
+  width: 181px;
 }
 .top-login-sign-btn:hover span.top-login-sign-btn-icon {
   color: #65a1ff;
@@ -1446,4 +1447,63 @@ img.cart-btn-img {
 }
 .BeyondTickets-sec {
   margin-top: 70px;
+}
+.eventpage-cat-name {
+  padding-left: 5rem;
+  padding-top: 4rem;
+}
+.eventpage-cat-name span {
+  border: 2px dashed white;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+.admin-login-img {
+  height: auto;
+  width: 340px;
+}
+.OURPARTNER-padding {
+  padding: 0px 25px 0px 0px;
+}
+.social-icon{
+  background: none !important;
+  cursor: pointer;
+}
+.login-pg-btn-cs{
+  background: #6495ED !important;
+}
+.login-pg-btn-cs .right{
+  background: #0047AB !important;
+}
+span.add_to_cart_count {
+  font-size: 25px;
+  padding: 0px 11px;
+  width: 40px;
+  user-select: none;
+} 
+.add_to_cart_btn {
+  background: #0e51b0;
+  cursor: pointer;
+  color: #fff;
+  user-select: none;
+  font-size: 25px;
+  padding: 0px 11px;
+  border-radius: 8px;
+  margin: 0px 5px;
+}
+span.event-pg-icon-img img {
+  height: auto;
+  width: 33px;
+  margin-right: 10px;
+  margin-left: 20px;
+}
+span.event-pg-icon-text {
+  font-size: 15px;
+}
+.event-pg-icon {
+  font-size: 30px;
+  margin-right: 10px;
+}
+.row.evnt-page-save-shear-box {
+  margin-right: 80px;
+  margin-bottom: -17px;
 }

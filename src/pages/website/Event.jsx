@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Footer from '../../components/footer';
 import HeaderMenu from '../../components/headermenu';
+import OrganizerProfile from '../../component/organizer/organizerprofile';
 import MobileMenu from '../../components/mobilemenu';
 import { apiurl, onlyDayMonth, shortPer, app_url } from "../../common/Helpers";
 import { useNavigate, Link } from "react-router-dom";
@@ -18,12 +19,10 @@ import Timelogo from "../../common/icon/time 1.svg";
 import Hourglasslogo from "../../common/icon/hourglass.svg";
 import LocationIcon from "../../common/icon/location.svg";
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import DateIcon from "../../common/icon/date 2.svg";
-import MapIcon from "../../common/icon/mapicon.svg";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import ShareIcon from "../../common/icon/share.svg";
+import WhiteShareIcon from "../../common/icon/whiteshear.svg";
 import EventImg from "../../common/event1.png";
-import MailIcon from "../../common/icon/mail.svg";
 import FlagIcon from "../../common/icon/flag.svg";
 import Flip from "react-reveal/Flip";
 import Fade from "react-reveal/Fade";
@@ -36,6 +35,8 @@ import hourglassIcon from "./eventpageicon/hourglass.png";
 import timeIcon from "./eventpageicon/time.png";
 import dataIcon from "./eventpageicon/data.png";
 import mapIcon from "./eventpageicon/map.png";
+import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 const Home = () => {
   const navigate = useNavigate();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -122,7 +123,7 @@ const Home = () => {
         toast.error("You need to login first");
         return false;
       }
-      // setFollowApi(true)
+      setFollowApi(true)
       const requestData = {
         organizerid: Organizerdata._id
       }
@@ -139,10 +140,10 @@ const Home = () => {
           if (data.success == true) {
             setOrganizerdata(data.data);
             if (data.typestatus == 1) {
-              // 1 = not following
+              setFollowtype(false)
 
             } else if (data.typestatus == 2) {
-              // 2 = following
+              setFollowtype(true)
 
             } else {
               toast.error("Internal Server Error");
@@ -554,7 +555,11 @@ const Home = () => {
     const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(location)}`;
     window.open(mapsUrl, "_blank");
   };
-  console.log(FollowApi);
+  const openGoogleMapswithlon = (latitude, longitude) => {
+    const coordinates = `${latitude},${longitude}`;
+    const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(coordinates)}`;
+    window.open(mapsUrl, "_blank");
+  };
   return (
     <>
       {" "}
@@ -594,10 +599,10 @@ const Home = () => {
           </div>
         ) : (
           <>
-            <h1 className="banner-h text-white text-start text-uppercase">{Eventdata.display_name}</h1>
-            <h3 className="banner-h2 text-white rounded-8 px-4 py-3 animate__animated animate__bounce">
-              {Eventdata.category_name}
+            <h3 className="eventpage-cat-name text-white animate__animated animate__bounce">
+              <span>{Eventdata.category_name}</span>
             </h3>
+            <h1 className="banner-h text-white text-start text-uppercase">{Eventdata.display_name}</h1>
             {screenWidth > 900 ? (
               <div className="py-2 singel-event-page-head-box">
                 <div className="organizer-name-sec px-2 py-2">
@@ -615,7 +620,7 @@ const Home = () => {
                     </div>
                     <div className="d-inline-block">
                       <span className="event-duration d-block">Event Time</span>
-                      <span className="event-time d-block">{Eventdata.start_time}</span>
+                      <span className="text-white event-time d-block">{Eventdata.start_time}</span>
                     </div>
                   </div>
                   <div className="d-inline-flex align-items-center border-right event-time-area">
@@ -624,7 +629,7 @@ const Home = () => {
                     </div>
                     <div className="d-inline-block">
                       <span className="event-duration d-block">Event Duration</span>
-                      <span className="event-time d-block">{Eventdata.event_duration}</span>
+                      <span className="text-white event-time d-block">{Eventdata.event_duration}</span>
                     </div>
                   </div>
                   <div className="d-inline-flex align-items-center">
@@ -635,7 +640,11 @@ const Home = () => {
                       <span className="event-duration d-block eventpage-location-name">
                         {Eventdata.location}
                       </span>
-                      <span onClick={openGoogleMaps} className="event-time d-block cursor-pointer py-0">Get direction</span>
+                      {Eventdata.Lag && Eventdata.lat ? (
+                        <span onClick={() => openGoogleMapswithlon(Eventdata.lat, Eventdata.Lag)} className="text-white event-time d-block cursor-pointer py-0">Get direction</span>
+                      ) : (
+                        <span onClick={openGoogleMaps} className="text-white event-time d-block cursor-pointer py-0">Get direction</span>
+                      )}
                     </div>
                     <div className="d-inline-block mr-1 ml-3">
                       <img height={30} width={30} src={mapIcon} alt="" />
@@ -646,7 +655,7 @@ const Home = () => {
             ) : (
               <>
                 <div className="row px-3 py-3">
-                  <div className="col-6 d-flex align-items-center justify-content-center">
+                  <div className="col-6 d-flex align-items-center justify-content-start">
                     <div>
                       <div className="d-inline-flex align-items-center event-time-area py-2">
                         <div className="d-inline-block mr-1">
@@ -658,7 +667,7 @@ const Home = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-6  d-flex align-items-center justify-content-center">
+                  <div className="col-6  d-flex align-items-center justify-content-start">
                     <div>
                       <div className="d-inline-flex align-items-centerevent-time-area">
                         <div className="d-inline-block mr-1">
@@ -666,25 +675,25 @@ const Home = () => {
                         </div>
                         <div className="d-inline-block">
                           <span className="event-duration d-block">Event Time</span>
-                          <span className="event-time d-block">{Eventdata.start_time}</span>
+                          <span className="event-time d-block text-white">{Eventdata.start_time}</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="col-6  d-flex align-items-center justify-content-center">
+                  <div className="col-6  d-flex align-items-center justify-content-start">
                     <div>
                       <div className="d-inline-flex align-items-center event-time-area">
                         <div className="d-inline-block mr-1">
-                          <img height={30} width={'auto'} className="ml-2" src={hourglassIcon} alt="" />
+                          <img height={30} width={'auto'} className="" src={hourglassIcon} alt="" />
                         </div>
                         <div className="d-inline-block">
                           <span className="event-duration d-block">Event Duration</span>
-                          <span className="event-time d-block">{Eventdata.event_duration}</span>
+                          <span className="event-time d-block  text-white">{Eventdata.event_duration}</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="col-6  d-flex align-items-center justify-content-center">
+                  <div className="col-6  d-flex align-items-center justify-content-start">
                     <div>
                       <div className="d-inline-flex align-items-center">
                         <div className="d-inline-block mr-1">
@@ -694,7 +703,7 @@ const Home = () => {
                           <span className="event-duration d-block eventpage-location-name">
                             {Eventdata.location}
                           </span>
-                          <span onClick={openGoogleMaps} className="event-time d-block cursor-pointer py-0">Get direction</span>
+                          <span onClick={openGoogleMaps} className="event-time d-block cursor-pointer py-0  text-white">Get direction</span>
                         </div>
                       </div>
                     </div>
@@ -702,6 +711,22 @@ const Home = () => {
                 </div>
               </>
             )}
+            <div className="row evnt-page-save-shear-box">
+              <div className="col-md-12 text-white d-flex align-items-center justify-content-md-end justify-content-center">
+                <span className="d-flex align-items-center cursor-pointer" onClick={() => SaveEvent(Eventdata._id)}>
+                  <span className="event-pg-icon">
+                  {IssaveEvent ? (<FaHeart />) : (<FaRegHeart />)}
+                  </span>
+                  <span className="event-pg-icon-text">Add to favourites</span>
+                </span>
+                <span className="d-flex align-items-center  cursor-pointer"  onClick={() => CopyUrlhandel()}>
+                  <span className="event-pg-icon-img">
+                    <img src={WhiteShareIcon} alt="" />
+                  </span>
+                  <span className="event-pg-icon-text">Share event</span>
+                </span>
+              </div>
+            </div>
             <div className="banner-child-event">
               <img className="mt-2 event-banner" src={Eventdata.banner_image ? Eventdata.banner_image : EventImg} alt="" />
             </div>
@@ -709,7 +734,7 @@ const Home = () => {
         )}
       </div>
       {Apiloader ? (
-        <div style={{margin: '30px 26px'}}>
+        <div style={{ margin: '30px 26px' }}>
           <div className="linear-background w-100"> </div>
         </div>
       ) : (
@@ -875,7 +900,7 @@ const Home = () => {
                                                   src={LocationIcon}
                                                   alt=""
                                                 />{" "}
-                                                <span>{item.location}</span>
+                                                <span>{item.city ? item.city : ''} </span>
                                               </div>
                                             </Col>
                                             <Col md={5} xs={5}>
@@ -902,73 +927,7 @@ const Home = () => {
                   {Eventdata.start_mindate && Eventdata.is_clock_countdown ? (
                     <CoundownDiv props={Eventdata.start_mindate} />
                   ) : ''}
-                  <div className="organised-by-box eventpage-box-style">
-                    <div className="organizer-name-sec d-flex align-items-center px-2 py-2">
-                      <div className="d-inline-block mr-3">
-                        <img
-                          height={70}
-                          width={70}
-                          src={Organizerdata.profile_picture ? Organizerdata.profile_picture : Nouserphoto}
-                          alt=""
-                          className="organiger-logo"
-                        />
-                      </div>
-                      <div className="d-inline-block">
-                        <span className="organizer-by d-block">Organised by</span>
-                        <Link to={`${app_url}organizer-profile/${Organizerdata._id}/${Organizerdata.first_name}`}><span className="organizer-name d-block">By {Organizerdata.first_name}</span></Link>
-                      </div>
-                    </div>
-                    <div className="border-botton-devider my-2"></div>
-                    <div className="right-box-con mt-4">
-                      {Followtypeloader ? (
-                        <div className="linear-background w-100"> </div>
-                      ) : (
-                        <div className="d-flex align-items-center">
-                          <div className="d-inline-block mr-4">
-                            <p className="followers-title">Followers</p>
-                            <p className="followers-count">{Organizerdata.followers ? Organizerdata.followers : 0}</p>
-                          </div>
-                          <div className="d-inline-block">
-                            {FollowApi ? (
-                              <button type="button" className="follow-btn">
-                                Please wait...
-                              </button>
-                            ) : (
-                              <>
-                                {Followtype ? (
-                                  <button onClick={() => followOrganizer()} type="button" class="Unfollow-btn-1">Unfollow</button>
-                                ) : (
-                                  <button onClick={() => followOrganizer()} type="button" className="follow-btn">
-                                    Follow
-                                  </button>
-                                )}
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                      <div className="align-items-center py-2">
-                        <div className="d-inline-block mr-1">
-                          <img height={30} width={30} src={LocationIcon} alt="" />
-                        </div>
-                        <div className="d-inline-block">
-                          <span className="event-page-organizer-deta d-block">
-                            {Organizerdata.countryname ? Organizerdata.countryname : '--'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="align-items-center py-2">
-                        <div className="d-inline-block mr-1">
-                          <img height={30} width={30} src={MailIcon} alt="" />
-                        </div>
-                        <div className="d-inline-block">
-                          <span className="event-page-organizer-deta d-block">
-                            {Organizerdata.email ? Organizerdata.email : '--'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <OrganizerProfile props={Organizerdata} />
                   <div className="start-in-box eventpage-box-style mb-5 my-5 event-page-ticket">
                     <div className="right-box-title">
                       <p><Flip left cascade>Tickets</Flip></p>
@@ -978,26 +937,26 @@ const Home = () => {
                         {Eventdata.allprice.map((items, index) => (
                           <>
                             <div key={items.id} className="right-box-con mt-4 in-event-page-cart-sec">
-                              <div className="d-flex align-items-center">
-                                <div className="price-section d-inline-block">
-                                  <p className="Ticket-title">{items.name}</p>
+                              <div className="row align-items-center">
+                                <div className="col-md-6 col-6">
+                                  <p className="Ticket-title mb-0">{items.name}</p>
                                   {items.ticket_type == 1 ? (
                                     <>
-                                      <span className="price">{Eventdata.countrysymbol}{items.price}</span>
-                                      {/* <span className="cut-price">${items.price}</span> */}
+                                      <span className="price  mb-0">{Eventdata.countrysymbol}{items.price}</span>
                                     </>
                                   ) : (<>
-                                    <span className="price">FREE</span>
+                                    <span className="price  mb-0">FREE</span>
                                   </>)}
                                 </div>
-                                <div className="d-inline-block cart-increment-button">
-                                  <span>
-                                    <span className="cart-minus cart-btn" onClick={() => removeFromCart(items.name, localQuantities[items.name] || 0)}>-</span>
-                                    <span className="cart-number">{localQuantities[items.name] || 0}</span>
-                                    <span className="cart-plus cart-btn" onClick={() => addToCart(items)}>+</span>
-                                  </span>
+                                <div className="col-md-6 col-6">
+                                  <div className="d-flex align-items-stretch">
+                                    <span className="add_to_cart_btn" onClick={() => removeFromCart(items.name, localQuantities[items.name] || 0)}>-</span>
+                                    <span className="add_to_cart_count">{localQuantities[items.name] || 0}</span>
+                                    <span className="add_to_cart_btn" onClick={() => addToCart(items)}>+</span>
+                                  </div>
                                 </div>
                               </div>
+
                             </div>
                             <div className="dashed-border-devider my-2"></div>
                           </>
@@ -1011,11 +970,7 @@ const Home = () => {
                       <span className="float-right main-title">{Eventdata.countrysymbol}{eventTotalPrice.toFixed(2)}</span>
                     </div>
                     {Paynowbtnstatus ? (
-                      <div className="mt-5 paynow-btn-box">
-                        <span onClick={() => saveCartToLocalStorage()}>
-                          <Whitestarbtn title={'Pay now'} />
-                        </span>
-                      </div>
+                      <button onClick={() => saveCartToLocalStorage()} type="button" className="btn theme-bg text-white mt-4 w-100">Pay Now</button>
                     ) : ''}
                   </div>
                 </Col>
@@ -1066,42 +1021,15 @@ const Home = () => {
                           <div className="d-flex align-items-center justify-content-start my-2">
                             <img className="card-icon me-1" src={locationIcon} alt="" />
                             <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                              {item.location}
+                              {item.city ? item.city : ''}
                             </p>
                           </div>
                         </div>
 
                       </div>
-                      {/* <div className="d-flex justify-content-start align-items-start">
-                          <div
-                            className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2 border-end pe-3"
-                            style={{ flexShrink: 0, width: "auto" }}
-                          >
-                            <img className="card-icon2 me-2" src={clock} alt="" />
-                            <div>
-                              <p className="small text-primary-color fw-bold mb-0 pb-0">
-                                Event Time
-                              </p>
-                              <p className="small mb-0">{item.start_time}</p>
-                            </div>
-                          </div>
-                          <div
-                            className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2"
-                            style={{ flexShrink: 0, width: "auto" }}
-                          >
-                            <img className="card-icon2 me-2" src={hourglass} alt="" />
-                            <div>
-                              <p className="small text-primary-color fw-bold mb-0 pb-0">
-                                Event Duration
-                              </p>
-                              <p className="small mb-0">{item.event_duration}</p>
-                            </div>
-                          </div>
-                        </div> */}
+
                       <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-                      {/* <p className="desc mx-3 pb-3">
-                          {shortPer(item.event_desc, 100)}
-                        </p> */}
+
                     </div>
                   </div>
                 ))}

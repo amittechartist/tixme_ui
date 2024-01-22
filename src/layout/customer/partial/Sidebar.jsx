@@ -54,7 +54,7 @@ const Sidebar = () => {
                         </li>
                         <li onClick={() => d()}><Link to={customer_url+ 'savedevents'} className="ai-icon" aria-expanded="false">
                             <img src={supportIcon} alt="Your Logo" />
-                            <span className="nav-text">saved Events</span>
+                            <span className="nav-text">Saved Events</span>
                         </Link>
                         </li>
                         <li onClick={() => d()}><Link to={customer_url+ 'support-tickets'} className="ai-icon" aria-expanded="false">
@@ -62,17 +62,6 @@ const Sidebar = () => {
                             <span className="nav-text">Support</span>
                         </Link>
                         </li>
-                        {/* <li onClick={() => d()}><Link to={customer_url+ 'my-profile'} className="ai-icon" aria-expanded="false">
-                            <img src={supportIcon} alt="Your Logo" />
-                            <span className="nav-text">Profile Managment</span>
-                        </Link>
-                        </li>
-                        <li onClick={() => d()}>
-                            <div onClick={Logout} className="ai-icon cursor-pointer" aria-expanded="false">
-                                <img src={DashboardIcon} alt="Your Logo" />
-                                <span className="nav-text">Logout</span>
-                            </div>
-                        </li> */}
                     </ul>
                 </div>
             </div>

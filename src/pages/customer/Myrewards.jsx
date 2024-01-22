@@ -280,45 +280,48 @@ const Dashboard = ({ title }) => {
                                                                 <></>
                                                             ) : (
                                                                 <>
-                                                                <Col md={12} className="pb-3">
-                                                                    <Row style={{ borderBottom: '1px solid #000' }}>
-                                                                        <Col md={4} xl={4} sm={4} className="text-center">
-                                                                            <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
-                                                                                <p className="rewarx-box-c-title">Your status</p>
-                                                                                <p className="rewarx-box-c-sts"><span>{currentPackage.name ? currentPackage.name + ' TIER' : ''}</span></p>
-                                                                            </div>
-                                                                        </Col>
-                                                                        <Col md={4} xl={4} sm={4} className="text-center">
-                                                                            <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
-                                                                                <p className="rewarx-box-c-title">Points to reach {nextTarget.name}</p>
-                                                                                <p className="rewarx-box-c-sts">{nextTarget.pointsToNextTarget}</p>
-                                                                            </div>
-                                                                        </Col>
-                                                                        <Col md={4} className="text-center">
-                                                                            <div>
-                                                                                <p className="rewarx-box-c-title">Next TIER</p>
-                                                                                <p className="rewarx-box-c-sts">{nextTarget.name} TIER</p>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Row>
-                                                                </Col>
-                                                            
+                                                                    <Col md={12} className="pb-3">
+                                                                        <Row style={{ borderBottom: '1px solid #000' }}>
+                                                                            <Col md={4} xl={4} sm={4} className="text-center">
+                                                                                <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
+                                                                                    <p className="rewarx-box-c-title">Your status</p>
+                                                                                    <p className="rewarx-box-c-sts"><span>{currentPackage.name ? currentPackage.name + ' TIER' : ''}</span></p>
+                                                                                </div>
+                                                                            </Col>
+                                                                            <Col md={4} xl={4} sm={4} className="text-center">
+                                                                                <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
+                                                                                    <p className="rewarx-box-c-title">Points to reach {nextTarget.name}</p>
+                                                                                    <p className="rewarx-box-c-sts">{nextTarget.pointsToNextTarget}</p>
+                                                                                </div>
+                                                                            </Col>
+                                                                            <Col md={4} className="text-center">
+                                                                                <div>
+                                                                                    <p className="rewarx-box-c-title">Next TIER</p>
+                                                                                    <p className="rewarx-box-c-sts">{nextTarget.name} TIER</p>
+                                                                                </div>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </Col>
 
-                                                            <Col md={6}>
-                                                                <p className="Booking-progress-towards">Booking progress towards  <span>{nextTarget.name} TIER</span></p>
-                                                            </Col>
-                                                            <Col md={6} className="text-end">
-                                                                <p className="Booking-progress-towards"><span>{nextTarget.purchaseAmount}</span> Points for {nextTarget.name} TIER</p>
-                                                            </Col>
-                                                            </>
+
+                                                                    <Col md={6}>
+                                                                        <p className="Booking-progress-towards">Booking progress towards  <span>{nextTarget.name} TIER</span></p>
+                                                                    </Col>
+                                                                    <Col md={6} className="text-end">
+                                                                        <p className="Booking-progress-towards"><span>{nextTarget.purchaseAmount}</span> Points for {nextTarget.name} TIER</p>
+                                                                    </Col>
+                                                                </>
                                                             )}
                                                             {Packloader ? '' : (
                                                                 <Col md={12} className="mt-4">
                                                                     <div className="reward-box" style={{ position: 'relative' }}>
-                                                                        <span className="reward_star" style={{ left: Percentage }}>
-                                                                            <img src={Silver} alt="" />
-                                                                            <p className="reward_star_text" style={{ fontSize: '18px' }}>{userdata.plan_name ? userdata.plan_name + ' TIER' : 'Next ' + nextTarget.name}</p>
-                                                                        </span>
+                                                                        {Packloaderxxx ? '' : (
+                                                                            <span className="reward_star" style={{ left: Percentage }}>
+                                                                                <img src={Silver} alt="" />
+                                                                                <p className="reward_star_text" style={{ fontSize: '18px' }}>{currentPackage.name ? currentPackage.name + ' TIER' : 'Next ' + nextTarget.name}</p>
+                                                                            </span>
+                                                                        )}
+
                                                                         {/* fetch scal data     */}
                                                                         {Packagelist.map((item, index) => (
                                                                             item.name === "Gold" && (

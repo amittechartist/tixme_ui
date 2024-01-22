@@ -1,75 +1,21 @@
-import React, { useEffect, useState } from "react";
-import aboutUs from "../../../assets/about-us-pic.svg";
+import React, { useState } from "react";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Silver from "../../../assets/Sliver.svg";
-import Gold from "../../../assets/Gold.svg";
-import Platinum from "../../../assets/Platinum.svg";
-import google from "../../../assets/google.svg";
-import airBNB from "../../../assets/airBNB.svg";
-import booking from "../../../assets/booking.com.svg";
-import expedia from "../../../assets/expedia.svg";
-import TUI from "../../../assets/TUI.svg";
-import arrow from "../../../assets/arrow.svg";
-import Logo from "../../../assets/Logo.svg";
-import Search from "../../../assets/search.png";
-import Account from "../../../assets/account.svg";
-import menu from "../../../assets/menu.svg";
-import plus from "../../../assets/plus.svg";
-import location from "../../../assets/location (5) 1.svg";
-import Footer from '../../../components/footer';
 import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
-import { FaEnvelope } from "react-icons/fa6";
 import toast from 'react-hot-toast';
-import { apiurl, app_url, isEmail, organizer_url } from '../../../common/Helpers';
+import { apiurl, app_url, isEmail } from '../../../common/Helpers';
 import { Link, useNavigate } from "react-router-dom";
-import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import SignupImg from '../../../common/image/signup.svg';
-import Lottie from "lottie-react";
-import Select from 'react-select'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import { auth, googleProvider, facebookProvider } from '../../../firebase';
+import { auth, googleProvider } from '../../../firebase';
 import GoogleLogo from '../../../common/icon/google.png';
 import { signInWithPopup } from 'firebase/auth';
 const About = () => {
-    const lottewidth = {
-        width: 'auto',
-        height: '320px'
-    }
     const navigate = useNavigate();
-    const [SignUpstep, SetSignUpstep] = useState(1);
     const [Loader, setLoader] = useState(false);
-    const [Confirmemail, setConfirmemail] = useState();
-    const [Email, setEmail] = useState();
-    const [Phonenumber, setPhonenumber] = useState();
-    const [Firstname, setFirstname] = useState();
-    const [Lastname, setLastname] = useState();
-
-    const [Password, setPassword] = useState();
-    const [ConfirmPassword, setConfirmPassword] = useState();
-    const [WhatsappNumber, setWhatsappNumber] = useState();
-    const [Address1, setAddress1] = useState();
-    const [Pincode, setPincode] = useState();
-    const [City, setCity] = useState();
-    const [State, setState] = useState();
-    const [Country, setCountry] = useState();
-    const [Terms, setTerms] = useState(1);
-    const [Marketing, setMarketing] = useState(1);
-
-    const [Message, setMessage] = useState();
-    const [Countryname, setCountryname] = useState();
-
-    const [Hobby, setHobby] = useState([]);
-    const [selectedHobbies, setSelectedHobbies] = useState([]);
-    const [countryList, setcountryList] = useState([{ value: "", label: "Country" }]);
-    const MySwal = withReactContent(Swal)
-
     const [LoginEmail, setLoginEmail] = useState();
     const [LoginPassword, setLoginPassword] = useState();
-
     const HandelCustomerLogin = async () => {
         try {
             if (!LoginEmail) {
@@ -117,7 +63,6 @@ const About = () => {
             console.error('Api error:', error);
         }
     };
-
     const handleGoogleLogin = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
@@ -174,7 +119,6 @@ const About = () => {
             console.error(error.message);
         }
     };
-
     return (
         <>
             {/* <!-- mobile nav --> */}
@@ -188,7 +132,7 @@ const About = () => {
                     <div className='row form-area'>
                         <div className="col-md-6">
                             <div>
-                                <h5 className="mb-5" style={{ fontWeight: '600', color: '#000' }}>Do you already have an account? please log in with your email address.</h5>
+                                <h5 className="mb-md-5 mb-2 auth-page-title1" style={{ fontWeight: '600', color: '#000' }}>Do you already have an account? please log in with your email address.</h5>
 
                                 <div className="form-group">
                                     <p>Email address</p>
@@ -230,7 +174,7 @@ const About = () => {
                         </div>
                         <div className="col-md-6">
                             <div className="text-center">
-                                <img className="no-result-img" src={SignupImg} style={lottewidth} />
+                                <img className="no-result-img admin-login-img" src={SignupImg} />
                             </div>
                         </div>
                     </div>

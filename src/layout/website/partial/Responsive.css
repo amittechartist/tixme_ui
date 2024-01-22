@@ -1,4 +1,33 @@
 @media only screen and (max-width: 900px) {
+    .BeyondTickets-sec {
+        margin-top: 40px;
+    }
+    .row.evnt-page-save-shear-box {
+        margin-right: 0;
+        margin-bottom: -16px;
+    }
+    .eventpage-cat-name {
+        padding-left: 1rem;
+        padding-top: 2rem;
+    }
+    .banner-event {
+        height: 360px !important;
+    }
+    .banner-organizer-page {
+        height: 88px;
+    }
+    .banner-h-events {
+        padding-top: 2.3rem !important;
+    }
+    .OURPARTNER-padding{
+        padding: 0px 8px 0px 0px;
+      }
+    .auth-page-title1 {
+        font-size: 14px;
+    }
+    .hobby-box{
+        font-size: 10px;
+    }
     .border-style-home-page {
         border-right: none;
         border-bottom: 1px solid #003b8f;
@@ -31,7 +60,7 @@
         margin: 10px 0px 0px 10px;
     }
     .animation-home-banner {
-        margin-left: 24px;
+        margin-left: 15px;
         font-size: 18px;
         padding: 16px 0px 40px 15px;
         border: 2px dashed  #fff;
@@ -1014,7 +1043,7 @@
     }
 
     .price {
-        font-size: 14px;
+        font-size: 21px;
     }
 
     .event-title-home {

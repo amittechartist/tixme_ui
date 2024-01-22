@@ -37,10 +37,10 @@ body {
   height: 450px;
 }
 .banner-organizer-page {
-  height: 250px;
+  height: 210px;
 }
 .banner-event {
-  height: 550px;
+  height: 630px;
 }
 
 .rounded-8 {
@@ -113,17 +113,19 @@ body {
 
 .nav-box {
   width: 180px;
-  height: 75px;
+  height: 100px;
 }
 
 a {
   color: #0047ab !important;
   text-decoration: unset !important;
 }
-
+.banner-h-events {
+  padding-top: 6rem !important;
+}
 /* Banner headings */
 .banner-h {
-  padding: 2rem 0rem 1.5rem 5rem;
+  padding: 3rem 0rem 1.5rem 5rem;
   font-family: "Gilroy-Bold";
   font-weight: 500;
 }
@@ -145,7 +147,7 @@ a {
 }
 
 .banner-child {
-  margin: 3rem 5rem;
+  margin: 1rem 5rem;
   border-radius: 10px;
 }
 .banner-child-event {
@@ -597,12 +599,14 @@ input:focus {
 
 @media (max-width: 576px) {
   .banner {
-    height: 340px;
+    height: 240px;
   }
 
   .banner-h {
-    padding: 2rem 2rem 1.5rem 2rem;
-  }
+    padding: 2rem 2rem 0rem 1rem;
+    font-size: 19px;
+    letter-spacing: 2px;
+}
 
   .banner-h2 {
     margin: 0 2rem;
@@ -647,7 +651,7 @@ input:focus {
   }
 
   .space-sec {
-    padding: 0rem 2rem;
+    padding: 0rem 1rem;
   }
 
   .space-sec2 {
@@ -663,7 +667,7 @@ input:focus {
   }
 
   .event-sec {
-    margin-top: 4rem;
+    margin-top: 1.5rem;
   }
 
   .mx-cards {
@@ -722,7 +726,7 @@ input:focus {
 
   .newsletter-sec {
     background: url(./assets/NewsletterBgM.png) bottom center;
-    height: 450px;
+    height: 340px;
     width: 90vw;
     margin: 0 auto;
     background-size: cover;
@@ -1078,17 +1082,24 @@ input:focus {
 }
 
 .GetCustomerButtonBox {
-  filter: grayscale(100%);
+  /* filter: grayscale(100%); */
   position: relative;
   text-align: center;
-  background: linear-gradient(#7FA3D6, #F0F5FC);
+  background: linear-gradient(#ffffff, white) padding-box, linear-gradient(to bottom, #0047AB, #ffffff) border-box;
   padding: 40px 20px;
-  border-radius: 10px;
+  border-radius: 15px;
+  border: 2px solid transparent;
   transition: 0.3s ease;
   cursor: pointer;
 }
+.GetCustomerButtonBox h4{
+  padding-bottom: 20px;
+}
+.GetCustomerButtonBox:hover h4{
+  color: #0047AB;
+}
 .GetCustomerButtonBox:hover{
-  filter: grayscale(0);
+  background: linear-gradient(#b1d1ff, white) padding-box, linear-gradient(to bottom, #b1d1ff, white) border-box;
 }
 
 .GetCustomerButtonBox .TopLeftImg {

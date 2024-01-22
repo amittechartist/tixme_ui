@@ -59,13 +59,13 @@ const Header = () => {
                   className="nav-link text-primary-theme pe-1 font-nav"
                   to={app_url}
                 >
-                  Home
+                  Home{" "}
                   <img className="nav-plus" src={plus} alt="" />
                 </Link>
               </li>
               <li className="nav-item d-flex align-items-center justify-content-start">
                 <Link className="nav-link text-primary-theme pe-1 font-nav" to={app_url + 'events'}>
-                  Events
+                  Events{" "}
                   <img className="nav-plus" src={plus} alt="" />
                 </Link>
               </li>
@@ -74,7 +74,7 @@ const Header = () => {
                   className="nav-link text-primary-theme pe-1 font-nav"
                   to={app_url + 'aboutus'}
                 >
-                  About Us
+                  About Us{" "}
                   <img className="nav-plus" src={plus} alt="" />
                 </Link>
               </li>
@@ -83,7 +83,7 @@ const Header = () => {
                   className="nav-link text-primary-theme pe-1 font-nav"
                   to={app_url + 'contact'}
                 >
-                  Contact Us
+                  Contact Us{" "}
                   <img className="nav-plus" src={plus} alt="" />
                 </Link>
               </li>
@@ -99,7 +99,7 @@ const Header = () => {
                           className="nav-link text-primary-theme pe-1 font-nav"
                           to={customer_url + "dashboard"}
                         >
-                          {customer_name}
+                          {customer_name} {" "}
                           <img className="nav-plus" src={plus} alt="" />
                         </Link>
                       </>
@@ -113,7 +113,7 @@ const Header = () => {
                           className="nav-link text-primary-theme pe-1 font-nav"
                           to={organizer_url + "dashboard"}
                         >
-                          {organizername}
+                          {organizername} {" "}
                           <img className="nav-plus" src={plus} alt="" />
                         </Link>
                       </>
@@ -126,7 +126,7 @@ const Header = () => {
                     className="nav-link text-primary-theme pe-1 font-nav"
                     to={app_url + 'auth/login-signup'}
                   >
-                    Login/Sign Up
+                    Login/Sign Up {" "}
                     <img className="nav-plus" src={plus} alt="" />
                   </Link>
                 )}

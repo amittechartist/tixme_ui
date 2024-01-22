@@ -202,7 +202,7 @@ const Locationbtn = ({ prorps }) => {
                     </Row>
                 </ModalBody>
             </Modal>
-                <button class="GetLatestUpdateButton CustomerButton" onClick={() => setContactModal(!ContactModal)}>
+                <button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs" onClick={() => setContactModal(!ContactModal)}>
                     <div class="left text-center">
                         <small class="ms-2">CONTACT US</small>
                     </div>

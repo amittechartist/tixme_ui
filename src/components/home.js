@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dropdown from "./assets/dropdown.svg";
-import card from "./assets/card.png";
 import Select from 'react-select'
 import calendar from "./assets/calendar.svg";
-import eventLogo from "./assets/eventLogo.svg";
-import clock from "./assets/clock.svg";
-import hourglass from "./assets/hourglass.svg";
 import google from "./assets/google.svg";
 import airBNB from "./assets/airBNB.svg";
 import booking from "./assets/booking.com.svg";
@@ -20,7 +16,6 @@ import Slider from "react-slick";
 import HeaderMenu from './headermenu';
 import Nouserphoto from '../common/image/nouser.png';
 import MobileMenu from './mobilemenu';
-import Alert from 'react-bootstrap/Alert';
 import Arts from '../common/category/Group 1171274918.svg';
 import Business from '../common/category/Busimess11.svg';
 import Food from '../common/category/Group 1171274941.svg';
@@ -31,14 +26,13 @@ import InputSearchIcon from '../assets/inputSearch.png'
 import { MdMyLocation } from "react-icons/md";
 import { FaTimes } from 'react-icons/fa';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { apiurl, onlyDayMonth, shortPer, app_url, isEmail } from "../common/Helpers";
+import { apiurl, onlyDayMonth, app_url, isEmail } from "../common/Helpers";
 import { useNavigate } from "react-router-dom";
 import { Button, Col, Row } from "react-bootstrap";
 import Noimg from "../common/image/noimg.jpg";
 import toast from "react-hot-toast";
 import { Country, State, City } from 'country-state-city';
 const Home = () => {
-
   const texts = [
     "Unlock Your Entertainment Gateway",
     "Where Thrills Commence",
@@ -92,12 +86,15 @@ const Home = () => {
   }, [selectedState, selectedCountry]);
 
   const handelSetHomelocation = () => {
-    if(selectedCity.label){
+    if (selectedCity) {
       setCityname(selectedCity.label);
-    }else if(selectedState.label){
-      
     }
-    setCountryname(selectedCountry.label);
+    if (selectedState) {
+      setStatename(selectedState.label)
+    }
+    if (selectedCountry) {
+      setCountryname(selectedCountry.label);
+    }
   }
 
   const [UpdatesLoader, setUpdatesLoader] = useState(false);
@@ -148,8 +145,6 @@ const Home = () => {
       setUpdatesLoader(false);
     }
   };
-
-
   const settings = {
     dots: false,
     infinite: true,
@@ -169,9 +164,7 @@ const Home = () => {
     ],
   };
   const navigate = useNavigate();
-
   const [SearchInput, setSearchInput] = useState();
-
   const HandelCategorsearch = (value) => {
     let url = `${app_url}events/?categoryId=${encodeURIComponent(value)}`;
     navigate(url);
@@ -194,7 +187,6 @@ const Home = () => {
     navigate(url);
   };
 
-
   const [location, setLocation] = useState(null);
   const [newmodal, setNewModal] = useState(false);
   const [MyCountry, setMyCountry] = useState();
@@ -202,10 +194,12 @@ const Home = () => {
   const [CurrentState, setCurrentState] = useState();
   const [CurrentCity, setCurrentCity] = useState();
   const [Cityname, setCityname] = useState();
+  const [Statename, setStatename] = useState();
   const getMyLoc = async () => {
     setMyCountry(CurrentCountry);
     setCountryname(CurrentCountry);
     setCityname(CurrentCity);
+    setStatename(CurrentState);
     setNewModal(!newmodal);
   }
   const [countryList, setcountryList] = useState([{ value: "", label: "Country" }]);
@@ -237,17 +231,6 @@ const Home = () => {
       console.error('Api error:', error);
     }
   }
-  const CountryOption = [
-    {
-      options: countryList
-    }
-  ]
-  const selectCountry = (selectedValue) => {
-    // setCountry(selectedValue);
-    setCountryname(selectedValue.label);
-    setCityname('');
-    setNewModal(!newmodal);
-  };
   useEffect(() => {
     fetchCountry();
   }, []);
@@ -325,7 +308,6 @@ const Home = () => {
     // Call the function to get current location
     getCurrentLocation();
   }, []);
-
   const [Eventlist, setEventlist] = useState([]);
   const [Eventloader, setEventloader] = useState(false);
   const [Listitems, setListitems] = useState([]);
@@ -341,6 +323,8 @@ const Home = () => {
         limit: 10,
         organizerid: null,
         country: Countryname ? Countryname : null,
+        city: Cityname ? Cityname : null,
+        state: Statename ? Statename : null,
       }
       fetch(apiurl + "website/all-events-list", {
         method: "POST",
@@ -392,12 +376,10 @@ const Home = () => {
   }
   useEffect(() => {
     fetchEvent();
-  }, [filtercategory, Countryname, Cityname]);
+  }, [filtercategory, Countryname, Cityname, Statename]);
   useEffect(() => {
     fetchCategory();
   }, []);
-
-
   const CategoryImage = [
     { image: NIGHTLIFE },
     { image: Arts },
@@ -408,7 +390,6 @@ const Home = () => {
     { image: NIGHTLIFE },
   ];
   const filteredList = Listitems.filter(item => item.is_homepage === 1);
-
   return (
     <>
       {" "}
@@ -431,19 +412,7 @@ const Home = () => {
                 <p className="reset-password-link text-center pt-3">OR</p>
               </div>
             </Col>
-            <Col md={12}>
-              {/* <div className="form-group">
-                <p>Select country</p>
-                <Select
-                  isClearable={false}
-                  options={CountryOption}
-                  className='react-select'
-                  classNamePrefix='select'
-                  onChange={selectCountry}
-                  value={Country}
-                />
-
-              </div> */}
+            <div className="col-12 col-md-12">
               <div className="form-group">
                 <p>Select Country</p>
                 <Select
@@ -453,6 +422,8 @@ const Home = () => {
                   placeholder="Select Country"
                 />
               </div>
+            </div>
+            <div className="col-12 col-md-6">
               <div className="form-group">
                 <p>Select State</p>
                 <Select
@@ -463,6 +434,8 @@ const Home = () => {
                   isDisabled={!selectedCountry}
                 />
               </div>
+            </div>
+            <div className="col-12 col-md-6">
               <div className="form-group">
                 <p>Select City</p>
                 <Select
@@ -472,7 +445,7 @@ const Home = () => {
                   onChange={setSelectedCity}
                 />
               </div>
-            </Col>
+            </div>
             <Col md={12}>
               <button type="button" className="btn btn-primary w-100 theme-bg" onClick={() => { handelSetHomelocation(); setNewModal(!newmodal); }}>Set Location</button>
             </Col>
@@ -585,7 +558,7 @@ const Home = () => {
             <h5 className="text-primary-color fw-bold pt-4 me-4 mb-1">{Cityname ? Cityname : (Countryname ? Countryname : 'Location')}</h5>
           </div>
         </div>
-        <div className="row px-0 mt-lg-4 mt-0 gx-lg-5 gy-3 mx-cards my-margen">
+        <div className="row px-0 mt-lg-4 mt-5 gx-lg-5 gy-3 mx-cards my-margen">
           {Eventloader ? (
             <>
               <div className="mb-5 col-md-4">
@@ -618,7 +591,7 @@ const Home = () => {
                           </div>
                         </div>
                         <div className="row px-2 mt-2">
-                          <div className="col-md-7 d-flex align-items-center">
+                          <div className="col-md-7 d-flex align-items-center col-7">
                             <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
                             <div className="d-flex flex-column align-items-start justify-content-start">
                               <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
@@ -627,7 +600,7 @@ const Home = () => {
                               </p>
                             </div>
                           </div>
-                          <div className="col-md-5">
+                          <div className="col-md-5  col-5">
                             <div className="bg-fade rounded pl-5 event-cart-price-box">
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
                               {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
@@ -637,45 +610,15 @@ const Home = () => {
                         </div>
                         <div className="row mt-1">
                           <div className="col-md-12">
-                            <div className="d-flex align-items-center justify-content-start my-2">
+                            <div className="d-flex align-items-center justify-content-start my-2 mx-2">
                               <img className="card-icon me-1" src={locationIcon} alt="" />
                               <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                                {item.location}
+                                {item.city ? item.city : ''} 
                               </p>
                             </div>
                           </div>
-
                         </div>
-                        {/* <div className="d-flex justify-content-start align-items-start">
-                          <div
-                            className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2 border-end pe-3"
-                            style={{ flexShrink: 0, width: "auto" }}
-                          >
-                            <img className="card-icon2 me-2" src={clock} alt="" />
-                            <div>
-                              <p className="small text-primary-color fw-bold mb-0 pb-0">
-                                Event Time
-                              </p>
-                              <p className="small mb-0">{item.start_time}</p>
-                            </div>
-                          </div>
-                          <div
-                            className="d-flex align-items-center justify-content-start w-origin ms-3 pb-2"
-                            style={{ flexShrink: 0, width: "auto" }}
-                          >
-                            <img className="card-icon2 me-2" src={hourglass} alt="" />
-                            <div>
-                              <p className="small text-primary-color fw-bold mb-0 pb-0">
-                                Event Duration
-                              </p>
-                              <p className="small mb-0">{item.event_duration}</p>
-                            </div>
-                          </div>
-                        </div> */}
                         <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-                        {/* <p className="desc mx-3 pb-3">
-                          {shortPer(item.event_desc, 100)}
-                        </p> */}
                       </div>
                     </div>
                   ))}
@@ -692,13 +635,13 @@ const Home = () => {
       <div className="count-sec">
         <div className="row">
           <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-            <div className="border-style-home-page pb-md-0 pb-4">
+            <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
               <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">EVENT HOSTED</h6>
               <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
             </div>
           </div>
           <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-            <div className="border-style-home-page pb-md-0 pb-4">
+            <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
               <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Ticket Sold</h6>
               <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
             </div>
@@ -714,7 +657,7 @@ const Home = () => {
         </div>
       </div>
       <div className="partner-sec">
-        <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce" style={{ padding: '0px 14px 0px 0px' }}>
+        <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
           OUR PARTNER
         </h3>
         <div className="partnetSlider">

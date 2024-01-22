@@ -206,8 +206,8 @@ const Locationbtn = ({ prorps }) => {
             {prorps == 'pcheadermenu' ? (
                 <li class="nav-item border rounded border-primary align-self-center me-3" onClick={() => setContactModal(!ContactModal)}>
                     <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav">
-                        List your event{" "}
-                        <img class="nav-plus" src={plus} alt="" />
+                        List your event{""}
+                        {/* <img class="nav-plus" src={plus} alt="" /> */}
                     </Link>
                 </li>
             ) : ''}
@@ -217,7 +217,8 @@ const Locationbtn = ({ prorps }) => {
                         className="nav-link text-primary-theme pt-1 pb-1p font-nav"
                         onClick={() => setContactModal(!ContactModal)}
                     >
-                        List your eventd
+                        List your event {""}
+                        {/* <img class="nav-plus" src={plus} alt="" /> */}
                     </Link>
                 </li>
             ) : ''}

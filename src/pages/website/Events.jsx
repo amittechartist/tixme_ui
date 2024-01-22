@@ -226,7 +226,7 @@ const Home = () => {
             <HeaderMenu />
             <div className="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
                 <MobileMenu />
-                <h1 className="banner-h text-white text-start text-uppercase">Explore our events :</h1>
+                <h1 className="banner-h banner-h-events text-white text-start text-uppercase">Explore our events :</h1>
                 <div className="banner-child keywordsBannerIndex">
                     <div className="row mx-lg-3 mx-1 mb-4 mt-4 gx-md-4 gx-2">
                         <div className="col-md-12">
@@ -297,7 +297,7 @@ const Home = () => {
                                     <Col md={12} xs={12}>
                                         <div className="">
                                             <p className="mb-2">Date</p>
-                                            <div>
+                                            <div style={{position: 'relative', zIndex: '9'}}>
                                                 <Select
                                                     isClearable={false}
                                                     options={DatefilterOption}
@@ -523,7 +523,7 @@ const Home = () => {
                                                                 <div className="d-flex align-items-center justify-content-start my-2">
                                                                     <img className="card-icon me-1" src={location} alt="" />
                                                                     <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                                                                        {item.location}
+                                                                    {item.city ? item.city : ''}
                                                                     </p>
                                                                 </div>
                                                             </div>

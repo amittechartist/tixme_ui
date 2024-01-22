@@ -90,6 +90,9 @@ const Type = ({ title, editid }) => {
     const [Country, setCountry] = useState();
     const [CountryId, setCountryId] = useState();
     const [Countryname, setCountryname] = useState();
+    const [Cityname, setCityname] = useState();
+    const [Statename, setStatename] = useState();
+    const [Pincode, setPincode] = useState();
     const [selectedImage, setSelectedImage] = useState(null);
     const [Bannerimg, setBannerimg] = useState(null);
     const organizerid = localStorage.getItem('organizerid')
@@ -246,6 +249,9 @@ const Type = ({ title, editid }) => {
                     console.log("state", state);
                     console.log("city", city);
                     console.log("postalCode", postalCode);
+                    setCityname(city);
+                    setStatename(state);
+                    setPincode(postalCode);
                 } else {
                     console.error('No results found for reverse geocoding.');
                 }
@@ -481,6 +487,9 @@ const Type = ({ title, editid }) => {
                 currencycode: CurrencyId,
                 countrysymbol: Currencyname,
                 timezone: selectedTimezone,
+                city: Cityname,
+                state: Statename,
+                pincode: Pincode,
             };
             fetch(apiurl + 'event/update', {
                 method: 'POST',
@@ -598,7 +607,9 @@ const Type = ({ title, editid }) => {
                 currencycode: CurrencyId,
                 countrysymbol: Currencyname,
                 timezone: selectedTimezone,
-
+                city: Cityname,
+                state: Statename,
+                pincode: Pincode,
             };
             fetch(apiurl + 'event/create', {
                 method: 'POST',
@@ -628,25 +639,6 @@ const Type = ({ title, editid }) => {
             console.error('Api error:', error);
             setLoader(false);
         }
-    }
-    function emptyField() {
-        setFormSection(1);
-        setEventtype('');
-        setName('');
-        setDisplayname('');
-        setType('');
-        setCategory('');
-        setCategoryId('');
-        setCategoryname('');
-        Visibility(1);
-        Location('');
-        EventSubtype(1);
-        IsclockCountdown(false);
-        Displaystarttime(false);
-        Displayendtime(false);
-        Eventdesc('');
-        setcategoryList({ value: "", label: "Category" });
-        setEventtypecategoryList({ value: "", label: "Type" });
     }
     function emptyPriceForm() {
         setTickettype(1);
@@ -786,7 +778,7 @@ const Type = ({ title, editid }) => {
             if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
-            if (!Tax  && Tickettype == 1) {
+            if (!Tax && Tickettype == 1) {
                 return toast.error('Enter tax amount or 0');
             }
             setLoader(true);
@@ -909,6 +901,9 @@ const Type = ({ title, editid }) => {
                         setEventtypeCategoryname(data.data.eventtypecategory_name)
                         setVisibility(data.data.visibility)
                         setLocation(data.data.location)
+                        setCityname(data.data.city)
+                        setStatename(data.data.state)
+                        setPincode(data.data.pincode)
                         setEventSubtype(data.data.event_subtype_id)
                         setStartdateselect(data.data.start_data_min[0])
                         setEnddateselect(data.data.end_data_min[0])
@@ -1117,8 +1112,8 @@ const Type = ({ title, editid }) => {
                                             <label htmlFor="">Location</label>
                                             <p>Help people in the area discover your event and let attendees know where to show up.</p>
                                             <div className="tab-button-box">
-                                                <span onClick={() => setEventtype(1)} className={Eventtype == 1 ? "tab-button-active" : "tab-button-grey-active"}>Venue</span>
-                                                <span onClick={() => setEventtype(2)} className={Eventtype == 2 ? "tab-button-active" : "tab-button-grey-active"}> Online Event</span>
+                                                <span onClick={() => setEventtype(2)} className={Eventtype == 2 ? "tab-button-active" : "tab-button-grey-active"}>Venue</span>
+                                                <span onClick={() => setEventtype(1)} className={Eventtype == 1 ? "tab-button-active" : "tab-button-grey-active"}> Online Event</span>
                                                 {/* <span onClick={() => setEventtype(3)} className={Eventtype == 3 ? "tab-button-active" : ""}>To be announced</span> */}
                                             </div>
                                         </div>
@@ -1163,6 +1158,18 @@ const Type = ({ title, editid }) => {
                                                 )}
                                             </PlacesAutocomplete>
                                         </div>
+                                        <div className="col-12 col-md-4 mt-4">
+                                            <label htmlFor="" className="text-black">City</label>
+                                            <input type="text" class="form-control input-default" value={Cityname} onChange={(e) => setCityname(e.target.value)} placeholder="Enter City Name" />
+                                        </div>
+                                        <div className="col-12 col-md-4 mt-4">
+                                            <label htmlFor="" className="text-black">State</label>
+                                            <input type="text" class="form-control input-default" value={Statename} onChange={(e) => setStatename(e.target.value)} placeholder="Enter State Name" />
+                                        </div>
+                                        <div className="col-12 col-md-4 mt-4">
+                                            <label htmlFor="" className="text-black">Pincode</label>
+                                            <input type="text" class="form-control input-default" value={Pincode} onChange={(e) => setPincode(e.target.value)} placeholder="Enter Pincode" />
+                                        </div>
                                         <div className="col-md-12 pt-4">
                                             <p className="mb-0">Tell event-goers when your event starts and ends so they can make plans to attend.</p>
                                         </div>
@@ -1170,7 +1177,7 @@ const Type = ({ title, editid }) => {
                                             <label htmlFor="">Date & Time</label>
                                             <div className="tab-button-box">
                                                 <span onClick={() => setEventSubtype(1)} className={EventSubtype == 1 ? "tab-button-active" : ""}>Single Event</span>
-                                                <span onClick={() => setEventSubtype(2)} className={EventSubtype == 2 ? "tab-button-active" : ""}> Recurring Event</span>
+                                                {/* <span onClick={() => setEventSubtype(2)} className={EventSubtype == 2 ? "tab-button-active" : ""}> Recurring Event</span> */}
                                             </div>
                                         </div>
                                         <div className="col-md-4 mt-4 d-flex align-items-end">
@@ -1202,7 +1209,7 @@ const Type = ({ title, editid }) => {
                                         <div className="col-md-4">
                                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                                <input type="text" class="form-control date-border-redius date-border-redius-input" placeholder="" readOnly value={startdate} />
+                                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={startdate} />
                                                 <div className="date-style-picker">
                                                     <Flatpickr
                                                         value={Startdateselect}
@@ -1218,7 +1225,7 @@ const Type = ({ title, editid }) => {
                                         <div className="col-md-4">
                                             <div class="input-group mb-3 input-warning-o">
                                                 <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                                <input type="text" class="form-control date-border-redius-input" placeholder="" readOnly value={starttime} />
+                                                <input type="text" class="form-control date-border-redius-input bg-white pl-5" placeholder="" readOnly value={starttime} />
                                             </div>
                                         </div>
                                         <div className="col-md-4 checkout-style-bottom">
@@ -1240,7 +1247,7 @@ const Type = ({ title, editid }) => {
                                         <div className="col-md-4">
                                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                                <input type="text" class="form-control date-border-redius date-border-redius-input" placeholder="" readOnly value={Enddate} />
+                                                <input type="text" class="form-control date-border-redius date-border-redius-input bg-white pl-5" placeholder="" readOnly value={Enddate} />
                                                 <div className="date-style-picker">
                                                     <Flatpickr
                                                         value={Enddateselect}
@@ -1255,7 +1262,7 @@ const Type = ({ title, editid }) => {
                                         <div className="col-md-4">
                                             <div class="input-group mb-3 input-warning-o">
                                                 <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                                <input type="text" class="form-control date-border-redius-input" placeholder="" readOnly value={Rndtime} />
+                                                <input type="text" class="form-control date-border-redius-input bg-white pl-5" placeholder="" readOnly value={Rndtime} />
                                             </div>
                                         </div>
                                         <div className="col-md-4 checkout-style-bottom">
@@ -1510,7 +1517,7 @@ const Type = ({ title, editid }) => {
             )}
             <Modal isOpen={Ticketshow} toggle={() => setTicketshow(!Ticketshow)} className='modal-dialog-centered modal-lg'>
                 <ModalHeader className='bg-transparent' toggle={() => setTicketshow(!Ticketshow)}>Create new ticket
-                <button className="close p-0" onClick={() => setTicketshow(!Ticketshow)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
+                    <button className="close p-0" onClick={() => setTicketshow(!Ticketshow)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
                         <FaTimes />
                     </button>
                 </ModalHeader>

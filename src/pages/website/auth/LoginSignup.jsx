@@ -231,8 +231,8 @@ const About = () => {
                         <div className="col-12 col-md-4 col-lg-4 mt-5">
                             <div className="GetCustomerButtonBox">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Customer</h4>
-                                <Link to={app_url + 'auth/customer/login'}><button class="GetLatestUpdateButton CustomerButton">
+                                <h4>Returning Customer</h4>
+                                <Link to={app_url + 'auth/customer/login'}><button class="GetLatestUpdateButton CustomerButton login-pg-btn-cs" >
                                     <div class="left text-center">
                                         <small class="ms-2">LOGIN</small>
                                     </div>
@@ -245,10 +245,10 @@ const About = () => {
                         <div className="col-12 col-md-4 col-lg-4 mt-5">
                             <div className="GetCustomerButtonBox">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Customer</h4>
-                                <Link to={app_url + 'auth/customer/signup'}><button class="GetLatestUpdateButton CustomerButton">
+                                <h4>Please Register Customer</h4>
+                                <Link to={app_url + 'auth/customer/signup'}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
                                     <div class="left text-center">
-                                        <small class="ms-2">SINGUP</small>
+                                        <small class="ms-2">SING IN</small>
                                     </div>
                                     <div class="right">
                                         <img src={arrow} alt="" style={{ width: "15px" }} />
@@ -260,8 +260,8 @@ const About = () => {
                         <div className="col-12 col-md-4 col-lg-4 mt-5">
                             <div className="GetCustomerButtonBox">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Organizer</h4>
-                                <Link to={app_url + 'auth/organizer/login'}><button class="GetLatestUpdateButton CustomerButton">
+                                <h4>Returning Organizer</h4>
+                                <Link to={app_url + 'auth/organizer/login'}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
                                     <div class="left text-center">
                                         <small class="ms-2">LOGIN</small>
                                     </div>
@@ -274,7 +274,7 @@ const About = () => {
                         <div className="col-12 col-md-4 col-lg-4 mt-5 m-auto">
                             <div className="GetCustomerButtonBox mt-3">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Organizer</h4>
+                                <h4>Please Register Organizer</h4>
                                 <OrganizerSignup/>
                             </div>
                         </div>
