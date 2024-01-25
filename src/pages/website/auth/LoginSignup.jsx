@@ -227,8 +227,8 @@ const About = () => {
                         <h4>TIXME</h4>
                         <p>Your one stop solution for managing and conducting events</p>
                     </div>
-                    <div className='row p-5 py-5'>
-                        <div className="col-12 col-md-4 col-lg-4 mt-5">
+                    <div className='row p-5 py-5 d-flex justify-content-center'>
+                        <div className="col-12 col-md-5 col-lg-5 mt-5">
                             <div className="GetCustomerButtonBox">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
                                 <h4>Returning Customer</h4>
@@ -242,7 +242,7 @@ const About = () => {
                                 </button></Link>
                             </div>
                         </div>
-                        <div className="col-12 col-md-4 col-lg-4 mt-5">
+                        <div className="col-12 col-md-5 col-lg-5 mt-5">
                             <div className="GetCustomerButtonBox">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
                                 <h4>Please Register Customer</h4>
@@ -257,8 +257,8 @@ const About = () => {
                                 </Link>
                             </div>
                         </div>
-                        <div className="col-12 col-md-4 col-lg-4 mt-5">
-                            <div className="GetCustomerButtonBox">
+                        <div className="col-12 col-md-5 col-lg-5 mt-5">
+                            <div className="GetCustomerButtonBox mt-4">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
                                 <h4>Returning Organizer</h4>
                                 <Link to={app_url + 'auth/organizer/login'}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
@@ -271,11 +271,11 @@ const About = () => {
                                 </button></Link>
                             </div>
                         </div>
-                        <div className="col-12 col-md-4 col-lg-4 mt-5 m-auto">
-                            <div className="GetCustomerButtonBox mt-3">
+                        <div className="col-12 col-md-5 col-lg-5 mt-5">
+                            <div className="GetCustomerButtonBox mt-4">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
                                 <h4>Please Register Organizer</h4>
-                                <OrganizerSignup/>
+                                <OrganizerSignup />
                             </div>
                         </div>
                     </div>

@@ -73,7 +73,7 @@ const Footer = () => {
         </div>
       </footer>
       <div className="copyright text-center py-2">
-        <small className="text-white"> © 2023 Eventbrite </small>
+        <small className="text-white"> © 2023 TIXME </small>
       </div>
     </>
   );

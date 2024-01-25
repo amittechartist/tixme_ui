@@ -7,6 +7,7 @@ import google from "./assets/google.svg";
 import airBNB from "./assets/airBNB.svg";
 import booking from "./assets/booking.com.svg";
 import expedia from "./assets/expedia.svg";
+import Slider from "react-slick";
 import TUI from "./assets/TUI.svg";
 import arrow from "./assets/arrow.svg";
 import Logo from "./assets/Logo.svg";
@@ -23,6 +24,24 @@ import Journey2 from '../common/image/aboutus/Support (5).svg'
 import Journey3 from '../common/image/aboutus/Techonolgy.svg'
 import Journey4 from '../common/image/aboutus/Membership.svg'
 const About = () => {
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    responsive: [
+      {
+        breakpoint: 768, // Adjust the breakpoint as needed
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
   return (
     <>
       {/* <!-- mobile nav --> */}
@@ -34,7 +53,7 @@ const About = () => {
         </h1>
         <div class="banner-child bg-white px-0">
           <div class="d-flex flex-md-row flex-column">
-            <img class="about-img mt-lg-5 mt-4" src={aboutUs} alt="" />
+            <img class="about-img mt-lg-5 mt-4" style={{paddingLeft: '11px'}} src={aboutUs} alt="" />
             <p class="ps-lg-5 ps-4 pe-4 about-p mt-lg-5 mt-4">
               Welcome to TIXME, where every ticket tells a story! Our mission is
               to redefine events, making each occasion an unforgettable and
@@ -50,22 +69,22 @@ const About = () => {
             </p>
           </div>
           <div className="row newAboutJourney">
-                <div className="col-6 col-lg-3">
-                  <img className="img-fluid" src={Journey1} alt="" />
-                  <span>Low Fee</span>
-                </div>               
-                <div className="col-6 col-lg-3">
-                  <img className="img-fluid" src={Journey2} alt="" />
-                  <span>Excllent Customer Support</span>
-                </div>               
-                <div className="col-6 col-lg-3 mt-4 mt-md-0">
-                  <img className="img-fluid" src={Journey3} alt="" />
-                  <span>High Cutting Edge Technology</span>
-                </div>               
-                <div className="col-6 col-lg-3 mt-4 mt-md-0">
-                  <img className="img-fluid" src={Journey4} alt="" />
-                  <span>Membership Provided</span>
-                </div>               
+            <div className="col-6 col-lg-3">
+              <img className="img-fluid" src={Journey1} alt="" />
+              <span>Low Fee</span>
+            </div>
+            <div className="col-6 col-lg-3">
+              <img className="img-fluid" src={Journey2} alt="" />
+              <span>Excllent Customer Support</span>
+            </div>
+            <div className="col-6 col-lg-3 mt-4 mt-md-0">
+              <img className="img-fluid" src={Journey3} alt="" />
+              <span>High Cutting Edge Technology</span>
+            </div>
+            <div className="col-6 col-lg-3 mt-4 mt-md-0">
+              <img className="img-fluid" src={Journey4} alt="" />
+              <span>Membership Provided</span>
+            </div>
           </div>
           <p>
             At TIXME, we believe in expressing our gratitude to our valued
@@ -79,12 +98,12 @@ const About = () => {
             Step with us into the spotlight of unforgettable moments where the
             journey is secure, the path is clear, and the memories are destined
             to be extraordinary!Seize the moment, secure your ticket!
-          </p>        
+          </p>
         </div>
       </div>
       {/* </div> */}
-      <div class="space-height"></div>
-      <div class=" sponser-sec banner-child py-5">
+      <div class="space-height about-space-height"></div>
+      <div class=" sponser-sec banner-child py-5 ">
         <div class="row w-100 m-auto">
           <div class="col-lg-4 text-lg-center text-start">
             <img class="mb-lg-0 mb-4" src={Silver} alt="" />
@@ -141,52 +160,65 @@ const About = () => {
           </div>
         </div>
       </div>
-      <div class="count-sec">
-        <div class="row">
-          <div class="col-md-4 text-center pt-4 pb-md-5 pb-0">
-            <div class="border-end bottom-line border-primary pb-md-0 pb-4">
-              <h6 class="fw-bold text-primary-color mb-0">EVENT HOSTED</h6>
-              <p class="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
+      <div className="count-sec">
+        <div className="row">
+          <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
+            <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
+              <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">EVENT HOSTED</h6>
+              <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
             </div>
           </div>
-          <div class="col-md-4 text-center pt-4 pb-md-5 pb-0">
-            <div class="border-end bottom-line border-primary pb-md-0 pb-4">
-              <h6 class="fw-bold text-primary-color mb-0">Ticket Sold</h6>
-              <p class="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
+          <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
+            <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
+              <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Ticket Sold</h6>
+              <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
             </div>
           </div>
-          <div class="col-md-4 text-center pt-4 pb-md-5 pb-0">
+          <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
             <div>
-              <h6 class="fw-bold text-primary-color mb-0">Partners & Organizers</h6>
-              <p class="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
+              <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">
+                Partners & Organizers
+              </h6>
+              <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="partner-sec">
-        <h3 class="fw-bold text-primary-color mb-0 text-center mb-0">OUR PARTNER</h3>
-        <div class="mt-lg-5 mt-4 pt-xl-5 pt-md-2 pt-5 pb-5 d-flex justify-content-center align-items-center">
-          <img class="partner-img me-5" src={google} alt="" />
-          <img class="partner-img me-md-5" src={airBNB} alt="" />
-          <img
-            class="partner-img me-5 d-lg-block d-none"
-            src={booking}
-            alt=""
-          />
-          <img
-            class="partner-img me-5 d-md-block d-none"
-            src={expedia}
-            alt=""
-          />
-          <img
-            class="partner-img me-5 d-md-block d-none tui"
-            src={TUI}
-            alt=""
-          />
+      <div className="partner-sec">
+        <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
+          OUR PARTNER
+        </h3>
+        <div className="partnetSlider">
+          <Slider {...settings}>
+            <div>
+              <img src={google} alt="google" />
+            </div>
+            <div>
+              <img src={airBNB} alt="google" />
+            </div>
+            <div>
+              <img src={booking} alt="google" />
+            </div>
+            <div>
+              <img src={expedia} alt="google" />
+            </div>
+            <div>
+              <img src={google} alt="google" />
+            </div>
+            <div>
+              <img src={airBNB} alt="google" />
+            </div>
+            <div>
+              <img src={booking} alt="google" />
+            </div>
+            <div>
+              <img src={expedia} alt="google" />
+            </div>
+          </Slider>
         </div>
       </div>
 
-      <Footer/>
+      <Footer />
     </>
   );
 };

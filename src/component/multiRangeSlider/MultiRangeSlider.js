@@ -42,7 +42,8 @@ const MultiRangeSlider = ({ min, max, onChange }) => {
   }, [minVal, maxVal, onChange]);
   const mycurrency = localStorage.getItem("mycurrency");
   return (
-    <div className="container-xxx">
+    <div className="container-xxx d-flex align-items-center">
+      <input type="text" className="price-range-picker-input" onChange={(e) => setMinVal(e.target.value)} value={minVal}></input>
       <input
         type="range"
         min={min}
@@ -72,9 +73,8 @@ const MultiRangeSlider = ({ min, max, onChange }) => {
       <div className="slider">
         <div className="slider__track" />
         <div ref={range} className="slider__range" />
-        <div className="slider__left-value">{mycurrency ? mycurrency : ''} {minVal}</div>
-        <div className="slider__right-value">{mycurrency ? mycurrency : ''} {maxVal}</div>
       </div>
+      <input type="text" className="price-range-picker-input" onChange={(e) => setMaxVal(e.target.value)} value={maxVal}></input>
     </div>
   );
 };

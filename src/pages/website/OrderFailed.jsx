@@ -34,9 +34,9 @@ const Page = ({ title }) => {
                                             <Lottie className="py-3" animationData={FailedLotte} style={lottewidth} />
                                         </Col>
                                         <Col md={12} className="mt-4">
-                                            <Link to={customer_url + 'my-order-list'}>
+                                            {/* <Link to={customer_url + 'my-order-list'}>
                                                 <Whitebtn title={'View Order'} />
-                                            </Link>
+                                            </Link> */}
                                             <Link to={app_url}>
                                                 <Whitebtn title={'Home'} />
                                             </Link>

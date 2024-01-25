@@ -36,11 +36,13 @@ body {
 .banner {
   height: 450px;
 }
+
 .banner-organizer-page {
   height: 210px;
 }
+
 .banner-event {
-  height: 630px;
+  height: 470px;
 }
 
 .rounded-8 {
@@ -60,7 +62,8 @@ body {
 }
 
 .nav-plus {
-  height: 12px;
+  height: 16px;
+  margin-left: 2px;
 }
 
 .ListYourEvents {
@@ -113,16 +116,19 @@ body {
 
 .nav-box {
   width: 180px;
-  height: 100px;
+  /* height: 100px; */
+  height: 73px;
 }
 
 a {
   color: #0047ab !important;
   text-decoration: unset !important;
 }
+
 .banner-h-events {
-  padding-top: 6rem !important;
+  padding-top: 3rem !important;
 }
+
 /* Banner headings */
 .banner-h {
   padding: 3rem 0rem 1.5rem 5rem;
@@ -150,6 +156,7 @@ a {
   margin: 1rem 5rem;
   border-radius: 10px;
 }
+
 .banner-child-event {
   margin: 1rem 5rem;
   border-radius: 10px;
@@ -335,7 +342,7 @@ select {
 .event-sec {
   /* background: url(./assets/EventsBG.png); */
   background-size: 100% 100%;
-  margin-top: 8rem;
+  margin-top: 11rem;
   background-repeat: no-repeat;
 }
 
@@ -407,7 +414,7 @@ select {
 }
 
 .desc-h {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .desc {
@@ -537,7 +544,7 @@ footer span {
 
 .contact-sec {
   background: url(./assets/contactFormBg.png) top center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
 }
 
@@ -606,7 +613,7 @@ input:focus {
     padding: 2rem 2rem 0rem 1rem;
     font-size: 19px;
     letter-spacing: 2px;
-}
+  }
 
   .banner-h2 {
     margin: 0 2rem;
@@ -627,11 +634,11 @@ input:focus {
   }
 
   .banner-child {
-    margin: 3rem 2rem;
+    margin: 2rem 2rem;
   }
 
   .banner-child-address {
-    margin: 3rem 1rem;
+    margin: 10rem 1rem;
   }
 
   .m-search {
@@ -687,7 +694,7 @@ input:focus {
   }
 
   .desc-h {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .w-origin {
@@ -753,6 +760,10 @@ input:focus {
 
   .space-height {
     height: 780px;
+  }
+
+  .about-space-height {
+    height: 1400px !important;
   }
 
   .sponser-sec img {
@@ -1092,13 +1103,16 @@ input:focus {
   transition: 0.3s ease;
   cursor: pointer;
 }
-.GetCustomerButtonBox h4{
+
+.GetCustomerButtonBox h4 {
   padding-bottom: 20px;
 }
-.GetCustomerButtonBox:hover h4{
+
+.GetCustomerButtonBox:hover h4 {
   color: #0047AB;
 }
-.GetCustomerButtonBox:hover{
+
+.GetCustomerButtonBox:hover {
   background: linear-gradient(#b1d1ff, white) padding-box, linear-gradient(to bottom, #b1d1ff, white) border-box;
 }
 
@@ -1127,16 +1141,29 @@ input:focus {
   color: #0047AB;
   font-weight: 500;
 }
+
 span.event-date-small {
   background: #fff;
   border-radius: 8px;
   padding: 2px 9px 5px 9px;
 }
+
 .event-text-org-name {
   font-size: 14px;
 }
+
 .event-date-small-box {
   position: absolute;
   bottom: 10px;
   right: 10px;
+}
+.home-events-box {
+  width: 95% !important;
+  padding: 10px 1px 20px 1px;
+}
+h3.home-events-title {
+  color: #003b8f;
+  font-size: 33px;
+  text-transform: capitalize;
+  margin-top: 20px;
 }

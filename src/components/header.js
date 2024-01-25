@@ -12,20 +12,41 @@ import sport from "./assets/sport.svg";
 import foot from "./assets/food.svg";
 import art from "./assets/art.svg";
 import { FaLocationDot } from 'react-icons/fa';
-
+import { Link } from "react-router-dom";
+import { app_url, apiurl, organizer_url, customer_url } from "../common/Helpers";
 const Header = () => {
+  const customer_token = localStorage.getItem("userauth");
+  const organizername = localStorage.getItem("organizername");
+  const customer_name = localStorage.getItem("username");
+  var url = '';
+  if (customer_token || organizername) {
+    if (customer_token) {
+      url = customer_url + "dashboard";
+    } else {
+      url = organizer_url + "dashboard";
+    }
+  } else {
+    url = app_url + 'auth/login-signup';
+  }
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-white bg-white d-lg-none mx-4 rounded-8 top-10 d-block mb-5">
         <div className="container-fluid pe-0">
           <img className="nav-logo ms-lg-5 ms-2" src={Logo} alt="Not found" />
           <div>
-            <img
-              className="m-search me-md-4 me-3"
-              src={Search}
-              alt="Not found"
-            />
-            <img className="m-account me-md-3 me-2" src={Account} alt="" />
+            <Link to={app_url + 'events'}>
+              <img
+                className="m-search me-md-4 me-3"
+                src={Search}
+                alt="Not founds"
+              />
+            </Link>
+            {url && (
+              <Link to={url}>
+                <img className="m-account me-md-3 me-2" src={Account} alt="" />
+              </Link>
+            )}
+
             <button
               className="navbar-toggler"
               type="button"

@@ -21,6 +21,7 @@ const Home = () => {
 
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
+    const [GuestToken, setGuestToken] = useState();
     const [isFirstRender, setIsFirstRender] = useState(false);
     const [showLoginasGuest, setshowLoginasGuest] = useState(false);
     const [IsCountryName, setIsCountryName] = useState(false);
@@ -59,6 +60,7 @@ const Home = () => {
                 return toast.error("Coupon not applied for free tickets");
             }
             if (!Beartoken) {
+                console.log("ss");
                 toast.error("Login to your account");
                 // navigate(app_url + 'auth/customer/login');
                 setshowLoginasGuest(true);
@@ -144,11 +146,12 @@ const Home = () => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        localStorage.setItem('userauth', data.token);
-                        localStorage.setItem('username', data.username);
-                        localStorage.setItem('user_role', 1);
+                        // localStorage.setItem('userauth', data.token);
+                        // localStorage.setItem('username', data.username);
+                        // localStorage.setItem('user_role', 1);
+                        setGuestToken(data.token);
                         setshowLoginasGuest(false);
-                        window.location.reload();
+                        // window.location.reload();
                     } else {
                         toast.error(data.message);
                     }
@@ -203,11 +206,17 @@ const Home = () => {
             setOneTimegettax(false)
         }
     }
+
     useEffect(() => {
-        if(OneTimegettax){
-            
+        if (GuestToken) {
+            saveCartToLocalStorage();
         }
-    
+    }, [GuestToken]); // Added taxlist as a dependency
+    useEffect(() => {
+        if (OneTimegettax) {
+
+        }
+
         // Function to calculate and update taxlist with percentage_amount
         const updateTaxListWithPercentage = () => {
             if (taxlist.length > 0 && totaltaxamount > 0) {
@@ -216,22 +225,21 @@ const Home = () => {
                     percentage_amount: (item.taxamount / totaltaxamount) * 100
                 }));
                 setTaxlist(updatedTaxList);
-                console.log("zxx",updatedTaxList);
             }
         }
-    
+
         if (totaltaxamount > 0 && !OneTimegettax) {
             updateTaxListWithPercentage();
             console.log("1");
         }
-    
+
         calculateTotalPrice();
     }, [totaltaxamount, OneTimegettax]); // Added taxlist as a dependency
-    
+
     useEffect(() => {
         if (moneyLoader) {
-            calculateTotalPrice();
         }
+        calculateTotalPrice();
     }, [cartItems, moneyLoader, rewardPoints]);
     useEffect(() => {
         if (isFirstRender) {
@@ -382,6 +390,7 @@ const Home = () => {
             setDiscountAmount(0);
             setSubtotal(total + TotalTax);
         }
+        console.log("sss");
     };
 
     const saveCartToLocalStorage = async () => {
@@ -391,7 +400,8 @@ const Home = () => {
                 localStorage.removeItem('cart')
                 navigate(app_url);
             }
-            if (!Beartoken) {
+            if (!Beartoken && !GuestToken) {
+
                 toast.error("Login to your account");
                 // navigate(app_url + 'auth/customer/login');
                 setshowLoginasGuest(true);
@@ -412,7 +422,7 @@ const Home = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Beartoken}`, // Set the Content-Type header to JSON
+                    'Authorization': `Bearer ${GuestToken ? GuestToken : Beartoken}`, // Set the Content-Type header to JSON
                 },
                 body: JSON.stringify(requestData),
             })
@@ -507,7 +517,7 @@ const Home = () => {
             <div className="mx-lg-4 my-lg-3 bg-primary-color rounded-8 position-relative mob-d-none" style={{ height: '150px' }}>
                 <MobileMenu />
             </div>
-            <div>
+            <div className="event-view-body">
                 <Row className="mt-5 mx-lg-4 my-lg-3 ">
                     <Col md={12}>
                         <h2 className="Your-cart-text font-weight-bold">Your cart</h2>
@@ -534,9 +544,9 @@ const Home = () => {
                                                                         {item.price > 0 ? (
                                                                             <span className="cart-price">Price : {currency_symble} {item.price}</span>
                                                                         ) : (
-                                                                        <span className="cart-price">Price : Free</span>
+                                                                            <span className="cart-price">Price : Free</span>
                                                                         )}
-                                                                        
+
                                                                     </Col>
                                                                     <Col md={4}>
                                                                         <div className="d-inline-block">
@@ -563,7 +573,7 @@ const Home = () => {
                                                 <Card>
                                                     <Card.Body>
                                                         <Row>
-                                                            <div  className="my-2 col-6">
+                                                            <div className="my-2 col-6">
                                                                 <h5 className="cart-amount-small-title">Subtotal</h5>
                                                             </div>
                                                             <div className="my-2 text-end  col-6">
@@ -614,7 +624,7 @@ const Home = () => {
                                                                                         <h5 className="cart-amount-small-title">{item.name}</h5>
                                                                                     </div>
                                                                                     <div className="col-md-6 col-6 my-2 text-end">
-                                                                                        <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount,allItemsTotalPrice)}</h5>
+                                                                                        <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)}</h5>
                                                                                     </div>
                                                                                 </>
                                                                             ))}
@@ -625,10 +635,10 @@ const Home = () => {
                                                             ) : ''}
                                                             {DiscountAmount ? (
                                                                 <>
-                                                                    <div  className="my-2 col-6">
+                                                                    <div className="my-2 col-6">
                                                                         <h5 className="cart-amount-small-title">Discount</h5>
                                                                     </div>
-                                                                    <div  className="my-2 text-end  col-6">
+                                                                    <div className="my-2 text-end  col-6">
                                                                         <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}</h5>
                                                                     </div>
                                                                 </>
@@ -664,78 +674,78 @@ const Home = () => {
                                                             </Col>
                                                             <Col md={12}>
                                                                 {ApiLoader ? (
-                                                                    <Button className='signup-page-btn'>Please wait...</Button>
+                                                                    <Button className='signup-page-btn  w-100 mt-2 theme-bg'>Please wait...</Button>
                                                                 ) : (
                                                                     <>
-                                                                        {IsCountryName ? (
-                                                                            <div className="mt-3 paynow-btn-box">
-                                                                                <span onClick={() => saveCartToLocalStorage()}>
-                                                                                    <button onClick={() => saveCartToLocalStorage()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Pay now</button>
-                                                                                </span>
-                                                                            </div>
-                                                                        ) : (
-                                                                            <button type="button" className="btn btn-dark w-100">Select country</button>
-                                                                        )}
-                                                                    </>
+                                                                        <div className="mt-3 paynow-btn-box">
+                                                                            <span >
+                                                                                <button onClick={() => saveCartToLocalStorage()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Pay now</button>
+                                                                            </span>
+                                                                        </div>
+                                                                        {/* {IsCountryName ? (
+                                                                        ): (
+                                                                                <button type = "button" className = "btn btn-dark w-100">Select country</button>
+                                                                        )} */}
+                                                            </>
                                                                 )}
+                                                        </Col>
+                                                        {showLoginasGuest ? (
+                                                            <Col md={12} style={{ borderTop: '1px solid #eee' }} className="mt-3 pt-4">
+                                                                <Row>
+                                                                    <Col md={12}>
+                                                                        <div className="form-group">
+                                                                            <p>Email Address</p>
+                                                                            <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)} value={LoginEmail}></input>
+                                                                        </div>
+                                                                    </Col>
+                                                                    <Col md={6}>
+                                                                        <div className="form-group">
+                                                                            <p>First Name</p>
+                                                                            <input className="form-control" type="text" placeholder="First Name" onChange={(e) => setLoginFname(e.target.value)} value={LoginFname}></input>
+                                                                        </div>
+                                                                    </Col>
+                                                                    <Col md={6}>
+                                                                        <div className="form-group">
+                                                                            <p>Last Name</p>
+                                                                            <input className="form-control" type="text" placeholder="Last Name" onChange={(e) => setLoginLname(e.target.value)} value={LoginLname}></input>
+                                                                        </div>
+                                                                    </Col>
+                                                                    <Col md={12}>
+                                                                        {LoginLoader ? (
+                                                                            <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
+                                                                        ) : (
+                                                                            <button className="btn btn-primary w-100 theme-bg  my-2" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
+                                                                        )}
+                                                                    </Col>
+                                                                    <Col md={12} className="mt-2">
+                                                                        <p className="forgot-password-text">Already have an account? <Link to={app_url + 'auth/login-signup'} className='reset-password-link'>Log In/Sign Up</Link></p>
+                                                                    </Col>
+                                                                </Row>
+                                                                {/* /customer/login-as-guest */}
                                                             </Col>
-                                                            {showLoginasGuest ? (
-                                                                <Col md={12} style={{ borderTop: '1px solid #eee' }} className="mt-3 pt-4">
-                                                                    <Row>
-                                                                        <Col md={12}>
-                                                                            <div className="form-group">
-                                                                                <p>Email Address</p>
-                                                                                <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)} value={LoginEmail}></input>
-                                                                            </div>
-                                                                        </Col>
-                                                                        <Col md={6}>
-                                                                            <div className="form-group">
-                                                                                <p>First Name</p>
-                                                                                <input className="form-control" type="text" placeholder="First Name" onChange={(e) => setLoginFname(e.target.value)} value={LoginFname}></input>
-                                                                            </div>
-                                                                        </Col>
-                                                                        <Col md={6}>
-                                                                            <div className="form-group">
-                                                                                <p>Last Name</p>
-                                                                                <input className="form-control" type="text" placeholder="Last Name" onChange={(e) => setLoginLname(e.target.value)} value={LoginLname}></input>
-                                                                            </div>
-                                                                        </Col>
-                                                                        <Col md={12}>
-                                                                            {LoginLoader ? (
-                                                                                <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
-                                                                            ) : (
-                                                                                <button className="btn btn-primary w-100 theme-bg  my-2" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
-                                                                            )}
-                                                                        </Col>
-                                                                        <Col md={12} className="mt-2">
-                                                                            <p className="forgot-password-text">Already have an account? <Link to={app_url + 'auth/login-signup'} className='reset-password-link'>Log In/Sign Up</Link></p>
-                                                                        </Col>
-                                                                    </Row>
-                                                                    {/* /customer/login-as-guest */}
-                                                                </Col>
-                                                            ) : ''}
-                                                        </Row>
-                                                    </Card.Body>
-                                                </Card>
+                                                        ) : ''}
+                                                    </Row>
+                                                </Card.Body>
+                                            </Card>
                                             </div>
                                         )}
-                                    </Col>
-                                </Row>
-                            </>
-                        ) : (
-                            <Row>
-                                <Col md={12}>
-                                    <Card>
-                                        <Card.Body>
-                                            <h2 className="text-danger " style={{ fontWeight: '600' }}>Your cart is empty !</h2>
-                                        </Card.Body>
-                                    </Card>
                                 </Col>
                             </Row>
+                    </>
+                    ) : (
+                    <Row>
+                        <Col md={12}>
+                            <Card>
+                                <Card.Body>
+                                    <h2 className="text-danger " style={{ fontWeight: '600' }}>Your cart is empty !</h2>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
                         )}
-                    </Col>
-                </Row>
-            </div>
+                </Col>
+            </Row>
+        </div >
             <Footer />
         </>
     );

@@ -1551,7 +1551,7 @@ const Type = ({ title, editid }) => {
                             <label htmlFor="" className="text-black">Start date</label>
                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="form-control date-border-redius date-border-redius-input" placeholder="" readOnly value={ticketstartdate} />
+                                <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={ticketstartdate} />
                                 <div className="date-style-picker">
                                     <Flatpickr
                                         value={TicketStartdate}
@@ -1567,7 +1567,7 @@ const Type = ({ title, editid }) => {
                             <label htmlFor="" className="text-black">Start time</label>
                             <div class="input-group mb-3 input-warning-o">
                                 <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                <input type="text" class="form-control date-border-redius-input" placeholder="" readOnly value={ticketstarttime} />
+                                <input type="text" class="form-control date-border-redius-input  bg-white" placeholder="" readOnly value={ticketstarttime} />
                             </div>
                         </Col>
                         <Col md={12} className="mb-2"></Col>
@@ -1575,7 +1575,7 @@ const Type = ({ title, editid }) => {
                             <label htmlFor="" className="text-black">End date</label>
                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="form-control date-border-redius date-border-redius-input" placeholder="" readOnly value={ticketenddate} />
+                                <input type="text" class="form-control date-border-redius date-border-redius-input  bg-white" placeholder="" readOnly value={ticketenddate} />
                                 <div className="date-style-picker">
                                     <Flatpickr
                                         value={TicketEndtdate}
@@ -1591,7 +1591,7 @@ const Type = ({ title, editid }) => {
                             <label htmlFor="" className="text-black">End time</label>
                             <div class="input-group mb-3 input-warning-o">
                                 <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                <input type="text" class="form-control date-border-redius-input" placeholder="" readOnly value={ticketendtime} />
+                                <input type="text" class="form-control date-border-redius-input  bg-white" placeholder="" readOnly value={ticketendtime} />
                             </div>
                         </Col>
                         <Col md={12}>

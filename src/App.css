@@ -274,10 +274,12 @@ span.input-group-text {
   overflow: hidden;
   width: 100%;
 }
+
 .input-group.mb-3.input-warning-o {
   border: 1px solid #eee;
   border-radius: 6px;
 }
+
 .date-border-redius {
   border-radius: 0px 10px 10px 0px !important;
 }
@@ -526,7 +528,7 @@ span.flatpickr-weekday {
 }
 
 .hobby-box {
-  border: 1px solid #a9a9a9;
+  border: 1px solid #0047ab;
   margin: 10px 3px;
   padding: 2px 10px;
   border-radius: 15px;
@@ -534,10 +536,10 @@ span.flatpickr-weekday {
   font-weight: 400;
   text-transform: capitalize;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 14px;
   display: inline-block;
+  background: #fff;
 }
-
 .hobby-active {
   background: #0047ab;
   color: #fff;
@@ -1219,7 +1221,7 @@ button.signup-page-button {
 
 .reward_star {
   position: absolute;
-font-size: 36px;
+  font-size: 36px;
   top: -12px;
 }
 
@@ -1228,34 +1230,41 @@ font-size: 36px;
   font-size: 36px;
   top: -12px;
 }
+
 .reward_star_gold {
 
   font-size: 36px;
   top: -12px;
 }
-.reward_star_premeum img{
+
+.reward_star_premeum img {
   margin-left: 10px;
 }
+
 .reward_star_premeum {
 
   font-size: 36px;
   top: -12px;
   width: 150px;
 }
+
 .reward_star_grew p.reward_star_text {
   font-size: 16px;
   font-weight: 600;
 }
+
 .reward_star_gold p.reward_star_text {
   font-size: 16px;
   font-weight: 600;
   color: #FFA619;
 }
+
 .reward_star_premeum p.reward_star_text {
   font-size: 16px;
   font-weight: 600;
   color: #0047AB;
 }
+
 .view-event-btn {
   background: #0047ab;
   color: #fff !important;
@@ -1263,31 +1272,43 @@ font-size: 36px;
   border-radius: 5px;
   float: inline-end;
 }
+
 .cart-count {
   position: absolute;
-  top: -8px; /* Adjust the positioning as needed */
-  right: -8px; /* Adjust the positioning as needed */
-  background-color: #000; /* Blue background color */
-  color: #fff; /* Text color */
-  border-radius: 50%; /* Make it circular */
-  width: 20px; /* Adjust the size as needed */
-  height: 20px; /* Adjust the size as needed */
+  top: -8px;
+  /* Adjust the positioning as needed */
+  right: -8px;
+  /* Adjust the positioning as needed */
+  background-color: #000;
+  /* Blue background color */
+  color: #fff;
+  /* Text color */
+  border-radius: 50%;
+  /* Make it circular */
+  width: 20px;
+  /* Adjust the size as needed */
+  height: 20px;
+  /* Adjust the size as needed */
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 12px; /* Adjust the font size as needed */
+  font-size: 12px;
+  /* Adjust the font size as needed */
   font-weight: bold;
 }
+
 /* .nav-control {
   display: none;
 } */
 .home_logo {
-    height: auto;
-    width: 180px;
+  height: auto;
+  width: 180px;
 }
+
 .deznav .deznav-scroll {
   height: 612px !important;
 }
+
 .coupon-page-ui .col-md-4 {
   background: #0047ab;
   color: #fff;
@@ -1298,19 +1319,23 @@ p.coupon-amount {
   font-size: 30px;
   margin-bottom: 0;
 }
-.shadow{
-  -webkit-box-shadow: 1px 2px 5px 0px rgba(191,191,191,1);
--moz-box-shadow: 1px 2px 5px 0px rgba(191,191,191,1);
-box-shadow: 1px 2px 5px 0px rgba(191,191,191,1);
+
+.shadow {
+  -webkit-box-shadow: 1px 2px 5px 0px rgba(191, 191, 191, 1);
+  -moz-box-shadow: 1px 2px 5px 0px rgba(191, 191, 191, 1);
+  box-shadow: 1px 2px 5px 0px rgba(191, 191, 191, 1);
 }
+
 .tickret-show-box {
   position: relative;
   height: 200px;
   padding: 14px 55px;
 }
-img.ticketimg-bg:hover{
+
+img.ticketimg-bg:hover {
   opacity: 0.6;
 }
+
 img.ticketimg-bg {
   position: absolute;
   left: 0;
@@ -1319,6 +1344,7 @@ img.ticketimg-bg {
   width: 100%;
   opacity: 0.3;
 }
+
 button.redem-btn {
   border: 1px solid #000;
   background: none;
@@ -1328,19 +1354,23 @@ button.redem-btn {
   padding: 8px 40px;
   position: relative;
 }
-button.redem-btn:hover img.ticketimg-bg:hover{
+
+button.redem-btn:hover img.ticketimg-bg:hover {
   opacity: 0.6;
 }
+
 button.redem-btn:hover {
   border: 1px solid #0047ab;
 }
+
 span.token-no-span {
-    background: #eee;
-    padding: 11px 16px;
-    color: #838383;
-    font-weight: 600;
-    margin-right: 10px;
+  background: #eee;
+  padding: 11px 16px;
+  color: #838383;
+  font-weight: 600;
+  margin-right: 10px;
 }
+
 button.redem-copy-btn {
   background: #0047ab;
   border: none;
@@ -1349,6 +1379,7 @@ button.redem-copy-btn {
   border-radius: 8px;
   position: relative;
 }
+
 img.flag-icon {
   position: absolute;
   left: -12px;
@@ -1356,12 +1387,14 @@ img.flag-icon {
   height: auto;
   width: 66px;
 }
+
 .xyss {
-  background: linear-gradient(#d5e7ff,#fff) padding-box,linear-gradient(335deg,#0047ab,#fff) border-box;
+  background: linear-gradient(#d5e7ff, #fff) padding-box, linear-gradient(335deg, #0047ab, #fff) border-box;
   border: 1px solid transparent !important;
   color: #003b8f !important;
   border-radius: 10px;
 }
+
 p.sssas {
   font-weight: 600;
   font-size: 21px;
@@ -1369,15 +1402,19 @@ p.sssas {
   text-align: center;
   margin-bottom: 0px;
 }
+
 .event-cart-location {
-    font-size: 13px;
+  font-size: 13px;
 }
+
 .event-cart-price-box {
   padding-left: 14px;
 }
+
 .event-cart-display-price {
   font-size: 19px;
 }
+
 .pc-header-location {
   position: relative;
   z-index: 9;
@@ -1388,122 +1425,274 @@ p.sssas {
   border-radius: 0px 0px 10px 10px;
   width: 181px;
 }
+
 .top-login-sign-btn:hover span.top-login-sign-btn-icon {
   color: #65a1ff;
 }
+
 .top-login-sign-btn {
-  -webkit-box-shadow: 2px 2px 8px -4px rgba(66,66,66,1);
-  -moz-box-shadow: 2px 2px 8px -4px rgba(66,66,66,1);
-  box-shadow: 2px 2px 8px -4px rgba(66,66,66,1);
+  -webkit-box-shadow: 2px 2px 8px -4px rgba(66, 66, 66, 1);
+  -moz-box-shadow: 2px 2px 8px -4px rgba(66, 66, 66, 1);
+  box-shadow: 2px 2px 8px -4px rgba(66, 66, 66, 1);
   border-radius: 36px;
   padding: 0px 12px 0px 19px;
-  
+
   cursor: pointer;
 }
+
 span.top-login-sign-btn-icon {
   font-size: 29px;
   line-height: 0px;
   color: #cde1ff;
   transition: color 0.5s ease;
 }
+
 .top-login-sign-btn img {
   height: 40px;
   width: 40px;
   margin: 4px 4px 4px 9px;
 }
+
 .animation-home-banner {
   margin-left: 17px;
   font-size: 30px;
   padding: 9px 15px;
-  border: 2px dashed  #fff;
+  border: 2px dashed #fff;
   width: 547px;
   border-radius: 8px;
-  height: 70px; 
+  height: 70px;
 }
-.theme-bg{
+
+.theme-bg {
   background: #0047AB !important;
 }
-.xxx-conta{
+
+.xxx-conta {
   position: relative;
   width: 200px;
-  height: 40px,;
+  height: 40px, ;
   cursor: pointer;
   border: 1px solid #eee;
   border-radius: 10px
 }
+
 .xxx-event-page-top-loader {
   margin: 78px 23px 0px 23px;
 }
+
 img.cart-btn-img {
   height: auto;
   width: 40px;
 }
-.copy-n{
+
+.copy-n {
   user-select: none;
 }
+
 .tag-active {
   background: #0047ab;
   color: #fff !important;
 }
+
 .BeyondTickets-sec {
-  margin-top: 70px;
+  margin: 95px 0px 65px 0px;
 }
+
 .eventpage-cat-name {
   padding-left: 5rem;
   padding-top: 4rem;
 }
+
 .eventpage-cat-name span {
   border: 2px dashed white;
   padding: 6px 10px;
   border-radius: 8px;
 }
+
 .admin-login-img {
   height: auto;
   width: 340px;
 }
+
 .OURPARTNER-padding {
   padding: 0px 25px 0px 0px;
 }
-.social-icon{
+
+.social-icon {
   background: none !important;
   cursor: pointer;
 }
-.login-pg-btn-cs{
+
+.login-pg-btn-cs {
   background: #6495ED !important;
 }
-.login-pg-btn-cs .right{
+
+.login-pg-btn-cs .right {
   background: #0047AB !important;
 }
+
 span.add_to_cart_count {
   font-size: 25px;
   padding: 0px 11px;
   width: 40px;
   user-select: none;
-} 
+}
+
 .add_to_cart_btn {
   background: #0e51b0;
   cursor: pointer;
   color: #fff;
+  -webkit-user-select: none;
   user-select: none;
-  font-size: 25px;
-  padding: 0px 11px;
+  font-size: 21px;
+  padding: 3px 11px 0px 12px;
   border-radius: 8px;
-  margin: 0px 5px;
+  margin: 0px 1px;
 }
+
 span.event-pg-icon-img img {
   height: auto;
   width: 33px;
   margin-right: 10px;
   margin-left: 20px;
 }
+
 span.event-pg-icon-text {
   font-size: 15px;
 }
+
 .event-pg-icon {
   font-size: 30px;
   margin-right: 10px;
 }
+
 .row.evnt-page-save-shear-box {
   margin-right: 80px;
   margin-bottom: -17px;
+}
+
+.event-hero {
+  border-radius: 20px;
+  position: relative;
+  max-width: 1080px;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  text-align: center;
+  max-height: 50vw;
+  overflow: hidden;
+  font-size: 0;
+  background-color: #fff;
+}
+
+.event-hero__background {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  max-width: 1080px;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  -webkit-filter: blur(50px) brightness(.9);
+  filter: blur(50px) brightness(.9);
+  z-index: 0;
+}
+
+.css-1vu2yqv {
+  position: static;
+}
+
+.css-1tue3c7 {
+  overflow: hidden;
+  max-width: 940px;
+  margin: auto;
+}
+
+.css-6dsmqv img {
+  max-width: 940px;
+  width: 100%;
+  height: auto;
+}
+
+.event-hero img {
+  max-width: 940px;
+  position: relative;
+  width: 100%;
+  height: auto;
+  z-index: 1;
+}
+
+.event-hero {
+  max-height: 470px;
+}
+
+.banner-h-home-pg {
+  padding-left: 5rem;
+}
+
+.events-page-search {
+  border: 1px solid #eee !important;
+  border-radius: 8px !important;
+  padding-right: 0px !important;
+}
+
+.events-page-search button.dfssfdsfdsf {
+  margin-top: 4px;
+  border-radius: 0px 6px 6px 0px;
+  height: 80% !important;
+  padding-bottom: 3px !important;
+}
+
+.events-page-filter-box {
+  background: linear-gradient(white, #fff) padding-box, linear-gradient(to top, #0047AB, #eee) border-box;
+  padding-top: 40px;
+  border-radius: 15px;
+  border: 1px solid transparent;
+}
+.events-page-filter-box .selectDiv img {
+  position: absolute;
+  right: 0;
+  top: 12px;
+  pointer-events: none;
+  bottom: 0;
+  width: 17px;
+  right: 12px;
+  background-color: white;
+}
+.Listyourevent {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+.form-select:focus {
+  border-color: transparent !important;
+}
+.event-view-body {
+  margin-left: 80px !important;
+  margin-right: 80px !important;
+}
+.home-event-in-box {
+    margin-left: 6rem;
+    margin-right: 6rem;
+}
+.home-event-in-box .slick-next:before,.home-event-in-box .slick-prev:before {
+  font-size: 26px;
+  line-height: 1;
+  opacity: 1 !important;
+  color: #0047ab;
+}
+.home-event-in-box .slick-prev {
+  margin-left: -11px !important;
+}
+.event-page-menu-div {
+  margin: 41px 130px 0px 0px;
+}
+.event-vew-page-margin {
+  margin-right: 50px;
+}
+input.price-range-picker-input {
+  width: 45px;
 }

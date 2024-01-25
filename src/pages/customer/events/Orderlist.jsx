@@ -303,6 +303,9 @@ const Dashboard = ({ title }) => {
         }
     }
     useEffect(() => {
+        if(!Beartoken){
+            return navigate(app_url)
+        }
         fetchmyEvent();
         fetchCategory();
     }, []);

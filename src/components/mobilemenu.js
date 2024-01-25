@@ -308,12 +308,12 @@ const Header = () => {
                                     </>
                                 ) : (
                                     <>
-                                        {/* <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav" to={app_url + 'auth/login-signup'}>
-                                        Login/Sign Up
-                                    </Link>  */}
-                                        <Link to={app_url + 'auth/login-signup'} className='top-login-sign-btn d-flex align-items-center justify-content-center' >
-                                            <span className="top-login-sign-btn-icon"><FaEllipsis /></span><span><img src={NewLoginicon}></img></span>
+                                        <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav" to={app_url + 'auth/login-signup'}>
+                                            Login/Sign Up
                                         </Link>
+                                        {/* <Link to={app_url + 'auth/login-signup'} className='top-login-sign-btn d-flex align-items-center justify-content-center' >
+                                            <span className="top-login-sign-btn-icon"><FaEllipsis /></span><span><img src={NewLoginicon}></img></span>
+                                        </Link> */}
                                     </>
                                 )}
 

@@ -454,10 +454,11 @@ const Home = () => {
   //     setIsFirstRender(true);
   // };
 
-  const addToCart = (item) => {
+  const addToCart = (item, id) => {
     // Initialize cartItems as an empty array if it's undefined
     const existingItem = cartItems.find((cartItem) => cartItem.name === item.name);
 
+    localStorage.setItem('inside_cart_id', id);
     if (Eventdata.currencycode === "USD") {
       localStorage.setItem('payment_gatway', 'Stripe');
       localStorage.setItem('currency_symble', '$');
@@ -468,15 +469,14 @@ const Home = () => {
       localStorage.setItem('payment_gatway', 'rezorpay');
       localStorage.setItem('currency_symble', '₹');
     }
-
+    localStorage.setItem('cart_insert_id', id);
     if (existingItem) {
-      // If item already exists in cart, update quantity
+
       const updatedCart = cartItems.map((cartItem) =>
         cartItem.name === item.name ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
       );
       setCartItems(updatedCart);
     } else {
-      // If item is not in cart, add it with quantity 1 and eventId
       setCartItems([...cartItems, { ...item, quantity: 1, eventId, event: Eventdata, ticket: item }]);
     }
 
@@ -541,13 +541,19 @@ const Home = () => {
   const loadCartFromLocalStorage = () => {
     // Load cart items, local quantities, and eventId from localStorage
     const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      const { items, quantities } = JSON.parse(storedCart);
-      // Check if items and quantities exist in the stored data
-      if (items && quantities) {
-        setCartItems(items);
-        setLocalQuantities(quantities);
+    const check_same_id = localStorage.getItem('cart_insert_id');
+    if (check_same_id && check_same_id == id) {
+      if (storedCart) {
+        const { items, quantities } = JSON.parse(storedCart);
+        // Check if items and quantities exist in the stored data
+        if (items && quantities) {
+          setCartItems(items);
+          setLocalQuantities(quantities);
+        }
       }
+    } else {
+      localStorage.removeItem('cart');
+      localStorage.removeItem('cart_insert_id');
     }
   };
   const openGoogleMaps = () => {
@@ -595,14 +601,14 @@ const Home = () => {
         <MobileMenu />
         {Apiloader ? (
           <div className="xxx-event-page-top-loader">
-            <div className="linear-background w-100" style={{ height: '330px' }}> </div>
+            <div className="linear-background w-100" style={{ height: '270px' }}> </div>
           </div>
         ) : (
           <>
             <h3 className="eventpage-cat-name text-white animate__animated animate__bounce">
               <span>{Eventdata.category_name}</span>
             </h3>
-            <h1 className="banner-h text-white text-start text-uppercase">{Eventdata.display_name}</h1>
+            <h1 className="banner-h banner-h-mob-event text-white text-start text-uppercase">{Eventdata.display_name}</h1>
             {screenWidth > 900 ? (
               <div className="py-2 singel-event-page-head-box">
                 <div className="organizer-name-sec px-2 py-2">
@@ -715,11 +721,11 @@ const Home = () => {
               <div className="col-md-12 text-white d-flex align-items-center justify-content-md-end justify-content-center">
                 <span className="d-flex align-items-center cursor-pointer" onClick={() => SaveEvent(Eventdata._id)}>
                   <span className="event-pg-icon">
-                  {IssaveEvent ? (<FaHeart />) : (<FaRegHeart />)}
+                    {IssaveEvent ? (<FaHeart />) : (<FaRegHeart />)}
                   </span>
                   <span className="event-pg-icon-text">Add to favourites</span>
                 </span>
-                <span className="d-flex align-items-center  cursor-pointer"  onClick={() => CopyUrlhandel()}>
+                <span className="d-flex align-items-center  cursor-pointer" onClick={() => CopyUrlhandel()}>
                   <span className="event-pg-icon-img">
                     <img src={WhiteShareIcon} alt="" />
                   </span>
@@ -727,9 +733,9 @@ const Home = () => {
                 </span>
               </div>
             </div>
-            <div className="banner-child-event">
+            {/* <div className="banner-child-event">
               <img className="mt-2 event-banner" src={Eventdata.banner_image ? Eventdata.banner_image : EventImg} alt="" />
-            </div>
+            </div> */}
           </>
         )}
       </div>
@@ -738,190 +744,206 @@ const Home = () => {
           <div className="linear-background w-100"> </div>
         </div>
       ) : (
-        <div className="mx-lg-4 my-lg-3 ">
-          <Row>
-            <Col md={12}>
-
-            </Col>
-          </Row>
+        <div className="my-lg-3 my-md-3 event-view-body">
           <div className="event-desc event-page-margin">
             <Container fluid>
               <Row>
-                <Col md={9}>
-                  <div className="desc-sec">
-                    <span className="sec-title">
-                      <Fade bottom>Description</Fade>
-                    </span>
-                    <Fade bottom>
-                      <p>
-                        {Eventdata.event_desc}
-                      </p>
-                    </Fade>
+                <div className="col-md-12 col-12 mb-5">
+                  <div className="event-hero">
+                    <div
+                      className="event-hero__background"
+                      style={{ backgroundImage: `url("${Eventdata.banner_image ? Eventdata.banner_image : EventImg}")` }}
+                    ></div>
+                    <div className="css-1vu2yqv e1kx2rja0">
+                      <div className="css-1tue3c7 e1kx2rja1">
+                        <img
+                          width="600"
+                          height="300"
+                          alt="Gangtok: 21 Day- Free Kundalini Inner Energy Awakening Meditation"
+                          src={Eventdata.banner_image ? Eventdata.banner_image : EventImg}
+                          fetchpriority="high"
+                          data-testid="hero-img"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  {/* <div className="desc-sec">
+                </div>
+                <Col md={9} className="">
+                  <div className="event-vew-page-margin">
+                    <div className="desc-sec">
+                      <span className="sec-title">
+                        <Fade bottom>Description</Fade>
+                      </span>
+                      <Fade bottom>
+                        <p>
+                          {Eventdata.event_desc}
+                        </p>
+                      </Fade>
+                    </div>
+                    {/* <div className="desc-sec">
                       <span className="sec-title">Map xxx</span>
                     </div> */}
-                  <div>
-
-                    <GoogleMap
-                      center={position}
-                      zoom={15}
-                      mapContainerStyle={{ height: '500px', width: '100%' }}
-                    >
-                      {position && <Marker position={position} />}
-                    </GoogleMap>
-                  </div>
-                  <div className="desc-sec">
-                    <span onClick={() => navigate(app_url + 'privacy-policy')} className="sec-title cursor-pointer">
-                      Return Policy{" "}
-                      <span>
-                        <img src={ShareIcon} alt="" />
+                    <div className="event-page-menu-div">
+                      <GoogleMap
+                        center={position}
+                        zoom={15}
+                        mapContainerStyle={{ height: '500px', width: '100%' }}
+                      >
+                        {position && <Marker position={position} />}
+                      </GoogleMap>
+                    </div>
+                    <div className="desc-sec">
+                      <span onClick={() => navigate(app_url + 'privacy-policy')} className="sec-title cursor-pointer">
+                        Return Policy{" "}
+                        <span>
+                          <img src={ShareIcon} alt="" />
+                        </span>
                       </span>
-                    </span>
-                    <p onClick={() => navigate(app_url + 'contact')} className="report cursor-pointer">
-                      <img src={FlagIcon} alt="" /> Report this event
-                    </p>
-                  </div>
-                  <Row>
-                    <Col md={12}>
-                      <Slide bottom>
-                        <div className="start-in-box eventpage-box-style mb-5">
+                      <p onClick={() => navigate(app_url + 'contact')} className="report cursor-pointer">
+                        <img src={FlagIcon} alt="" /> Report this event
+                      </p>
+                    </div>
+                    <Row>
+                      <Col md={12}>
+                        <Slide bottom>
+                          <div className="start-in-box eventpage-box-style mb-5">
+                            <Row>
+                              <Col md={6}>
+                                <div className="right-box-title">
+                                  <p>Tags</p>
+                                </div>
+                              </Col>
+                              <Col md={12}>
+                                <div className="tags pt-4 pb-5">
+                                  <ul className="p-0">
+                                    {Eventdata.tags.map((item, index) => (
+                                      <li className="d-inline-block m-1 mb-3">
+                                        <span className="event-category-title event-category-title-mobile font-13">
+                                          {item}
+                                        </span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </Col>
+                            </Row>
+                          </div>
+                        </Slide>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col md={12}>
+                        <div className="start-in-box eventpage-box-style mb-5 More-events">
                           <Row>
-                            <Col md={6}>
+                            <Col md={8}>
                               <div className="right-box-title">
-                                <p>Tags</p>
+                                <p>More events from this organiser</p>
                               </div>
                             </Col>
                             <Col md={12}>
-                              <div className="tags pt-4 pb-5">
-                                <ul className="p-0">
-                                  {Eventdata.tags.map((item, index) => (
-                                    <li className="d-inline-block m-1 mb-3">
-                                      <span className="event-category-title event-category-title-mobile font-13">
-                                        {item}
-                                      </span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
+                              <Row>
+                                {OrganizerEventlist.map((item, index) => (
+                                  <Col md={6}>
+                                    <div className="cursor-pointer" title="View" onClick={() => viewEvent(item._id, item.name)}>
+                                      <Slide bottom>
+                                        <div className="more-event-box">
+                                          <div className="ticket-price-area ticket-price-area-bg mt-3">
+                                            <Row>
+                                              <Col
+                                                md={5}
+                                                className="d-flex align-items-center"
+                                              >
+                                                <div className="event-image-part">
+                                                  <img
+                                                    className="event-image"
+                                                    src={item.thum_image ? item.thum_image : Noimg}
+                                                    alt=""
+                                                  />
+                                                </div>
+                                              </Col>
+                                              <Col md={7} className="event-view-page">
+                                                <div className="organizer-name-sec px-2 py-2">
+                                                  <div className="d-inline-flex align-items-center  event-time-area">
+                                                    <div className="d-inline-block mr-1">
+                                                      <img
+                                                        height={30}
+                                                        width={30}
+                                                        src={Timelogo}
+                                                        alt=""
+                                                      />
+                                                    </div>
+                                                    <div className="d-inline-block">
+                                                      <span className="event-duration d-block text-dark">
+                                                        Event Date
+                                                      </span>
+                                                      <span className="event-time d-block text-dark">
+                                                        {item.start_date}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div className="d-inline-flex align-items-center">
+                                                    <div className="d-inline-block mr-1">
+                                                      <img
+                                                        height={30}
+                                                        width={30}
+                                                        src={Hourglasslogo}
+                                                        alt=""
+                                                      />
+                                                    </div>
+                                                    <div className="d-inline-block">
+                                                      <span className="event-duration d-block text-dark">
+                                                        Event Duration
+                                                      </span>
+                                                      <span className="event-time d-block text-dark">
+                                                        {item.event_duration}
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </Col>
+                                              <Col md={12} className="my-2">
+                                                <div className="event-name  ml-2">
+                                                  <span>{item.display_name}</span>
+                                                  <p className="font-10">
+                                                    {shortPer(item.event_desc, 100)}
+                                                  </p>
+                                                </div>
+                                              </Col>
+                                              <Col
+                                                md={7}
+                                                xs={7}
+                                                className="border-top-doted"
+                                              >
+                                                <div className="location d-flex align-items-center text-center">
+                                                  <img
+                                                    height={30}
+                                                    width={30}
+                                                    src={LocationIcon}
+                                                    alt=""
+                                                  />{" "}
+                                                  <span>{item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''} </span>
+                                                </div>
+                                              </Col>
+                                              <Col md={5} xs={5}>
+                                                <div className="price-section text-center">
+                                                  <p>Ticket Price</p>
+                                                  <span className="price">{item.countrysymbol} {item.displayprice}</span>
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                          </div>
+                                        </div>
+                                      </Slide>
+                                    </div>
+                                  </Col>
+                                ))}
+                              </Row>
                             </Col>
                           </Row>
                         </div>
-                      </Slide>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md={12}>
-                      <div className="start-in-box eventpage-box-style mb-5 More-events">
-                        <Row>
-                          <Col md={8}>
-                            <div className="right-box-title">
-                              <p>More events from this organiser</p>
-                            </div>
-                          </Col>
-                          <Col md={12}>
-                            <Row>
-                              {OrganizerEventlist.map((item, index) => (
-                                <Col md={6}>
-                                  <div className="cursor-pointer" title="View" onClick={() => viewEvent(item._id, item.name)}>
-                                    <Slide bottom>
-                                      <div className="more-event-box">
-                                        <div className="ticket-price-area ticket-price-area-bg mt-3">
-                                          <Row>
-                                            <Col
-                                              md={5}
-                                              className="d-flex align-items-center"
-                                            >
-                                              <div className="event-image-part">
-                                                <img
-                                                  className="event-image"
-                                                  src={item.thum_image ? item.thum_image : Noimg}
-                                                  alt=""
-                                                />
-                                              </div>
-                                            </Col>
-                                            <Col md={7} className="event-view-page">
-                                              <div className="organizer-name-sec px-2 py-2">
-                                                <div className="d-inline-flex align-items-center  event-time-area">
-                                                  <div className="d-inline-block mr-1">
-                                                    <img
-                                                      height={30}
-                                                      width={30}
-                                                      src={Timelogo}
-                                                      alt=""
-                                                    />
-                                                  </div>
-                                                  <div className="d-inline-block">
-                                                    <span className="event-duration d-block text-dark">
-                                                      Event Date
-                                                    </span>
-                                                    <span className="event-time d-block text-dark">
-                                                      {item.start_date}
-                                                    </span>
-                                                  </div>
-                                                </div>
-                                                <div className="d-inline-flex align-items-center">
-                                                  <div className="d-inline-block mr-1">
-                                                    <img
-                                                      height={30}
-                                                      width={30}
-                                                      src={Hourglasslogo}
-                                                      alt=""
-                                                    />
-                                                  </div>
-                                                  <div className="d-inline-block">
-                                                    <span className="event-duration d-block text-dark">
-                                                      Event Duration
-                                                    </span>
-                                                    <span className="event-time d-block text-dark">
-                                                      {item.event_duration}
-                                                    </span>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </Col>
-                                            <Col md={12} className="my-2">
-                                              <div className="event-name  ml-2">
-                                                <span>{item.display_name}</span>
-                                                <p className="font-10">
-                                                  {shortPer(item.event_desc, 100)}
-                                                </p>
-                                              </div>
-                                            </Col>
-                                            <Col
-                                              md={7}
-                                              xs={7}
-                                              className="border-top-doted"
-                                            >
-                                              <div className="location d-flex align-items-center text-center">
-                                                <img
-                                                  height={30}
-                                                  width={30}
-                                                  src={LocationIcon}
-                                                  alt=""
-                                                />{" "}
-                                                <span>{item.city ? item.city : ''} </span>
-                                              </div>
-                                            </Col>
-                                            <Col md={5} xs={5}>
-                                              <div className="price-section text-center">
-                                                <p>Ticket Price</p>
-                                                <span className="price">{item.countrysymbol} {item.displayprice}</span>
-                                              </div>
-                                            </Col>
-                                          </Row>
-                                        </div>
-                                      </div>
-                                    </Slide>
-                                  </div>
-                                </Col>
-                              ))}
-                            </Row>
-                          </Col>
-                        </Row>
-                      </div>
-                    </Col>
-                  </Row>
+                      </Col>
+                    </Row>
+                  </div>
                 </Col>
                 <Col md={3}>
                   {Eventdata.start_mindate && Eventdata.is_clock_countdown ? (
@@ -948,11 +970,11 @@ const Home = () => {
                                     <span className="price  mb-0">FREE</span>
                                   </>)}
                                 </div>
-                                <div className="col-md-6 col-6">
+                                <div className="col-md-6 col-6 d-flex justify-content-end">
                                   <div className="d-flex align-items-stretch">
                                     <span className="add_to_cart_btn" onClick={() => removeFromCart(items.name, localQuantities[items.name] || 0)}>-</span>
                                     <span className="add_to_cart_count">{localQuantities[items.name] || 0}</span>
-                                    <span className="add_to_cart_btn" onClick={() => addToCart(items)}>+</span>
+                                    <span className="add_to_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span>
                                   </div>
                                 </div>
                               </div>
@@ -984,8 +1006,8 @@ const Home = () => {
                   <h2 className="desc-sec theme-color">Other events you may like</h2>
                 </Col>
                 {Eventlist.map((item, index) => (
-                  <div className="col-xl-3 col-md-3 col-12 cursor-pointer" onClick={() => viewEvent(item._id, item.name)}>
-                    <div className="bg-white rounded-10 shadow-bottom pb-3" style={{ height: '100%' }}>
+                  <div className="col-xl-3 col-xxl-3 col-md-3 col-12 " >
+                    <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
                       <div style={{ position: 'relative' }}>
                         <span className="event-category-img">{item.category_name}</span>
                         <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
@@ -999,16 +1021,16 @@ const Home = () => {
                         </div>
                       </div>
                       <div className="row px-2 mt-2">
-                        <div className="col-md-7 d-flex align-items-center">
+                        <div className="col-md-7 d-flex align-items-center col-7">
                           <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
                           <div className="d-flex flex-column align-items-start justify-content-start">
                             <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
                             <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                              By {item.organizer_name}
+                              {item.organizer_name}
                             </p>
                           </div>
                         </div>
-                        <div className="col-md-5">
+                        <div className="col-md-5  col-5">
                           <div className="bg-fade rounded pl-5 event-cart-price-box">
                             <p className="small fw-bold mb-0 pb-0">Onwards</p>
                             {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
@@ -1018,18 +1040,15 @@ const Home = () => {
                       </div>
                       <div className="row mt-1">
                         <div className="col-md-12">
-                          <div className="d-flex align-items-center justify-content-start my-2">
+                          <div className="d-flex align-items-center justify-content-start my-2 mx-2">
                             <img className="card-icon me-1" src={locationIcon} alt="" />
                             <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                              {item.city ? item.city : ''}
+                              {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
                             </p>
                           </div>
                         </div>
-
                       </div>
-
                       <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-
                     </div>
                   </div>
                 ))}

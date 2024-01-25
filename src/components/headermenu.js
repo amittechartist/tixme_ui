@@ -19,11 +19,13 @@ const Header = () => {
         <div className="container-fluid pe-0">
           <Link to={app_url}><img className="nav-logo ms-lg-5 ms-2" src={Logo} alt="Not found" /></Link>
           <div>
-            <img
-              className="m-search me-md-4 me-3"
-              src={Search}
-              alt="Not found "
-            />
+            <Link to={app_url + 'events'}>
+              <img
+                className="m-search me-md-4 me-3"
+                src={Search}
+                alt="Not found "
+              />
+            </Link>
             {customer_token || organizername ? (
               <>
                 {customer_token ? (

@@ -144,9 +144,9 @@ const Page = ({ title }) => {
                                                     </Col>
                                                 ) : (
                                                     <Col md={12} className="text-center">
-                                                        <p className="text-success payment-page-title">Payment successfull!</p>
+                                                        <p className="text-success payment-page-title">Congratulation !</p>
                                                         <Lottie animationData={SuccessLotte} style={Successlottewidth} />
-                                                        <div className="order-data">
+                                                        <div className="order-data d-none">
                                                             <Row className="mx-2">
                                                                 <Col md={4}><p className="data-title text-start">Payment type</p></Col>
                                                                 <Col md={8}><p className="data-value text-end">Online</p></Col>
@@ -165,7 +165,16 @@ const Page = ({ title }) => {
 
                                                                 <Col md={4}><p className="data-title text-start">Date</p></Col>
                                                                 <Col md={8}><p className="data-value text-end">{date} {time}</p></Col>
-                                                                <Col md={12} className="mt-4">
+                                                                
+                                                            </Row>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-md-12 text-center">
+                                                                <p className="mb-0">Your transaction was successful.</p>
+                                                                <p className="mb-0">We have sent you a confirmation to <span style={{color: '#0047ab'}}>{email}</span>.</p>
+                                                                <p>If you could not find an email from <span style={{color: '#0047ab'}}>TIXME</span>, check your spam or junk email folder.</p>
+                                                            </div>
+                                                            <Col md={12} className="mt-4">
                                                                     <span>
                                                                         <Link to={customer_url + 'my-order-list'}>
                                                                             <Whitebtn title={'View Order'} />
@@ -177,7 +186,6 @@ const Page = ({ title }) => {
                                                                         </Link>
                                                                     </span>
                                                                 </Col>
-                                                            </Row>
                                                         </div>
                                                     </Col>
                                                 )}

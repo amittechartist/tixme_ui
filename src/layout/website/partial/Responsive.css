@@ -1,23 +1,46 @@
 @media only screen and (max-width: 900px) {
+    .event-view-body {
+        margin-left: 5px !important;
+        margin-right: 5px !important;
+    }
+    .GetCustomerButtonBox h4 {
+        padding-bottom: 10px;
+        font-size: 13px;
+    }
     .BeyondTickets-sec {
         margin-top: 40px;
     }
+    .home-event-in-box{
+        margin-top: 150px;
+    }
+    .banner-h-home-pg {
+        padding-top: 18px;
+    }
+    .event-sec.home-event-in-box h5 {
+        font-size: 14px !important;
+    }
+    .banner-h-mob-event {
+        padding-top: 20px;
+        margin-bottom: -7px;
+    }
     .row.evnt-page-save-shear-box {
         margin-right: 0;
-        margin-bottom: -16px;
+        margin-bottom: -14px;
+        margin-top: -20px;
     }
     .eventpage-cat-name {
         padding-left: 1rem;
         padding-top: 2rem;
     }
     .banner-event {
-        height: 360px !important;
+        height: 270px !important;
     }
     .banner-organizer-page {
         height: 88px;
     }
     .banner-h-events {
         padding-top: 2.3rem !important;
+        padding-bottom: 38px;
     }
     .OURPARTNER-padding{
         padding: 0px 8px 0px 0px;
@@ -26,7 +49,7 @@
         font-size: 14px;
     }
     .hobby-box{
-        font-size: 10px;
+        font-size: 15px;
     }
     .border-style-home-page {
         border-right: none;
@@ -49,7 +72,7 @@
     }
     p.sssas {
         margin-bottom: 0px;
-        font-size: 12px;
+        font-size: 9px;
     }
     img.flag-icon {
         left: -6px;

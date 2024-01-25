@@ -79,7 +79,7 @@ const Contact = () => {
           Contact Us
         </h1>
         <div className="banner-child bg-white p-3">
-          <div className="contact-sec m-2">
+          <div className="contact-sec m-2" style={{backgroundSize: 'cover'}}>
             <form className="px-lg-5 px-4 py-4">
               <div className="row">
                 <div className="col-lg-4">
@@ -184,31 +184,33 @@ const Contact = () => {
                   </div>
                 </div>
               </div>
-              {Loader ? (
-                <button className="GetLatestUpdateButton">
-                  <div className="left">
-                    <small className="ms-2">Please wait...</small>
-                  </div>
-                  <div className="right">
-                    <img style={{ width: "18px" }} src={arrow} alt="" />
-                  </div>
-                </button>
-              ) : (
-                <button className="GetLatestUpdateButton" onClick={() => HandelContactForm()}>
-                  <div className="left">
-                    <small className="ms-2">Send</small>
-                  </div>
-                  <div className="right">
-                    <img style={{ width: "18px" }} src={arrow} alt="" />
-                  </div>
-                </button>
-              )}
+              <div className="mt-md-3 mt-2">
+                {Loader ? (
+                  <button className="GetLatestUpdateButton">
+                    <div className="left">
+                      <small className="ms-2">Please wait...</small>
+                    </div>
+                    <div className="right">
+                      <img style={{ width: "18px" }} src={arrow} alt="" />
+                    </div>
+                  </button>
+                ) : (
+                  <button className="GetLatestUpdateButton" onClick={() => HandelContactForm()}>
+                    <div className="left px-0 px-md-4">
+                      <small className="ms-2">Send</small>
+                    </div>
+                    <div className="right">
+                      <img style={{ width: "18px" }} src={arrow} alt="" />
+                    </div>
+                  </button>
+                )}
+              </div>
             </form>
           </div>
         </div>
       </div>
       <div className="h-200"></div>
-      <div className="address-sec banner-child-address py-5">
+      <div className="address-sec banner-child-address py-5 px-md-0 px-3">
         {/* <TabComp /> */}
         <div className="d-flex justify-content-center">
           <div onClick={() => setTabno(1)} className={tabno == 1 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
@@ -254,7 +256,7 @@ const Contact = () => {
                 <div>
                   <span className="text-primary-color text-uppercase fw-bold">Address:</span>
                   <span>
-                    Office, Singapure Office Location
+                    Office, Singapure Office <br /> Location
                   </span>
                 </div>
                 <div>
@@ -265,6 +267,7 @@ const Contact = () => {
                   <span className="text-primary-color text-uppercase fw-bold">Phone</span>
                   <span>+91 8080000007 (WhatsApp)</span>
                 </div>
+
               </>
             )
           }

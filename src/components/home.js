@@ -17,7 +17,7 @@ import HeaderMenu from './headermenu';
 import Nouserphoto from '../common/image/nouser.png';
 import MobileMenu from './mobilemenu';
 import Arts from '../common/category/Group 1171274918.svg';
-import Business from '../common/category/Busimess11.svg';
+import Business from '../common/category/rrrrrGroup 1171274982.svg';
 import Food from '../common/category/Group 1171274941.svg';
 import Music from '../common/category/Group 1171274913.svg';
 import NIGHTLIFE from '../common/category/Group 1171274914.svg';
@@ -74,6 +74,9 @@ const Home = () => {
     } else {
       setStates([]);
     }
+    setStatename('');
+    setCityname('');
+    setSelectedCity('');
     setSelectedState(null);
   }, [selectedCountry]);
 
@@ -83,16 +86,23 @@ const Home = () => {
     } else {
       setCities([]);
     }
+    setCityname('');
+    setSelectedCity('');
   }, [selectedState, selectedCountry]);
 
   const handelSetHomelocation = () => {
     if (selectedCity) {
       setCityname(selectedCity.label);
+    } else {
+      setCityname('');
     }
     if (selectedState) {
       setStatename(selectedState.label)
+    } else {
+      setStatename('');
     }
     if (selectedCountry) {
+      console.log("ssss", selectedCountry.label);
       setCountryname(selectedCountry.label);
     }
   }
@@ -152,6 +162,24 @@ const Home = () => {
     slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
+    autoplaySpeed: 2000,
+    responsive: [
+      {
+        breakpoint: 768, // Adjust the breakpoint as needed
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+  const eventslistsettings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: false,
     autoplaySpeed: 2000,
     responsive: [
       {
@@ -234,120 +262,174 @@ const Home = () => {
   useEffect(() => {
     fetchCountry();
   }, []);
-  useEffect(() => {
-    const getCurrentLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          successCallback,
-          errorCallback
-        );
-      } else {
-        console.log('Geolocation is not supported by this browser.');
-      }
-    };
+  // useEffect(() => {
+  //   const getCurrentLocation = () => {
+  //     if (navigator.geolocation) {
+  //       navigator.geolocation.getCurrentPosition(
+  //         successCallback,
+  //         errorCallback
+  //       );
+  //     } else {
+  //       console.log('Geolocation is not supported by this browser.');
+  //     }
+  //   };
 
-    // Callback function on successful geolocation
-    const successCallback = (position) => {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
+  //   // Callback function on successful geolocation
+  //   const successCallback = (position) => {
+  //     const latitude = position.coords.latitude;
+  //     const longitude = position.coords.longitude;
 
-      // Set the location state
-      setLocation({ latitude, longitude });
+  //     // Set the location state
+  //     setLocation({ latitude, longitude });
 
-      // Perform reverse geocoding to get country and city
-      reverseGeocode(latitude, longitude);
-    };
+  //     // Perform reverse geocoding to get country and city
+  //     reverseGeocode(latitude, longitude);
+  //   };
 
-    // Callback function on geolocation error
-    const errorCallback = (error) => {
-      console.error('Error getting geolocation:', error);
-    };
+  //   // Callback function on geolocation error
+  //   const errorCallback = (error) => {
+  //     console.error('Error getting geolocation:', error);
+  //   };
 
-    const reverseGeocode = (latitude, longitude) => {
-      const geocoder = new window.google.maps.Geocoder();
-      const latlng = { lat: latitude, lng: longitude };
+  //   const reverseGeocode = (latitude, longitude) => {
+  //     const geocoder = new window.google.maps.Geocoder();
+  //     const latlng = { lat: latitude, lng: longitude };
 
-      geocoder.geocode({ location: latlng }, (results, status) => {
-        if (status === 'OK') {
-          if (results[0]) {
-            // Extract address components from the results
-            const addressComponents = results[0].address_components;
+  //     geocoder.geocode({ location: latlng }, (results, status) => {
+  //       if (status === 'OK') {
+  //         if (results[0]) {
+  //           // Extract address components from the results
+  //           const addressComponents = results[0].address_components;
 
-            // Initialize variables to store address details
-            let country, state, city, postalCode;
+  //           // Initialize variables to store address details
+  //           let country, state, city, postalCode;
 
-            for (let component of addressComponents) {
-              if (component.types.includes('country')) {
-                country = component.long_name;
-              }
-              if (component.types.includes('administrative_area_level_1')) {
-                state = component.long_name;
-              }
-              if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
-                city = component.long_name;
-              }
-              if (component.types.includes('postal_code')) {
-                postalCode = component.long_name;
-              }
-            }
-            setCurrentCountry(country);
-            setCurrentState(state);
-            setCurrentCity(city);
-            if (!localStorage.getItem("countryname")) {
-              localStorage.setItem('countryname', country);
-            }
-          } else {
-            console.error('No results found for reverse geocoding.');
-          }
-        } else {
-          console.error('Reverse geocoding failed due to:', status);
-        }
-      });
-    };
+  //           for (let component of addressComponents) {
+  //             if (component.types.includes('country')) {
+  //               country = component.long_name;
+  //             }
+  //             if (component.types.includes('administrative_area_level_1')) {
+  //               state = component.long_name;
+  //             }
+  //             if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
+  //               city = component.long_name;
+  //             }
+  //             if (component.types.includes('postal_code')) {
+  //               postalCode = component.long_name;
+  //             }
+  //           }
+  //           setCurrentCountry(country);
+  //           setCurrentState(state);
+  //           setCurrentCity(city);
 
-    // Call the function to get current location
-    getCurrentLocation();
-  }, []);
-  const [Eventlist, setEventlist] = useState([]);
-  const [Eventloader, setEventloader] = useState(false);
+  //           setMyCountry(country);
+  //           setCountryname(country);
+  //           setCityname(city);
+  //           setStatename(state);
+
+  //           if (!localStorage.getItem("countryname")) {
+  //             localStorage.setItem('countryname', country);
+  //           }
+  //         } else {
+  //           console.error('No results found for reverse geocoding.');
+  //         }
+  //       } else {
+  //         console.error('Reverse geocoding failed due to:', status);
+  //       }
+  //     });
+  //   };
+
+  //   // Call the function to get current location
+  //   getCurrentLocation();
+  // }, []);
+  const [EventlistIndia, setEventlistIndia] = useState([]);
+  const [EventloaderIndia, setEventloaderIndia] = useState(false);
+  const [EventlistUsa, setEventlistUsa] = useState([]);
+  const [EventloaderUsa, setEventloaderUsa] = useState(false);
+  const [EventlistSingapur, setEventlistSingapur] = useState([]);
+  const [EventloaderSingapur, setEventloadSingapur] = useState(false);
   const [Listitems, setListitems] = useState([]);
   const [filtercategory, setFilterCategory] = useState('');
 
   const viewEvent = async (id, name) => {
     navigate(`${app_url}event/${id}/${name}`)
   }
-  const fetchEvent = async () => {
+  const fetchIndiaEvent = async () => {
     try {
-      setEventloader(true)
-      const requestData = {
-        limit: 10,
-        organizerid: null,
-        country: Countryname ? Countryname : null,
-        city: Cityname ? Cityname : null,
-        state: Statename ? Statename : null,
-      }
-      fetch(apiurl + "website/all-events-list", {
+      setEventloaderIndia(true)
+      fetch(apiurl + "website/india-events", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Set the Content-Type header to JSON
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestData),
       })
         .then((response) => response.json())
         .then((data) => {
           if (data.success === true) {
-            setEventlist(data.data);
+            setEventlistIndia(data.data);
           } else {
           }
-          setEventloader(false)
+          setEventloaderIndia(false)
         })
         .catch((error) => {
           console.error("Insert error:", error);
-          setEventloader(false)
+          setEventloaderIndia(false)
         });
     } catch (error) {
       console.error("Login api error:", error);
-      setEventloader(false)
+      setEventloaderIndia(false)
+    }
+  };
+  const fetchUsaEvent = async () => {
+    try {
+      setEventloaderUsa(true)
+      fetch(apiurl + "website/usa-events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success === true) {
+            setEventlistUsa(data.data);
+          } else {
+          }
+          setEventloaderUsa(false)
+        })
+        .catch((error) => {
+          console.error("Insert error:", error);
+          setEventloaderUsa(false)
+        });
+    } catch (error) {
+      console.error("Login api error:", error);
+      setEventloaderUsa(false)
+    }
+  };
+  const fetchSingapurEvent = async () => {
+    try {
+      setEventloadSingapur(true)
+      fetch(apiurl + "website/singapur-events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success === true) {
+            setEventlistSingapur(data.data);
+          } else {
+          }
+          setEventloadSingapur(false)
+        })
+        .catch((error) => {
+          console.error("Insert error:", error);
+          setEventloadSingapur(false)
+        });
+    } catch (error) {
+      console.error("Login api error:", error);
+      setEventloadSingapur(false)
     }
   };
   const fetchCategory = async () => {
@@ -375,8 +457,11 @@ const Home = () => {
     }
   }
   useEffect(() => {
-    fetchEvent();
-  }, [filtercategory, Countryname, Cityname, Statename]);
+    // fetchEvent();
+    fetchIndiaEvent();
+    fetchUsaEvent();
+    fetchSingapurEvent();
+  }, []);
   useEffect(() => {
     fetchCategory();
   }, []);
@@ -389,6 +474,13 @@ const Home = () => {
     { image: Music },
     { image: NIGHTLIFE },
   ];
+
+  function handleEnterPress(event) {
+    if (event.keyCode === 13 || event.which === 13) {
+      handleButtonClick();
+    }
+  }
+
   const filteredList = Listitems.filter(item => item.is_homepage === 1);
   return (
     <>
@@ -461,14 +553,13 @@ const Home = () => {
       <div className="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
         <MobileMenu />
         <div className='d-md-flex flex-md-1 align-items-center BeyondTickets-sec'>
-          <h1 className="banner-h text-white text-start text-uppercase">Beyond Tickets :</h1>
+          <h1 className="banner-h-home-pg text-white text-start text-uppercase">Beyond Tickets :</h1>
           <div className="animation-home-banner">
             {transitions((style, i) => (
               <animated.div
                 style={{
                   ...style,
                   position: 'absolute',
-                  width: '100%',
                   color: '#fff'
                   // textAlign: 'center'
                 }}
@@ -482,12 +573,13 @@ const Home = () => {
           <h5 className="text-primary-color fw-bold space-sec pt-4 animate__animated animate__bounce">
             Find Near By Events
           </h5>
-          <div className="d-flex space-sec2 flex-lg-row flex-column mt-lg-0 mt-3 d-none">
-            <div className="selectDiv" >
+          <div className="d-flex ml-5 flex-lg-row flex-column mt-lg-0 mt-3">
+            <div className="selectDiv d-none" >
               <select
                 className="form-select category me-4"
                 aria-label="Default select example"
                 onChange={(event) => setFilterCategory(event.target.value)}
+
                 style={{ paddingTop: '8px', height: '40px' }}
               >
                 <option value=''>Any</option>
@@ -497,20 +589,24 @@ const Home = () => {
               </select>
               <img src={ArrowDown} alt="" />
             </div>
-            <div id="inputForm1Div" style={{ height: '40px' }}>
+            
+
+            <div className="events-page-search" id="inputForm1Div" style={{ height: '40px' }}>
               <input
                 type="search"
                 id="form1"
-                className="form-control border-b5 mt-lg-0"
-                placeholder="Search anything"
+                className="form-control mt-lg-0"
+                placeholder="Search for Events"
                 onChange={(e) => setSearchInput(e.target.value)}
-                style={{ height: '40px' }}
+                onKeyDown={handleEnterPress}
                 value={SearchInput}
+                style={{ height: '40px', border: 'none' }}
               />
-              <button className="dfssfdsfdsf" onClick={handleButtonClick} type="button" style={{ background: '#f0f0f0' }}>
+              <button className="dfssfdsfdsf" onClick={handleButtonClick} type="button" style={{ background: '#F6F6F6' }}>
                 <img src={InputSearchIcon} alt="" />
               </button>
             </div>
+
           </div>
           <div className="row mx-lg-3 mx-1 mb-4 mt-4 gx-md-4 gx-2">
             <div>
@@ -550,85 +646,215 @@ const Home = () => {
 
         </div>
       </div>
-      <div className="event-sec mx-4">
-        <div className="d-flex align-items-start justify-content-start">
-          <h5 className="event-h fw-bold mx-head pt-4 me-4">Events In</h5>
-          <div className="d-flex align-items-center justify-content-start ms-2 border-bttom-dotted" style={{ cursor: 'pointer' }} onClick={() => setNewModal(!newmodal)}>
-            <img className="nav-plus pt-1 mt-2 me-2" src={dropdown} alt="" />
-            <h5 className="text-primary-color fw-bold pt-4 me-4 mb-1">{Cityname ? Cityname : (Countryname ? Countryname : 'Location')}</h5>
-          </div>
-        </div>
-        <div className="row px-0 mt-lg-4 mt-5 gx-lg-5 gy-3 mx-cards my-margen">
-          {Eventloader ? (
+      <div className="event-sec home-event-in-box">
+        <div className="india-div">
+          {EventloaderIndia ? (
             <>
-              <div className="mb-5 col-md-4">
-                <div className="linear-background w-100" style={{ height: '400px' }}> </div>
-              </div>
-              <div className="mb-5 col-md-4">
-                <div className="linear-background w-100" style={{ height: '400px' }}> </div>
-              </div>
-              <div className="mb-5 col-md-4">
-                <div className="linear-background w-100" style={{ height: '400px' }}> </div>
-              </div>
+              <Row>
+                <Col md={4} className="mb-5">
+                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                </Col>
+                <Col md={4} className="mb-5">
+                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                </Col>
+                <Col md={4} className="mb-5">
+                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                </Col>
+              </Row>
             </>
           ) : (
-            <>
-              {Eventlist.length > 0 ? (
-                <>
-                  {Eventlist.map((item, index) => (
-                    <div className="col-xl-3 col-md-3 col-12 cursor-pointer" onClick={() => viewEvent(item._id, item.name)}>
-                      <div className="bg-white rounded-10 shadow-bottom pb-3" style={{ height: '100%' }}>
-                        <div style={{ position: 'relative' }}>
-                          <span className="event-category-img">{item.category_name}</span>
-                          <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                          <div className="d-flex align-items-center event-date-small-box">
-                            <span className="event-date-small">
-                              <img className="card-icon me-2" src={calendar} alt="" />
-                              <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
-                                {onlyDayMonth(item.start_date)}
-                              </span>
+            <div className="india-events-box">
+              <h3 className="home-events-title">India</h3>
+              <Slider {...eventslistsettings}>
+                {EventlistIndia.map((item, index) => (
+                  <div className="home-events-box">
+                    <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                      <div style={{ position: 'relative' }}>
+                        <span className="event-category-img">{item.category_name}</span>
+                        <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                        <div className="d-flex align-items-center event-date-small-box">
+                          <span className="event-date-small  d-flex align-items-center">
+                            <img className="card-icon me-2" src={calendar} alt="" />
+                            <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                              {onlyDayMonth(item.start_date)}
                             </span>
-                          </div>
+                          </span>
                         </div>
-                        <div className="row px-2 mt-2">
-                          <div className="col-md-7 d-flex align-items-center col-7">
-                            <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                            <div className="d-flex flex-column align-items-start justify-content-start">
-                              <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
-                              <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                                By {item.organizer_name}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="col-md-5  col-5">
-                            <div className="bg-fade rounded pl-5 event-cart-price-box">
-                              <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="row mt-1">
-                          <div className="col-md-12">
-                            <div className="d-flex align-items-center justify-content-start my-2 mx-2">
-                              <img className="card-icon me-1" src={locationIcon} alt="" />
-                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                                {item.city ? item.city : ''} 
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
                       </div>
+                      <div className="row px-2 mt-2">
+                        <div className="col-md-7 d-flex align-items-center col-7">
+                          <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                          <div className="d-flex flex-column align-items-start justify-content-start">
+                            <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                            <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                              {item.organizer_name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-5  col-5">
+                          <div className="bg-fade rounded pl-5 event-cart-price-box">
+                            <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                            {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
+                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mt-1">
+                        <div className="col-md-12">
+                          <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                            <img className="card-icon me-1" src={locationIcon} alt="" />
+                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
                     </div>
-                  ))}
-                </>
-              ) : (
-                <div className="col-md=12 text-center text-danger">
-                  <h3>No events found !</h3>
-                </div>
-              )}
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          )}
+        </div>
+        <div className="usa-div">
+          {EventloaderUsa ? (
+            <>
+              <Row>
+                <Col md={4} className="mb-5">
+                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                </Col>
+                <Col md={4} className="mb-5">
+                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                </Col>
+                <Col md={4} className="mb-5">
+                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                </Col>
+              </Row>
             </>
+          ) : (
+            <div className="india-events-box">
+              <h3 className="home-events-title">United States</h3>
+              <Slider {...eventslistsettings}>
+                {EventlistUsa.map((item, index) => (
+                  <div className="home-events-box">
+                    <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                      <div style={{ position: 'relative' }}>
+                        <span className="event-category-img">{item.category_name}</span>
+                        <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                        <div className="d-flex align-items-center event-date-small-box">
+                          <span className="event-date-small  d-flex align-items-center">
+                            <img className="card-icon me-2" src={calendar} alt="" />
+                            <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                              {onlyDayMonth(item.start_date)}
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="row px-2 mt-2">
+                        <div className="col-md-7 d-flex align-items-center col-7">
+                          <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                          <div className="d-flex flex-column align-items-start justify-content-start">
+                            <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                            <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                              {item.organizer_name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-5  col-5">
+                          <div className="bg-fade rounded pl-5 event-cart-price-box">
+                            <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                            {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
+                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mt-1">
+                        <div className="col-md-12">
+                          <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                            <img className="card-icon me-1" src={locationIcon} alt="" />
+                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          )}
+        </div>
+        <div className="singapur-div">
+          {EventloaderSingapur ? (
+            <>
+              <Row>
+                <Col md={4} className="mb-5">
+                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                </Col>
+                <Col md={4} className="mb-5">
+                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                </Col>
+                <Col md={4} className="mb-5">
+                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                </Col>
+              </Row>
+            </>
+          ) : (
+            <div className="india-events-box">
+              <h3 className="home-events-title">Singapore</h3>
+              <Slider {...eventslistsettings}>
+                {EventlistSingapur.map((item, index) => (
+                  <div className="home-events-box">
+                    <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                      <div style={{ position: 'relative' }}>
+                        <span className="event-category-img">{item.category_name}</span>
+                        <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                        <div className="d-flex align-items-center event-date-small-box">
+                          <span className="event-date-small d-flex align-items-center">
+                            <img className="card-icon me-2" src={calendar} alt="" />
+                            <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                              {onlyDayMonth(item.start_date)}
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="row px-2 mt-2">
+                        <div className="col-md-7 d-flex align-items-center col-7">
+                          <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                          <div className="d-flex flex-column align-items-start justify-content-start">
+                            <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                            <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                              {item.organizer_name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-5  col-5">
+                          <div className="bg-fade rounded pl-5 event-cart-price-box">
+                            <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                            {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
+                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mt-1">
+                        <div className="col-md-12">
+                          <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                            <img className="card-icon me-1" src={locationIcon} alt="" />
+                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            </div>
           )}
         </div>
       </div>
