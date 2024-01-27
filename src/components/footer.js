@@ -32,7 +32,7 @@ const Footer = () => {
           </div>
           <div className="col-lg-2 col-12 footer-link ps-lg-0 ps-4 mt-lg-0 mt-5">
             <h6 className="fw-bold text-primary-color mb-0">
-              LIST YOUR ONLINE EVENTS
+              QUICK LINKS
             </h6>
             <div className="">
               <Link to={app_url + 'auth/login-signup'}>

@@ -8,14 +8,6 @@ import airBNB from "./assets/airBNB.svg";
 import booking from "./assets/booking.com.svg";
 import expedia from "./assets/expedia.svg";
 import Slider from "react-slick";
-import TUI from "./assets/TUI.svg";
-import arrow from "./assets/arrow.svg";
-import Logo from "./assets/Logo.svg";
-import Search from "./assets/search.png";
-import Account from "./assets/account.svg";
-import menu from "./assets/menu.svg";
-import plus from "./assets/plus.svg";
-import location from "./assets/location (5) 1.svg";
 import Footer from './footer';
 import HeaderMenu from './headermenu';
 import MobileMenu from './mobilemenu';
@@ -45,6 +37,7 @@ const About = () => {
   return (
     <>
       {/* <!-- mobile nav --> */}
+      <div className="content-area">
       <HeaderMenu />
       <div class="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
         <MobileMenu />
@@ -217,7 +210,7 @@ const About = () => {
           </Slider>
         </div>
       </div>
-
+      </div>
       <Footer />
     </>
   );

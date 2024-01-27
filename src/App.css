@@ -197,7 +197,7 @@ span.input-group-text {
 } */
 .cursor-pointer {
   cursor: pointer;
-  padding: 13px 0px;
+  padding: 0px 0px 13px 0px;
 }
 
 .content-body {
@@ -539,6 +539,23 @@ span.flatpickr-weekday {
   font-size: 14px;
   display: inline-block;
   background: #fff;
+}
+img.event-card-flag {
+  height: auto;
+  width: 50px;
+  position: absolute;
+  top: 9px;
+  right: 10px;
+}
+.organizer-name-sec {
+  font-size: 11px !important;
+}
+.organizer-name-sec .shdsjds{
+  height: auto;
+  width: 20px;
+}
+.ticket-price-area.ticket-price-area-bg {
+  padding-bottom: 1px !important;
 }
 .hobby-active {
   background: #0047ab;
@@ -1340,7 +1357,7 @@ img.ticketimg-bg {
   position: absolute;
   left: 0;
   top: 0;
-  height: 100%;
+  height: 77%;
   width: 100%;
   opacity: 0.3;
 }
@@ -1349,7 +1366,7 @@ button.redem-btn {
   border: 1px solid #000;
   background: none;
   border-radius: 5px;
-  font-size: 25px;
+  font-size: 13px;
   font-weight: 500;
   padding: 8px 40px;
   position: relative;
@@ -1365,19 +1382,21 @@ button.redem-btn:hover {
 
 span.token-no-span {
   background: #eee;
-  padding: 11px 16px;
+  padding: 5px 9px;
   color: #838383;
   font-weight: 600;
   margin-right: 10px;
+  font-size: 13px;
 }
 
 button.redem-copy-btn {
   background: #0047ab;
   border: none;
   color: #fff;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 2px 8px;
+  border-radius: 3px;
   position: relative;
+  font-size: 15px;
 }
 
 img.flag-icon {
@@ -1407,9 +1426,6 @@ p.sssas {
   font-size: 13px;
 }
 
-.event-cart-price-box {
-  padding-left: 14px;
-}
 
 .event-cart-display-price {
   font-size: 19px;
@@ -1456,11 +1472,15 @@ span.top-login-sign-btn-icon {
 .animation-home-banner {
   margin-left: 17px;
   font-size: 30px;
-  padding: 9px 15px;
+  padding: 0px 15px;
   border: 2px dashed #fff;
   width: 547px;
   border-radius: 8px;
-  height: 70px;
+  height: 50px;
+}
+
+.banner-h-home-pg {
+  font-size: 50px;
 }
 
 .theme-bg {
@@ -1610,6 +1630,7 @@ span.event-pg-icon-text {
   overflow: hidden;
   max-width: 940px;
   margin: auto;
+  border-radius: 10px;
 }
 
 .css-6dsmqv img {
@@ -1653,6 +1674,7 @@ span.event-pg-icon-text {
   border-radius: 15px;
   border: 1px solid transparent;
 }
+
 .events-page-filter-box .selectDiv img {
   position: absolute;
   right: 0;
@@ -1663,36 +1685,87 @@ span.event-pg-icon-text {
   right: 12px;
   background-color: white;
 }
+
 .Listyourevent {
-    padding-left: 15px !important;
-    padding-right: 15px !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
 }
+
 .form-select:focus {
   border-color: transparent !important;
 }
+
 .event-view-body {
   margin-left: 80px !important;
   margin-right: 80px !important;
 }
+
 .home-event-in-box {
-    margin-left: 6rem;
-    margin-right: 6rem;
+  margin-left: 6rem;
+  margin-right: 6rem;
 }
-.home-event-in-box .slick-next:before,.home-event-in-box .slick-prev:before {
+
+.home-event-in-box .slick-next:before,
+.home-event-in-box .slick-prev:before {
   font-size: 26px;
   line-height: 1;
   opacity: 1 !important;
   color: #0047ab;
 }
+
 .home-event-in-box .slick-prev {
   margin-left: -11px !important;
 }
+
 .event-page-menu-div {
   margin: 41px 130px 0px 0px;
 }
+
 .event-vew-page-margin {
   margin-right: 50px;
 }
+
 input.price-range-picker-input {
   width: 45px;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.content-area {
+  min-height: 100vh;
+}
+
+
+.cat-home-box {
+  padding: 7px;
+}
+
+.right-aww-sl {
+  display: inline;
+  position: absolute;
+  top: 34%;
+  right: -43px;
+  height: auto;
+  width: 50px;
+  cursor: pointer;
+}
+
+.left-aww-sl {
+  display: inline;
+  position: absolute;
+  top: 34%;
+  left: -48px;
+  height: auto;
+  width: 50px;
+  transform: rotate(-180deg);
+  cursor: pointer;
+}
+
+.partnetSlider .left-aww-sl,.partnetSlider  .right-aww-sl {
+  top: 0 !important;
+  width: 30px !important;
 }

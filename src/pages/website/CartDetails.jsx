@@ -513,73 +513,74 @@ const Home = () => {
     return (
         <>
             {" "}
-            <HeaderMenu />
-            <div className="mx-lg-4 my-lg-3 bg-primary-color rounded-8 position-relative mob-d-none" style={{ height: '150px' }}>
-                <MobileMenu />
-            </div>
-            <div className="event-view-body">
-                <Row className="mt-5 mx-lg-4 my-lg-3 ">
-                    <Col md={12}>
-                        <h2 className="Your-cart-text font-weight-bold">Your cart</h2>
-                    </Col>
-                    <Col md={12}>
-                        {cartItems.length > 0 ? (
-                            <>
-                                <Row>
-                                    <Col md={8}>
-                                        {cartItems.map((item, index) => (
-                                            <div>
-                                                <Card>
-                                                    <Card.Body>
-                                                        <div className="cart-details-box">
-                                                            <div className="right-box-con in-event-page-cart-sec">
-                                                                <Row>
-                                                                    <Col md={12}>
-                                                                        <p className="Ticket-title">{item.event.display_name} | <span><img height={20} width={20} src={Timelogo} alt="" /></span>Event Time - {item.event.start_time}</p>
-                                                                    </Col>
-                                                                    <Col md={4}>
-                                                                        <p className="mb-0 cart-ticket-name">{item.name}</p>
-                                                                    </Col>
-                                                                    <Col md={4}>
-                                                                        {item.price > 0 ? (
-                                                                            <span className="cart-price">Price : {currency_symble} {item.price}</span>
-                                                                        ) : (
-                                                                            <span className="cart-price">Price : Free</span>
-                                                                        )}
+            <div className="content-area">
+                <HeaderMenu />
+                <div className="mx-lg-4 my-lg-3 bg-primary-color rounded-8 position-relative mob-d-none" style={{ height: '150px' }}>
+                    <MobileMenu />
+                </div>
+                <div className="event-view-body">
+                    <Row className="mt-5 mx-lg-4 my-lg-3 ">
+                        <Col md={12}>
+                            <h2 className="Your-cart-text font-weight-bold">Your cart</h2>
+                        </Col>
+                        <Col md={12}>
+                            {cartItems.length > 0 ? (
+                                <>
+                                    <Row>
+                                        <Col md={8}>
+                                            {cartItems.map((item, index) => (
+                                                <div>
+                                                    <Card>
+                                                        <Card.Body>
+                                                            <div className="cart-details-box">
+                                                                <div className="right-box-con in-event-page-cart-sec">
+                                                                    <Row>
+                                                                        <Col md={12}>
+                                                                            <p className="Ticket-title">{item.event.display_name} | <span><img height={20} width={20} src={Timelogo} alt="" /></span>Event Time - {item.event.start_time}</p>
+                                                                        </Col>
+                                                                        <Col md={4}>
+                                                                            <p className="mb-0 cart-ticket-name">{item.name}</p>
+                                                                        </Col>
+                                                                        <Col md={4}>
+                                                                            {item.price > 0 ? (
+                                                                                <span className="cart-price">Price : {currency_symble} {item.price}</span>
+                                                                            ) : (
+                                                                                <span className="cart-price">Price : Free</span>
+                                                                            )}
 
-                                                                    </Col>
-                                                                    <Col md={4}>
-                                                                        <div className="d-inline-block">
-                                                                            <span>
-                                                                                <span className="cart-minus cart-btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span>
-                                                                                <span className="cart-number">{item.quantity}</span>
-                                                                                <span className="cart-plus cart-btn" onClick={() => addToCart(item.ticket)}>+</span>
-                                                                            </span>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
+                                                                        </Col>
+                                                                        <Col md={4}>
+                                                                            <div className="d-inline-block">
+                                                                                <span>
+                                                                                    <span className="cart-minus cart-btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span>
+                                                                                    <span className="cart-number">{item.quantity}</span>
+                                                                                    <span className="cart-plus cart-btn" onClick={() => addToCart(item.ticket)}>+</span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </Card.Body>
-                                                </Card>
-                                            </div>
-                                        ))}
-                                    </Col>
-                                    <Col md={4}>
-                                        {amountLoader ? (
-                                            <div className="linear-background w-100"> </div>
-                                        ) : (
-                                            <div className="cart-amount-box">
-                                                <Card>
-                                                    <Card.Body>
-                                                        <Row>
-                                                            <div className="my-2 col-6">
-                                                                <h5 className="cart-amount-small-title">Subtotal</h5>
-                                                            </div>
-                                                            <div className="my-2 text-end  col-6">
-                                                                <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}</h5>
-                                                            </div>
-                                                            {/* {Iswallet ? (
+                                                        </Card.Body>
+                                                    </Card>
+                                                </div>
+                                            ))}
+                                        </Col>
+                                        <Col md={4}>
+                                            {amountLoader ? (
+                                                <div className="linear-background w-100"> </div>
+                                            ) : (
+                                                <div className="cart-amount-box">
+                                                    <Card>
+                                                        <Card.Body>
+                                                            <Row>
+                                                                <div className="my-2 col-6">
+                                                                    <h5 className="cart-amount-small-title">Subtotal</h5>
+                                                                </div>
+                                                                <div className="my-2 text-end  col-6">
+                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}</h5>
+                                                                </div>
+                                                                {/* {Iswallet ? (
                                                                 <>
                                                                     <Col md={12}>
                                                                         <div class="widget-stat card" style={{background: '#003b8f'}}>
@@ -602,7 +603,7 @@ const Home = () => {
                                                                     </Col>
                                                                 </>
                                                             ) : ''} */}
-                                                            {/* {WantRedeem ? (
+                                                                {/* {WantRedeem ? (
                                                                 <Col md={12} className="mb-3">
                                                                     <h3 className="cart-amount-small-title theme-color font-600">Reward Points</h3>
                                                                     <input type="text" class="form-control" placeholder="Enter Reward Points"
@@ -612,140 +613,141 @@ const Home = () => {
                                                                 </Col>
 
                                                             ) : ''} */}
-                                                            {allItemsTotalPrice > 0 ? (
-                                                                <>
-                                                                    {TaxlistLoader ? (
-                                                                        <div className="linear-background w-100" style={{ height: '100px' }}> </div>
-                                                                    ) : (
-                                                                        <>
-                                                                            {taxlist.map((item, index) => (
-                                                                                <>
-                                                                                    <div className="my-2 col-md-6 col-6">
-                                                                                        <h5 className="cart-amount-small-title">{item.name}</h5>
-                                                                                    </div>
-                                                                                    <div className="col-md-6 col-6 my-2 text-end">
-                                                                                        <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)}</h5>
-                                                                                    </div>
-                                                                                </>
-                                                                            ))}
-
-                                                                        </>
-                                                                    )}
-                                                                </>
-                                                            ) : ''}
-                                                            {DiscountAmount ? (
-                                                                <>
-                                                                    <div className="my-2 col-6">
-                                                                        <h5 className="cart-amount-small-title">Discount</h5>
-                                                                    </div>
-                                                                    <div className="my-2 text-end  col-6">
-                                                                        <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}</h5>
-                                                                    </div>
-                                                                </>
-                                                            ) : ''}
-                                                            <Col md={12} className="py-3">
-                                                                <div className="border-bottom"></div>
-                                                            </Col>
-                                                            <div className="col-6">
-                                                                <h3 className="cart-amount-small-title theme-color font-600">Total</h3>
-                                                            </div>
-                                                            <div className="col-6 text-end">
-                                                                <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}</h3>
-                                                            </div>
-                                                            <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">
-                                                                <Row>
-                                                                    <Col md={8}>
-                                                                        <input className="form-control" readOnly={Iscoupon} type="text" placeholder="Enter coupon code" onChange={(e) => setCouponId(e.target.value)} value={CouponId}></input>
-                                                                    </Col>
-                                                                    <Col md={4}>
-                                                                        {CouponCheckLoader ? (
-                                                                            <button className="btn btn-primary w-100" type="button">Wait..</button>
+                                                                {allItemsTotalPrice > 0 ? (
+                                                                    <>
+                                                                        {TaxlistLoader ? (
+                                                                            <div className="linear-background w-100" style={{ height: '100px' }}> </div>
                                                                         ) : (
                                                                             <>
-                                                                                {Iscoupon ? (
-                                                                                    <button onClick={() => HandelRemoveToken()} type="button" className="btn btn-danger w-100 mt-2 theme-bg" >Remove</button>
-                                                                                ) : (
-                                                                                    <button onClick={() => HandelCouponCheck()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Apply</button>
-                                                                                )}
+                                                                                {taxlist.map((item, index) => (
+                                                                                    <>
+                                                                                        <div className="my-2 col-md-6 col-6">
+                                                                                            <h5 className="cart-amount-small-title">{item.name}</h5>
+                                                                                        </div>
+                                                                                        <div className="col-md-6 col-6 my-2 text-end">
+                                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)}</h5>
+                                                                                        </div>
+                                                                                    </>
+                                                                                ))}
+
                                                                             </>
                                                                         )}
-                                                                    </Col>
-                                                                </Row>
-                                                            </Col>
-                                                            <Col md={12}>
-                                                                {ApiLoader ? (
-                                                                    <Button className='signup-page-btn  w-100 mt-2 theme-bg'>Please wait...</Button>
-                                                                ) : (
+                                                                    </>
+                                                                ) : ''}
+                                                                {DiscountAmount ? (
                                                                     <>
-                                                                        <div className="mt-3 paynow-btn-box">
-                                                                            <span >
-                                                                                <button onClick={() => saveCartToLocalStorage()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Pay now</button>
-                                                                            </span>
+                                                                        <div className="my-2 col-6">
+                                                                            <h5 className="cart-amount-small-title">Discount</h5>
                                                                         </div>
-                                                                        {/* {IsCountryName ? (
+                                                                        <div className="my-2 text-end  col-6">
+                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}</h5>
+                                                                        </div>
+                                                                    </>
+                                                                ) : ''}
+                                                                <Col md={12} className="py-3">
+                                                                    <div className="border-bottom"></div>
+                                                                </Col>
+                                                                <div className="col-6">
+                                                                    <h3 className="cart-amount-small-title theme-color font-600">Total</h3>
+                                                                </div>
+                                                                <div className="col-6 text-end">
+                                                                    <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}</h3>
+                                                                </div>
+                                                                <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">
+                                                                    <Row>
+                                                                        <Col md={8}>
+                                                                            <input className="form-control" readOnly={Iscoupon} type="text" placeholder="Enter coupon code" onChange={(e) => setCouponId(e.target.value)} value={CouponId}></input>
+                                                                        </Col>
+                                                                        <Col md={4}>
+                                                                            {CouponCheckLoader ? (
+                                                                                <button className="btn btn-primary w-100" type="button">Wait..</button>
+                                                                            ) : (
+                                                                                <>
+                                                                                    {Iscoupon ? (
+                                                                                        <button onClick={() => HandelRemoveToken()} type="button" className="btn btn-danger w-100 mt-2 theme-bg" >Remove</button>
+                                                                                    ) : (
+                                                                                        <button onClick={() => HandelCouponCheck()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Apply</button>
+                                                                                    )}
+                                                                                </>
+                                                                            )}
+                                                                        </Col>
+                                                                    </Row>
+                                                                </Col>
+                                                                <Col md={12}>
+                                                                    {ApiLoader ? (
+                                                                        <Button className='signup-page-btn  w-100 mt-2 theme-bg'>Please wait...</Button>
+                                                                    ) : (
+                                                                        <>
+                                                                            <div className="mt-3 paynow-btn-box">
+                                                                                <span >
+                                                                                    <button onClick={() => saveCartToLocalStorage()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Pay now</button>
+                                                                                </span>
+                                                                            </div>
+                                                                            {/* {IsCountryName ? (
                                                                         ): (
                                                                                 <button type = "button" className = "btn btn-dark w-100">Select country</button>
                                                                         )} */}
-                                                            </>
-                                                                )}
-                                                        </Col>
-                                                        {showLoginasGuest ? (
-                                                            <Col md={12} style={{ borderTop: '1px solid #eee' }} className="mt-3 pt-4">
-                                                                <Row>
-                                                                    <Col md={12}>
-                                                                        <div className="form-group">
-                                                                            <p>Email Address</p>
-                                                                            <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)} value={LoginEmail}></input>
-                                                                        </div>
+                                                                        </>
+                                                                    )}
+                                                                </Col>
+                                                                {showLoginasGuest ? (
+                                                                    <Col md={12} style={{ borderTop: '1px solid #eee' }} className="mt-3 pt-4">
+                                                                        <Row>
+                                                                            <Col md={12}>
+                                                                                <div className="form-group">
+                                                                                    <p>Email Address</p>
+                                                                                    <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)} value={LoginEmail}></input>
+                                                                                </div>
+                                                                            </Col>
+                                                                            <Col md={6}>
+                                                                                <div className="form-group">
+                                                                                    <p>First Name</p>
+                                                                                    <input className="form-control" type="text" placeholder="First Name" onChange={(e) => setLoginFname(e.target.value)} value={LoginFname}></input>
+                                                                                </div>
+                                                                            </Col>
+                                                                            <Col md={6}>
+                                                                                <div className="form-group">
+                                                                                    <p>Last Name</p>
+                                                                                    <input className="form-control" type="text" placeholder="Last Name" onChange={(e) => setLoginLname(e.target.value)} value={LoginLname}></input>
+                                                                                </div>
+                                                                            </Col>
+                                                                            <Col md={12}>
+                                                                                {LoginLoader ? (
+                                                                                    <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
+                                                                                ) : (
+                                                                                    <button className="btn btn-primary w-100 theme-bg  my-2" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
+                                                                                )}
+                                                                            </Col>
+                                                                            <Col md={12} className="mt-2">
+                                                                                <p className="forgot-password-text">Already have an account? <Link to={app_url + 'auth/login-signup'} className='reset-password-link'>Log In/Sign Up</Link></p>
+                                                                            </Col>
+                                                                        </Row>
+                                                                        {/* /customer/login-as-guest */}
                                                                     </Col>
-                                                                    <Col md={6}>
-                                                                        <div className="form-group">
-                                                                            <p>First Name</p>
-                                                                            <input className="form-control" type="text" placeholder="First Name" onChange={(e) => setLoginFname(e.target.value)} value={LoginFname}></input>
-                                                                        </div>
-                                                                    </Col>
-                                                                    <Col md={6}>
-                                                                        <div className="form-group">
-                                                                            <p>Last Name</p>
-                                                                            <input className="form-control" type="text" placeholder="Last Name" onChange={(e) => setLoginLname(e.target.value)} value={LoginLname}></input>
-                                                                        </div>
-                                                                    </Col>
-                                                                    <Col md={12}>
-                                                                        {LoginLoader ? (
-                                                                            <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
-                                                                        ) : (
-                                                                            <button className="btn btn-primary w-100 theme-bg  my-2" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
-                                                                        )}
-                                                                    </Col>
-                                                                    <Col md={12} className="mt-2">
-                                                                        <p className="forgot-password-text">Already have an account? <Link to={app_url + 'auth/login-signup'} className='reset-password-link'>Log In/Sign Up</Link></p>
-                                                                    </Col>
-                                                                </Row>
-                                                                {/* /customer/login-as-guest */}
-                                                            </Col>
-                                                        ) : ''}
-                                                    </Row>
-                                                </Card.Body>
-                                            </Card>
-                                            </div>
-                                        )}
-                                </Col>
-                            </Row>
-                    </>
-                    ) : (
-                    <Row>
-                        <Col md={12}>
-                            <Card>
-                                <Card.Body>
-                                    <h2 className="text-danger " style={{ fontWeight: '600' }}>Your cart is empty !</h2>
-                                </Card.Body>
-                            </Card>
+                                                                ) : ''}
+                                                            </Row>
+                                                        </Card.Body>
+                                                    </Card>
+                                                </div>
+                                            )}
+                                        </Col>
+                                    </Row>
+                                </>
+                            ) : (
+                                <Row>
+                                    <Col md={12}>
+                                        <Card>
+                                            <Card.Body>
+                                                <h2 className="text-danger " style={{ fontWeight: '600' }}>Your cart is empty !</h2>
+                                            </Card.Body>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                            )}
                         </Col>
                     </Row>
-                        )}
-                </Col>
-            </Row>
-        </div >
+                </div >
+            </div>
             <Footer />
         </>
     );

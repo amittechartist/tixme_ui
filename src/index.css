@@ -296,7 +296,7 @@ input#form1 {
 }
 
 ::placeholder {
-  color: #6495ed !important;
+  color: #6494ed8e !important;
 }
 
 select {
@@ -453,7 +453,7 @@ select {
   cursor: grab;
 }
 
-.partnetSlider img {
+.partnetSlider .company_logo {
   height: 30px;
   width: 100px;
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import { apiurl } from '../../common/Helpers';
+import aboutUs from "../../common/category/Group (4).svg";
 import Nouserphoto from '../../common/image/nouser.png';
 import RewardBg from '../../common/image/reqard.svg';
 import Silver from '../../common/image/star/Group 1171274979.svg';
@@ -284,20 +285,20 @@ const Dashboard = ({ title }) => {
                                                                         <Row style={{ borderBottom: '1px solid #000' }}>
                                                                             <Col md={4} xl={4} sm={4} className="text-center">
                                                                                 <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
-                                                                                    <p className="rewarx-box-c-title">Your status</p>
-                                                                                    <p className="rewarx-box-c-sts"><span>{currentPackage.name ? currentPackage.name + ' TIER' : ''}</span></p>
+                                                                                    <p className="rewarx-box-c-title  text-capitalize">Your status</p>
+                                                                                    <p className="rewarx-box-c-sts"><span>{currentPackage.name ? currentPackage.name + ' Tier' : ''}</span></p>
                                                                                 </div>
                                                                             </Col>
                                                                             <Col md={4} xl={4} sm={4} className="text-center">
                                                                                 <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
-                                                                                    <p className="rewarx-box-c-title">Points to reach {nextTarget.name}</p>
+                                                                                    <p className="rewarx-box-c-title text-capitalize">Points to reach {nextTarget.name}</p>
                                                                                     <p className="rewarx-box-c-sts">{nextTarget.pointsToNextTarget}</p>
                                                                                 </div>
                                                                             </Col>
                                                                             <Col md={4} className="text-center">
                                                                                 <div>
-                                                                                    <p className="rewarx-box-c-title">Next TIER</p>
-                                                                                    <p className="rewarx-box-c-sts">{nextTarget.name} TIER</p>
+                                                                                    <p className="rewarx-box-c-title  text-capitalize">Next Tier</p>
+                                                                                    <p className="rewarx-box-c-sts  text-capitalize">{nextTarget.name} Tier</p>
                                                                                 </div>
                                                                             </Col>
                                                                         </Row>
@@ -305,10 +306,10 @@ const Dashboard = ({ title }) => {
 
 
                                                                     <Col md={6}>
-                                                                        <p className="Booking-progress-towards">Booking progress towards  <span>{nextTarget.name} TIER</span></p>
+                                                                        <p className="Booking-progress-towards  text-capitalize">Booking progress towards  <span>{nextTarget.name} Tier</span></p>
                                                                     </Col>
                                                                     <Col md={6} className="text-end">
-                                                                        <p className="Booking-progress-towards"><span>{nextTarget.purchaseAmount}</span> Points for {nextTarget.name} TIER</p>
+                                                                        <p className="Booking-progress-towards  text-capitalize"><span>{nextTarget.purchaseAmount}</span> Points for {nextTarget.name} Tier</p>
                                                                     </Col>
                                                                 </>
                                                             )}
@@ -317,8 +318,8 @@ const Dashboard = ({ title }) => {
                                                                     <div className="reward-box" style={{ position: 'relative' }}>
                                                                         {Packloaderxxx ? '' : (
                                                                             <span className="reward_star" style={{ left: Percentage }}>
-                                                                                <img src={Silver} alt="" />
-                                                                                <p className="reward_star_text" style={{ fontSize: '18px' }}>{currentPackage.name ? currentPackage.name + ' TIER' : 'Next ' + nextTarget.name}</p>
+                                                                                <img src={aboutUs} height={50} width={50} alt="" />
+                                                                                <p className="reward_star_text" style={{ fontSize: '18px' }}>{currentPackage.name ? currentPackage.name + ' Tier' : 'Next ' + nextTarget.name}</p>
                                                                             </span>
                                                                         )}
 
@@ -327,14 +328,14 @@ const Dashboard = ({ title }) => {
                                                                             item.name === "Gold" && (
                                                                                 <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
                                                                                     <img src={Gold} alt="" />
-                                                                                    <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Gold TIER</p>
+                                                                                    <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Gold Tier</p>
                                                                                 </span>
                                                                             )
                                                                             ||
                                                                             item.name === "Platinum" && (
                                                                                 <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
                                                                                     <img src={Prem} alt="" />
-                                                                                    <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Platinum TIER</p>
+                                                                                    <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Platinum Tier</p>
                                                                                 </span>
                                                                             )
                                                                         ))}
@@ -375,10 +376,10 @@ const Dashboard = ({ title }) => {
                                                                     ) : (
                                                                         <>
                                                                             {CouponList.map((item, index) => (
-                                                                                <Col md={6} className="mb-5">
+                                                                                <Col md={4} className="mb-5">
                                                                                     <div className="tickret-show-box">
                                                                                         <img src={Ticketimg} alt="" className="ticketimg-bg" />
-                                                                                        <p className="mb-0" style={{ fontSize: '25px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.name}</p>
+                                                                                        <p className="mb-0" style={{ fontSize: '16px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.name}</p>
                                                                                         <p className="">Points amount {item.point}</p>
                                                                                         <button onClick={() => CheckRedeem(item._id)} className="redem-btn">Redeem</button>
                                                                                     </div>
@@ -400,10 +401,10 @@ const Dashboard = ({ title }) => {
                                                                         <>
                                                                             {
                                                                                 MyCouponList.map((item, index) => (
-                                                                                    <Col md={6} className="mb-5">
+                                                                                    <Col md={4} className="mb-5">
                                                                                         <div className="tickret-show-box">
                                                                                             <img src={Ticketimg} alt="" className="ticketimg-bg" />
-                                                                                            <p className="mb-0" style={{ fontSize: '25px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.coupondata[0].name}</p>
+                                                                                            <p className="mb-0" style={{ fontSize: '16px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.coupondata[0].name}</p>
                                                                                             <p className="">Points amount {item.coupondata[0].point}</p>
                                                                                             <span className="token-no-span">{item.tokenno}</span>
                                                                                             {item.isvalid == 0 ? (<button type="button" onClick={() => HandelCopyTxt(item.tokenno)} className="redem-copy-btn"><FiCopy /> Copy</button>) : (<button type="button" disabled className="btn btn-dark">Expired</button>)}

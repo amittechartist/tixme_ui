@@ -94,7 +94,7 @@ const Type = ({ props }) => {
     }
   }, []);
   return (
-    <div className="organised-by-box eventpage-box-style">
+    <div className="organised-by-box eventpage-box-style-event-view">
       <div className="organizer-name-sec d-flex align-items-center px-2 py-2">
         <div className="d-inline-block mr-3">
           <img

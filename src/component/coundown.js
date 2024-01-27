@@ -56,7 +56,7 @@ const CountdownTimer = ({props}) => {
     };
 
     return (
-        <div className="start-in-box eventpage-box-style mb-5">
+        <div className="start-in-box eventpage-box-style-event-view mb-5">
             <div className="right-box-title">
                 <p>Starts In</p>
             </div>

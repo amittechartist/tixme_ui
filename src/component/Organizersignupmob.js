@@ -204,17 +204,20 @@ const Locationbtn = ({ prorps }) => {
                 </ModalBody>
             </Modal>
             {prorps == 'pcheadermenu' ? (
-                <li class="nav-item border rounded border-primary align-self-center me-3" onClick={() => setContactModal(!ContactModal)}>
-                    <Link class="Listyourevent nav-link text-primary-theme font-nav">
+                <li class="nav-item d-flex align-items-center justify-content-center me-xl-4 me-3">
+                    <Link
+                        class="nav-link text-primary-theme pe-1 font-nav"
+                        onClick={() => setContactModal(!ContactModal)}
+                    >
                         List your event{" "}
                         <img class="nav-plus" src={plus} alt="" />
                     </Link>
                 </li>
             ) : ''}
             {prorps == 'mobheadermenu' ? (
-                <li className="nav-item border rounded border-primary align-self-start px-2 my-1" onClick={() => setContactModal(!ContactModal)}>
+                <li className="nav-item d-flex align-items-center justify-content-start">
                     <Link
-                        className="nav-link text-primary-theme pt-1 pb-1p font-nav"
+                        className="nav-link text-primary-theme pe-1 font-nav"
                         onClick={() => setContactModal(!ContactModal)}
                     >
                         List your event {" "}

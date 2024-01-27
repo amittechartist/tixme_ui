@@ -3,6 +3,22 @@
         margin-left: 5px !important;
         margin-right: 5px !important;
     }
+    .banner-h-home-pg {
+        font-size: 30px;
+    }
+    .banner-h-home-pg {
+        padding-left: 1rem;
+    }
+    .home-event-in-box {
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }
+    .event-vew-page-margin {
+        margin-right: 5px;
+    }
+    .event-page-menu-div {
+        margin: 10px;
+    }
     .GetCustomerButtonBox h4 {
         padding-bottom: 10px;
         font-size: 13px;
@@ -11,7 +27,7 @@
         margin-top: 40px;
     }
     .home-event-in-box{
-        margin-top: 150px;
+        margin-top: 227px;
     }
     .banner-h-home-pg {
         padding-top: 18px;
@@ -89,6 +105,7 @@
         border: 2px dashed  #fff;
         width: 337px;
         border-radius: 10px;
+        margin-top: 15px;
     }
     .nav-control {
   display: inline;
@@ -1192,9 +1209,7 @@
         margin: 11px !important;
     }
 
-    .ticket-price-area-bg {
-        background-position: 0px -13px;
-    }
+    
 
     img.web-icon-about {
         top: 68px;

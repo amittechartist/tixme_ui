@@ -15,6 +15,9 @@ import Footer from './footer';
 import Slider from "react-slick";
 import HeaderMenu from './headermenu';
 import Nouserphoto from '../common/image/nouser.png';
+import Indiaflag from "../common/image/India.svg";
+import Usaflag from "../common/image/usaf.svg";
+import Singapureflag from "../common/image/singapur.svg";
 import MobileMenu from './mobilemenu';
 import Arts from '../common/category/Group 1171274918.svg';
 import Business from '../common/category/rrrrrGroup 1171274982.svg';
@@ -22,6 +25,7 @@ import Food from '../common/category/Group 1171274941.svg';
 import Music from '../common/category/Group 1171274913.svg';
 import NIGHTLIFE from '../common/category/Group 1171274914.svg';
 import Sports from '../common/category/Group 1171274916.svg';
+import RAwway from '../common/right.png';
 import InputSearchIcon from '../assets/inputSearch.png'
 import { MdMyLocation } from "react-icons/md";
 import { FaTimes } from 'react-icons/fa';
@@ -32,6 +36,21 @@ import { Button, Col, Row } from "react-bootstrap";
 import Noimg from "../common/image/noimg.jpg";
 import toast from "react-hot-toast";
 import { Country, State, City } from 'country-state-city';
+
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <img className="right-aww-sl" src={RAwway} onClick={onClick} alt="" />
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <img className="left-aww-sl" src={RAwway} onClick={onClick} alt="" />
+  );
+}
+
 const Home = () => {
   const texts = [
     "Unlock Your Entertainment Gateway",
@@ -163,9 +182,45 @@ const Home = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
     responsive: [
       {
         breakpoint: 768, // Adjust the breakpoint as needed
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+  const categorysettings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    autoplay: false,
+    autoplaySpeed: 2000,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    responsive: [
+      {
+        breakpoint: 992, // Adjust the breakpoint as needed
+        settings: {
+          slidesToShow: 6,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768, // Adjust the breakpoint as needed
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480, // Adjust the breakpoint as needed
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
@@ -181,11 +236,13 @@ const Home = () => {
     slidesToScroll: 1,
     autoplay: false,
     autoplaySpeed: 2000,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
     responsive: [
       {
         breakpoint: 768, // Adjust the breakpoint as needed
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -456,6 +513,17 @@ const Home = () => {
       console.error('Api error:', error);
     }
   }
+  function getCountryFlagImage(country) {
+    if (country =="India") {
+        return <img className="event-card-flag" src={Indiaflag}  />;
+    } else if(country =="United states") {
+        return <img className="event-card-flag" src={Usaflag}  />;
+    } else if(country =="Singapore") {
+        return <img className="event-card-flag" src={Singapureflag}  />;
+    }else{
+        return null; // or a default image if you have one
+    }
+}
   useEffect(() => {
     // fetchEvent();
     fetchIndiaEvent();
@@ -466,13 +534,13 @@ const Home = () => {
     fetchCategory();
   }, []);
   const CategoryImage = [
-    { image: NIGHTLIFE },
     { image: Arts },
-    { image: Food },
-    { image: Sports },
     { image: Business },
-    { image: Music },
     { image: NIGHTLIFE },
+    { image: NIGHTLIFE },
+    { image: Food },
+    { image: Music },
+    { image: Sports },
   ];
 
   function handleEnterPress(event) {
@@ -484,495 +552,513 @@ const Home = () => {
   const filteredList = Listitems.filter(item => item.is_homepage === 1);
   return (
     <>
-      {" "}
-      <Modal isOpen={newmodal} toggle={() => setNewModal(!newmodal)} centered>
-        <ModalHeader toggle={!newmodal}>Events In
-          <button className="close p-0" onClick={() => setNewModal(!newmodal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-            <FaTimes />
-          </button>
-        </ModalHeader>
-        <ModalBody>
-          <Row>
-            <Col md={12} className="text-center">
-              <p className="cursor-pointer my-location-btn" onClick={() => getMyLoc()}>
-                <MdMyLocation /> My Current Location
-              </p>
-            </Col>
-            <Col md={12}>
-              <div className="border-bottom py-2"></div>
-              <div className="text-center">
-                <p className="reset-password-link text-center pt-3">OR</p>
+      <div className="content-area">
+        {" "}
+        <Modal isOpen={newmodal} toggle={() => setNewModal(!newmodal)} centered>
+          <ModalHeader toggle={!newmodal}>Events In
+            <button className="close p-0" onClick={() => setNewModal(!newmodal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
+              <FaTimes />
+            </button>
+          </ModalHeader>
+          <ModalBody>
+            <Row>
+              <Col md={12} className="text-center">
+                <p className="cursor-pointer my-location-btn" onClick={() => getMyLoc()}>
+                  <MdMyLocation /> My Current Location
+                </p>
+              </Col>
+              <Col md={12}>
+                <div className="border-bottom py-2"></div>
+                <div className="text-center">
+                  <p className="reset-password-link text-center pt-3">OR</p>
+                </div>
+              </Col>
+              <div className="col-12 col-md-12">
+                <div className="form-group">
+                  <p>Select Country</p>
+                  <Select
+                    options={countries}
+                    value={selectedCountry}
+                    onChange={setSelectedCountry}
+                    placeholder="Select Country"
+                  />
+                </div>
               </div>
-            </Col>
-            <div className="col-12 col-md-12">
-              <div className="form-group">
-                <p>Select Country</p>
-                <Select
-                  options={countries}
-                  value={selectedCountry}
-                  onChange={setSelectedCountry}
-                  placeholder="Select Country"
+              <div className="col-12 col-md-6">
+                <div className="form-group">
+                  <p>Select State</p>
+                  <Select
+                    options={states}
+                    value={selectedState}
+                    onChange={setSelectedState}
+                    placeholder="Select State"
+                    isDisabled={!selectedCountry}
+                  />
+                </div>
+              </div>
+              <div className="col-12 col-md-6">
+                <div className="form-group">
+                  <p>Select City</p>
+                  <Select
+                    options={cities}
+                    placeholder="Select City"
+                    isDisabled={!selectedState}
+                    onChange={setSelectedCity}
+                  />
+                </div>
+              </div>
+              <Col md={12}>
+                <button type="button" className="btn btn-primary w-100 theme-bg" onClick={() => { handelSetHomelocation(); setNewModal(!newmodal); }}>Set Location</button>
+              </Col>
+            </Row>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={() => setNewModal(!newmodal)}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
+        <HeaderMenu />
+        <div className="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
+          <MobileMenu />
+          <div className='d-md-flex flex-md-1 align-items-center BeyondTickets-sec'>
+            <h1 className="banner-h-home-pg text-white text-start text-uppercase mb-0">Beyond Tickets :</h1>
+            <div className="animation-home-banner">
+              {transitions((style, i) => (
+                <animated.div
+                  style={{
+                    ...style,
+                    position: 'absolute',
+                    color: '#fff'
+                    // textAlign: 'center'
+                  }}
+                >
+                  {texts[i]}
+                </animated.div>
+              ))}
+            </div>
+          </div>
+          <div className="banner-child bg-white">
+            <h5 className="text-primary-color fw-bold space-sec pt-4 animate__animated animate__bounce">
+              Find Near By Events
+            </h5>
+            <div className="d-flex ml-5 flex-lg-row flex-column mt-lg-0 mt-3">
+              <div className="selectDiv d-none" >
+                <select
+                  className="form-select category me-4"
+                  aria-label="Default select example"
+                  onChange={(event) => setFilterCategory(event.target.value)}
+
+                  style={{ paddingTop: '8px', height: '40px' }}
+                >
+                  <option value=''>Any</option>
+                  {Listitems.map((item, index) => (
+                    <option value={item._id}>{item.name}</option>
+                  ))}
+                </select>
+                <img src={ArrowDown} alt="" />
+              </div>
+
+
+              <div className="events-page-search" id="inputForm1Div" style={{ height: '40px' }}>
+                <input
+                  type="search"
+                  id="form1"
+                  className="form-control mt-lg-0"
+                  placeholder="Search for Events"
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={handleEnterPress}
+                  value={SearchInput}
+                  style={{ height: '40px', border: 'none' }}
                 />
+                <button className="dfssfdsfdsf" onClick={handleButtonClick} type="button" style={{ background: '#F6F6F6' }}>
+                  <img src={InputSearchIcon} alt="" />
+                </button>
+              </div>
+
+            </div>
+            <div className="row mx-lg-3 mx-1 mb-4 mt-4 gx-md-4 gx-2 home-car-slider">
+              <div>
+                <Slider {...categorysettings}>
+                  {filteredList.map((item, index) => (
+                    <div className="cat-home-box">
+                      <div className="text-center position-relative">
+                        <div className="event-card pt-4" id="event-card" onClick={() => HandelCategorsearch(item._id)}>
+                          <img className="event-img  animate__animated animate__bounce" src={CategoryImage[index].image} alt="" />
+                          <small className="d-block text-card-color my-2 mt-3" style={{ fontSize: '12px' }}> {item.name} </small>
+                        </div>
+                        <div className="fade-effect"></div>
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+                {/* <Swiper
+                  slidesPerView={2}
+                  spaceBetween={30}
+                  breakpoints={{
+                    992: {
+                      slidesPerView: 6,
+                      spaceBetween: 20,
+                    },
+                    768: {
+                      slidesPerView: 3,
+                      spaceBetween: 20,
+                    },
+                    480: {
+                      slidesPerView: 2,
+                      spaceBetween: 10,
+                    },
+                  }}
+                  className="mySwiper"
+                >
+                  {filteredList.map((item, index) => (
+                    <SwiperSlide>
+                      <div className="text-center position-relative">
+                        <div className="event-card pt-4" id="event-card" onClick={() => HandelCategorsearch(item._id)}>
+                          <img className="event-img  animate__animated animate__bounce" src={CategoryImage[index].image} alt="" />
+                          <small className="d-block text-card-color my-2 mt-3" style={{ fontSize: '12px' }}> {item.name} </small>
+                        </div>
+                        <div className="fade-effect"></div>
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper> */}
               </div>
             </div>
-            <div className="col-12 col-md-6">
-              <div className="form-group">
-                <p>Select State</p>
-                <Select
-                  options={states}
-                  value={selectedState}
-                  onChange={setSelectedState}
-                  placeholder="Select State"
-                  isDisabled={!selectedCountry}
-                />
-              </div>
-            </div>
-            <div className="col-12 col-md-6">
-              <div className="form-group">
-                <p>Select City</p>
-                <Select
-                  options={cities}
-                  placeholder="Select City"
-                  isDisabled={!selectedState}
-                  onChange={setSelectedCity}
-                />
-              </div>
-            </div>
-            <Col md={12}>
-              <button type="button" className="btn btn-primary w-100 theme-bg" onClick={() => { handelSetHomelocation(); setNewModal(!newmodal); }}>Set Location</button>
-            </Col>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={() => setNewModal(!newmodal)}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-      <HeaderMenu />
-      <div className="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
-        <MobileMenu />
-        <div className='d-md-flex flex-md-1 align-items-center BeyondTickets-sec'>
-          <h1 className="banner-h-home-pg text-white text-start text-uppercase">Beyond Tickets :</h1>
-          <div className="animation-home-banner">
-            {transitions((style, i) => (
-              <animated.div
-                style={{
-                  ...style,
-                  position: 'absolute',
-                  color: '#fff'
-                  // textAlign: 'center'
-                }}
-              >
-                {texts[i]}
-              </animated.div>
-            ))}
+
           </div>
         </div>
-        <div className="banner-child bg-white">
-          <h5 className="text-primary-color fw-bold space-sec pt-4 animate__animated animate__bounce">
-            Find Near By Events
-          </h5>
-          <div className="d-flex ml-5 flex-lg-row flex-column mt-lg-0 mt-3">
-            <div className="selectDiv d-none" >
-              <select
-                className="form-select category me-4"
-                aria-label="Default select example"
-                onChange={(event) => setFilterCategory(event.target.value)}
-
-                style={{ paddingTop: '8px', height: '40px' }}
-              >
-                <option value=''>Any</option>
-                {Listitems.map((item, index) => (
-                  <option value={item._id}>{item.name}</option>
-                ))}
-              </select>
-              <img src={ArrowDown} alt="" />
+        <div className="event-sec home-event-in-box">
+          <div className="singapur-div pt-2">
+            {EventloaderSingapur ? (
+              <>
+                <Row>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                  </Col>
+                </Row>
+              </>
+            ) : (
+              <div className="india-events-box">
+                <h3 className="home-events-title">Singapore</h3>
+                <Slider {...eventslistsettings}>
+                  {EventlistSingapur.map((item, index) => (
+                    <div className="home-events-box">
+                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                        <div style={{ position: 'relative' }}>
+                          <span className="event-category-img">{item.category_name}</span>
+                          {getCountryFlagImage(item.countryname)}
+                          <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                          <div className="d-flex align-items-center event-date-small-box">
+                            <span className="event-date-small d-flex align-items-center">
+                              <img className="card-icon me-2" src={calendar} alt="" />
+                              <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                                {onlyDayMonth(item.start_date)}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                        <div className="row px-2 mt-2">
+                          <div className="col-md-7 d-flex align-items-center col-7">
+                            <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                            <div className="d-flex flex-column align-items-start justify-content-start">
+                              <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                              <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                                {item.organizer_name}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="col-md-5  col-5">
+                            <div className="bg-fade rounded text-center event-cart-price-box">
+                              <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row mt-1">
+                          <div className="col-md-12">
+                            <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                              <img className="card-icon me-1" src={locationIcon} alt="" />
+                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                                {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            )}
+          </div>
+          <div className="india-div">
+            {EventloaderIndia ? (
+              <>
+                <Row>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                  </Col>
+                </Row>
+              </>
+            ) : (
+              <div className="india-events-box">
+                <h3 className="home-events-title">India</h3>
+                <Slider {...eventslistsettings}>
+                  {EventlistIndia.map((item, index) => (
+                    <div className="home-events-box">
+                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                        <div style={{ position: 'relative' }}>
+                          <span className="event-category-img">{item.category_name}</span>
+                          {getCountryFlagImage(item.countryname)}
+                          <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                          <div className="d-flex align-items-center event-date-small-box">
+                            <span className="event-date-small  d-flex align-items-center">
+                              <img className="card-icon me-2" src={calendar} alt="" />
+                              <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                                {onlyDayMonth(item.start_date)}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                        <div className="row px-2 mt-2">
+                          <div className="col-md-7 d-flex align-items-center col-7">
+                            <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                            <div className="d-flex flex-column align-items-start justify-content-start">
+                              <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                              <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                                {item.organizer_name}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="col-md-5  col-5">
+                            <div className="bg-fade rounded text-center event-cart-price-box">
+                              <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row mt-1">
+                          <div className="col-md-12">
+                            <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                              <img className="card-icon me-1" src={locationIcon} alt="" />
+                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                                {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            )}
+          </div>
+          <div className="usa-div">
+            {EventloaderUsa ? (
+              <>
+                <Row>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                  </Col>
+                  <Col md={4} className="mb-5">
+                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
+                  </Col>
+                </Row>
+              </>
+            ) : (
+              <div className="india-events-box">
+                <h3 className="home-events-title">United States</h3>
+                <Slider {...eventslistsettings}>
+                  {EventlistUsa.map((item, index) => (
+                    <div className="home-events-box">
+                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                        <div style={{ position: 'relative' }}>
+                          <span className="event-category-img">{item.category_name}</span>
+                          {getCountryFlagImage(item.countryname)}
+                          <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                          <div className="d-flex align-items-center event-date-small-box">
+                            <span className="event-date-small  d-flex align-items-center">
+                              <img className="card-icon me-2" src={calendar} alt="" />
+                              <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                                {onlyDayMonth(item.start_date)}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                        <div className="row px-2 mt-2">
+                          <div className="col-md-7 d-flex align-items-center col-7">
+                            <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                            <div className="d-flex flex-column align-items-start justify-content-start">
+                              <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                              <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                                {item.organizer_name}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="col-md-5  col-5">
+                            <div className="bg-fade rounded text-center event-cart-price-box">
+                              <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row mt-1">
+                          <div className="col-md-12">
+                            <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                              <img className="card-icon me-1" src={locationIcon} alt="" />
+                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                                {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="count-sec">
+          <div className="row">
+            <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
+              <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
+                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">EVENT HOSTED</h6>
+                <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
+              </div>
             </div>
-            
-
-            <div className="events-page-search" id="inputForm1Div" style={{ height: '40px' }}>
+            <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
+              <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
+                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Ticket Sold</h6>
+                <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
+              </div>
+            </div>
+            <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
+              <div>
+                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">
+                  Partners & Organizers
+                </h6>
+                <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="partner-sec">
+          <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
+            OUR PARTNER
+          </h3>
+          <div className="partnetSlider">
+            <Slider {...settings}>
+              <div>
+                <img className="company_logo" src={google} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={airBNB} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={booking} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={expedia} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={google} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={airBNB} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={booking} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={expedia} alt="google" />
+              </div>
+            </Slider>
+          </div>
+        </div>
+        <div className="newsletter-sec pb-4 position-relative">
+          <div className="position-absolute md-absolute news-form">
+            <h5 className="fw-bold text-primary-color mb-0 pt-2 animate__animated animate__bounce">
+              Want to receive events & news and updates?
+            </h5>
+            <div className="d-flex mt-4 flex-md-row flex-column">
               <input
-                type="search"
-                id="form1"
-                className="form-control mt-lg-0"
-                placeholder="Search for Events"
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={handleEnterPress}
-                value={SearchInput}
-                style={{ height: '40px', border: 'none' }}
+                className="w-auto form-control rounded me-md-3 me-5 mb-md-0 mb-3"
+                type="text"
+                name=""
+                id=""
+                onChange={(e) => setUpdatesName(e.target.value)}
+                value={UpdatesName}
+                placeholder="Name"
               />
-              <button className="dfssfdsfdsf" onClick={handleButtonClick} type="button" style={{ background: '#F6F6F6' }}>
-                <img src={InputSearchIcon} alt="" />
+              <input
+                className="w-auto form-control rounded me-md-0 me-5"
+                type="text"
+                name=""
+                id=""
+                onChange={(e) => setUpdatesEmail(e.target.value)}
+                value={UpdatesEmail}
+                placeholder="Email ID"
+              />
+            </div>
+            <div className="form-check mt-3 mb-4">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={Updatesprivacy}
+                onChange={(e) => setUpdatesprivacy(e.target.checked)}
+                id="flexCheckDefault"
+              />
+              <label className="form-check-label" for="flexCheckDefault">
+                I agree with the{" "}
+                <span className="text-primary-color">privacy statement</span>
+              </label>
+            </div>
+            {UpdatesLoader ? (
+              <button className="GetLatestUpdateButton">
+                <div className="left">
+                  <small className="ms-2">Please wait...</small>
+                </div>
+                <div className="right">
+                  <img style={{ width: "18px" }} src={arrow} alt="" />
+                </div>
               </button>
-            </div>
+            ) : (
+              <button className="GetLatestUpdateButton" onClick={() => HandelUpdatesForm()}>
+                <div className="left">
+                  <small className="ms-2">Get the latest updates</small>
+                </div>
+                <div className="right">
+                  <img style={{ width: "18px" }} src={arrow} alt="" />
+                </div>
+              </button>
+            )}
 
           </div>
-          <div className="row mx-lg-3 mx-1 mb-4 mt-4 gx-md-4 gx-2">
-            <div>
-              <Swiper
-                slidesPerView={2}
-                spaceBetween={30}
-                breakpoints={{
-                  992: {
-                    slidesPerView: 6,
-                    spaceBetween: 20,
-                  },
-                  768: {
-                    slidesPerView: 3,
-                    spaceBetween: 20,
-                  },
-                  480: {
-                    slidesPerView: 2,
-                    spaceBetween: 10,
-                  },
-                }}
-                className="mySwiper"
-              >
-                {filteredList.map((item, index) => (
-                  <SwiperSlide>
-                    <div className="text-center position-relative">
-                      <div className="event-card pt-4" id="event-card" onClick={() => HandelCategorsearch(item._id)}>
-                        <img className="event-img  animate__animated animate__bounce" src={CategoryImage[index].image} alt="" />
-                        <small className="d-block text-card-color my-2 mt-3" style={{ fontSize: '12px' }}> {item.name} </small>
-                      </div>
-                      <div className="fade-effect"></div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-          </div>
-
-        </div>
-      </div>
-      <div className="event-sec home-event-in-box">
-        <div className="india-div">
-          {EventloaderIndia ? (
-            <>
-              <Row>
-                <Col md={4} className="mb-5">
-                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
-                </Col>
-                <Col md={4} className="mb-5">
-                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
-                </Col>
-                <Col md={4} className="mb-5">
-                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
-                </Col>
-              </Row>
-            </>
-          ) : (
-            <div className="india-events-box">
-              <h3 className="home-events-title">India</h3>
-              <Slider {...eventslistsettings}>
-                {EventlistIndia.map((item, index) => (
-                  <div className="home-events-box">
-                    <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
-                      <div style={{ position: 'relative' }}>
-                        <span className="event-category-img">{item.category_name}</span>
-                        <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                        <div className="d-flex align-items-center event-date-small-box">
-                          <span className="event-date-small  d-flex align-items-center">
-                            <img className="card-icon me-2" src={calendar} alt="" />
-                            <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
-                              {onlyDayMonth(item.start_date)}
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-                      <div className="row px-2 mt-2">
-                        <div className="col-md-7 d-flex align-items-center col-7">
-                          <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                          <div className="d-flex flex-column align-items-start justify-content-start">
-                            <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
-                            <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                              {item.organizer_name}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-md-5  col-5">
-                          <div className="bg-fade rounded pl-5 event-cart-price-box">
-                            <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                            {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row mt-1">
-                        <div className="col-md-12">
-                          <div className="d-flex align-items-center justify-content-start my-2 mx-2">
-                            <img className="card-icon me-1" src={locationIcon} alt="" />
-                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                              {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          )}
-        </div>
-        <div className="usa-div">
-          {EventloaderUsa ? (
-            <>
-              <Row>
-                <Col md={4} className="mb-5">
-                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
-                </Col>
-                <Col md={4} className="mb-5">
-                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
-                </Col>
-                <Col md={4} className="mb-5">
-                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
-                </Col>
-              </Row>
-            </>
-          ) : (
-            <div className="india-events-box">
-              <h3 className="home-events-title">United States</h3>
-              <Slider {...eventslistsettings}>
-                {EventlistUsa.map((item, index) => (
-                  <div className="home-events-box">
-                    <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
-                      <div style={{ position: 'relative' }}>
-                        <span className="event-category-img">{item.category_name}</span>
-                        <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                        <div className="d-flex align-items-center event-date-small-box">
-                          <span className="event-date-small  d-flex align-items-center">
-                            <img className="card-icon me-2" src={calendar} alt="" />
-                            <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
-                              {onlyDayMonth(item.start_date)}
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-                      <div className="row px-2 mt-2">
-                        <div className="col-md-7 d-flex align-items-center col-7">
-                          <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                          <div className="d-flex flex-column align-items-start justify-content-start">
-                            <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
-                            <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                              {item.organizer_name}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-md-5  col-5">
-                          <div className="bg-fade rounded pl-5 event-cart-price-box">
-                            <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                            {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row mt-1">
-                        <div className="col-md-12">
-                          <div className="d-flex align-items-center justify-content-start my-2 mx-2">
-                            <img className="card-icon me-1" src={locationIcon} alt="" />
-                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                              {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          )}
-        </div>
-        <div className="singapur-div">
-          {EventloaderSingapur ? (
-            <>
-              <Row>
-                <Col md={4} className="mb-5">
-                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
-                </Col>
-                <Col md={4} className="mb-5">
-                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
-                </Col>
-                <Col md={4} className="mb-5">
-                  <div className="linear-background w-100" style={{ height: '300px' }}> </div>
-                </Col>
-              </Row>
-            </>
-          ) : (
-            <div className="india-events-box">
-              <h3 className="home-events-title">Singapore</h3>
-              <Slider {...eventslistsettings}>
-                {EventlistSingapur.map((item, index) => (
-                  <div className="home-events-box">
-                    <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
-                      <div style={{ position: 'relative' }}>
-                        <span className="event-category-img">{item.category_name}</span>
-                        <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                        <div className="d-flex align-items-center event-date-small-box">
-                          <span className="event-date-small d-flex align-items-center">
-                            <img className="card-icon me-2" src={calendar} alt="" />
-                            <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
-                              {onlyDayMonth(item.start_date)}
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-                      <div className="row px-2 mt-2">
-                        <div className="col-md-7 d-flex align-items-center col-7">
-                          <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                          <div className="d-flex flex-column align-items-start justify-content-start">
-                            <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
-                            <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                              {item.organizer_name}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-md-5  col-5">
-                          <div className="bg-fade rounded pl-5 event-cart-price-box">
-                            <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                            {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row mt-1">
-                        <div className="col-md-12">
-                          <div className="d-flex align-items-center justify-content-start my-2 mx-2">
-                            <img className="card-icon me-1" src={locationIcon} alt="" />
-                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                              {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="count-sec">
-        <div className="row">
-          <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-            <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
-              <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">EVENT HOSTED</h6>
-              <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
-            </div>
-          </div>
-          <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-            <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
-              <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Ticket Sold</h6>
-              <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
-            </div>
-          </div>
-          <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-            <div>
-              <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">
-                Partners & Organizers
-              </h6>
-              <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="partner-sec">
-        <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
-          OUR PARTNER
-        </h3>
-        <div className="partnetSlider">
-          <Slider {...settings}>
-            <div>
-              <img src={google} alt="google" />
-            </div>
-            <div>
-              <img src={airBNB} alt="google" />
-            </div>
-            <div>
-              <img src={booking} alt="google" />
-            </div>
-            <div>
-              <img src={expedia} alt="google" />
-            </div>
-            <div>
-              <img src={google} alt="google" />
-            </div>
-            <div>
-              <img src={airBNB} alt="google" />
-            </div>
-            <div>
-              <img src={booking} alt="google" />
-            </div>
-            <div>
-              <img src={expedia} alt="google" />
-            </div>
-          </Slider>
-        </div>
-      </div>
-      <div className="newsletter-sec pb-4 position-relative">
-        <div className="position-absolute md-absolute news-form">
-          <h5 className="fw-bold text-primary-color mb-0 pt-2 animate__animated animate__bounce">
-            Want to receive events & news and updates?
-          </h5>
-          <div className="d-flex mt-4 flex-md-row flex-column">
-            <input
-              className="w-auto form-control rounded me-md-3 me-5 mb-md-0 mb-3"
-              type="text"
-              name=""
-              id=""
-              onChange={(e) => setUpdatesName(e.target.value)}
-              value={UpdatesName}
-              placeholder="Name"
-            />
-            <input
-              className="w-auto form-control rounded me-md-0 me-5"
-              type="text"
-              name=""
-              id=""
-              onChange={(e) => setUpdatesEmail(e.target.value)}
-              value={UpdatesEmail}
-              placeholder="Email ID"
-            />
-          </div>
-          <div className="form-check mt-3 mb-4">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              checked={Updatesprivacy}
-              onChange={(e) => setUpdatesprivacy(e.target.checked)}
-              id="flexCheckDefault"
-            />
-            <label className="form-check-label" for="flexCheckDefault">
-              I agree with the{" "}
-              <span className="text-primary-color">privacy statement</span>
-            </label>
-          </div>
-          {UpdatesLoader ? (
-            <button className="GetLatestUpdateButton">
-              <div className="left">
-                <small className="ms-2">Please wait...</small>
-              </div>
-              <div className="right">
-                <img style={{ width: "18px" }} src={arrow} alt="" />
-              </div>
-            </button>
-          ) : (
-            <button className="GetLatestUpdateButton" onClick={() => HandelUpdatesForm()}>
-              <div className="left">
-                <small className="ms-2">Get the latest updates</small>
-              </div>
-              <div className="right">
-                <img style={{ width: "18px" }} src={arrow} alt="" />
-              </div>
-            </button>
-          )}
-
         </div>
       </div>
       <Footer />

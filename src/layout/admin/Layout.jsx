@@ -4,6 +4,7 @@ import Sidebar from './partial/Sidebar';
 import Footer from './partial/Footer';
 import Logo from '../../common/logo.svg';
 import { Link } from "react-router-dom";
+import { app_url } from "../../common/Helpers";
 const Layout = ({ children, title }) => {
     function d() {
         const mainWrapperView = document.getElementById('main-wrapper view');
@@ -25,7 +26,7 @@ const Layout = ({ children, title }) => {
         <>
             <div id="main-wrapper show">
                 <div className="nav-header">
-                    <Link className="brand-logo">
+                    <Link className="brand-logo"  to={app_url}>
                         <img src={Logo} className="admin-panel-logo" alt="Your Logo" />
                     </Link>
                     <div class="nav-control" onClick={() => d()}>

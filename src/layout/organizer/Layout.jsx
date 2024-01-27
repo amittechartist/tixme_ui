@@ -3,6 +3,7 @@ import Header from './partial/Header';
 import Sidebar from './partial/Sidebar';
 import Footer from './partial/Footer';
 import Logo from '../../common/logo.svg';
+import { app_url } from "../../common/Helpers";
 import { Link } from "react-router-dom";
 const Layout = ({ children, title }) => {
     function d() {
@@ -27,7 +28,7 @@ const Layout = ({ children, title }) => {
             <div id="main-wrapper view" className="">
                 <div className="dashboard_box">
                     <div className="nav-header">
-                        <Link className="brand-logo">
+                        <Link className="brand-logo"  to={app_url}>
                             <img src={Logo} className="admin-panel-logo" alt="Your Logo" />
                         </Link>
                         <div class="nav-control" onClick={() => d()}>

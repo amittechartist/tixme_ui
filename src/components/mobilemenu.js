@@ -120,7 +120,7 @@ const Header = () => {
             setTotalcart(items.length)
         }
         return (
-            <li className="nav-item align-self-center me-7 cursor-pointer">
+            <li className="nav-item align-self-center cursor-pointer me-xl-4 me-3 pb-0">
                 <Link to={app_url + 'cart-details'}>
                     <div className="position-relative">
                         {/* <FaShoppingCart size={30} color="#003B8F" /> */}
@@ -250,7 +250,7 @@ const Header = () => {
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 position-relative">
-                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5 me-3">
+                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-4  me-3">
                                 <Link
                                     class="nav-link text-primary-theme pe-1 font-nav"
                                     to={app_url}
@@ -258,13 +258,13 @@ const Header = () => {
                                     Home  <img class="nav-plus" src={plus} alt="" />
                                 </Link>
                             </li>
-                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5 me-3">
+                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-4  me-3">
                                 <Link class="nav-link text-primary-theme pe-1 font-nav" to={app_url + 'events'}>
                                     Events{" "}
                                     <img class="nav-plus" src={plus} alt="" />
                                 </Link>
                             </li>
-                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5 me-3">
+                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-4  me-3">
                                 <Link
                                     class="nav-link text-primary-theme pe-1 font-nav"
                                     to={app_url + 'aboutus'}
@@ -273,7 +273,7 @@ const Header = () => {
                                     <img class="nav-plus" src={plus} alt="" />
                                 </Link>
                             </li>
-                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5 me-3">
+                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-4  me-3">
                                 <Link
                                     class="nav-link text-primary-theme pe-1 font-nav"
                                     to={app_url + 'contact'}
@@ -283,9 +283,8 @@ const Header = () => {
                                 </Link>
                             </li>
                             <OrganizerSignupmob prorps={'pcheadermenu'} />
-
                             <CartListItem />
-                            <li class="nav-item position-absolute end-0 bg-white nav-box me-0 d-flex flex-column justify-content-center align-items-center rounded-8">
+                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5  me-3">
                                 {customer_token || organizername ? (
                                     <>
                                         {customer_token ? (
@@ -309,7 +308,8 @@ const Header = () => {
                                 ) : (
                                     <>
                                         <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav" to={app_url + 'auth/login-signup'}>
-                                            Login/Sign Up
+                                            Login/Sign Up{" "}
+                                            <img class="nav-plus" src={plus} alt="" />
                                         </Link>
                                         {/* <Link to={app_url + 'auth/login-signup'} className='top-login-sign-btn d-flex align-items-center justify-content-center' >
                                             <span className="top-login-sign-btn-icon"><FaEllipsis /></span><span><img src={NewLoginicon}></img></span>

@@ -393,6 +393,12 @@ span.on-img-date-val {
     border: 2px solid transparent;
     padding: 14px 10px;
 }
+.eventpage-box-style-event-view {
+    background: linear-gradient(#fff, white) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box;
+    border-radius: 15px;
+    border: 2px solid transparent;
+    padding: 14px 10px;
+}
 
 .right-box-title p {
     color: #0047AB;
@@ -545,11 +551,11 @@ p.Ticket-title {
 }
 
 .ticket-price-area-bg {
-    background-image: url('../../../common/icon/Rectangleeventpage.svg');
+    background-image: url('../../../common/icon/Rectangle 2464.svg');
 }
 
 .ticket-price-area-bg {
-    background-size: 100% 389px;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: bottom;
     overflow: hidden;
