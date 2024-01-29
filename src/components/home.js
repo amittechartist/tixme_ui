@@ -200,7 +200,7 @@ const Home = () => {
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 1,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 2000,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
@@ -265,6 +265,19 @@ const Home = () => {
       queryParams.push(`categoryId=${encodeURIComponent(filtercategory)}`);
     }
 
+    if (queryParams.length) {
+      url += `?${queryParams.join('&')}`;
+    }
+
+    navigate(url);
+  };
+  const viewMoreButtonClick = (country_name) => {
+    let url = `${app_url}events/`;
+
+    const queryParams = [];
+    if (country_name) {
+      queryParams.push(`country=${encodeURIComponent(country_name)}`);
+    }
     if (queryParams.length) {
       url += `?${queryParams.join('&')}`;
     }
@@ -515,11 +528,11 @@ const Home = () => {
   }
   function getCountryFlagImage(country) {
     if (country =="India") {
-        return <img className="event-card-flag" src={Indiaflag}  />;
+        // return <img className="event-card-flag" src={Indiaflag}  />;
     } else if(country =="United states") {
-        return <img className="event-card-flag" src={Usaflag}  />;
+        // return <img className="event-card-flag" src={Usaflag}  />;
     } else if(country =="Singapore") {
-        return <img className="event-card-flag" src={Singapureflag}  />;
+        // return <img className="event-card-flag" src={Singapureflag}  />;
     }else{
         return null; // or a default image if you have one
     }
@@ -536,7 +549,6 @@ const Home = () => {
   const CategoryImage = [
     { image: Arts },
     { image: Business },
-    { image: NIGHTLIFE },
     { image: NIGHTLIFE },
     { image: Food },
     { image: Music },
@@ -642,7 +654,7 @@ const Home = () => {
             <h5 className="text-primary-color fw-bold space-sec pt-4 animate__animated animate__bounce">
               Find Near By Events
             </h5>
-            <div className="d-flex ml-5 flex-lg-row flex-column mt-lg-0 mt-3">
+            <div className="d-flex home-fil-mar flex-lg-row flex-column mt-3">
               <div className="selectDiv d-none" >
                 <select
                   className="form-select category me-4"
@@ -658,8 +670,6 @@ const Home = () => {
                 </select>
                 <img src={ArrowDown} alt="" />
               </div>
-
-
               <div className="events-page-search" id="inputForm1Div" style={{ height: '40px' }}>
                 <input
                   type="search"
@@ -750,53 +760,54 @@ const Home = () => {
                 <Slider {...eventslistsettings}>
                   {EventlistSingapur.map((item, index) => (
                     <div className="home-events-box">
-                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
-                        <div style={{ position: 'relative' }}>
-                          <span className="event-category-img">{item.category_name}</span>
-                          {getCountryFlagImage(item.countryname)}
-                          <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                          <div className="d-flex align-items-center event-date-small-box">
-                            <span className="event-date-small d-flex align-items-center">
-                              <img className="card-icon me-2" src={calendar} alt="" />
-                              <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
-                                {onlyDayMonth(item.start_date)}
-                              </span>
+                    <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%', position: 'relative' }}>
+                      <div style={{ position: 'relative' }}>
+                        <span className="event-category-img">{item.category_name}</span>
+                        <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                        <div className="d-flex align-items-center event-date-small-box">
+                          <span className="event-date-small  d-flex align-items-center">
+                            <img className="card-icon me-2" src={calendar} alt="" />
+                            <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                              {onlyDayMonth(item.start_date)}
                             </span>
-                          </div>
+                          </span>
                         </div>
-                        <div className="row px-2 mt-2">
-                          <div className="col-md-7 d-flex align-items-center col-7">
-                            <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                            <div className="d-flex flex-column align-items-start justify-content-start">
-                              <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
-                              <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                                {item.organizer_name}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="col-md-5  col-5">
-                            <div className="bg-fade rounded text-center event-cart-price-box">
-                              <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="row mt-1">
-                          <div className="col-md-12">
-                            <div className="d-flex align-items-center justify-content-start my-2 mx-2">
-                              <img className="card-icon me-1" src={locationIcon} alt="" />
-                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                                {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
                       </div>
+                      <div className="row px-2 mt-2">
+                        <div className="col-md-7 d-flex align-items-center col-7">
+                          <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                          <div className="d-flex flex-column align-items-start justify-content-start">
+                            <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                            <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                              {item.organizer_name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-5  col-5">
+                          <div className="bg-fade rounded text-center event-cart-price-box">
+                            <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                            {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
+                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mt-1">
+                        <div className="col-md-12">
+                          <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                            <img className="card-icon me-1" src={locationIcon} alt="" />
+                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                      {getCountryFlagImage(item.countryname)}
                     </div>
+                  </div>
                   ))}
                 </Slider>
+                <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("Singapore")}>More events</button>
               </div>
             )}
           </div>
@@ -821,10 +832,9 @@ const Home = () => {
                 <Slider {...eventslistsettings}>
                   {EventlistIndia.map((item, index) => (
                     <div className="home-events-box">
-                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%', position: 'relative' }}>
                         <div style={{ position: 'relative' }}>
                           <span className="event-category-img">{item.category_name}</span>
-                          {getCountryFlagImage(item.countryname)}
                           <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
                           <div className="d-flex align-items-center event-date-small-box">
                             <span className="event-date-small  d-flex align-items-center">
@@ -864,10 +874,12 @@ const Home = () => {
                           </div>
                         </div>
                         <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                        {getCountryFlagImage(item.countryname)}
                       </div>
                     </div>
                   ))}
                 </Slider>
+                <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("India")}>More events</button>
               </div>
             )}
           </div>
@@ -892,53 +904,54 @@ const Home = () => {
                 <Slider {...eventslistsettings}>
                   {EventlistUsa.map((item, index) => (
                     <div className="home-events-box">
-                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
-                        <div style={{ position: 'relative' }}>
-                          <span className="event-category-img">{item.category_name}</span>
-                          {getCountryFlagImage(item.countryname)}
-                          <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                          <div className="d-flex align-items-center event-date-small-box">
-                            <span className="event-date-small  d-flex align-items-center">
-                              <img className="card-icon me-2" src={calendar} alt="" />
-                              <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
-                                {onlyDayMonth(item.start_date)}
-                              </span>
+                    <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%', position: 'relative' }}>
+                      <div style={{ position: 'relative' }}>
+                        <span className="event-category-img">{item.category_name}</span>
+                        <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                        <div className="d-flex align-items-center event-date-small-box">
+                          <span className="event-date-small  d-flex align-items-center">
+                            <img className="card-icon me-2" src={calendar} alt="" />
+                            <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                              {onlyDayMonth(item.start_date)}
                             </span>
-                          </div>
+                          </span>
                         </div>
-                        <div className="row px-2 mt-2">
-                          <div className="col-md-7 d-flex align-items-center col-7">
-                            <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                            <div className="d-flex flex-column align-items-start justify-content-start">
-                              <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
-                              <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                                {item.organizer_name}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="col-md-5  col-5">
-                            <div className="bg-fade rounded text-center event-cart-price-box">
-                              <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="row mt-1">
-                          <div className="col-md-12">
-                            <div className="d-flex align-items-center justify-content-start my-2 mx-2">
-                              <img className="card-icon me-1" src={locationIcon} alt="" />
-                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                                {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
                       </div>
+                      <div className="row px-2 mt-2">
+                        <div className="col-md-7 d-flex align-items-center col-7">
+                          <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                          <div className="d-flex flex-column align-items-start justify-content-start">
+                            <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                            <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                              {item.organizer_name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="col-md-5  col-5">
+                          <div className="bg-fade rounded text-center event-cart-price-box">
+                            <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                            {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
+                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mt-1">
+                        <div className="col-md-12">
+                          <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                            <img className="card-icon me-1" src={locationIcon} alt="" />
+                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                      {getCountryFlagImage(item.countryname)}
                     </div>
+                  </div>
                   ))}
                 </Slider>
+                <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("united states")}>More events</button>
               </div>
             )}
           </div>

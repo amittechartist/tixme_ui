@@ -394,12 +394,16 @@ span.on-img-date-val {
     padding: 14px 10px;
 }
 .eventpage-box-style-event-view {
-    background: linear-gradient(#fff, white) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box;
-    border-radius: 15px;
-    border: 2px solid transparent;
-    padding: 14px 10px;
+    background: linear-gradient(#fff, white) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box !important;
+    border-radius: 15px !important;
+    border: 2px solid transparent !important;
+    padding: 14px 10px !important;
 }
-
+.grediant-border{
+    background: linear-gradient(#fff, white) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box;
+    border-radius: 5px;
+    border: 2px solid transparent;
+}
 .right-box-title p {
     color: #0047AB;
     font-weight: 600;
@@ -1412,4 +1416,10 @@ p.cursor-pointer.my-location-btn {
 }
 .dfssfdsfdsf:hover{
     background: #f0f0f0 !important;
+}
+span.new_cart_btn {
+    font-size: 22px;
+    cursor: pointer;
+    color: #003b8f;
+    user-select: none;
 }

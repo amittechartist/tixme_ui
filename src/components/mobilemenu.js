@@ -36,80 +36,80 @@ const Header = () => {
         : organizername
             ? organizer_url + "dashboard"
             : app_url + "auth/customer/login";
-    useEffect(() => {
-        const getCurrentLocation = () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    successCallback,
-                    errorCallback
-                );
-            } else {
-                console.log('Geolocation is not supported by this browser.');
-            }
-        };
+    // useEffect(() => {
+    //     const getCurrentLocation = () => {
+    //         if (navigator.geolocation) {
+    //             navigator.geolocation.getCurrentPosition(
+    //                 successCallback,
+    //                 errorCallback
+    //             );
+    //         } else {
+    //             console.log('Geolocation is not supported by this browser.');
+    //         }
+    //     };
 
-        // Callback function on successful geolocation
-        const successCallback = (position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
+    //     // Callback function on successful geolocation
+    //     const successCallback = (position) => {
+    //         const latitude = position.coords.latitude;
+    //         const longitude = position.coords.longitude;
 
-            // Set the location state
-            setLocation({ latitude, longitude });
+    //         // Set the location state
+    //         setLocation({ latitude, longitude });
 
-            // Perform reverse geocoding to get country and city
-            reverseGeocode(latitude, longitude);
-        };
+    //         // Perform reverse geocoding to get country and city
+    //         reverseGeocode(latitude, longitude);
+    //     };
 
-        // Callback function on geolocation error
-        const errorCallback = (error) => {
-            console.error('Error getting geolocation:', error);
-        };
+    //     // Callback function on geolocation error
+    //     const errorCallback = (error) => {
+    //         console.error('Error getting geolocation:', error);
+    //     };
 
-        const reverseGeocode = (latitude, longitude) => {
-            const geocoder = new window.google.maps.Geocoder();
-            const latlng = { lat: latitude, lng: longitude };
+    //     const reverseGeocode = (latitude, longitude) => {
+    //         const geocoder = new window.google.maps.Geocoder();
+    //         const latlng = { lat: latitude, lng: longitude };
 
-            geocoder.geocode({ location: latlng }, (results, status) => {
-                if (status === 'OK') {
-                    if (results[0]) {
-                        // Extract address components from the results
-                        const addressComponents = results[0].address_components;
+    //         geocoder.geocode({ location: latlng }, (results, status) => {
+    //             if (status === 'OK') {
+    //                 if (results[0]) {
+    //                     // Extract address components from the results
+    //                     const addressComponents = results[0].address_components;
 
-                        // Initialize variables to store address details
-                        let country, state, city, postalCode;
+    //                     // Initialize variables to store address details
+    //                     let country, state, city, postalCode;
 
-                        for (let component of addressComponents) {
-                            if (component.types.includes('country')) {
-                                country = component.long_name;
-                            }
-                            if (component.types.includes('administrative_area_level_1')) {
-                                state = component.long_name;
-                            }
-                            if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
-                                city = component.long_name;
-                            }
-                            if (component.types.includes('postal_code')) {
-                                postalCode = component.long_name;
-                            }
-                        }
-                        setCurrentCountry(country);
-                        setCurrentState(state);
-                        setCurrentCity(city);
-                        if (!localStorage.getItem("countryname")) {
-                            localStorage.setItem('countryname', country);
-                        }
-                    } else {
-                        console.error('No results found for reverse geocoding.');
-                    }
-                } else {
-                    console.error('Reverse geocoding failed due to:', status);
-                }
-            });
-        };
+    //                     for (let component of addressComponents) {
+    //                         if (component.types.includes('country')) {
+    //                             country = component.long_name;
+    //                         }
+    //                         if (component.types.includes('administrative_area_level_1')) {
+    //                             state = component.long_name;
+    //                         }
+    //                         if (component.types.includes('locality') || component.types.includes('administrative_area_level_2')) {
+    //                             city = component.long_name;
+    //                         }
+    //                         if (component.types.includes('postal_code')) {
+    //                             postalCode = component.long_name;
+    //                         }
+    //                     }
+    //                     setCurrentCountry(country);
+    //                     setCurrentState(state);
+    //                     setCurrentCity(city);
+    //                     if (!localStorage.getItem("countryname")) {
+    //                         localStorage.setItem('countryname', country);
+    //                     }
+    //                 } else {
+    //                     console.error('No results found for reverse geocoding.');
+    //                 }
+    //             } else {
+    //                 console.error('Reverse geocoding failed due to:', status);
+    //             }
+    //         });
+    //     };
 
-        // Call the function to get current location
-        getCurrentLocation();
-    }, []); // Empty dependency array to ensure useEffect runs only once
+    //     // Call the function to get current location
+    //     getCurrentLocation();
+    // }, []);
 
     const [Totalcart, setTotalcart] = useState(0);
     const cartCheck = localStorage.getItem('cart');

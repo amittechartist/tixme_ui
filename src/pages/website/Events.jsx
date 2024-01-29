@@ -27,7 +27,7 @@ import Nouserphoto from '../../common/image/nouser.png';
 import Accordion from 'react-bootstrap/Accordion';
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
-import { apiurl, onlyDayMonth, shortPer, app_url, get_date_time } from "../../common/Helpers";
+import { apiurl, onlyDayMonth, shortPer, app_url, get_date_time, get_min_date } from "../../common/Helpers";
 import { Link, useNavigate } from "react-router-dom";
 import Noimg from "../../common/image/noimg.jpg";
 import MultiRangeSlider from "../../component/multiRangeSlider/MultiRangeSlider";
@@ -43,49 +43,14 @@ const Home = () => {
     const [CountryListLoader, setCountryListLoader] = useState(true);
     const searchQuery = searchParams.get('query');
     const categoryid = searchParams.get('categoryId');
-
-    const [selectedCountry, setSelectedCountry] = useState(null);
-    const [selectedState, setSelectedState] = useState(null);
-    const [selectedCity, setSelectedCity] = useState(null);
-    const [countries, setCountries] = useState([]);
-    const [states, setStates] = useState([]);
-    const [cities, setCities] = useState([]);
-    useEffect(() => {
-        setCountries(Country.getAllCountries().map(({ isoCode, name }) => ({ value: isoCode, label: name })));
-    }, []);
-    useEffect(() => {
-        if (selectedCountry) {
-            setStates(State.getStatesOfCountry(selectedCountry.value).map(({ isoCode, name }) => ({ value: isoCode, label: name })));
-        } else {
-            setStates([]);
-        }
-        setSelectedState(null);
-    }, [selectedCountry]);
-
-    useEffect(() => {
-        if (selectedState) {
-            setCities(City.getCitiesOfState(selectedCountry.value, selectedState.value).map(({ name }) => ({ value: name, label: name })));
-        } else {
-            setCities([]);
-        }
-    }, [selectedState, selectedCountry]);
-
-    useEffect(() => {
-        if (searchQuery) {
-            setSearchInput(searchQuery);
-        }
-        if (categoryid) {
-            setFilterCategory(categoryid);
-        }
-    }, []);
-
+    const country_filter = searchParams.get('country');
     function getCountryFlagImage(country) {
         if (country == "India") {
-            return <img className="event-card-flag" src={Indiaflag} />;
+            // return <img className="event-card-flag" src={Indiaflag} />;
         } else if (country == "United states") {
-            return <img className="event-card-flag" src={Usaflag} />;
+            // return <img className="event-card-flag" src={Usaflag} />;
         } else if (country == "Singapore") {
-            return <img className="event-card-flag" src={Singapureflag} />;
+            // return <img className="event-card-flag" src={Singapureflag} />;
         } else {
             return null; // or a default image if you have one
         }
@@ -98,6 +63,7 @@ const Home = () => {
     const [Eventloader, setEventloader] = useState(false);
     const [filtercategory, setFilterCategory] = useState('');
     const [SearchInput, setSearchInput] = useState('');
+    const [CountryFilter, setCountryFilter] = useState('');
     const [Ticketstype, setTicketstype] = useState('');
     const [Dateapitype, setDateapitype] = useState('');
     const [Eventtype, setEventtype] = useState('');
@@ -110,9 +76,9 @@ const Home = () => {
     const [Datevalue, setDatevalue] = useState();
     const [PriceFilter, setPriceFilter] = useState();
     const [Datetype, setDatetype] = useState();
-    const [India, setIndia] = useState();
     const [Singapur, setSingapur] = useState();
-
+    const [India, setIndia] = useState();
+    const [Usa, setUsa] = useState();
 
     const countryName = localStorage.getItem("countryname");
 
@@ -192,13 +158,14 @@ const Home = () => {
                 dateapitype: Dateapitype ? Dateapitype : null,
                 onlydate: Datetype == "Pick a date" ? startdate : null,
                 display_name: SearchInput ? SearchInput : (searchQuery ? searchQuery : null),
-                fromdate: Datetype == "Pick between two dates" ? rangestartdate : null,
-                todate: Datetype == "Pick between two dates" ? enddate : null,
+                fromdate: Datetype == "Pick between two dates" ? get_min_date(RangeStartdateselect) : null,
+                todate: Datetype == "Pick between two dates" ? get_min_date(Enddateselect) : null,
                 minprice: wantPricefilter ? Minprice : null,
                 maxprice: wantPricefilter ? Maxprice : null,
-                country: selectedCountry.label ? selectedCountry.label : null,
-                city: selectedCity.label ? selectedCity.label : null,
-                state: selectedState.label ? selectedState.label : null,
+                country_filter: !India && !Singapur && !Usa ? CountryFilter ? CountryFilter : null : null,
+                india: India ? India : null,
+                singapur: Singapur ? Singapur : null,
+                usa: Usa ? Usa : null,
             }
             fetch(apiurl + "website/all-events-list", {
                 method: "POST",
@@ -299,12 +266,20 @@ const Home = () => {
     }
     useEffect(() => {
         fetchCategory();
-        fetchCountry();
+        // fetchCountry();
     }, []);
+    useEffect(() => {
+        if (categoryid) {
+            setFilterCategory(categoryid)
+        }
+        if (country_filter) {
+            setCountryFilter(country_filter)
+        }
+    }, [categoryid, country_filter]);
 
     useEffect(() => {
         fetchEvent();
-    }, [filtercategory, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, countryName, searchQuery, India, Singapur]);
+    }, [filtercategory, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, countryName, searchQuery, India, Singapur, Usa, CountryFilter]);
     const [activeKey, setActiveKey] = useState(null);
 
     function handleEnterPress(event) {
@@ -320,7 +295,7 @@ const Home = () => {
                 <HeaderMenu />
                 <div className="mx-lg-4 my-lg-3 banner-events-page bg-primary-color rounded-8 position-relative">
                     <MobileMenu />
-                    <h1 className="banner-h banner-h-events text-white text-start text-uppercase">Explore our events :</h1>
+                    <h1 className="banner-h banner-h-events text-white text-start text-uppercase animate__animated animate__bounce">Explore our events</h1>
                 </div>
                 <div className="event-view-body">
                     <Row className="mx-4" style={{ marginTop: '50px' }}>
@@ -343,40 +318,11 @@ const Home = () => {
                                         </button>
                                     </div>
                                 </div>
-
-                                <div className="col-12 col-md-12">
-                                    <div className="form-group">
-                                        <p className="mb-0 theme-color">Select Country</p>
-                                        <Select
-                                            options={countries}
-                                            value={selectedCountry}
-                                            onChange={setSelectedCountry}
-                                            placeholder="Select Country"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="col-12 col-md-12">
-                                    <div className="form-group">
-                                        <p className="mb-0 theme-color">Select State</p>
-                                        <Select
-                                            options={states}
-                                            value={selectedState}
-                                            onChange={setSelectedState}
-                                            placeholder="Select State"
-                                            isDisabled={!selectedCountry}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="col-12 col-md-12">
-                                    <div className="form-group">
-                                        <p className="mb-0 theme-color">Select City</p>
-                                        <Select
-                                            options={cities}
-                                            placeholder="Select City"
-                                            isDisabled={!selectedState}
-                                            onChange={setSelectedCity}
-                                        />
-                                    </div>
+                                <div className="col-md-12 mt-3">
+                                    <p className="mb-0 theme-color">Country</p>
+                                    <a style={{fontSize: '13px'}} onClick={() => {setSingapur(Singapur == 'Singapore' ? '' : 'Singapore');setCountryFilter('')}} className={Singapur || CountryFilter == 'Singapore' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
+                                    <a style={{fontSize: '13px'}} onClick={() => {setIndia(India == 'India' ? '' : 'India');setCountryFilter('')}} className={India || CountryFilter == 'India' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>India</a>
+                                    <a style={{fontSize: '13px'}} onClick={() => {setUsa(Usa == 'united states' ? '' : 'united states');setCountryFilter('')}} className={Usa || CountryFilter == 'united states' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
                                 </div>
                                 <div className="col-md-12 mt-3">
                                     <div className="selectDiv" style={{ marginRight: '0px' }}>
@@ -401,6 +347,13 @@ const Home = () => {
                                         <div className="filterbutton-container">
                                             <a onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
                                             <a onClick={() => setEventtype(Eventtype == 2 ? '' : 2)} className={Eventtype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>In-Person</a>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col md={12} xs={12} className="">
+                                    <div>
+                                        {/* <p className="mb-0">Event mode</p> */}
+                                        <div className="filterbutton-container">
                                             <a onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
                                             <a onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
                                         </div>

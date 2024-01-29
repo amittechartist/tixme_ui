@@ -178,38 +178,38 @@ const About = () => {
         </div>
       </div>
       <div className="partner-sec">
-        <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
-          OUR PARTNER
-        </h3>
-        <div className="partnetSlider">
-          <Slider {...settings}>
-            <div>
-              <img src={google} alt="google" />
-            </div>
-            <div>
-              <img src={airBNB} alt="google" />
-            </div>
-            <div>
-              <img src={booking} alt="google" />
-            </div>
-            <div>
-              <img src={expedia} alt="google" />
-            </div>
-            <div>
-              <img src={google} alt="google" />
-            </div>
-            <div>
-              <img src={airBNB} alt="google" />
-            </div>
-            <div>
-              <img src={booking} alt="google" />
-            </div>
-            <div>
-              <img src={expedia} alt="google" />
-            </div>
-          </Slider>
+          <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
+            OUR PARTNER
+          </h3>
+          <div className="partnetSlider">
+            <Slider {...settings}>
+              <div>
+                <img className="company_logo" src={google} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={airBNB} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={booking} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={expedia} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={google} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={airBNB} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={booking} alt="google" />
+              </div>
+              <div>
+                <img className="company_logo" src={expedia} alt="google" />
+              </div>
+            </Slider>
+          </div>
         </div>
-      </div>
       </div>
       <Footer />
     </>

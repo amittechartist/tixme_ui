@@ -11,7 +11,7 @@ import { FaTimes } from 'react-icons/fa';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { Button, Col, Row } from "react-bootstrap";
-import arrow from "../assets/arrow.svg";
+import { Country, State, City } from 'country-state-city';
 const Locationbtn = ({ prorps }) => {
     const navigate = useNavigate();
     const [ContactModal, setContactModal] = useState(false);
@@ -22,14 +22,16 @@ const Locationbtn = ({ prorps }) => {
     const [Lastname, setLastname] = useState();
     const [Message, setMessage] = useState();
     const [Countryname, setCountryname] = useState();
-    const [countryList, setcountryList] = useState([{ value: "", label: "Country" }]);
-    const [Country, setCountry] = useState();
     const [Loader, setLoader] = useState(false);
     const MySwal = withReactContent(Swal)
-
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [countries, setCountries] = useState([]);
+    useEffect(() => {
+        setCountries(Country.getAllCountries().map(({ isoCode, name }) => ({ value: isoCode, label: name })));
+    }, []);
     const HandelOrganizersignup = async () => {
         try {
-            if (!Firstname || !Lastname || !Email || !Confirmemail || !Phonenumber) {
+            if (!Firstname || !Lastname || !Email || !Confirmemail || !Phonenumber || !selectedCountry.label) {
                 return toast.error('Required field must not be empty');
             }
             if (!isEmail(Email)) {
@@ -49,7 +51,7 @@ const Locationbtn = ({ prorps }) => {
                 last_name: Lastname,
                 email: Email,
                 phone_number: Phonenumber,
-                countryname: Countryname,
+                countryname: selectedCountry.label,
                 message: Message,
                 area_code: "+91",
                 agree_to_terms: 1,
@@ -87,47 +89,9 @@ const Locationbtn = ({ prorps }) => {
         }
 
     }
-    const fetchCountry = async () => {
-        try {
-            fetch(apiurl + 'admin/country-list', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success == true) {
-                        const countryData = data.data;
-                        const CountryOption = countryData.map(category => ({
-                            value: category.name,
-                            label: category.name
-                        }));
-                        setcountryList(CountryOption);
-                    }
-                })
-                .catch(error => {
-                    console.error('Insert error:', error);
-                });
-        } catch (error) {
-            console.error('Api error:', error);
-        }
-    }
-    const CountryOption = [
-        {
-            options: countryList
-        }
-    ]
-    const selectCountry = (selectedValue) => {
-        setCountry(selectedValue);
-        setCountryname(selectedValue.label);
-    };
     const handlePhoneChange = (newPhone) => {
         setPhonenumber(newPhone);
     };
-    useEffect(() => {
-        fetchCountry();
-    }, []);
     return (
         <>
             <Modal isOpen={ContactModal} toggle={() => setContactModal(!ContactModal)} centered>
@@ -179,12 +143,10 @@ const Locationbtn = ({ prorps }) => {
                             <div className="form-group">
                                 <p>Select country <span className="text-danger">*</span></p>
                                 <Select
-                                    isClearable={false}
-                                    options={CountryOption}
-                                    className='react-select'
-                                    classNamePrefix='select'
-                                    onChange={selectCountry}
-                                    value={Country}
+                                    options={countries}
+                                    value={selectedCountry}
+                                    onChange={setSelectedCountry}
+                                    placeholder="Select Country"
                                 />
 
                             </div>

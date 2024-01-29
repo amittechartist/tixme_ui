@@ -64,11 +64,11 @@ const Home = () => {
   
   function getCountryFlagImage(country) {
     if (country =="India") {
-        return <img className="event-card-flag" src={Indiaflag}  />;
+        // return <img className="event-card-flag" src={Indiaflag}  />;
     } else if(country =="United states") {
-        return <img className="event-card-flag" src={Usaflag}  />;
+        // return <img className="event-card-flag" src={Usaflag}  />;
     } else if(country =="Singapore") {
-        return <img className="event-card-flag" src={Singapureflag}  />;
+        // return <img className="event-card-flag" src={Singapureflag}  />;
     }else{
         return null; // or a default image if you have one
     }
@@ -808,7 +808,7 @@ const Home = () => {
                         <GoogleMap
                           center={position}
                           zoom={15}
-                          mapContainerStyle={{ height: '500px', width: '100%' }}
+                          mapContainerStyle={{ height: '300px', width: '100%' }}
                         >
                           {position && <Marker position={position} />}
                         </GoogleMap>

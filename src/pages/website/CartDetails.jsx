@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Container from 'react-bootstrap/Container';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Row from 'react-bootstrap/Row';
 import Timelogo from "../../common/icon/time 1.svg";
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import Whitestarbtn from "../../component/Whitestarbtn";
+import { FaTimes } from 'react-icons/fa';
 import toast from "react-hot-toast";
 import Button from 'react-bootstrap/Button';
 import Footer from '../../components/footer';
 import HeaderMenu from '../../components/headermenu';
 import MobileMenu from '../../components/mobilemenu';
+import CartBG from '../../common/image/Cart BG.svg'
+import calendar from "../../assets/calendar.svg";
+import hourglassIcon from "./eventpageicon/hourglass.png";
 import { apiurl, onlyDayMonth, shortPer, app_url, isEmail, get_percentage } from "../../common/Helpers";
 import { Link, useNavigate } from "react-router-dom";
 const Home = () => {
@@ -18,10 +22,12 @@ const Home = () => {
 
     const pgatway_name = localStorage.getItem("payment_gatway");
     const currency_symble = localStorage.getItem("currency_symble");
-
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const navigate = useNavigate();
+    const [Loginmodal, setLoginmodal] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [GuestToken, setGuestToken] = useState();
+    const [LoginToken, setLoginToken] = useState();
     const [isFirstRender, setIsFirstRender] = useState(false);
     const [showLoginasGuest, setshowLoginasGuest] = useState(false);
     const [IsCountryName, setIsCountryName] = useState(false);
@@ -54,6 +60,55 @@ const Home = () => {
         setDiscountAmount('');
         setSubtotal(allItemsTotalPrice);
     }
+    const [LoginbtnLoader, setLoginbtnLoader] = useState(false);
+    const [LoginEmail, setLoginEmail] = useState();
+    const [LoginPassword, setLoginPassword] = useState();
+    const HandelCustomerLogin = async () => {
+        try {
+            if (!LoginEmail) {
+                return toast.error('Email is required');
+            }
+            if (!isEmail(LoginEmail)) {
+                return toast.error('Enter valid email address');
+            }
+            if (!LoginPassword) {
+                return toast.error('Password is required');
+            }
+            setLoginbtnLoader(true);
+            const requestData = {
+                email: LoginEmail,
+                password: LoginPassword
+            };
+            fetch(apiurl + 'auth/customer/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setLoginbtnLoader(false);
+                    if (data.success == true) {
+                        localStorage.setItem('userauth', data.token);
+                        localStorage.setItem('username', data.username);
+                        localStorage.setItem('user_role', 1);
+                        setLoginToken(data.token);
+                        setLoginmodal(!Loginmodal);
+                        setApiLoader(true);
+                    } else {
+                        toast.error(data.message);
+                    }
+                })
+                .catch(error => {
+                    setLoginbtnLoader(false);
+                    toast.error('Insert error: ' + error.message);
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+    };
     const HandelCouponCheck = async () => {
         try {
             if (allItemsTotalPrice && allItemsTotalPrice <= 0) {
@@ -117,14 +172,14 @@ const Home = () => {
     //coupon check
 
     // login as guest
-    const [LoginEmail, setLoginEmail] = useState('');
+    const [GLoginEmail, setGLoginEmail] = useState('');
     const [LoginFname, setLoginFname] = useState('');
     const [LoginLname, setLoginLname] = useState('');
     const [LoginLoader, setLoginLoader] = useState(false);
     const [OneTimegettax, setOneTimegettax] = useState(true);
     const HandelLoginasguest = async () => {
         try {
-            if (!LoginEmail || !isEmail(LoginEmail)) {
+            if (!GLoginEmail || !isEmail(GLoginEmail)) {
                 return toast.error("Enter valid email");
             }
             if (!LoginFname || !LoginLname) {
@@ -132,7 +187,7 @@ const Home = () => {
             }
             setLoginLoader(true);
             const requestData = {
-                email: LoginEmail,
+                email: GLoginEmail,
                 fname: LoginFname,
                 lname: LoginLname,
             };
@@ -151,6 +206,8 @@ const Home = () => {
                         // localStorage.setItem('user_role', 1);
                         setGuestToken(data.token);
                         setshowLoginasGuest(false);
+                        setLoginmodal(!Loginmodal);
+                        setApiLoader(true);
                         // window.location.reload();
                     } else {
                         toast.error(data.message);
@@ -208,10 +265,10 @@ const Home = () => {
     }
 
     useEffect(() => {
-        if (GuestToken) {
+        if (GuestToken || LoginToken) {
             saveCartToLocalStorage();
         }
-    }, [GuestToken]); // Added taxlist as a dependency
+    }, [GuestToken, LoginToken]); // Added taxlist as a dependency
     useEffect(() => {
         if (OneTimegettax) {
 
@@ -400,11 +457,11 @@ const Home = () => {
                 localStorage.removeItem('cart')
                 navigate(app_url);
             }
-            if (!Beartoken && !GuestToken) {
-
+            if (!Beartoken && !GuestToken && !LoginToken) {
                 toast.error("Login to your account");
                 // navigate(app_url + 'auth/customer/login');
-                setshowLoginasGuest(true);
+                // setshowLoginasGuest(true);
+                setLoginmodal(true);
                 return;
             }
             setApiLoader(true);
@@ -422,7 +479,7 @@ const Home = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${GuestToken ? GuestToken : Beartoken}`, // Set the Content-Type header to JSON
+                    'Authorization': `Bearer ${GuestToken || LoginToken ? GuestToken ? GuestToken : LoginToken : Beartoken}`, // Set the Content-Type header to JSON
                 },
                 body: JSON.stringify(requestData),
             })
@@ -513,6 +570,80 @@ const Home = () => {
     return (
         <>
             {" "}
+            <Modal isOpen={Loginmodal} toggle={() => setLoginmodal(!Loginmodal)} centered>
+                <ModalHeader toggle={!Loginmodal}>{showLoginasGuest ? 'Log in as guest' : 'Log In'}
+                    <button className="close p-0" onClick={() => setLoginmodal(!Loginmodal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
+                        <FaTimes />
+                    </button>
+                </ModalHeader>
+                <ModalBody>
+                    {showLoginasGuest ? (
+                        <div className="row">
+                            <Col md={12} style={{ borderTop: '1px solid #eee' }} className="mt-3 pt-4">
+                                <Row>
+                                    <Col md={12}>
+                                        <div className="form-group">
+                                            <p>Email Address</p>
+                                            <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)} value={LoginEmail}></input>
+                                        </div>
+                                    </Col>
+                                    <Col md={6}>
+                                        <div className="form-group">
+                                            <p>First Name</p>
+                                            <input className="form-control" type="text" placeholder="First Name" onChange={(e) => setLoginFname(e.target.value)} value={LoginFname}></input>
+                                        </div>
+                                    </Col>
+                                    <Col md={6}>
+                                        <div className="form-group">
+                                            <p>Last Name</p>
+                                            <input className="form-control" type="text" placeholder="Last Name" onChange={(e) => setLoginLname(e.target.value)} value={LoginLname}></input>
+                                        </div>
+                                    </Col>
+                                    <Col md={12}>
+                                        {LoginLoader ? (
+                                            <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
+                                        ) : (
+                                            <button className="btn btn-primary w-100 theme-bg  my-2" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
+                                        )}
+                                    </Col>
+                                    <div className="border-bottom py-2"></div>
+                                    <div className="text-center">OR</div>
+                                    <div className="text-center">
+                                        <button type="button" className="btn theme-bg w-100 text-white mt-3" onClick={() => setshowLoginasGuest(false)}>Log In</button>
+                                    </div>
+                                </Row>
+                                {/* /customer/login-as-guest */}
+                            </Col>
+                        </div>
+                    ) : (
+                        <div className="row">
+                            <div className="form-group col-md-12">
+                                <p>Email address</p>
+                                <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)}></input>
+                            </div>
+                            <div className="form-group  col-md-12">
+                                <p>Password</p>
+                                <input className="form-control" type="password" placeholder="Password" onChange={(e) => setLoginPassword(e.target.value)}></input>
+                            </div>
+                            <div className="col-md-12">
+                                {LoginbtnLoader ? (
+                                    <button type='button' className="btn theme-bg w-100 text-white">Please wait...</button>
+                                ) : (
+                                    <button type='button' className="btn theme-bg w-100 text-white" onClick={() => HandelCustomerLogin()}>Login</button>
+                                )}
+                            </div>
+                            <div className="border-bottom py-2"></div>
+                            <div className="text-center">OR</div>
+                            <div className="text-center">
+                                <button type="button" className="btn theme-bg w-100 text-white mt-3" onClick={() => setshowLoginasGuest(true)}>continue as guest</button>
+                            </div>
+                        </div>
+                    )}
+
+
+
+                </ModalBody>
+            </Modal>
             <div className="content-area">
                 <HeaderMenu />
                 <div className="mx-lg-4 my-lg-3 bg-primary-color rounded-8 position-relative mob-d-none" style={{ height: '150px' }}>
@@ -528,9 +659,72 @@ const Home = () => {
                                 <>
                                     <Row>
                                         <Col md={8}>
-                                            {cartItems.map((item, index) => (
-                                                <div>
-                                                    <Card>
+                                            {screenWidth > 900 ? (
+                                                <>
+                                                    {cartItems.map((item, index) => (
+                                                        <div className="cart-new-bg mb-3" style={{ position: 'relative' }}>
+                                                            <div className="row cart-new-div">
+                                                                <div className="col-md-9">
+                                                                    <div>
+                                                                        <p className="Ticket-title mb-0">{item.event.display_name}</p>
+                                                                        <div className="row d-flex align-items-center">
+                                                                            <div className="col-3">
+                                                                                <div className="d-flex align-items-center">
+                                                                                    <div >
+                                                                                        <img height={20} width={20} src={calendar} alt="" />
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <p className="mb-0 aaa">{item.event.start_date}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="col-3">
+                                                                                <div className="d-flex align-items-center">
+                                                                                    <div >
+                                                                                        <img height={20} width={20} src={Timelogo} alt="" />
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <p className="mb-0 aaa">Event Time</p>
+                                                                                        <p className="mb-0 bbb">{item.event.start_time}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="col-3">
+                                                                                <div className="d-flex align-items-center">
+                                                                                    <div >
+                                                                                        <img height={20} width={20} src={hourglassIcon} alt="" />
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <p className="mb-0 aaa">Event Duration</p>
+                                                                                        <p className="mb-0 bbb">{item.event.event_duration}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="col-3">
+                                                                                <div className="mx-2">
+                                                                                    <div className="py-2 eventpage-box-style-event-view text-center d-flex align-items-center justify-content-center">
+                                                                                        <p className="mb-0 tc">{item.name}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-md-3">
+                                                                    <div className="ml-3 text-center">
+                                                                        <p className="mb-0">Price {item.price > 0 ? currency_symble + ' ' + item.price : 'Free'}</p>
+                                                                        <div className="">
+                                                                            <div className="row grediant-border d-flex align-items-center">
+                                                                                <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span></div>
+                                                                                <div className="col-4"><span>{item.quantity}</span></div>
+                                                                                <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item.ticket)}>+</span></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <img src={CartBG} style={{ height: '100%', width: '100%', objectFit: 'contain' }} alt="" />
+                                                            {/* <Card>
                                                         <Card.Body>
                                                             <div className="cart-details-box">
                                                                 <div className="right-box-con in-event-page-cart-sec">
@@ -562,17 +756,57 @@ const Home = () => {
                                                                 </div>
                                                             </div>
                                                         </Card.Body>
-                                                    </Card>
-                                                </div>
-                                            ))}
+                                                    </Card> */}
+                                                        </div>
+                                                    ))}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {cartItems.map((item, index) => (
+                                                        <Card>
+                                                            <Card.Body>
+                                                                <div className="cart-details-box">
+                                                                    <div className="right-box-con in-event-page-cart-sec">
+                                                                        <Row>
+                                                                            <Col md={12}>
+                                                                                <p className="Ticket-title mb-0">{item.event.display_name}</p>
+                                                                                <p className="mb-0">
+                                                                                    <span><img height={20} width={20} src={Timelogo} alt="" /></span>Event Time - {item.event.start_time}
+                                                                                </p>
+                                                                            </Col>
+                                                                            <Col md={4}>
+                                                                                    {item.price > 0 ? (
+                                                                                        <span className="cart-price">{item.name} | Price : {currency_symble} {item.price}</span>
+                                                                                    ) : (
+                                                                                        <span className="cart-price">{item.name} | Price : Free</span>
+                                                                                    )}
+                                                                            </Col>
+                                                                            <Col md={4}>
+                                                                                <div className="d-inline-block">
+                                                                                    <span>
+                                                                                        <span className="cart-minus cart-btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span>
+                                                                                        <span className="cart-number">{item.quantity}</span>
+                                                                                        <span className="cart-plus cart-btn" onClick={() => addToCart(item.ticket)}>+</span>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </div>
+                                                                </div>
+                                                            </Card.Body>
+                                                        </Card>
+                                                    ))}
+                                                </>
+                                            )}
+
                                         </Col>
                                         <Col md={4}>
                                             {amountLoader ? (
                                                 <div className="linear-background w-100"> </div>
                                             ) : (
-                                                <div className="cart-amount-box">
-                                                    <Card>
-                                                        <Card.Body>
+                                                <div className="cart-amount-box ">
+                                                    <Card className="eventpage-box-style-event-view">
+                                                        <Card.Body >
                                                             <Row>
                                                                 <div className="my-2 col-6">
                                                                     <h5 className="cart-amount-small-title">Subtotal</h5>
@@ -690,41 +924,6 @@ const Home = () => {
                                                                         </>
                                                                     )}
                                                                 </Col>
-                                                                {showLoginasGuest ? (
-                                                                    <Col md={12} style={{ borderTop: '1px solid #eee' }} className="mt-3 pt-4">
-                                                                        <Row>
-                                                                            <Col md={12}>
-                                                                                <div className="form-group">
-                                                                                    <p>Email Address</p>
-                                                                                    <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)} value={LoginEmail}></input>
-                                                                                </div>
-                                                                            </Col>
-                                                                            <Col md={6}>
-                                                                                <div className="form-group">
-                                                                                    <p>First Name</p>
-                                                                                    <input className="form-control" type="text" placeholder="First Name" onChange={(e) => setLoginFname(e.target.value)} value={LoginFname}></input>
-                                                                                </div>
-                                                                            </Col>
-                                                                            <Col md={6}>
-                                                                                <div className="form-group">
-                                                                                    <p>Last Name</p>
-                                                                                    <input className="form-control" type="text" placeholder="Last Name" onChange={(e) => setLoginLname(e.target.value)} value={LoginLname}></input>
-                                                                                </div>
-                                                                            </Col>
-                                                                            <Col md={12}>
-                                                                                {LoginLoader ? (
-                                                                                    <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
-                                                                                ) : (
-                                                                                    <button className="btn btn-primary w-100 theme-bg  my-2" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
-                                                                                )}
-                                                                            </Col>
-                                                                            <Col md={12} className="mt-2">
-                                                                                <p className="forgot-password-text">Already have an account? <Link to={app_url + 'auth/login-signup'} className='reset-password-link'>Log In/Sign Up</Link></p>
-                                                                            </Col>
-                                                                        </Row>
-                                                                        {/* /customer/login-as-guest */}
-                                                                    </Col>
-                                                                ) : ''}
                                                             </Row>
                                                         </Card.Body>
                                                     </Card>
@@ -747,7 +946,7 @@ const Home = () => {
                         </Col>
                     </Row>
                 </div >
-            </div>
+            </div >
             <Footer />
         </>
     );
