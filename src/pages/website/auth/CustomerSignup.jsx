@@ -31,6 +31,7 @@ const About = () => {
     const [Address1, setAddress1] = useState();
     const [Pincode, setPincode] = useState();
     const [Terms, setTerms] = useState(false);
+    const [Privacy, setPrivacy] = useState(false);    
     const [Marketing, setMarketing] = useState(false);
     const [Hobby, setHobby] = useState([]);
     const [selectedHobbies, setSelectedHobbies] = useState([]);
@@ -78,10 +79,10 @@ const About = () => {
                 return toast.error('Email and confirm email must me same');
             }
             if (!Terms) {
-                return toast.error('Please agree to the terms and conditions.');
+                return toast.error('Please agree to the terms & conditions');
             }
-            if (!Marketing) {
-                return toast.error('Please agree to the receive marketing.');
+            if (!Privacy) {
+                return toast.error('Please agree to the privacy policy');
             }
             HandelEmailCheck();
         }
@@ -137,11 +138,11 @@ const About = () => {
     }
     const HandelCustomersignup = async () => {
         try {
-            if (selectedHobbies.length > 0) {
+            // if (selectedHobbies.length > 0) {
 
-            } else {
-                return toast.error('Select hobbies');
-            }
+            // } else {
+            //     return toast.error('Select hobbies');
+            // }
             setLoader(true);
             const requestData = {
                 first_name: Firstname,
@@ -256,12 +257,12 @@ const About = () => {
                                         {SignUpstep == 2 ? (
                                             <>
                                                 <div className="form-group">
-                                                    <p>Email address <span className="text-danger">*</span></p>
-                                                    <input className="form-control" type="text" placeholder="Yourname@gmail.com" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
+                                                    <p>Email Address <span className="text-danger">*</span></p>
+                                                    <input className="form-control" type="text" placeholder="Email ID" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
                                                 </div>
                                                 <div className="form-group">
-                                                    <p>Confirm Email address <span className="text-danger">*</span></p>
-                                                    <input className="form-control" type="text" placeholder="Confirm email Address" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
+                                                    <p>Confirm Email Address <span className="text-danger">*</span></p>
+                                                    <input className="form-control" type="text" placeholder="Confirm Email ID" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
                                                 </div>
                                                 <div className="form-group">
                                                     <p>First Name <span className="text-danger">*</span></p>
@@ -286,9 +287,12 @@ const About = () => {
                                                 </div>
                                                 <div class="form-check">
                                                     <input type="checkbox" checked={Terms} class="form-check-input" id="exampleCheck1" onChange={(e) => setTerms(e.target.checked)} />
-                                                    <label class="form-check-label" for="exampleCheck1">Agree to terms, privacy policy</label>
+                                                    <label class="form-check-label" for="exampleCheck1">Agree to Terms & Conditions</label>
                                                 </div>
-
+                                                <div class="form-check">
+                                                    <input type="checkbox" checked={Privacy} class="form-check-input" id="exampleCheck3" onChange={(e) => setPrivacy(e.target.checked)} />
+                                                    <label class="form-check-label" for="exampleCheck3">Agree to Privacy Policy</label>
+                                                </div>
                                                 <div class="form-check">
                                                     <input type="checkbox" checked={Marketing} class="form-check-input" id="exampleCheck2" onChange={(e) => setMarketing(e.target.checked)} />
                                                     <label class="form-check-label" for="exampleCheck2">Agree to receive marketing</label>
@@ -310,8 +314,8 @@ const About = () => {
                                             <input className="form-control" type="password" placeholder="Confirm Password" value={ConfirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}></input>
                                         </div>
                                         <div className="form-group">
-                                            <p>WhatsApp no</p>
-                                            <input className="form-control" type="number" placeholder="WhatsApp no" value={WhatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)}></input>
+                                            <p>WhatsApp Number</p>
+                                            <input className="form-control" type="number" placeholder="WhatsApp Number" value={WhatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)}></input>
                                         </div>
                                         <div className="form-group">
                                             <p>Select Country</p>
@@ -321,35 +325,7 @@ const About = () => {
                                                 onChange={setSelectedCountry}
                                                 placeholder="Select Country"
                                             />
-                                        </div>
-                                        <div className="form-group">
-                                            <p>Select State</p>
-                                            <Select
-                                                options={states}
-                                                value={selectedState}
-                                                onChange={setSelectedState}
-                                                placeholder="Select State"
-                                                isDisabled={!selectedCountry}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <p>Select City</p>
-                                            <Select
-                                                options={cities}
-                                                placeholder="Select City"
-                                                isDisabled={!selectedState}
-                                                onChange={setSelectedCity}
-                                                value={selectedCity}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <p>Your Address</p>
-                                            <input className="form-control" type="text" placeholder="Your Address" value={Address1} onChange={(e) => setAddress1(e.target.value)}></input>
-                                        </div>
-                                        <div className="form-group">
-                                            <p>Pincode</p>
-                                            <input className="form-control" type="text" placeholder="Pincode" value={Pincode} onChange={(e) => setPincode(e.target.value)}></input>
-                                        </div>
+                                        </div>                                        
                                     </>
                                 ) : (
                                     ''
@@ -399,7 +375,7 @@ const About = () => {
                             <>
                                 <div className="col-md-12 px-5-">
                                     <div className="form-group">
-                                        <p>Select hobby</p>
+                                        <p>Select Hobbies & Interests</p>
                                         {Hobby.map((item, index) => (
                                             <span
                                                 key={item.name}

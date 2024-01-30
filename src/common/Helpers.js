@@ -1,15 +1,15 @@
 import React from 'react';
-export const app_url = '/tixme_ui/';
+export const app_url = '/';
 export const admin_url = app_url + 'admin/';
 export const organizer_url = app_url + 'organizer/';
 export const customer_url = app_url + 'customer/';
 
-export const apiurl = 'http://localhost:5001/api/v1/';
-export const imgurl = 'http://localhost:5001/uploads/';
+// export const apiurl = 'http://localhost:5001/api/v1/';
+// export const imgurl = 'http://localhost:5001/uploads/';
 
 
-// export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
-// export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
+export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
+export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
 
 
 

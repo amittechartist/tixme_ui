@@ -223,10 +223,6 @@ const About = () => {
                     Login / Sign up
                 </h1>
                 <div class="banner-child bg-white px-0" style={{ border: '1px solid #eee' }}>
-                    <div className="TixmeBox">
-                        <h4>TIXME</h4>
-                        <p>Your one stop solution for managing and conducting events</p>
-                    </div>
                     <div className='row p-5 py-5 d-flex justify-content-center'>
                         <div className="col-12 col-md-5 col-lg-5 mt-5">
                             <div className="GetCustomerButtonBox">
@@ -234,7 +230,7 @@ const About = () => {
                                 <h4>Returning Customer</h4>
                                 <Link to={app_url + 'auth/customer/login'}><button class="GetLatestUpdateButton CustomerButton login-pg-btn-cs" >
                                     <div class="left text-center">
-                                        <small class="ms-2">LOGIN</small>
+                                        <small class="ms-2">Log In</small>
                                     </div>
                                     <div class="right">
                                         <img src={arrow} alt="" style={{ width: "15px" }} />
@@ -245,10 +241,10 @@ const About = () => {
                         <div className="col-12 col-md-5 col-lg-5 mt-5">
                             <div className="GetCustomerButtonBox">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Please Register Customer</h4>
+                                <h4>Sign Up - Custome</h4>
                                 <Link to={app_url + 'auth/customer/signup'}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
                                     <div class="left text-center">
-                                        <small class="ms-2">SING IN</small>
+                                        <small class="ms-2">Create Account</small>
                                     </div>
                                     <div class="right">
                                         <img src={arrow} alt="" style={{ width: "15px" }} />
@@ -263,7 +259,7 @@ const About = () => {
                                 <h4>Returning Organizer</h4>
                                 <Link to={app_url + 'auth/organizer/login'}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
                                     <div class="left text-center">
-                                        <small class="ms-2">LOGIN</small>
+                                        <small class="ms-2">Log In</small>
                                     </div>
                                     <div class="right">
                                         <img src={arrow} alt="" style={{ width: "15px" }} />
@@ -274,7 +270,7 @@ const About = () => {
                         <div className="col-12 col-md-5 col-lg-5 mt-5">
                             <div className="GetCustomerButtonBox mt-4">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Please Register Organizer</h4>
+                                <h4>Sign Up - Organize</h4>
                                 <OrganizerSignup />
                             </div>
                         </div>

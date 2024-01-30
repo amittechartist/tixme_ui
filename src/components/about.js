@@ -45,7 +45,7 @@ const About = () => {
         <div class="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
           <MobileMenu />
           <h1 class="banner-h fw-bold text-white text-uppercase mb-0 pb-0 animate__animated animate__bounce">
-            ABout us
+            About us
           </h1>
           <div class="banner-child bg-white px-0">
             <div class="d-flex flex-md-row flex-column">
@@ -182,7 +182,7 @@ const About = () => {
         </div>
         <div className="partner-sec">
           <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
-            OUR PARTNER
+          OUR PARTNERS
           </h3>
           <div className="partnetSlider">
             <Slider {...settings}>

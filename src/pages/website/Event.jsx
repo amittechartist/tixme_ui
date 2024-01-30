@@ -61,19 +61,19 @@ const Home = () => {
   const [Eventlist, setEventlist] = useState([]);
   const [IsMap, setIsMap] = useState(false);
   const [OrganizerEventlist, setOrganizerEventlist] = useState([]);
-  
+
   function getCountryFlagImage(country) {
-    if (country =="India") {
-        // return <img className="event-card-flag" src={Indiaflag}  />;
-    } else if(country =="United states") {
-        // return <img className="event-card-flag" src={Usaflag}  />;
-    } else if(country =="Singapore") {
-        // return <img className="event-card-flag" src={Singapureflag}  />;
-    }else{
-        return null; // or a default image if you have one
+    if (country == "India") {
+      // return <img className="event-card-flag" src={Indiaflag}  />;
+    } else if (country == "United states") {
+      // return <img className="event-card-flag" src={Usaflag}  />;
+    } else if (country == "Singapore") {
+      // return <img className="event-card-flag" src={Singapureflag}  />;
+    } else {
+      return null; // or a default image if you have one
     }
-}
-  
+  }
+
   const [position, setPosition] = useState(null);
 
   useEffect(() => {
@@ -303,7 +303,7 @@ const Home = () => {
 
     setEventTotalPrice(eventTotal);
   }
-  
+
   const fetchEvent = async () => {
     try {
       const requestData = {
@@ -402,7 +402,7 @@ const Home = () => {
   useEffect(() => {
     fetchData();
     fetchEvent();
-    
+
   }, []);
   useEffect(() => {
 
@@ -479,7 +479,7 @@ const Home = () => {
     if (Eventdata.currencycode.trim() === "USD") {
       localStorage.setItem('payment_gatway', 'Stripe');
       localStorage.setItem('currency_symble', '$');
-    } 
+    }
     if (Eventdata.currencycode.trim() === "SGD") {
       localStorage.setItem('payment_gatway', 'hitpay');
       localStorage.setItem('currency_symble', 'S$');
@@ -649,7 +649,7 @@ const Home = () => {
                         <span className="text-white event-time d-block">{Eventdata.start_time}</span>
                       </div>
                     </div>
-                    <div className="d-inline-flex align-items-center border-right event-time-area">
+                    <div className="d-inline-flex align-items-center border-right event-time-area px-2">
                       <div className="d-inline-block mr-1">
                         <img height={30} width={'auto'} className="ml-2" src={hourglassIcon} alt="" />
                       </div>
@@ -824,7 +824,7 @@ const Home = () => {
                           <img src={FlagIcon} alt="" /> Report this event
                         </p>
                       </div>
-                      <Row>
+                      <Row className="d-none">
                         <Col md={12}>
                           <Slide bottom>
                             <div className="start-in-box eventpage-box-style-event-view mb-5">
@@ -835,7 +835,7 @@ const Home = () => {
                                   </div>
                                 </Col>
                                 <Col md={12}>
-                                  <div className="tags pt-4 pb-5">
+                                  <div className="tags py-2">
                                     <ul className="p-0">
                                       {Eventdata.tags.map((item, index) => (
                                         <li className="d-inline-block m-1 mb-3">
@@ -866,98 +866,102 @@ const Home = () => {
                                   {OrganizerEventlist.map((item, index) => (
                                     <>
                                       <Col md={6}>
-                                      <div className="cursor-pointer" title="View" onClick={() => viewEvent(item._id, item.name)}>
-                                        <Slide bottom>
-                                          <div className="more-event-box">
-                                            <div className="ticket-price-area ticket-price-area-bg mt-3">
-                                              <Row style={{margin: '6px'}}>
-                                                <Col
-                                                  md={5}
-                                                  className="d-flex align-items-center"
-                                                >
-                                                  <div className="event-image-part">
-                                                    <img
-                                                      className="event-image"
-                                                      src={item.thum_image ? item.thum_image : Noimg}
-                                                      alt=""
-                                                    />
-                                                  </div>
-                                                </Col>
-                                                <Col md={7} className="event-view-page">
-                                                  <div className="organizer-name-sec px-2 py-2">
-                                                    <div className="d-inline-flex align-items-center  event-time-area">
-                                                      <div className="d-inline-block mr-1">
-                                                        <img
-                                                          height={30}
-                                                          width={30}
-                                                          className="shdsjds"
-                                                          src={Timelogo}
-                                                          alt=""
-                                                        />
+                                        <div className="cursor-pointer" title="View" onClick={() => viewEvent(item._id, item.name)}>
+                                          <Slide bottom>
+                                            <div className="more-event-box">
+                                              <div className="ticket-price-area ticket-price-area-bg mt-3">
+                                                <Row style={{ margin: '6px' }}>
+                                                  <Col
+                                                    md={5}
+                                                    className="d-flex align-items-center justify-content-center"
+                                                  >
+                                                    <div className="event-image-part">
+                                                      <img
+                                                        className="event-image"
+                                                        src={item.thum_image ? item.thum_image : Noimg}
+                                                        alt=""
+                                                      />
+                                                    </div>
+                                                  </Col>
+                                                  <Col md={7} className="event-view-page">
+                                                    <div className="organizer-name-sec px-2 py-2">
+                                                      <div>
+                                                        <div className="d-inline-flex align-items-center  event-time-area">
+                                                          <div className="d-inline-block mr-1">
+                                                            <img
+                                                              height={30}
+                                                              width={30}
+                                                              className="shdsjds"
+                                                              src={Timelogo}
+                                                              alt=""
+                                                            />
+                                                          </div>
+                                                          <div className="d-inline-block">
+                                                            <span className="event-duration d-block text-dark">
+                                                              Event Date
+                                                            </span>
+                                                            <span className="event-time d-block text-dark">
+                                                              {item.start_date}
+                                                            </span>
+                                                          </div>
+                                                        </div>
                                                       </div>
-                                                      <div className="d-inline-block">
-                                                        <span className="event-duration d-block text-dark">
-                                                          Event Date
-                                                        </span>
-                                                        <span className="event-time d-block text-dark">
-                                                          {item.start_date}
-                                                        </span>
+                                                      <div>
+                                                        <div className="d-inline-flex align-items-center">
+                                                          <div className="d-inline-block mr-1">
+                                                            <img
+                                                              height={30}
+                                                              width={30}
+                                                              className="shdsjds"
+                                                              src={Hourglasslogo}
+                                                              alt=""
+                                                            />
+                                                          </div>
+                                                          <div className="d-inline-block">
+                                                            <span className="event-duration d-block text-dark">
+                                                              Event Duration
+                                                            </span>
+                                                            <span className="event-time d-block text-dark">
+                                                              {item.event_duration}
+                                                            </span>
+                                                          </div>
+                                                        </div>
                                                       </div>
                                                     </div>
-                                                    <div className="d-inline-flex align-items-center">
-                                                      <div className="d-inline-block mr-1">
-                                                        <img
-                                                          height={30}
-                                                          width={30}
-                                                          className="shdsjds"
-                                                          src={Hourglasslogo}
-                                                          alt=""
-                                                        />
-                                                      </div>
-                                                      <div className="d-inline-block">
-                                                        <span className="event-duration d-block text-dark">
-                                                          Event Duration
-                                                        </span>
-                                                        <span className="event-time d-block text-dark">
-                                                          {item.event_duration}
-                                                        </span>
-                                                      </div>
+                                                  </Col>
+                                                  <Col md={12} className="my-2">
+                                                    <div className="event-name  ml-2">
+                                                      <span>{item.display_name}</span>
                                                     </div>
-                                                  </div>
-                                                </Col>
-                                                <Col md={12} className="my-2">
-                                                  <div className="event-name  ml-2">
-                                                    <span>{item.display_name}</span>
-                                                  </div>
-                                                </Col>
-                                                <Col
-                                                  md={7}
-                                                  xs={7}
-                                                  className="border-top-doted"
-                                                >
-                                                  <div className="d-flex align-items-center text-center">
-                                                    <img
-                                                      height={30}
-                                                      width={30}
-                                                      src={LocationIcon}
-                                                      alt=""
-                                                    />{" "}
-                                                    <span>{item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''} </span>
-                                                  </div>
-                                                </Col>
-                                                <Col md={5} xs={5}>
-                                                  <div className="price-section text-center">
-                                                    <p>Ticket Price</p>
-                                                    <span className="price">{item.countrysymbol} {item.displayprice}</span>
-                                                  </div>
-                                                </Col>
-                                              </Row>
+                                                  </Col>
+                                                  <Col
+                                                    md={7}
+                                                    xs={7}
+                                                    className="border-top-doted"
+                                                  >
+                                                    <div className="d-flex align-items-center text-center">
+                                                      <img
+                                                        height={30}
+                                                        width={30}
+                                                        src={LocationIcon}
+                                                        alt=""
+                                                      />{" "}
+                                                      <span>{item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''} </span>
+                                                    </div>
+                                                  </Col>
+                                                  <Col md={5} xs={5}>
+                                                    <div className="price-section text-center">
+                                                      <p>Ticket Price</p>
+                                                      <span className="price">{item.countrysymbol} {item.displayprice}</span>
+                                                    </div>
+                                                  </Col>
+                                                </Row>
+                                              </div>
                                             </div>
-                                          </div>
-                                        </Slide>
-                                      </div>
+                                          </Slide>
+                                        </div>
                                       </Col>
-                                      
+
                                     </>
                                   ))}
                                 </Row>
@@ -1056,9 +1060,8 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
                             </div>
                           </div>
                         </div>
@@ -1066,7 +1069,7 @@ const Home = () => {
                           <div className="col-md-12">
                             <div className="d-flex align-items-center justify-content-start my-2 mx-2">
                               <img className="card-icon me-1" src={locationIcon} alt="" />
-                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              <p className="text-primary-color fw-bold mb-0 event-cart-location">
                                 {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
                               </p>
                             </div>

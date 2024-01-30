@@ -397,7 +397,7 @@ span.on-img-date-val {
     background: linear-gradient(#fff, white) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box !important;
     border-radius: 15px !important;
     border: 2px solid transparent !important;
-    padding: 14px 10px !important;
+    padding: 14px 18px !important;
 }
 .grediant-border{
     background: linear-gradient(#fff, white) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box;
@@ -555,7 +555,9 @@ p.Ticket-title {
 }
 
 .ticket-price-area-bg {
-    background-image: url('../../../common/icon/Rectangle 2464.svg');
+    /* background-image: url('../../../common/icon/Rectangle 2464.svg'); */
+    border: 1px solid #0b4fae;
+    border-radius: 6px;
 }
 
 .ticket-price-area-bg {
@@ -565,7 +567,7 @@ p.Ticket-title {
     overflow: hidden;
     padding-bottom: 50px;
     padding-left: 20px;
-    padding-right: 10px;
+    padding-right: 20px;
 }
 
 .subsacribe-box {

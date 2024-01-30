@@ -464,7 +464,7 @@ select {
 
 /* newsletter section */
 .newsletter-sec {
-  background: url(./assets/Newsletter.png) center;
+  background: url(./common/newsletter.svg) center;
   height: 450px;
   width: 70vw;
   margin: 0 auto;
@@ -732,7 +732,7 @@ input:focus {
   }
 
   .newsletter-sec {
-    background: url(./assets/NewsletterBgM.png) bottom center;
+    background: url(./assets/Newsletter.png) bottom center;
     height: 340px;
     width: 90vw;
     margin: 0 auto;

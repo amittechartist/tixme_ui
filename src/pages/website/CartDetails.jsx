@@ -584,7 +584,7 @@ const Home = () => {
                                     <Col md={12}>
                                         <div className="form-group">
                                             <p>Email Address</p>
-                                            <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)} value={LoginEmail}></input>
+                                            <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setGLoginEmail(e.target.value)} value={GLoginEmail}></input>
                                         </div>
                                     </Col>
                                     <Col md={6}>
@@ -714,7 +714,7 @@ const Home = () => {
                                                                     <div className="ml-3 text-center">
                                                                         <p className="mb-0">Price {item.price > 0 ? currency_symble + ' ' + item.price : 'Free'}</p>
                                                                         <div className="">
-                                                                            <div className="row grediant-border d-flex align-items-center">
+                                                                            <div className="row grediant-border d-flex align-items-center mx-3">
                                                                                 <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span></div>
                                                                                 <div className="col-4"><span>{item.quantity}</span></div>
                                                                                 <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item.ticket)}>+</span></div>

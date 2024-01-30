@@ -31,38 +31,41 @@ const Footer = () => {
             </div>
           </div>
           <div className="col-lg-2 col-12 footer-link ps-lg-0 ps-4 mt-lg-0 mt-5">
-            <h6 className="fw-bold text-primary-color mb-0">
+            <h6 className="fw-bold text-primary-color mb-0 text-underline">
               QUICK LINKS
             </h6>
-            <div className="">
-              <Link to={app_url + 'auth/login-signup'}>
-                <span className="text-primary-color mt-3">Login</span>
-              </Link>
-              <Link to={app_url + 'faq'}>
-                <span className="text-primary-color mt-3">FAQ's</span>
-              </Link>
-              <Link to={app_url + 'events'}>
-                <span className="text-primary-color mt-3">Event</span>
-              </Link>
-              <Link to={app_url + 'organizers'}>
-                <span className="text-primary-color mt-3">Organizers</span>
-              </Link>
-            </div>
-          </div>
-          <div className="col-lg-2 col-12 footer-link ps-lg-0 ps-4 mt-lg-0 mt-5">
-            <h6 className="fw-bold text-primary-color mb-0">LINKS</h6>
             <div className="">
               <Link to={app_url}>
                 <span className="text-primary-color mt-3">Home</span>
               </Link>
               <Link to={app_url + 'events'}>
-                <span className="text-primary-color mt-3">All Events</span>
+                <span className="text-primary-color mt-3">Events</span>
               </Link>
               <Link to={app_url + 'aboutus'}>
                 <span className="text-primary-color mt-3">About Us</span>
               </Link>
+              <Link to={app_url + 'contact'}>
+                <span className="text-primary-color mt-3">Contact Us</span>
+              </Link>
+              <Link to={app_url + 'auth/login-signup'}>
+                <span className="text-primary-color mt-3">Login/Signup</span>
+              </Link>
+            </div>
+          </div>
+          <div className="col-lg-2 col-12 footer-link ps-lg-0 ps-4 mt-lg-0 mt-5">
+            <h6 className="fw-bold text-primary-color mb-0  text-underline">OTHER LINKS</h6>
+            <div className="">
+              <Link to={app_url}>
+                <span className="text-primary-color mt-3">Purchase Policy</span>
+              </Link>
               <Link to={app_url + 'privacy-policy'}>
                 <span className="text-primary-color mt-3">Privacy Policy</span>
+              </Link>
+              <Link to={app_url + 'organizers'}>
+                <span className="text-primary-color mt-3">Organizers</span>
+              </Link>
+              <Link to={app_url + 'faq'}>
+                <span className="text-primary-color mt-3">FAQs</span>
               </Link>
             </div>
           </div>
@@ -73,7 +76,7 @@ const Footer = () => {
         </div>
       </footer>
       <div className="copyright text-center py-2">
-        <small className="text-white"> © 2023 TIXME </small>
+        <small className="text-white"> © 2023. All Rights Reserved by TIXME.</small>
       </div>
     </>
   );

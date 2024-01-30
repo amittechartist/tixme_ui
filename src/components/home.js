@@ -659,7 +659,7 @@ const Home = () => {
           </div>
           <div className="banner-child bg-white">
             <h5 className="text-primary-color fw-bold space-sec pt-4 animate__animated animate__bounce">
-              Find Near By Events
+              Find Nearby Events
             </h5>
             <div className="d-flex home-fil-mar flex-lg-row flex-column mt-3">
               <div className="selectDiv d-none" >
@@ -682,7 +682,7 @@ const Home = () => {
                   type="search"
                   id="form1"
                   className="form-control mt-lg-0"
-                  placeholder="Search for Events"
+                  placeholder="Search"
                   onChange={(e) => setSearchInput(e.target.value)}
                   onKeyDown={handleEnterPress}
                   value={SearchInput}
@@ -697,7 +697,7 @@ const Home = () => {
             <div className="row mx-lg-3 mx-1 mb-4 mt-4 gx-md-4 gx-2 home-car-slider">
               <div>
                 {CategoryLoader ? (
-                  <div className="linear-background w-100" style={{height:'160px'}}> </div>
+                  <div className="linear-background w-100" style={{ height: '160px' }}> </div>
                 ) : (
                   <>
                     <Slider {...categorysettings}>
@@ -767,9 +767,8 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
                             </div>
                           </div>
                         </div>
@@ -777,7 +776,7 @@ const Home = () => {
                           <div className="col-md-12">
                             <div className="d-flex align-items-center justify-content-start my-2 mx-2">
                               <img className="card-icon me-1" src={locationIcon} alt="" />
-                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              <p className="text-primary-color fw-bold mb-0 event-cart-location">
                                 {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
                               </p>
                             </div>
@@ -839,9 +838,8 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
                             </div>
                           </div>
                         </div>
@@ -849,7 +847,7 @@ const Home = () => {
                           <div className="col-md-12">
                             <div className="d-flex align-items-center justify-content-start my-2 mx-2">
                               <img className="card-icon me-1" src={locationIcon} alt="" />
-                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              <p className="text-primary-color fw-bold mb-0 event-cart-location">
                                 {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
                               </p>
                             </div>
@@ -911,9 +909,8 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                              {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
                             </div>
                           </div>
                         </div>
@@ -921,7 +918,7 @@ const Home = () => {
                           <div className="col-md-12">
                             <div className="d-flex align-items-center justify-content-start my-2 mx-2">
                               <img className="card-icon me-1" src={locationIcon} alt="" />
-                              <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                              <p className="text-primary-color fw-bold mb-0 event-cart-location">
                                 {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
                               </p>
                             </div>
@@ -942,13 +939,13 @@ const Home = () => {
           <div className="row">
             <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
               <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
-                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">EVENT HOSTED</h6>
+                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Events Hosted</h6>
                 <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
               </div>
             </div>
             <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
               <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
-                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Ticket Sold</h6>
+                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Tickets Sold</h6>
                 <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
               </div>
             </div>
@@ -964,7 +961,7 @@ const Home = () => {
         </div>
         <div className="partner-sec">
           <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
-            OUR PARTNER
+            OUR PARTNERS
           </h3>
           <div className="partnetSlider">
             <Slider {...settings}>
@@ -998,7 +995,7 @@ const Home = () => {
         <div className="newsletter-sec pb-4 position-relative">
           <div className="position-absolute md-absolute news-form">
             <h5 className="fw-bold text-primary-color mb-0 pt-2 animate__animated animate__bounce">
-              Want to receive events & news and updates?
+              Stay in the loop & receive event updates!
             </h5>
             <div className="d-flex mt-4 flex-md-row flex-column">
               <input
@@ -1045,7 +1042,7 @@ const Home = () => {
             ) : (
               <button className="GetLatestUpdateButton" onClick={() => HandelUpdatesForm()}>
                 <div className="left">
-                  <small className="ms-2">Get the latest updates</small>
+                  <small className="ms-2">Get TIXED!</small>
                 </div>
                 <div className="right">
                   <img style={{ width: "18px" }} src={arrow} alt="" />

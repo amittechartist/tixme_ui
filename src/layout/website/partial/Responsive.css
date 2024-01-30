@@ -3,6 +3,11 @@
         margin-left: 5px !important;
         margin-right: 5px !important;
     }
+    .event-image-part img {
+        height: auto;
+        width: 200px;
+        border-radius: 11px;
+    }
     .home-fil-mar {
         margin-left: 10px;
         margin-right: 10px;
@@ -46,7 +51,7 @@
     .row.evnt-page-save-shear-box {
         margin-right: 0;
         margin-bottom: -14px;
-        margin-top: -20px;
+        margin-top: 0px;
     }
     .eventpage-cat-name {
         padding-left: 1rem;
@@ -1181,7 +1186,7 @@
     }
 
     .event-page-ticket .right-box-con {
-        padding: 0px 21px;
+        padding: 0px 5px;
     }
 
     .event-page-ticket .cart-increment-button {

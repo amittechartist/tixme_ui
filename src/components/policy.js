@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from './footer';
 import HeaderMenu from './headermenu';
 import MobileMenu from './mobilemenu';
-const policy = () => {
+const Policy = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className="content-area">
@@ -10,8 +13,8 @@ const policy = () => {
         <HeaderMenu />
         <div class="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
           <MobileMenu />
-          <h1 class="banner-h text-white text-uppercase fw-bold animate__animated animate__bounce">
-            Privacy policy
+          <h1 class="banner-h fw-bold text-white text-uppercase mb-0 pb-0 animate__animated animate__bounce">
+            Privacy Policy
           </h1>
         </div>
         <div
@@ -107,4 +110,4 @@ const policy = () => {
   );
 };
 
-export default policy;
+export default Policy;
