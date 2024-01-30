@@ -10,8 +10,8 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <>
-      <footer className="footer py-5 mt-4">
-        <div className="row m-auto w-100">
+      <footer className="footer py-5 mt-4 bg-gray">
+        <div className="row m-auto w-100 container-fluid bg-gray">
           <div className="col-lg-5 col-12">
             <div className="mx-footer">
               <img className="footer-logo animate__animated animate__bounce" src={footerLogo} alt="" />
@@ -67,7 +67,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="col-lg-3 col-12 d-flex justify-content-center align-items-start flex-column text-center ps-lg-0 ps-4 mt-lg-0 mt-4">
-            <img className="support-img ms-4 mb-1 animate__animated animate__bounce" src={support} alt="" />
+            <img className="support-img ms-4 mb-1 animate__animated animate__bounce" style={{paddingLeft : "20px"}} src={support} alt="" />
             <h6 className="fw-bold text-primary-color mb-0">24/7 CUSTOMER CARE</h6>
           </div>
         </div>

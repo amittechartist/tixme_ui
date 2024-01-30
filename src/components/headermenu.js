@@ -102,7 +102,7 @@ const Header = () => {
                           to={customer_url + "dashboard"}
                         >
                           {customer_name} {" "}
-                          <img className="nav-plus" src={plus} alt="" />
+                          {/* <img className="nav-plus" src={plus} alt="" /> */}
                         </Link>
                       </>
                     ) : (
@@ -116,7 +116,7 @@ const Header = () => {
                           to={organizer_url + "dashboard"}
                         >
                           {organizername} {" "}
-                          <img className="nav-plus" src={plus} alt="" />
+                          {/* <img className="nav-plus" src={plus} alt="" /> */}
                         </Link>
                       </>
                     ) : (
@@ -129,7 +129,7 @@ const Header = () => {
                     to={app_url + 'auth/login-signup'}
                   >
                     Login/Sign Up {" "}
-                    <img className="nav-plus" src={plus} alt="" />
+                    {/* <img className="nav-plus" src={plus} alt="" /> */}
                   </Link>
                 )}
 

@@ -4,7 +4,7 @@ import MobileMenu from '../../../components/mobilemenu';
 import 'react-phone-input-2/lib/style.css';
 import { Link } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
-import { FiPlus } from "react-icons/fi";
+// import { FiPlus } from "react-icons/fi";
 import OrganizerSignup from '../../../component/Organizersignup';
 import { app_url, apiurl, isEmail } from '../../../common/Helpers';
 import { useNavigate } from "react-router-dom";

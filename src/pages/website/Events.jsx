@@ -345,7 +345,7 @@ const Home = () => {
                                     <div>
                                         {/* <p className="mb-0">Event mode</p> */}
                                         <div className="filterbutton-container">
-                                            <a onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
+                                            <a style={{paddingLeft:"16px", paddingRight: "16px"}} onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
                                             <a onClick={() => setEventtype(Eventtype == 2 ? '' : 2)} className={Eventtype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>In-Person</a>
                                         </div>
                                     </div>
@@ -354,8 +354,8 @@ const Home = () => {
                                     <div>
                                         {/* <p className="mb-0">Event mode</p> */}
                                         <div className="filterbutton-container">
-                                            <a onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
-                                            <a onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
+                                            <a style={{paddingLeft:"20px", paddingRight: "20px"}} onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
+                                            <a style={{paddingLeft:"20px", paddingRight: "20px"}} onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
                                         </div>
                                     </div>
                                 </Col>

@@ -100,7 +100,7 @@ const Header = () => {
                 </a>
               </li>
               <li className="nav-item border rounded border-primary align-self-start px-2 my-1">
-                <button className="ListYourEvents">List Your Events kdjfkdjfkfkd</button>
+                <button className="ListYourEvents">List Your Events</button>
               </li>
               <li className="nav-item d-flex align-items-center justify-content-start">
                 <a
@@ -108,7 +108,7 @@ const Header = () => {
                   href="contact-us.html"
                 >
                   Login/Sign Up
-                  <img className="nav-plus" src={plus} alt="" />
+                  {/* <img className="nav-plus" src={plus} alt="" /> */}
                 </a>
               </li>
               <li className="nav-item d-flex align-items-center justify-content-start">
