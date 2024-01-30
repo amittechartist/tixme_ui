@@ -62,6 +62,7 @@ const Home = () => {
     const [Eventlist, setEventlist] = useState([]);
     const [Eventloader, setEventloader] = useState(false);
     const [filtercategory, setFilterCategory] = useState('');
+    const [FiltersearchQuery, setFiltersearchQuery] = useState('');
     const [SearchInput, setSearchInput] = useState('');
     const [CountryFilter, setCountryFilter] = useState('');
     const [Ticketstype, setTicketstype] = useState('');
@@ -132,8 +133,15 @@ const Home = () => {
         }
     }
     const HandelPriceFilter = () => {
-        if (Minprice || Maxprice) {
-            if (Minprice && Maxprice) {
+        // Convert to numbers
+        const minPriceNum = parseFloat(Minprice);
+        const maxPriceNum = parseFloat(Maxprice);
+
+        if (minPriceNum || maxPriceNum) {
+            if (minPriceNum && maxPriceNum) {
+                if (minPriceNum >= maxPriceNum) {
+                    return toast.error("The minimum price must be below the maximum price");
+                }
                 setWantPricefilter(true);
                 fetchEvent();
             } else {
@@ -143,8 +151,8 @@ const Home = () => {
             setWantPricefilter(true);
             fetchEvent();
         }
+    };
 
-    }
 
     const fetchEvent = async () => {
         try {
@@ -157,7 +165,7 @@ const Home = () => {
                 tickettype: Ticketstype ? Ticketstype : null,
                 dateapitype: Dateapitype ? Dateapitype : null,
                 onlydate: Datetype == "Pick a date" ? startdate : null,
-                display_name: SearchInput ? SearchInput : (searchQuery ? searchQuery : null),
+                display_name: SearchInput ? SearchInput : (FiltersearchQuery ? FiltersearchQuery : null),
                 fromdate: Datetype == "Pick between two dates" ? get_min_date(RangeStartdateselect) : null,
                 todate: Datetype == "Pick between two dates" ? get_min_date(Enddateselect) : null,
                 minprice: wantPricefilter ? Minprice : null,
@@ -275,14 +283,19 @@ const Home = () => {
         if (country_filter) {
             setCountryFilter(country_filter)
         }
+        if (searchQuery) {
+            setFiltersearchQuery(searchQuery);
+            setSearchInput(searchQuery);
+        }
     }, [categoryid, country_filter]);
 
     useEffect(() => {
         fetchEvent();
-    }, [filtercategory, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, countryName, searchQuery, India, Singapur, Usa, CountryFilter]);
+    }, [filtercategory, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, countryName, FiltersearchQuery, India, Singapur, Usa, CountryFilter]);
     const [activeKey, setActiveKey] = useState(null);
 
     function handleEnterPress(event) {
+        setFiltersearchQuery('')
         if (event.keyCode === 13 || event.which === 13) {
             fetchEvent();
         }
@@ -307,8 +320,8 @@ const Home = () => {
                                             type="search"
                                             id="form1"
                                             className="form-control mt-lg-0"
-                                            placeholder="Search for Events"
-                                            onChange={(e) => setSearchInput(e.target.value)}
+                                            placeholder="Search"
+                                            onChange={(e) => { setSearchInput(e.target.value) }}
                                             value={SearchInput}
                                             onKeyDown={handleEnterPress}
                                             style={{ height: '40px', border: 'none' }}
@@ -320,11 +333,12 @@ const Home = () => {
                                 </div>
                                 <div className="col-md-12 mt-3">
                                     <p className="mb-0 theme-color">Country</p>
-                                    <a style={{fontSize: '13px'}} onClick={() => {setSingapur(Singapur == 'Singapore' ? '' : 'Singapore');setCountryFilter('')}} className={Singapur || CountryFilter == 'Singapore' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
-                                    <a style={{fontSize: '13px'}} onClick={() => {setIndia(India == 'India' ? '' : 'India');setCountryFilter('')}} className={India || CountryFilter == 'India' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>India</a>
-                                    <a style={{fontSize: '13px'}} onClick={() => {setUsa(Usa == 'united states' ? '' : 'united states');setCountryFilter('')}} className={Usa || CountryFilter == 'united states' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
+                                    <a style={{ fontSize: '13px' }} onClick={() => { setSingapur(Singapur == 'Singapore' ? '' : 'Singapore'); setCountryFilter('') }} className={Singapur || CountryFilter == 'Singapore' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
+                                    <a style={{ fontSize: '13px' }} onClick={() => { setIndia(India == 'India' ? '' : 'India'); setCountryFilter('') }} className={India || CountryFilter == 'India' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>India</a>
+                                    <a style={{ fontSize: '13px' }} onClick={() => { setUsa(Usa == 'united states' ? '' : 'united states'); setCountryFilter('') }} className={Usa || CountryFilter == 'united states' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
                                 </div>
                                 <div className="col-md-12 mt-3">
+                                    <p className="mb-0 theme-color">Genres</p>
                                     <div className="selectDiv" style={{ marginRight: '0px' }}>
                                         <select
                                             className="form-select category me-4"
@@ -343,7 +357,7 @@ const Home = () => {
 
                                 <Col md={12} xs={12} className=" mt-3">
                                     <div>
-                                        {/* <p className="mb-0">Event mode</p> */}
+                                        <p className="mb-0 theme-color">Mode</p>
                                         <div className="filterbutton-container">
                                             <a style={{paddingLeft:"16px", paddingRight: "16px"}} onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
                                             <a onClick={() => setEventtype(Eventtype == 2 ? '' : 2)} className={Eventtype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>In-Person</a>
@@ -352,7 +366,7 @@ const Home = () => {
                                 </Col>
                                 <Col md={12} xs={12} className="">
                                     <div>
-                                        {/* <p className="mb-0">Event mode</p> */}
+                                        <p className="mb-0 theme-color">Admission</p>
                                         <div className="filterbutton-container">
                                             <a style={{paddingLeft:"20px", paddingRight: "20px"}} onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
                                             <a style={{paddingLeft:"20px", paddingRight: "20px"}} onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
@@ -444,7 +458,7 @@ const Home = () => {
                             </div>
                         </Col> */}
                                 <Col md={12} xs={12} className="mt-3">
-                                    <p className="mb-0 theme-color">Ticket Price</p>
+                                    <p className="mb-0 theme-color">Price Range</p>
                                 </Col>
                                 <Col md={6} className="mt-3">
                                     <input className="form-control" type="number" placeholder="Min price" min={1} onChange={(e) => setMinprice(e.target.value)}></input>
@@ -453,7 +467,7 @@ const Home = () => {
                                     <input className="form-control" type="number" placeholder="Max price" min={1} onChange={(e) => setMaxprice(e.target.value)}></input>
                                 </Col>
                                 <div className="col-md-6 col-6 my-4 ">
-                                    <button className="btn theme-bg w-100 text-white" onClick={() => HandelPriceFilter()}>Apply Filter</button>
+                                    <button className="btn theme-bg w-100 text-white" onClick={() => HandelPriceFilter()}>Apply</button>
                                 </div>
                                 <div className="col-md-6 col-6 my-4 pb-4 pb-md-0">
                                     <button type="button" className="btn theme-bg w-100 text-white" onClick={Resetfilter}>Reset</button>
@@ -519,9 +533,8 @@ const Home = () => {
                                                                     </div>
                                                                     <div className="col-md-5  col-5">
                                                                         <div className="bg-fade rounded text-center event-cart-price-box">
+                                                                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
                                                                             <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                                                                            {/* <span className="line-through text-primary-color fw-bold mr-2">{item.countrysymbol} {item.displaycutprice}</span> */}
-                                                                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -529,7 +542,7 @@ const Home = () => {
                                                                     <div className="col-md-12">
                                                                         <div className="d-flex align-items-center justify-content-start my-2 mx-2">
                                                                             <img className="card-icon me-1" src={location} alt="" />
-                                                                            <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
+                                                                            <p className="text-primary-color fw-bold mb-0 event-cart-location">
                                                                                 {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
                                                                             </p>
                                                                         </div>

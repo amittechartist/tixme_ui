@@ -529,11 +529,11 @@ p.Ticket-title {
     font-size: 10px !important;
 }
 
-.ticket-price-area-bg {
+/* .ticket-price-area-bg {
     background-image: url('../icon/Rectangleeventpage.svg');
-}
+} */
 
-.ticket-price-area-bg {
+/* .ticket-price-area-bg {
     background-size: 100% 389px;
     background-repeat: no-repeat;
     background-position: bottom;
@@ -541,7 +541,7 @@ p.Ticket-title {
     padding-bottom: 50px;
     padding-left: 20px;
     padding-right: 10px;
-}
+} */
 
 .subsacribe-box {
     height: 500px;

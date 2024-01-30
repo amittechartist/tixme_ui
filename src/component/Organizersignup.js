@@ -204,7 +204,7 @@ const Locationbtn = ({ prorps }) => {
             </Modal>
                 <button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs" onClick={() => setContactModal(!ContactModal)}>
                     <div class="left text-center">
-                        <small class="ms-2">CONTACT US</small>
+                        <small class="ms-2">Get in Touch</small>
                     </div>
                     <div class="right">
                         <img src={arrow} alt="" style={{ width: "15px" }} />

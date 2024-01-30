@@ -1,15 +1,11 @@
-import React from "react";
-import arrow from "./assets/arrow.svg";
-import Logo from "./assets/Logo.svg";
-import Search from "./assets/search.png";
-import Account from "./assets/account.svg";
-import menu from "./assets/menu.svg";
-import plus from "./assets/plus.svg";
-import location from "./assets/location (5) 1.svg";
+import React, { useEffect } from "react";
 import Footer from './footer';
 import HeaderMenu from './headermenu';
 import MobileMenu from './mobilemenu';
 const Faqs = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       {/* <!-- mobile nav --> */}

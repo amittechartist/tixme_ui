@@ -108,11 +108,6 @@ function App() {
           <Route path={app_url + 'auth/organizer/forgot-password'} element={<OrganizerFpassword title={'Tixme'} />} />
           <Route path={app_url + 'auth/admin/login'} element={<AdminLogin title={'Tixme'} />} />
           {/* website */}
-          {/* <Route path={app_url} element={<WebsiteLayout> <Home title={'Tixme'} /> </WebsiteLayout>} /> */}
-          {/* <Route path={app_url + 'aboutus'} element={<WebsiteLayout> <Aboutus title={'About Us'} /> </WebsiteLayout>} /> */}
-          {/* <Route path={app_url + 'privacy-policy'} element={<WebsiteLayout> <Privacy title={'Privacy policy'} /> </WebsiteLayout>} /> */}
-          {/* <Route path={app_url + 'faq'} element={<WebsiteLayout> <Faq title={'FAQ'} /> </WebsiteLayout>} /> */}
-          {/* <Route path={app_url + 'contact'} element={<WebsiteLayout> <Contact title={'Contact Us'} /> </WebsiteLayout>} /> */}
           <Route path={app_url} element={<Home />} />
           <Route path={app_url + 'test'} element={<XYZ title={'Tixme'} />} />
           <Route path={`${app_url}event/:id/:name`} element={<Event title={'Tixme'} />} />

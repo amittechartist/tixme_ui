@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import india from "./assets/india.svg";
-import singapore from "./assets/singapore.svg";
-import USA from "./assets/USA.svg";
 import arrow from "./assets/arrow.svg";
 import Indiaflag from "../common/image/India.svg";
 import Usaflag from "../common/image/usaf.svg";
@@ -11,6 +8,8 @@ import HeaderMenu from './headermenu';
 import MobileMenu from './mobilemenu';
 import toast from 'react-hot-toast';
 import { apiurl, isEmail } from '../common/Helpers';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 const Contact = () => {
   const [tabno, setTabno] = useState(1);
   const [Loader, setLoader] = useState(false);
@@ -70,6 +69,9 @@ const Contact = () => {
     }
 
   }
+  const handlePhoneChange = (newPhone) => {
+    setphone(newPhone);
+  };
   return (
     <>
       <div className="content-area">
@@ -114,7 +116,7 @@ const Contact = () => {
                   <div className="col-lg-4">
                     <div className="mb-3">
                       <label for="exampleInputEmail1" className="form-label">
-                        Email Id
+                        Email ID
                       </label>
                       <input
                         type="text"
@@ -125,22 +127,32 @@ const Contact = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-lg-4">
+
+                  <div className="col-lg-4 extra-phone-css">
                     <div className="mb-3">
                       <label for="exampleInputEmail1" className="form-label">
                         Phone Number
                       </label>
-                      <input
+                      {/* <input
                         type="number"
                         onChange={(e) => setphone(e.target.value)}
                         value={phone}
                         className="form-control line-field"
                         placeholder="+1 012 3456 789"
+                      /> */}
+                      <PhoneInput
+                        country={'us'}
+                        className="phone-number-with-code"
+                        enableSearch={true}
+                        placeholder={'Phone Number'}
+                        autoFormat={true}
+                        value={phone}
+                        onChange={handlePhoneChange}
                       />
                     </div>
                   </div>
                   <div className="col-lg-8">
-                    <p className="text-primary-color fw-bold mb-3">Select Subject?</p>
+                    <p className="text-primary-color fw-bold mb-3">Subject</p>
                     <div className="d-flex flex-md-row flex-column">
                       <div className="form-check me-3">
                         <input
@@ -152,7 +164,7 @@ const Contact = () => {
                           id="flexCheckDefault"
                         />
                         <label className="form-check-label" for="flexCheckDefault">
-                          General enquiry
+                          General Enquiry
                         </label>
                       </div>
                       <div className="form-check me-3">
@@ -165,7 +177,7 @@ const Contact = () => {
                           id="flexCheckDefault2"
                         />
                         <label className="form-check-label" for="flexCheckDefault2">
-                          Ticket issue
+                          Ticket Issue
                         </label>
                       </div>
                     </div>
@@ -180,7 +192,7 @@ const Contact = () => {
                         onChange={(e) => setmessage(e.target.value)}
                         value={message}
                         className="form-control line-field"
-                        placeholder="Write your message."
+                        placeholder="Write your message"
                       />
                     </div>
                   </div>
@@ -198,7 +210,7 @@ const Contact = () => {
                   ) : (
                     <button className="GetLatestUpdateButton" onClick={() => HandelContactForm()}>
                       <div className="left px-0 px-md-4">
-                        <small className="ms-2">Send</small>
+                        <small className="ms-2">Get In Touch</small>
                       </div>
                       <div className="right">
                         <img style={{ width: "18px" }} src={arrow} alt="" />
@@ -235,18 +247,20 @@ const Contact = () => {
               tabno === 1 && (
                 <>
                   <div>
-                    <span className="text-primary-color text-uppercase fw-bold">Address:</span>
+                    <span className="text-primary-color text-uppercase fw-bold">Address:{" "}</span>
                     <span>
-                      Office, Vijay Chambers, Grant Road, Mumbai, Maharashtra 400004
+                      Office No 3N, Vijay Chambers
+                      Premises CHS LTD, Grant Road, Tribhuvan
+                      Road, Mumbai, Maharashtra 400004
                     </span>
                   </div>
                   <div>
-                    <span className="text-primary-color text-uppercase fw-bold">Email</span>
-                    <span>tixme.tix@gmail.com</span>
+                    <span className="text-primary-color text-uppercase fw-bold">Email:{" "}</span>
+                    <span>tixme.india@gmail.com</span>
                   </div>
                   <div>
-                    <span className="text-primary-color text-uppercase fw-bold">Phone</span>
-                    <span>+91 8080000007 (WhatsApp)</span>
+                    <span className="text-primary-color text-uppercase fw-bold">Phone:{" "}</span>
+                    <span>+91 8080292007 (WhatsApp)</span>
                   </div>
                 </>
               )
@@ -255,18 +269,19 @@ const Contact = () => {
               tabno === 2 && (
                 <>
                   <div>
-                    <span className="text-primary-color text-uppercase fw-bold">Address:</span>
+                    <span className="text-primary-color text-uppercase fw-bold">Address:{" "}</span>
                     <span>
-                      Office, Singapure Office <br /> Location
+                      10 Jalan Besar, #17-02 Sim Lim <br />
+                      Tower, Singapore 208787
                     </span>
                   </div>
                   <div>
-                    <span className="text-primary-color text-uppercase fw-bold">Email</span>
-                    <span>tixme.tix@gmail.com</span>
+                    <span className="text-primary-color text-uppercase fw-bold">Email:{" "}</span>
+                    <span> tixme.sg@gmail.com</span>
                   </div>
                   <div>
-                    <span className="text-primary-color text-uppercase fw-bold">Phone</span>
-                    <span>+91 8080000007 (WhatsApp)</span>
+                    <span className="text-primary-color text-uppercase fw-bold">Phone:{" "}</span>
+                    <span>+65 90288903 (WhatsApp)</span>
                   </div>
 
                 </>
@@ -276,18 +291,19 @@ const Contact = () => {
               tabno === 3 && (
                 <>
                   <div>
-                    <span className="text-primary-color text-uppercase fw-bold">Address:</span>
+                    <span className="text-primary-color text-uppercase fw-bold">Address:{" "}</span>
                     <span>
-                      USA Office Location, Broklyn United Staes of America and more
+                      660 Washington Street, Boston,<br /> MA 02111
+
                     </span>
                   </div>
                   <div>
-                    <span className="text-primary-color text-uppercase fw-bold">Email</span>
-                    <span>tixme.tix@gmail.com</span>
+                    <span className="text-primary-color text-uppercase fw-bold">Email:{" "}</span>
+                    <span>tixme.usa@gmail.com</span>
                   </div>
                   <div>
-                    <span className="text-primary-color text-uppercase fw-bold">Phone</span>
-                    <span>+91 8080000007 (WhatsApp)</span>
+                    <span className="text-primary-color text-uppercase fw-bold">Phone:{" "}</span>
+                    <span>+1 (617) 775-0311</span>
                   </div>
                 </>
               )

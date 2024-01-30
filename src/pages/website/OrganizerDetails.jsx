@@ -55,6 +55,7 @@ const Home = () => {
     }
   }
   useEffect(() => {
+    window.scrollTo(0, 0);
     getdata();
   }, [])
   return (
@@ -64,7 +65,7 @@ const Home = () => {
         <HeaderMenu />
         <div className="mx-lg-4 my-lg-3 banner-organizer-page bg-primary-color rounded-8 position-relative">
           <MobileMenu />
-          <h1 className="banner-h text-white text-start text-uppercase">Organizers profile</h1>
+          <h1 className="banner-h text-white text-start text-uppercase animate__animated animate__bounce">Organizers profile</h1>
         </div>
         <div className="row p-md-3 p-0 mx-4 mt-5">
           {screenWidth <= 900 ? (

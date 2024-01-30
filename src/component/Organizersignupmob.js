@@ -95,21 +95,17 @@ const Locationbtn = ({ prorps }) => {
     return (
         <>
             <Modal isOpen={ContactModal} toggle={() => setContactModal(!ContactModal)} centered>
-                <ModalHeader toggle={!ContactModal}>Get in touch
-                    <button className="close p-0" onClick={() => setContactModal(!ContactModal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-                        <FaTimes />
-                    </button>
-                </ModalHeader>
+                
                 <ModalBody>
-                    <Row>
+                <Row>
                         <Col md={12}>
                             <div className="form-group">
-                                <p>Email address <span className="text-danger">*</span></p>
-                                <input className="form-control" type="text" placeholder="email Address" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
+                                <p>Email Address <span className="text-danger">*</span></p>
+                                <input className="form-control" type="text" placeholder="Email Address" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
                             </div>
                             <div className="form-group">
-                                <p>Confirm Email address <span className="text-danger">*</span></p>
-                                <input className="form-control" type="text" placeholder="Confirm email Address" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
+                                <p>Confirm Email Address <span className="text-danger">*</span></p>
+                                <input className="form-control" type="text" placeholder="Confirm Email Address" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
                             </div>
                         </Col>
                         <Col md={6}>
@@ -126,13 +122,13 @@ const Locationbtn = ({ prorps }) => {
                         </Col>
                         <Col md={6}>
                             <div className="form-group">
-                                <p>Phone number <span className="text-danger">*</span></p>
+                                <p>Phone Number <span className="text-danger">*</span></p>
                                 {/* <input className="form-control" type="number" placeholder="Phone number" value={Phonenumber} onChange={handlePhoneChange}></input> */}
                                 <PhoneInput
                                     country={'us'}
                                     className="phone-number-with-code"
                                     enableSearch={true}
-                                    placeholder={'Phone number'}
+                                    placeholder={'Phone Number'}
                                     autoFormat={true}
                                     value={Phonenumber}
                                     onChange={handlePhoneChange}
@@ -141,7 +137,7 @@ const Locationbtn = ({ prorps }) => {
                         </Col>
                         <Col md={6}>
                             <div className="form-group">
-                                <p>Select country <span className="text-danger">*</span></p>
+                                <p>Select Country <span className="text-danger">*</span></p>
                                 <Select
                                     options={countries}
                                     value={selectedCountry}
@@ -159,7 +155,7 @@ const Locationbtn = ({ prorps }) => {
                             {Loader ? (
                                 <button type='button' className="signup-page-button">Please wait...</button>
                             ) : (
-                                <button type='button' className="signup-page-button" onClick={() => HandelOrganizersignup()}>Contact Us</button>
+                                <button type='button' className="signup-page-button" onClick={() => HandelOrganizersignup()}>Get In Touch</button>
                             )}
                         </Col>
                     </Row>

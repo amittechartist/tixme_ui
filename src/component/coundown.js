@@ -38,7 +38,7 @@ const CountdownTimer = ({props}) => {
             return <p>The event has already started!</p>;
         } else {
             return (
-                <div className="right-box-con mt-4">
+                <div className="right-box-con mt-4 d-flex justify-content-center">
                     {Object.entries(timeLeft).map(([unit, value]) => {
                         if (unit !== 'isPast') {
                             return (
