@@ -32,6 +32,7 @@ const Home = () => {
     }
   }
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchorganizer();
   }, [])
   return (
@@ -41,7 +42,7 @@ const Home = () => {
         <HeaderMenu />
         <div className="mx-lg-4 my-lg-3 banner-organizer-page bg-primary-color rounded-8 position-relative">
           <MobileMenu />
-          <h1 className="banner-h text-white text-start text-uppercase">Explore our organizers</h1>
+          <h1 className="banner-h text-white text-start text-uppercase animate__animated animate__bounce">Explore our organizers</h1>
         </div>
         <Row className="mx-4" style={{ marginTop: '50px' }}>
           <div className="row p-3">

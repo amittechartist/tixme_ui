@@ -1747,20 +1747,20 @@ body {
 .right-aww-sl {
   display: inline;
   position: absolute;
-  top: 34%;
+  top: 48%;
   right: -43px;
   height: auto;
-  width: 50px;
+  width: 35px;
   cursor: pointer;
 }
 
 .left-aww-sl {
   display: inline;
   position: absolute;
-  top: 34%;
+  top: 40%;
   left: -48px;
   height: auto;
-  width: 50px;
+  width: 35px;
   transform: rotate(-180deg);
   cursor: pointer;
 }
