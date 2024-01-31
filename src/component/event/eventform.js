@@ -63,6 +63,7 @@ const Type = ({ title, editid }) => {
     const [Startdateselect, setStartdateselect] = useState(new Date());
     const [Enddateselect, setEnddateselect] = useState(new Date());
     const [IsclockCountdown, setIsclockCountdown] = useState(false);
+    const [IsSellingFast, setIsSellingFast] = useState(false);
     const [Displaystarttime, setDisplaystarttime] = useState(false);
     const [EditApiloader, setEditApiloader] = useState(false);
     const [Displayendtime, setDisplayendtime] = useState(false);
@@ -383,6 +384,9 @@ const Type = ({ title, editid }) => {
         var Editid = check_eventcreateid;
     }
 
+    const handleIsSellingFast = (event) => {
+        setIsSellingFast(event.target.checked); // Update state based on checkbox checked status
+    };
     const handleIsclockCountdown = (event) => {
         setIsclockCountdown(event.target.checked); // Update state based on checkbox checked status
     };
@@ -481,6 +485,7 @@ const Type = ({ title, editid }) => {
                 start_data_min: Startdateselect,
                 end_data_min: Enddateselect,
                 is_clock_countdown: IsclockCountdown,
+                is_selling_fast: IsSellingFast,
                 display_start_time: Displaystarttime,
                 display_end_time: Displayendtime,
                 countryname: Countryname,
@@ -600,6 +605,7 @@ const Type = ({ title, editid }) => {
                 start_data_min: Startdateselect,
                 end_data_min: Enddateselect,
                 is_clock_countdown: IsclockCountdown,
+                is_selling_fast: IsSellingFast,
                 display_start_time: Displaystarttime,
                 display_end_time: Displayendtime,
                 organizer_id: organizerid,
@@ -908,6 +914,7 @@ const Type = ({ title, editid }) => {
                         setStartdateselect(data.data.start_data_min[0])
                         setEnddateselect(data.data.end_data_min[0])
                         setIsclockCountdown(data.data.is_clock_countdown)
+                        setIsSellingFast(data.data.is_selling_fast)
                         setDisplaystarttime(data.data.display_start_time)
                         setDisplayendtime(data.data.display_end_time)
                         setEventdesc(data.data.event_desc)
@@ -1066,13 +1073,25 @@ const Type = ({ title, editid }) => {
                                                 value={Currency}
                                             />
                                         </div>
-                                        <div className="col-md-4 mt-4">
+                                        <div className="col-md-2 mt-4">
                                             <label htmlFor="" className="text-black">Display price</label>
                                             <input type="text" class="form-control input-default" value={Displayprice} onChange={(e) => setDisplayprice(e.target.value)} placeholder="Enter Amount" />
                                         </div>
-                                        <div className="col-md-4  mt-4">
+                                        <div className="col-md-2  mt-4">
                                             <label htmlFor="" className="text-black">Display cut price</label>
                                             <input type="text" class="form-control input-default" value={Displaycutprice} onChange={(e) => setDisplaycutprice(e.target.value)} placeholder="Enter Amount" />
+                                        </div>
+                                        <div className="col-md-3 mt-4">
+                                            <div className="row mt-4">
+                                                <div className="col-md-2">
+                                                    <div class="input-group mb-3">
+                                                        <input checked={IsSellingFast} onChange={handleIsSellingFast} type="checkbox" class="form-check-input" />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-10">
+                                                    <p className="mb-0">Show Selling Fast</p>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="col-md-12 mt-4">
                                             <label htmlFor="">Tags</label>
@@ -1174,10 +1193,10 @@ const Type = ({ title, editid }) => {
                                             <p className="mb-0">Tell event-goers when your event starts and ends so they can make plans to attend.</p>
                                         </div>
                                         <div className="col-md-4 mt-4">
-                                            <label htmlFor="">Date & Time</label>
+                                            <label htmlFor="">Events Date & Time</label>
                                             <div className="tab-button-box">
                                                 <span onClick={() => setEventSubtype(1)} className={EventSubtype == 1 ? "tab-button-active" : ""}>Single Event</span>
-                                                {/* <span onClick={() => setEventSubtype(2)} className={EventSubtype == 2 ? "tab-button-active" : ""}> Recurring Event</span> */}
+                                                <span onClick={() => setEventSubtype(2)} className={EventSubtype == 2 ? "tab-button-active" : ""}>Multiple Days</span>
                                             </div>
                                         </div>
                                         <div className="col-md-4 mt-4 d-flex align-items-end">
@@ -1425,7 +1444,7 @@ const Type = ({ title, editid }) => {
                                 {FormSection === 4 ? (
                                     <Row>
                                         <Col md={12} className="text-center mb-5">
-                                            <h2 className="theme-color mb-2 ">Event Price</h2>
+                                            <h2 className="theme-color mb-2 ">Event Tickets</h2>
                                         </Col>
                                         <Col md={12} className="">
                                             <Button variant="link" className="button-join" onClick={HandelCreateticket}>

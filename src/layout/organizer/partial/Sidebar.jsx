@@ -79,11 +79,11 @@ const Sidebar = () => {
                             <span className="nav-text">Support</span>
                         </Link>
                         </li>
-                        <li><Link to={organizer_url+ 'payout-request'} className="ai-icon" aria-expanded="false">
+                        {/* <li><Link to={organizer_url+ 'payout-request'} className="ai-icon" aria-expanded="false">
                             <img src={supportIcon} alt="Your Logo" />
                             <span className="nav-text">Payout Request</span>
                         </Link>
-                        </li>
+                        </li> */}
                         {/* <li onClick={() => d()}><Link to={organizer_url+ 'my-profile'} className="ai-icon" aria-expanded="false">
                             <img src={supportIcon} alt="Your Logo" />
                             <span className="nav-text">Profile Managment</span>

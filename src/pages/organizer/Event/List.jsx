@@ -434,7 +434,7 @@ const Dashboard = ({ title }) => {
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div>
-                                                                                <span className="list-event-name">{item.name}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} src={EditPng} alt="" /></span>
+                                                                                <span className="list-event-name text-capitalize">{item.name}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} src={EditPng} alt="" /></span>
                                                                                 <p className="list-event-desc mb-0">{shortPer(item.event_desc, 100)}</p>
                                                                             </div>
                                                                             <div className="list-event-location">
@@ -445,7 +445,7 @@ const Dashboard = ({ title }) => {
                                                                                         src={LocationIcon}
                                                                                         alt=""
                                                                                     />{" "}
-                                                                                    <span>{item.location}</span>
+                                                                                    <span>{item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}</span>
                                                                                 </div>
                                                                             </div>
                                                                             <div className="desc_data">

@@ -127,9 +127,8 @@ ul#menu span {
   background: #fff;
   border: 1px solid rgba(184, 185, 185, 1);
   padding: 0px;
-  border-radius: 15px;
+  border-radius: 5px;
   overflow: hidden;
-  height: 63px;
   width: fit-content;
 }
 
@@ -152,13 +151,13 @@ ul#menu span {
 }
 
 .tab-button-box span {
-  height: 48px;
+  font-size: 14px;
   color: #000 !important;
   display: inline-block;
   text-align: center;
-  padding: 11px 30px;
+  padding: 5px 15px;
   margin: 6px;
-  border-radius: 10px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -869,7 +868,7 @@ img.list-thum-img {
 }
 
 .list-event-desc {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .in-ticket-list-1 {
@@ -1818,4 +1817,81 @@ body {
   background-color: transparent !important;
   border: none  !important;
   border-radius: 0px  !important;
+}
+.coundown-box {
+    background: #EBF0F8;
+    border-radius: 5px;
+}
+.cowndown-lable {
+  font-size: 10px;
+  color: #9B9B9B;
+}
+.cowndown-val {
+  font-size: 18px;
+  color: #58585B;
+}
+.coundown-number-box {
+  margin: 0px 7px;
+}
+img.coundown-clock {
+  height: auto;
+  width: 38px;
+}
+.days, .hours, .minutes {
+  position: relative;
+}
+.days::before, .hours::before, .minutes::before  {
+  content: ':';
+  position: absolute;
+  right: -11px;
+  top: 0px;
+  font-size: 23px;
+  color: #0047AB;
+  line-height: 28px;
+}
+.Selling-Fast-box {
+  background: #0047AB;
+  display: inline-block;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: 15px;
+  padding: 1px 12px;
+  border-radius: 0px 0px 8px 8px;
+}
+.week-select-box-active{
+  border: 1px solid #0047ab !important;
+}
+.week-select-box:hover{
+  border: 1px solid #0047ab;
+}
+.week-select-box {
+  font-size: 11px;
+  border: 1px solid #eee;
+  padding: 3px 2px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.week-select-box .d {
+  font-size: 13px;
+}
+.week-select-box .a {
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  margin: 0px 10px;
+}
+.week-select-box .b {
+  font-size: 15px;
+}
+.week-select-box .c {
+  font-size: 18px;
+  color: #fff;
+  border-radius: 50%;
+}
+.week-select-box .b-box {
+  background: #0047ab;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
 }

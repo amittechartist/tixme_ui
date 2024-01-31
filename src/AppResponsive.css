@@ -51,6 +51,9 @@
         width: 60px;
         padding-left: 3px;
     }
+    .coundown-number-box {
+        margin: 0px 14px;
+    }
 }
 
 @media only screen and (max-width: 900px) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-
+import Newclockeventpage from "../common/image/newclockeventpage.svg";
 const CountdownTimer = ({props}) => {
     const targetDate = moment(props, 'YYYYMMDD');
     const [timeLeft, setTimeLeft] = useState({
@@ -38,13 +38,16 @@ const CountdownTimer = ({props}) => {
             return <p>The event has already started!</p>;
         } else {
             return (
-                <div className="right-box-con mt-4 d-flex justify-content-center">
+                <div className="coundown-box mt-4 d-flex justify-content-center align-items-center">
+                    <div>
+                        <img src={Newclockeventpage} className='coundown-clock'></img>
+                    </div>
                     {Object.entries(timeLeft).map(([unit, value]) => {
                         if (unit !== 'isPast') {
                             return (
-                                <div className="time-box d-inline-block text-center" key={unit}>
-                                    <p className="time-box-date">{value}</p>
-                                    <p className="time-box-text">{unit.charAt(0).toUpperCase() + unit.slice(1)}</p>
+                                <div className={`d-inline-block text-center coundown-number-box ${unit}`} key={unit}>
+                                    <p className="mb-0 cowndown-val">{value}</p>
+                                    <p className="mb-0 cowndown-lable">{unit.charAt(0).toUpperCase() + unit.slice(1)}</p>
                                 </div>
                             );
                         }
@@ -57,7 +60,7 @@ const CountdownTimer = ({props}) => {
 
     return (
         <div className="start-in-box eventpage-box-style-event-view mb-5">
-            <div className="right-box-title">
+            <div className="right-box-title text-center">
                 <p>Starts In</p>
             </div>
             {renderCountdown()}

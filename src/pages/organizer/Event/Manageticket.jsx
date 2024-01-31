@@ -9,7 +9,7 @@ import ArrowPng from "../../../common/icon/Arrow.svg";
 import Norecord from '../../../component/Norecordui';
 import DateIcon from "../../../common/icon/date 1.svg";
 import TimeIcon from "../../../common/icon/time 1.svg";
-import WhitestarBtn from '../../../component/Whitestarbtn';
+import { FaTimes } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useParams } from 'react-router-dom';
@@ -34,7 +34,10 @@ const Dashboard = ({ title }) => {
     const [Ticketsoldlist, setTicketsoldlist] = useState([]);
     const [Eventdata, setEventdata] = useState([]);
     const [Tickettype, setTickettype] = useState(1);
+    const [IsTicketMultiple, setIsTicketMultiple] = useState();
     const [Ticketname, setTicketname] = useState();
+    const [Description, setDescription] = useState();
+    const [TicketId, setTicketId] = useState();
     const [Ticketoldname, setTicketoldname] = useState();
     const [Quantity, setQuantity] = useState();
     const [TicketStartdate, setTicketStartdate] = useState(new Date());
@@ -81,7 +84,7 @@ const Dashboard = ({ title }) => {
             setLoader(false);
         }
     }
-    
+
     const CountTicketSold = (name) => {
         const filteredList = Ticketsoldlist.filter(item => item.ticket_name === name);
         return filteredList.length;
@@ -145,15 +148,16 @@ const Dashboard = ({ title }) => {
             if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
-            if (!Tax  && Tickettype == 1) {
-                return toast.error('Enter tax amount or 0');
-            }
+            // if (!Tax && Tickettype == 1) {
+            //     return toast.error('Enter tax amount or 0');
+            // }
             setApiLoader(true);
             const requestData = {
-                tax: Tax,
+                tax: 0,
                 updateid: id,
                 ticket_type: Tickettype,
                 name: Ticketname,
+                description: Description,
                 quantity: Quantity,
                 startdate: ticketstartdate,
                 endtdate: ticketenddate,
@@ -208,15 +212,17 @@ const Dashboard = ({ title }) => {
             if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
-            if (!Tax  && Tickettype == 1) {
+            if (!Tax && Tickettype == 1) {
                 return toast.error('Enter tax amount or 0');
             }
             setApiLoader(true);
             const requestData = {
                 tax: Tax,
                 updateid: id,
+                ticketid: TicketId,
                 ticket_type: Tickettype,
                 name: Ticketname,
+                description: Description,
                 oldname: Ticketoldname,
                 quantity: Quantity,
                 startdate: ticketstartdate,
@@ -258,7 +264,7 @@ const Dashboard = ({ title }) => {
             setApiLoader(false);
         }
     }
-    const HandelTicketEdit = async (name) => {
+    const HandelTicketEdit = async (ticketid) => {
         try {
             const requestData = {
                 updateid: id
@@ -275,14 +281,16 @@ const Dashboard = ({ title }) => {
 
                     if (data.success == true) {
                         const fetchdata = data.data.allprice;
-                        const targetName = name; // Provide the name you want to filter
-                        const filteredData = fetchdata.filter(item => item.name === targetName);
+                        const targetID = ticketid; // Provide the name you want to filter
+                        const filteredData = fetchdata.filter(item => item.id === targetID);
                         if (filteredData.length > 0) {
                             setIsEdit(true);
                             setTicketshow(!Ticketshow);
                             // setEditApiLoader(true);
+                            setIsTicketMultiple(data.data.event_subtype_id);
                             setTickettype(filteredData[0].ticket_type);
                             setTicketname(filteredData[0].name);
+                            setTicketId(filteredData[0].id);
                             setQuantity(filteredData[0].quantity);
                             setPrice(filteredData[0].ticket_amount);
                             setTicketoldname(filteredData[0].name);
@@ -306,6 +314,7 @@ const Dashboard = ({ title }) => {
     function emptyPriceForm() {
         setTickettype(1);
         setTicketname('');
+        setTicketId('');
         setQuantity('');
         setPrice('');
         setPricedisable(false);
@@ -320,7 +329,7 @@ const Dashboard = ({ title }) => {
         setSearchTerm(value);
         // Now filter the events based on the search term
         if (value) {
-            
+
             const filteredEvents = allEvents.filter(event =>
                 event.name.toLowerCase().includes(value.toLowerCase()));
             setListitems(filteredEvents);
@@ -378,14 +387,14 @@ const Dashboard = ({ title }) => {
                                                                     <Row>
                                                                         <Col md={4}>
                                                                             <div className="text-center">
-                                                                                <span className="ticket-list-name">{item.name}</span> <span className="cursor-pointre list-event-edit-btn" onClick={() => HandelTicketEdit(item.name)}><img src={EditPng} alt="" /></span>
+                                                                                <span className="ticket-list-name">{item.name}</span> <span className="cursor-pointre list-event-edit-btn" onClick={() => HandelTicketEdit(item.id)}><img src={EditPng} alt="" /></span>
                                                                                 <p className="ticket-list-price_title mb-0">Price</p>
                                                                                 <p className="ticket-list-price_value">{item.ticket_type == 1 ? Eventdata.countrysymbol + ' ' + item.price : 'Free'}</p>
                                                                             </div>
                                                                         </Col>
                                                                         <Col md={8}>
                                                                             <div>
-                                                                            <Row className="pt-4">
+                                                                                <Row className="pt-4">
                                                                                     <Col md={3} className="ticket-sts-box  text-center border-right">
                                                                                         <p>Total Ticket</p>
                                                                                         <h2>{item.quantity}</h2>
@@ -404,7 +413,7 @@ const Dashboard = ({ title }) => {
                                                                                             <h2>
                                                                                                 {item.price > 0 ? (
                                                                                                     <>
-                                                                                                    {Eventdata.countrysymbol}{parseInt(item.price, 10) * parseInt(CountTicketSold(item.name), 10)}
+                                                                                                        {Eventdata.countrysymbol}{parseInt(item.price, 10) * parseInt(CountTicketSold(item.name), 10)}
                                                                                                     </>
                                                                                                 ) : 'FREE'}
 
@@ -432,7 +441,11 @@ const Dashboard = ({ title }) => {
                 </div>
             </div >
             <Modal isOpen={Ticketshow} toggle={() => setTicketshow(!Ticketshow)} className='modal-dialog-centered modal-lg'>
-                <ModalHeader className='bg-transparent' toggle={() => setTicketshow(!Ticketshow)}>Manage Ticket</ModalHeader>
+                <ModalHeader className='bg-transparent'>Manage Ticket
+                    <button className="close p-0" onClick={() => setTicketshow(!Ticketshow)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
+                        <FaTimes />
+                    </button>
+                </ModalHeader>
                 <ModalBody className=''>
                     {EditApiLoader ? (
                         <div className="linear-background w-100"> </div>
@@ -446,69 +459,78 @@ const Dashboard = ({ title }) => {
                                     {/* <span onClick={() => { setTickettype(3); setPricedisable(true); setPrice(''); }} className={Tickettype === 3 ? "tab-button-active" : ""}>Donation</span> */}
                                 </div>
                             </Col>
-                            <Col md={12} className="mb-2 mt-4">
+                            <Col md={4} className="mb-2 mt-4">
                                 <label htmlFor="" className="text-black">Name</label>
                                 <input type="text" class="form-control input-default" onChange={(e) => setTicketname(e.target.value)} value={Ticketname} placeholder="Name" />
                             </Col>
-                            <Col md={4} className="mb-2">
+                            <Col md={4} className="mb-2 mt-4">
                                 <label htmlFor="" className="text-black">Available quantity</label>
                                 <input type="number" class="form-control input-default" onChange={(e) => setQuantity(e.target.value)} value={Quantity} placeholder="Available quantity" />
                             </Col>
-                            <Col md={4} className="mb-2">
+                            <Col md={4} className="mb-2 mt-4">
                                 <label htmlFor="" className="text-black">Price</label>
                                 <Input type="number" disabled={Pricedisable} class="form-control input-default" value={Price} onChange={(e) => setPrice(e.target.value)} placeholder="Price" />
                             </Col>
-                            <Col md={4} className="mb-2">
+                            <Col md={12} className="mb-2">
+                                <label htmlFor="" className="text-black">Description</label>
+                                <input type="text" class="form-control input-default" onChange={(e) => setDescription(e.target.value)} value={Description} placeholder="Description" />
+                            </Col>
+                            <Col md={4} className="mb-2"></Col>
+                            {/* <Col md={4} className="mb-2">
                                 <label htmlFor="" className="text-black">Tax (%)</label>
                                 <Input type="number" disabled={Pricedisable} class="form-control input-default" value={Tax} onChange={(e) => setTax(e.target.value)} placeholder="Tax" />
-                            </Col>
-                            <Col md={4} className="mb-2 mt-4">
-                                <label htmlFor="" className="text-black">Start date</label>
-                                <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                    <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                    <input type="text" class="form-control date-border-redius date-border-redius-input date_filter" placeholder="" readOnly value={ticketstartdate} />
-                                    <div className="date-style-picker">
-                                        <Flatpickr
-                                            value={TicketStartdate}
-                                            data-enable-time
-                                            id='date-picker'
-                                            className='form-control'
-                                            onChange={date => setTicketStartdate(date)}
-                                        />
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md={4} className="mb-2  mt-4">
-                                <label htmlFor="" className="text-black">Start time</label>
-                                <div class="input-group mb-3 input-warning-o">
-                                    <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                    <input type="text" class="form-control date-border-redius-input date_filter" placeholder="" readOnly value={ticketstarttime} />
-                                </div>
-                            </Col>
-                            <Col md={12} className="mb-2"></Col>
-                            <Col md={4} className="mb-2">
-                                <label htmlFor="" className="text-black">End date</label>
-                                <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                    <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                    <input type="text" class="form-control date-border-redius date-border-redius-input date_filter" placeholder="" readOnly value={ticketenddate} />
-                                    <div className="date-style-picker">
-                                        <Flatpickr
-                                            value={TicketEndtdate}
-                                            data-enable-time
-                                            id='date-picker'
-                                            className='form-control'
-                                            onChange={date => setTicketEndtdate(date)}
-                                        />
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md={4} className="mb-2">
-                                <label htmlFor="" className="text-black">End time</label>
-                                <div class="input-group mb-3 input-warning-o">
-                                    <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                    <input type="text" class="form-control date-border-redius-input date_filter" placeholder="" readOnly value={ticketendtime} />
-                                </div>
-                            </Col>
+                            </Col> */}
+                            {IsTicketMultiple && IsTicketMultiple == 2 && (
+                                <>
+                                    <Col md={4} className="mb-2 mt-4">
+                                        <label htmlFor="" className="text-black">Start date</label>
+                                        <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
+                                            <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                            <input type="text" class="form-control date-border-redius date-border-redius-input date_filter" placeholder="" readOnly value={ticketstartdate} />
+                                            <div className="date-style-picker">
+                                                <Flatpickr
+                                                    value={TicketStartdate}
+                                                    data-enable-time
+                                                    id='date-picker'
+                                                    className='form-control'
+                                                    onChange={date => setTicketStartdate(date)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </Col>
+                                    <Col md={4} className="mb-2  mt-4">
+                                        <label htmlFor="" className="text-black">Start time</label>
+                                        <div class="input-group mb-3 input-warning-o">
+                                            <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
+                                            <input type="text" class="form-control date-border-redius-input date_filter" placeholder="" readOnly value={ticketstarttime} />
+                                        </div>
+                                    </Col>
+                                    <Col md={12} className="mb-2"></Col>
+                                    <Col md={4} className="mb-2">
+                                        <label htmlFor="" className="text-black">End date</label>
+                                        <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
+                                            <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                            <input type="text" class="form-control date-border-redius date-border-redius-input date_filter" placeholder="" readOnly value={ticketenddate} />
+                                            <div className="date-style-picker">
+                                                <Flatpickr
+                                                    value={TicketEndtdate}
+                                                    data-enable-time
+                                                    id='date-picker'
+                                                    className='form-control'
+                                                    onChange={date => setTicketEndtdate(date)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </Col>
+                                    <Col md={4} className="mb-2">
+                                        <label htmlFor="" className="text-black">End time</label>
+                                        <div class="input-group mb-3 input-warning-o">
+                                            <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
+                                            <input type="text" class="form-control date-border-redius-input date_filter" placeholder="" readOnly value={ticketendtime} />
+                                        </div>
+                                    </Col>
+                                </>
+                            )}
                             <Col md={12}>
                                 <>
                                     {ApiLoader ? (

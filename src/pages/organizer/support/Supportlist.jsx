@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { apiurl, organizer_url, isEmail, getSupportbagecolor, get_date_time, get_min_date, shortPer } from '../../../common/Helpers';
-
 import { Button, Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
-
 import Searchicon from '../../../common/icon/searchicon.png';
 import DateIcon from "../../../common/icon/date 2.svg";
 import WhiteButton from '../../../component/Whitestarbtn';
@@ -19,6 +17,9 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 import { useParams } from 'react-router-dom';
 import { FaCircle } from "react-icons/fa6";
+import Indiaflag from "../../../common/image/India.svg";
+import Usaflag from "../../../common/image/usaf.svg";
+import Singapureflag from "../../../common/image/singapur.svg";
 const Dashboard = ({ title }) => {
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal)
@@ -665,7 +666,7 @@ const Dashboard = ({ title }) => {
             ]
         }
     ]
-
+    const [tabno, setTabno] = useState(1);
     return (
         <>
             <Modal isOpen={Daterange} toggle={() => setDaterange(!Daterange)} centered>
@@ -713,8 +714,7 @@ const Dashboard = ({ title }) => {
             </Modal>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
-
-                    <Row className="justify-content-center">
+                    <Row className="d-none justify-content-center">
                         <Col md={12}>
                             <Card className="py-4">
                                 <Card.Body>
@@ -933,6 +933,98 @@ const Dashboard = ({ title }) => {
                             </Card >
                         </Col >
                     </Row >
+                    <Row className="justify-content-center">
+                        <div className="col-md-12">
+                            <Card className="py-4">
+                                <Card.Body>
+                                    <div className="banner-child-address py-5 px-md-0 px-3">
+                                        {/* <TabComp /> */}
+                                        <div className="d-flex justify-content-center">
+                                            <div onClick={() => setTabno(2)} className={tabno == 2 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
+                                                <p className="sssas">singapore</p>
+                                                <img className="flag-icon" src={Singapureflag}></img>
+                                            </div>
+                                            <div onClick={() => setTabno(3)} className={tabno == 3 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
+                                                <p className="sssas">USA</p>
+                                                <img className="flag-icon" src={Usaflag}></img>
+                                            </div>
+                                            <div onClick={() => setTabno(1)} className={tabno == 1 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
+                                                <p className="sssas">India</p>
+                                                <img className="flag-icon" src={Indiaflag}></img>
+                                            </div>
+                                        </div>
+                                        <div className="contact-sec w-500 m-auto px-5 py-4 mt-4">
+                                            {
+                                                tabno === 1 && (
+                                                    <>
+                                                        <div>
+                                                            <span className="text-primary-color text-uppercase fw-bold">Address:{" "}</span>
+                                                            <span>
+                                                                Office No 3N, Vijay Chambers
+                                                                Premises CHS LTD, Grant Road, Tribhuvan
+                                                                Road, Mumbai, Maharashtra 400004
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-primary-color text-uppercase fw-bold">Email:{" "}</span>
+                                                            <span>tixme.india@gmail.com</span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-primary-color text-uppercase fw-bold">Phone:{" "}</span>
+                                                            <span>+91 8080292007 (WhatsApp)</span>
+                                                        </div>
+                                                    </>
+                                                )
+                                            }
+                                            {
+                                                tabno === 2 && (
+                                                    <>
+                                                        <div>
+                                                            <span className="text-primary-color text-uppercase fw-bold">Address:{" "}</span>
+                                                            <span>
+                                                                10 Jalan Besar, #17-02 Sim Lim <br />
+                                                                Tower, Singapore 208787
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-primary-color text-uppercase fw-bold">Email:{" "}</span>
+                                                            <span> tixme.sg@gmail.com</span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-primary-color text-uppercase fw-bold">Phone:{" "}</span>
+                                                            <span>+65 90288903 (WhatsApp)</span>
+                                                        </div>
+
+                                                    </>
+                                                )
+                                            }
+                                            {
+                                                tabno === 3 && (
+                                                    <>
+                                                        <div>
+                                                            <span className="text-primary-color text-uppercase fw-bold">Address:{" "}</span>
+                                                            <span>
+                                                                660 Washington Street, Boston,<br /> MA 02111
+
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-primary-color text-uppercase fw-bold">Email:{" "}</span>
+                                                            <span>tixme.usa@gmail.com</span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-primary-color text-uppercase fw-bold">Phone:{" "}</span>
+                                                            <span>+1 (617) 775-0311</span>
+                                                        </div>
+                                                    </>
+                                                )
+                                            }
+                                        </div>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </div>
+                    </Row>
                 </div >
             </div >
 
