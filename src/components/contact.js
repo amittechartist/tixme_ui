@@ -226,10 +226,6 @@ const Contact = () => {
         <div className="address-sec banner-child-address py-5 px-md-0 px-3">
           {/* <TabComp /> */}
           <div className="d-flex justify-content-center">
-            <div onClick={() => setTabno(1)} className={tabno == 1 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
-              <p className="sssas">India</p>
-              <img className="flag-icon" src={Indiaflag}></img>
-            </div>
             <div onClick={() => setTabno(2)} className={tabno == 2 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
               <p className="sssas">singapore</p>
               <img className="flag-icon" src={Singapureflag}></img>
@@ -237,6 +233,10 @@ const Contact = () => {
             <div onClick={() => setTabno(3)} className={tabno == 3 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
               <p className="sssas">USA</p>
               <img className="flag-icon" src={Usaflag}></img>
+            </div>
+            <div onClick={() => setTabno(1)} className={tabno == 1 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
+              <p className="sssas">India</p>
+              <img className="flag-icon" src={Indiaflag}></img>
             </div>
             {/* <img onClick={() => setTabno(1)} className="mx-lg-4 mx-2 animate__animated animate__bounce" src={india} alt="" />
           <img onClick={() => setTabno(2)} className="mx-lg-4 mx-2 animate__animated animate__bounce" src={singapore} alt="" />

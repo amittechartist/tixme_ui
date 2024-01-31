@@ -4,7 +4,7 @@ import MobileMenu from '../../../components/mobilemenu';
 import 'react-phone-input-2/lib/style.css';
 import { Link } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
-import { FiPlus } from "react-icons/fi";
+// import { FiPlus } from "react-icons/fi";
 import OrganizerSignup from '../../../component/Organizersignup';
 import { app_url, apiurl, isEmail } from '../../../common/Helpers';
 import { useNavigate } from "react-router-dom";
@@ -241,7 +241,7 @@ const About = () => {
                         <div className="col-12 col-md-5 col-lg-5 mt-5">
                             <div className="GetCustomerButtonBox">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Sign Up - Custome</h4>
+                                <h4>Sign Up - Customer</h4>
                                 <Link to={app_url + 'auth/customer/signup'}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
                                     <div class="left text-center">
                                         <small class="ms-2">Create Account</small>

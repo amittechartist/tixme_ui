@@ -312,7 +312,7 @@ const Home = () => {
                 </div>
                 <div className="event-view-body">
                     <Row className="mx-4" style={{ marginTop: '50px' }}>
-                        <Col md={3} className="filter-according events-page-filter-box mb-4 mb-md-0">
+                        <Col md={3} className="filter-according events-page-filter-box mb-4 mb-md-0" style={{height:"100%"}}>
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="events-page-search" id="inputForm1Div" style={{ height: '40px' }}>
@@ -359,7 +359,7 @@ const Home = () => {
                                     <div>
                                         <p className="mb-0 theme-color">Mode</p>
                                         <div className="filterbutton-container">
-                                            <a onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
+                                            <a style={{paddingLeft:"16px", paddingRight: "16px"}} onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
                                             <a onClick={() => setEventtype(Eventtype == 2 ? '' : 2)} className={Eventtype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>In-Person</a>
                                         </div>
                                     </div>
@@ -368,8 +368,8 @@ const Home = () => {
                                     <div>
                                         <p className="mb-0 theme-color">Admission</p>
                                         <div className="filterbutton-container">
-                                            <a onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
-                                            <a onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
+                                            <a style={{paddingLeft:"20px", paddingRight: "20px"}} onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
+                                            <a style={{paddingLeft:"20px", paddingRight: "20px"}} onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
                                         </div>
                                     </div>
                                 </Col>

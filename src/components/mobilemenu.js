@@ -283,7 +283,6 @@ const Header = () => {
                                 </Link>
                             </li>
                             <OrganizerSignupmob prorps={'pcheadermenu'} />
-                            <CartListItem />
                             <li class="nav-item d-flex align-items-center justify-content-center me-xl-5  me-3">
                                 {customer_token || organizername ? (
                                     <>
@@ -309,16 +308,16 @@ const Header = () => {
                                     <>
                                         <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav" to={app_url + 'auth/login-signup'}>
                                             Login/Sign Up{" "}
-                                            <img class="nav-plus" src={plus} alt="" />
+                                            {/* <img class="nav-plus" src={plus} alt="" /> */}
                                         </Link>
                                         {/* <Link to={app_url + 'auth/login-signup'} className='top-login-sign-btn d-flex align-items-center justify-content-center' >
                                             <span className="top-login-sign-btn-icon"><FaEllipsis /></span><span><img src={NewLoginicon}></img></span>
                                         </Link> */}
                                     </>
                                 )}
-
                                 <HeaderLocation prorps={'pc'} />
                             </li>
+                            <CartListItem />
                         </ul>
                     </div>
                 </div>

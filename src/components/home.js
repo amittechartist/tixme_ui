@@ -641,7 +641,7 @@ const Home = () => {
         <div className="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
           <MobileMenu />
           <div className='d-md-flex flex-md-1 align-items-center BeyondTickets-sec'>
-            <h1 className="banner-h-home-pg text-white text-start text-uppercase mb-0">Beyond Tickets :</h1>
+            <h1 className="banner-h-home-pg text-white text-start text-uppercase mb-0 ">Beyond Tickets :</h1>
             <div className="animation-home-banner">
               {transitions((style, i) => (
                 <animated.div
@@ -788,7 +788,9 @@ const Home = () => {
                     </div>
                   ))}
                 </Slider>
-                <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("Singapore")}>More events</button>
+                <div className="d-flex justify-content-end">
+                  <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("Singapore")}>More events</button>
+                </div>
               </div>
             )}
           </div>
@@ -859,7 +861,9 @@ const Home = () => {
                     </div>
                   ))}
                 </Slider>
-                <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("India")}>More events</button>
+                <div className="d-flex justify-content-end">
+                  <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("India")}>More events</button>
+                </div>
               </div>
             )}
           </div>
@@ -930,7 +934,9 @@ const Home = () => {
                     </div>
                   ))}
                 </Slider>
-                <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("united states")}>More events</button>
+                <div className="d-flex justify-content-end">
+                  <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("united states")}>More events</button>
+                </div>
               </div>
             )}
           </div>
