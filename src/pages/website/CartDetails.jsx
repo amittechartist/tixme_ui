@@ -116,7 +116,7 @@ const Home = () => {
             }
             if (!Beartoken) {
                 console.log("ss");
-                toast.error("Login to your account");
+                // toast.error("Login to your account");
                 // navigate(app_url + 'auth/customer/login');
                 setshowLoginasGuest(true);
                 return;
@@ -458,7 +458,7 @@ const Home = () => {
                 navigate(app_url);
             }
             if (!Beartoken && !GuestToken && !LoginToken) {
-                toast.error("Login to your account");
+                // toast.error("Login to your account");
                 // navigate(app_url + 'auth/customer/login');
                 // setshowLoginasGuest(true);
                 setLoginmodal(true);
@@ -530,7 +530,7 @@ const Home = () => {
     const HandelSavecart = async () => {
         try {
             if (!Beartoken) {
-                toast.error("Login to your account");
+                // toast.error("Login to your account");
                 navigate(app_url + 'auth/customer/login');
                 return;
             }
@@ -609,7 +609,10 @@ const Home = () => {
                                     <div className="border-bottom py-2"></div>
                                     <div className="text-center">OR</div>
                                     <div className="text-center">
-                                        <button type="button" className="btn theme-bg w-100 text-white mt-3" onClick={() => setshowLoginasGuest(false)}>Log In</button>
+                                        <button type="button" style={{width:"230px"}} className="btn theme-bg text-white mt-3" onClick={() => setshowLoginasGuest(false)}>Log In</button>
+                                        <Link to={app_url + 'auth/customer/signup'}>
+                                           <button type="button" style={{width:"230px"}} className="btn theme-bg ml-1 text-white mt-3">Sign up</button>
+                                        </Link>
                                     </div>
                                 </Row>
                                 {/* /customer/login-as-guest */}

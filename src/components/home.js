@@ -788,7 +788,9 @@ const Home = () => {
                     </div>
                   ))}
                 </Slider>
-                <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("Singapore")}>More events</button>
+                <div className="d-flex justify-content-end">
+                  <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("Singapore")}>More events</button>
+                </div>
               </div>
             )}
           </div>
@@ -859,7 +861,9 @@ const Home = () => {
                     </div>
                   ))}
                 </Slider>
-                <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("India")}>More events</button>
+                <div className="d-flex justify-content-end">
+                  <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("India")}>More events</button>
+                </div>
               </div>
             )}
           </div>
@@ -930,7 +934,9 @@ const Home = () => {
                     </div>
                   ))}
                 </Slider>
-                <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("united states")}>More events</button>
+                <div className="d-flex justify-content-end">
+                  <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("united states")}>More events</button>
+                </div>
               </div>
             )}
           </div>

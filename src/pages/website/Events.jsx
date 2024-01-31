@@ -312,7 +312,7 @@ const Home = () => {
                 </div>
                 <div className="event-view-body">
                     <Row className="mx-4" style={{ marginTop: '50px' }}>
-                        <Col md={3} className="filter-according events-page-filter-box mb-4 mb-md-0">
+                        <Col md={3} className="filter-according events-page-filter-box mb-4 mb-md-0" style={{height:"100%"}}>
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="events-page-search" id="inputForm1Div" style={{ height: '40px' }}>

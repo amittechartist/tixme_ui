@@ -283,7 +283,6 @@ const Header = () => {
                                 </Link>
                             </li>
                             <OrganizerSignupmob prorps={'pcheadermenu'} />
-                            <CartListItem />
                             <li class="nav-item d-flex align-items-center justify-content-center me-xl-5  me-3">
                                 {customer_token || organizername ? (
                                     <>
@@ -318,6 +317,7 @@ const Header = () => {
                                 )}
                                 <HeaderLocation prorps={'pc'} />
                             </li>
+                            <CartListItem />
                         </ul>
                     </div>
                 </div>

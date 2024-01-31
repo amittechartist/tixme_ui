@@ -241,7 +241,7 @@ const About = () => {
                         <div className="col-12 col-md-5 col-lg-5 mt-5">
                             <div className="GetCustomerButtonBox">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Sign Up - Custome</h4>
+                                <h4>Sign Up - Customer</h4>
                                 <Link to={app_url + 'auth/customer/signup'}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
                                     <div class="left text-center">
                                         <small class="ms-2">Create Account</small>
