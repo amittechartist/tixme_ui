@@ -11,6 +11,7 @@ import Slider from "react-slick";
 import Footer from './footer';
 import HeaderMenu from './headermenu';
 import MobileMenu from './mobilemenu';
+import RAwway from '../common/right.png';
 import Journey1 from '../common/image/aboutus/Low Fee.svg'
 import Journey2 from '../common/image/aboutus/Support (5).svg'
 import Journey3 from '../common/image/aboutus/Techonolgy.svg'
@@ -19,6 +20,19 @@ const About = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  function SampleNextArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+      <img className="right-aww-sl" src={RAwway} onClick={onClick} alt="" />
+    );
+  }
+  
+  function SamplePrevArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+      <img className="left-aww-sl" src={RAwway} onClick={onClick} alt="" />
+    );
+  }
   const settings = {
     dots: false,
     infinite: true,
@@ -27,6 +41,8 @@ const About = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
     responsive: [
       {
         breakpoint: 768, // Adjust the breakpoint as needed
@@ -186,28 +202,28 @@ const About = () => {
           </h3>
           <div className="partnetSlider">
             <Slider {...settings}>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={google} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={airBNB} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={booking} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={expedia} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={google} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={airBNB} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={booking} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={expedia} alt="google" />
               </div>
             </Slider>

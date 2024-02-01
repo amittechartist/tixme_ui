@@ -312,7 +312,7 @@ const Home = () => {
                 </div>
                 <div className="event-view-body">
                     <Row className="mx-4" style={{ marginTop: '50px' }}>
-                        <Col md={3} className="filter-according events-page-filter-box mb-4 mb-md-0" style={{height:"100%"}}>
+                        <Col md={3} xl={3} lg={4} className="filter-according events-page-filter-box mb-4 mb-md-0" style={{height:"100%"}}>
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="events-page-search" id="inputForm1Div" style={{ height: '40px' }}>
@@ -326,7 +326,7 @@ const Home = () => {
                                             onKeyDown={handleEnterPress}
                                             style={{ height: '40px', border: 'none' }}
                                         />
-                                        <button className="dfssfdsfdsf" type="button" style={{ background: '#F6F6F6' }}>
+                                        <button className="dfssfdsfdsf" onClick={() => fetchEvent()} type="button" style={{ background: '#F6F6F6' }}>
                                             <img src={InputSearchIcon} alt="" />
                                         </button>
                                     </div>
@@ -475,29 +475,29 @@ const Home = () => {
                             </div>
 
                         </Col>
-                        <Col md={9}>
+                        <Col md={9} xl={9} lg={8}>
                             <div className="event-category-section mb-5 in-event-page">
                                 <Container fluid className="">
                                     {Eventloader ? (
                                         <>
                                             <Row>
                                                 <Col md={4} className="mb-5">
-                                                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                                                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
                                                 </Col>
                                                 <Col md={4} className="mb-5">
-                                                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                                                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
                                                 </Col>
                                                 <Col md={4} className="mb-5">
-                                                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                                                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
                                                 </Col>
                                                 <Col md={4} className="mb-5">
-                                                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                                                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
                                                 </Col>
                                                 <Col md={4} className="mb-5">
-                                                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                                                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
                                                 </Col>
                                                 <Col md={4} className="mb-5">
-                                                    <div className="linear-background w-100" style={{ height: '400px' }}> </div>
+                                                    <div className="linear-background w-100" style={{ height: '300px' }}> </div>
                                                 </Col>
                                             </Row>
                                         </>
@@ -506,7 +506,7 @@ const Home = () => {
                                             {Eventlist.length > 0 ? (
                                                 <Row className="event-box-mobile">
                                                     {Eventlist.map((item, index) => (
-                                                        <div className="col-xl-4 col-xxl-4 col-md-4 col-12 mb-3">
+                                                        <div className="col-xl-4 col-lg-6 col-md-6 col-12 mb-3">
                                                             <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
                                                                 <div style={{ position: 'relative' }}>
                                                                     <span className="event-category-img">{item.category_name}</span>

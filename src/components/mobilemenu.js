@@ -249,7 +249,7 @@ const Header = () => {
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 position-relative">
+                        <ul class="navbar-nav navbar-nav-pc-mergin ms-auto mb-2 mb-lg-0 position-relative">
                             <li class="nav-item d-flex align-items-center justify-content-center me-xl-4  me-3">
                                 <Link
                                     class="nav-link text-primary-theme pe-1 font-nav"
@@ -306,7 +306,7 @@ const Header = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <Link class="nav-link text-primary-theme pt-1 pb-1p font-nav" to={app_url + 'auth/login-signup'}>
+                                        <Link class="nav-link text-primary-theme pt-1 font-nav pc-top-menu-box" to={app_url + 'auth/login-signup'}>
                                             Login/Sign Up{" "}
                                             {/* <img class="nav-plus" src={plus} alt="" /> */}
                                         </Link>

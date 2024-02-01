@@ -402,7 +402,7 @@ span.on-img-date-val {
 .grediant-border{
     background: linear-gradient(#fff, white) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box;
     border-radius: 5px;
-    border: 2px solid transparent;
+    border: 1px solid transparent;
 }
 .right-box-title p {
     color: #0047AB;
@@ -1414,7 +1414,7 @@ p.cursor-pointer.my-location-btn {
     border-right: 1px solid #003b8f;
 }
 .singel-event-page-head-box{
-    margin: 10px 0px 0px 66px
+    margin: -15px 0px 0px 66px
 }
 .dfssfdsfdsf:hover{
     background: #f0f0f0 !important;

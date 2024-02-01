@@ -207,9 +207,9 @@ const Home = () => {
     prevArrow: <SamplePrevArrow />,
     responsive: [
       {
-        breakpoint: 992, // Adjust the breakpoint as needed
+        breakpoint: 1150, // Adjust the breakpoint as needed
         settings: {
-          slidesToShow: 6,
+          slidesToShow: 5,
           slidesToScroll: 1,
         },
       },
@@ -706,7 +706,7 @@ const Home = () => {
                           <div className="text-center position-relative">
                             <div className="event-card pt-4" id="event-card" onClick={() => HandelCategorsearch(item._id)}>
                               <img className="event-img  animate__animated animate__bounce" src={CategoryImage[index].image} alt="" />
-                              <small className="d-block text-card-color my-2 mt-3" style={{ fontSize: '12px' }}> {item.name} </small>
+                              <small className="d-block text-card-color my-2 mt-3 home-category-slide-name"> {item.name} </small>
                             </div>
                             <div className="fade-effect"></div>
                           </div>
@@ -971,28 +971,28 @@ const Home = () => {
           </h3>
           <div className="partnetSlider">
             <Slider {...settings}>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={google} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={airBNB} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={booking} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={expedia} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={google} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={airBNB} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={booking} alt="google" />
               </div>
-              <div>
+              <div className="d-flex justify-content-center">
                 <img className="company_logo" src={expedia} alt="google" />
               </div>
             </Slider>

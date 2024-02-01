@@ -47,10 +47,12 @@
     .slider {
         width: 230px !important;
     }
+
     input.price-range-picker-input {
         width: 60px;
         padding-left: 3px;
     }
+
     .coundown-number-box {
         margin: 0px 14px;
     }
@@ -118,5 +120,36 @@
 
     .list-Total-Ticket {
         font-size: 11px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1150px) {
+    .font-nav {
+        font-size: 9px !important;
+    }
+
+    .banner-h-home-pg {
+        font-size: 32px;
+    }
+
+    .animation-home-banner {
+        margin-left: 17px;
+        font-size: 26px;
+        padding: 0px 10px;
+        width: 506px;
+        height: 44px;
+    }
+
+    .home-category-slide-name {
+        font-size: 8px;
+    }
+    .space-sec {
+        padding: 0rem 1rem;
+    }
+    .event-pg-icon {
+        font-size: 22px;
+    }
+    span.event-pg-icon-img img {
+        width: 26px;
     }
 }

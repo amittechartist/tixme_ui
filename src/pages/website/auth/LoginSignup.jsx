@@ -270,7 +270,7 @@ const About = () => {
                         <div className="col-12 col-md-5 col-lg-5 mt-5">
                             <div className="GetCustomerButtonBox mt-4">
                                 <img src={TopIcon} alt="" className="TopLeftImg" />
-                                <h4>Sign Up - Organize</h4>
+                                <h4>Sign Up - Organizer</h4>
                                 <OrganizerSignup />
                             </div>
                         </div>

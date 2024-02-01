@@ -677,7 +677,7 @@ const Home = () => {
                                                                                         <img height={20} width={20} src={calendar} alt="" />
                                                                                     </div>
                                                                                     <div>
-                                                                                        <p className="mb-0 aaa">{item.event.start_date}</p>
+                                                                                        <p className="mb-0 aaa">{item.event.event_subtype_id == 2 ? item.startdate : item.event.start_date}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -688,7 +688,7 @@ const Home = () => {
                                                                                     </div>
                                                                                     <div>
                                                                                         <p className="mb-0 aaa">Event Time</p>
-                                                                                        <p className="mb-0 bbb">{item.event.start_time}</p>
+                                                                                        <p className="mb-0 bbb">{item.event.event_subtype_id == 2 ? item.starttime : item.event.start_time}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -727,39 +727,6 @@ const Home = () => {
                                                                 </div>
                                                             </div>
                                                             <img src={CartBG} style={{ height: '100%', width: '100%', objectFit: 'contain' }} alt="" />
-                                                            {/* <Card>
-                                                        <Card.Body>
-                                                            <div className="cart-details-box">
-                                                                <div className="right-box-con in-event-page-cart-sec">
-                                                                    <Row>
-                                                                        <Col md={12}>
-                                                                            <p className="Ticket-title">{item.event.display_name} | <span><img height={20} width={20} src={Timelogo} alt="" /></span>Event Time - {item.event.start_time}</p>
-                                                                        </Col>
-                                                                        <Col md={4}>
-                                                                            <p className="mb-0 cart-ticket-name">{item.name}</p>
-                                                                        </Col>
-                                                                        <Col md={4}>
-                                                                            {item.price > 0 ? (
-                                                                                <span className="cart-price">Price : {currency_symble} {item.price}</span>
-                                                                            ) : (
-                                                                                <span className="cart-price">Price : Free</span>
-                                                                            )}
-
-                                                                        </Col>
-                                                                        <Col md={4}>
-                                                                            <div className="d-inline-block">
-                                                                                <span>
-                                                                                    <span className="cart-minus cart-btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span>
-                                                                                    <span className="cart-number">{item.quantity}</span>
-                                                                                    <span className="cart-plus cart-btn" onClick={() => addToCart(item.ticket)}>+</span>
-                                                                                </span>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Row>
-                                                                </div>
-                                                            </div>
-                                                        </Card.Body>
-                                                    </Card> */}
                                                         </div>
                                                     ))}
                                                 </>

@@ -7,10 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import 'react-phone-input-2/lib/style.css';
 import SignupImg from '../../../common/image/signup.svg';
 const About = () => {
-    const lottewidth = {
-        width: 'auto',
-        height: '320px'
-    }
     const navigate = useNavigate();
     const [Loader, setLoader] = useState(false);
     const [LoginEmail, setLoginEmail] = useState();

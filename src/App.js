@@ -59,7 +59,6 @@ import CustomerFpassword from './pages/website/auth/Customerfpassword';
 import OrganizerFpassword from './pages/website/auth/Organizerfpassword';
 import CustomerSignup from './pages/website/auth/CustomerSignup';
 import OrganizerLogin from './pages/website/auth/OrganizerLogin';
-import OrganizerSignup from './pages/website/auth/OrganizerSignup';
 import AdminLogin from './pages/website/auth/AdminLogin';
 import LoginSignup from './pages/website/auth/LoginSignup';
 // website
@@ -104,7 +103,6 @@ function App() {
           <Route path={app_url + 'auth/customer/login'} element={<CustomerLogin title={'Tixme'} />} />
           <Route path={app_url + 'auth/customer/forgot-password'} element={<CustomerFpassword title={'Tixme'} />} />
           <Route path={app_url + 'auth/organizer/login'} element={<OrganizerLogin title={'Tixme'} />} />
-          <Route path={app_url + 'auth/organizer/signup'} element={<OrganizerSignup title={'Tixme'} />} />
           <Route path={app_url + 'auth/organizer/forgot-password'} element={<OrganizerFpassword title={'Tixme'} />} />
           <Route path={app_url + 'auth/admin/login'} element={<AdminLogin title={'Tixme'} />} />
           {/* website */}

@@ -196,7 +196,7 @@ span.input-group-text {
 } */
 .cursor-pointer {
   cursor: pointer;
-  padding: 0px 0px 13px 0px;
+  /* padding: 0px 0px 13px 0px; */
 }
 
 .content-body {
@@ -1819,8 +1819,9 @@ body {
   border-radius: 0px  !important;
 }
 .coundown-box {
-    background: #EBF0F8;
-    border-radius: 5px;
+  background: #EBF0F8;
+  border-radius: 5px;
+  padding: 9px 0px;
 }
 .cowndown-lable {
   font-size: 10px;
@@ -1829,6 +1830,7 @@ body {
 .cowndown-val {
   font-size: 18px;
   color: #58585B;
+  line-height: 19px;
 }
 .coundown-number-box {
   margin: 0px 7px;
@@ -1844,7 +1846,7 @@ img.coundown-clock {
   content: ':';
   position: absolute;
   right: -11px;
-  top: 0px;
+  top: -7px;
   font-size: 23px;
   color: #0047AB;
   line-height: 28px;
@@ -1894,4 +1896,22 @@ img.coundown-clock {
   height: 30px;
   width: 30px;
   border-radius: 50%;
+}
+.navbar-nav-pc-mergin {
+  margin-right: 30px;
+}
+.pc-top-menu-box {
+  border: 1px solid #003b8f;
+  border-radius: 6px;
+  padding: 5px 9px !important;
+}
+.banner-h-event-page{
+  padding-top: 15px;
+  padding-bottom: 0px;
+}
+.sh-icon {
+  font-size: 23px;
+}
+.home-category-slide-name{
+  font-size: 12px;
 }
