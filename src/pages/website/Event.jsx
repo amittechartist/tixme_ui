@@ -471,7 +471,10 @@ const Home = () => {
 
   //     setIsFirstRender(true);
   // };
-
+  const HandelCategorsearch = (value) => {
+    let url = `${app_url}events/?categoryId=${encodeURIComponent(value)}`;
+    navigate(url);
+  };
   const addToCart = (item, id) => {
     // Initialize cartItems as an empty array if it's undefined
     const existingItem = cartItems.find((cartItem) => cartItem.name === item.name);
@@ -634,12 +637,12 @@ const Home = () => {
           <MobileMenu />
           {Apiloader ? (
             <div className="xxx-event-page-top-loader">
-              <div className="linear-background w-100" style={{ height: '270px' }}> </div>
+              <div className="linear-background w-100" style={{ height: '150px' }}> </div>
             </div>
           ) : (
             <>
               <h3 className="eventpage-cat-name text-white animate__animated animate__bounce">
-                <span>{Eventdata.category_name}</span>
+                <span className="cursor-pointer" onClick={() => HandelCategorsearch(Eventdata.category)}>{Eventdata.category_name}</span>
               </h3>
               <h1 className="banner-h banner-h-event-page banner-h-mob-event text-white text-start text-uppercase">{Eventdata.display_name}</h1>
               {screenWidth > 900 ? (
@@ -671,7 +674,7 @@ const Home = () => {
                         <span className="text-white event-time d-block">{Eventdata.event_duration}</span>
                       </div>
                     </div>
-                    <div className="d-inline-flex align-items-center border-right">
+                    <div className="d-inline-flex align-items-center">
                       <div className="d-inline-block mr-1">
                         <img height={30} width={'auto'} src={locationIconevent} alt="" />
                       </div>
@@ -688,20 +691,6 @@ const Home = () => {
                       <div className="d-inline-block mr-1 ml-3">
                         <img height={30} width={30} src={mapIcon} alt="" />
                       </div>
-                    </div>
-                    <div className="text-white d-inline-flex  align-items-center justify-content-md-end justify-content-end ml-2">
-                      <span className="d-flex align-items-center cursor-pointer" onClick={() => SaveEvent(Eventdata._id)}>
-                        <span className="event-pg-icon">
-                          {IssaveEvent ? (<FaHeart />) : (<FaRegHeart />)}
-                        </span>
-                        <span className="event-pg-icon-text">Add to favourites</span>
-                      </span>
-                      <span className="d-flex align-items-center  cursor-pointer" onClick={() => { setNewModal(!newmodal); setIscopy(false) }}>
-                        <span className="event-pg-icon-img">
-                          <img src={WhiteShareIcon} alt="" />
-                        </span>
-                        <span className="event-pg-icon-text">Share event</span>
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -765,7 +754,20 @@ const Home = () => {
                 </>
               )}
               <div className="row evnt-page-save-shear-box">
-
+                <div className="text-white d-inline-flex  align-items-center justify-content-md-end justify-content-end ml-2">
+                  <span className="d-flex align-items-center cursor-pointer" onClick={() => SaveEvent(Eventdata._id)}>
+                    <span className="event-pg-icon">
+                      {IssaveEvent ? (<FaHeart />) : (<FaRegHeart />)}
+                    </span>
+                    <span className="event-pg-icon-text">Add to favourites</span>
+                  </span>
+                  <span className="d-flex align-items-center  cursor-pointer" onClick={() => { setNewModal(!newmodal); setIscopy(false) }}>
+                    <span className="event-pg-icon-img">
+                      <img src={WhiteShareIcon} alt="" />
+                    </span>
+                    <span className="event-pg-icon-text">Share event</span>
+                  </span>
+                </div>
               </div>
               {/* <div className="banner-child-event">
               <img className="mt-2 event-banner" src={Eventdata.banner_image ? Eventdata.banner_image : EventImg} alt="" />
@@ -867,70 +869,70 @@ const Home = () => {
                         </Col>
                       </Row>
                       <Row>
-                      <Col md={12}>
-                    <div className="start-in-box eventpage-box-style-event-view mb-5 More-events">
-                      <Row>
                         <Col md={12}>
-                          <div className="right-box-title">
-                            <p className="pl-3 pb-1">More events from this organiser</p>
+                          <div className="start-in-box eventpage-box-style-event-view mb-5 More-events">
+                            <Row>
+                              <Col md={12}>
+                                <div className="right-box-title">
+                                  <p className="pl-3 pb-1">More events from this organiser</p>
+                                </div>
+                              </Col>
+                              <Col md={12}>
+                                <Row className="p-1 d-flex justify-content-center" >
+                                  {OrganizerEventlist.map((item, index) => (
+                                    <>
+                                      <div className="col-xl-5 col-xxl-5 col-lg-6 col-md-6 col-12 my-3" >
+                                        <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                                          <div style={{ position: 'relative' }}>
+                                            <span className="event-category-img">{item.category_name}</span>
+                                            {getCountryFlagImage(item.countryname)}
+                                            <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                                            <div className="d-flex align-items-center event-date-small-box">
+                                              <span className="event-date-small">
+                                                <img className="card-icon me-2" src={calendar} alt="" />
+                                                <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                                                  {onlyDayMonth(item.start_date)}
+                                                </span>
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div className="row px-2 mt-2">
+                                            <div className="col-md-7 d-flex align-items-center col-7">
+                                              <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                                              <div className="d-flex flex-column align-items-start justify-content-start">
+                                                <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                                                <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                                                  {item.organizer_name}
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <div className="col-md-5  col-5">
+                                              <div className="bg-fade rounded text-center event-cart-price-box">
+                                                <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
+                                                <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div className="row mt-1">
+                                            <div className="col-md-12">
+                                              <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                                                <img className="card-icon me-1" src={locationIcon} alt="" />
+                                                <p className="text-primary-color fw-bold mb-0 event-cart-location">
+                                                  {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                                        </div>
+                                      </div>
+                                    </>
+                                  ))}
+                                </Row>
+                              </Col>
+                            </Row>
                           </div>
                         </Col>
-                        <Col md={12}>
-                          <Row className="p-1" >
-                            {OrganizerEventlist.map((item, index) => (
-                              <>
-                                <div className="col-xl-4 col-xxl-4 col-md-6 col-12 my-3" >
-                                  <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
-                                    <div style={{ position: 'relative' }}>
-                                      <span className="event-category-img">{item.category_name}</span>
-                                      {getCountryFlagImage(item.countryname)}
-                                      <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                                      <div className="d-flex align-items-center event-date-small-box">
-                                        <span className="event-date-small">
-                                          <img className="card-icon me-2" src={calendar} alt="" />
-                                          <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
-                                            {onlyDayMonth(item.start_date)}
-                                          </span>
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div className="row px-2 mt-2">
-                                      <div className="col-md-7 d-flex align-items-center col-7">
-                                        <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                                        <div className="d-flex flex-column align-items-start justify-content-start">
-                                          <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
-                                          <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                                            {item.organizer_name}
-                                          </p>
-                                        </div>
-                                      </div>
-                                      <div className="col-md-5  col-5">
-                                        <div className="bg-fade rounded text-center event-cart-price-box">
-                                          <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
-                                          <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="row mt-1">
-                                      <div className="col-md-12">
-                                        <div className="d-flex align-items-center justify-content-start my-2 mx-2">
-                                          <img className="card-icon me-1" src={locationIcon} alt="" />
-                                          <p className="text-primary-color fw-bold mb-0 event-cart-location">
-                                            {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-                                  </div>
-                                </div>
-                              </>
-                            ))}
-                          </Row>
-                        </Col>
-                      </Row>
-                    </div>
-                  </Col>
                       </Row>
                     </div>
                   </div>
@@ -1050,13 +1052,13 @@ const Home = () => {
             <div className="event-category-section mb-5 in-event-page">
               <Container fluid className="">
                 <Row className="event-box-mobile">
-                  
+
                   <Col md={12}>
                     <h2 className="desc-sec theme-color">Other events you may like</h2>
                   </Col>
                   {Eventlist.map((item, index) => (
                     <div className="col-xl-3 col-xxl-3 col-md-4 col-12 mb-3" >
-                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
                         <div style={{ position: 'relative' }}>
                           <span className="event-category-img">{item.category_name}</span>
                           {getCountryFlagImage(item.countryname)}

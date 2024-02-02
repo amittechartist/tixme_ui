@@ -95,46 +95,50 @@ const Type = ({ props }) => {
   }, []);
   return (
     <div className="organised-by-box eventpage-box-style-event-view">
-      <div className="organizer-name-sec d-flex align-items-center px-2 py-2">
-        <div className="d-inline-block mr-3">
-          <img
-            height={70}
-            width={70}
-            src={Organizerdata.profile_picture ? Organizerdata.profile_picture : Nouserphoto}
-            alt=""
-            className="organiger-logo"
-          />
-        </div>
-        <div className="d-inline-block">
-          <span className="organizer-by d-block">Organised by</span>
-          <Link to={`${app_url}organizer-profile/${Organizerdata._id}/${Organizerdata.first_name}`}><span className="organizer-name d-block">By {Organizerdata.first_name}</span></Link>
+      <div className="organizer-name-sec">
+        <div className="row d-flex align-items-end">
+          <div className="col-8 d-flex align-items-end">
+            <div className="d-inline-block mr-3">
+              <img
+                height={70}
+                width={70}
+                src={Organizerdata.profile_picture ? Organizerdata.profile_picture : Nouserphoto}
+                alt=""
+                className="organiger-logo"
+              />
+            </div>
+            <div className="d-inline-block">
+              <span className="organizer-by d-block">Organised by</span>
+              <Link to={`${app_url}organizer-profile/${Organizerdata._id}/${Organizerdata.first_name}`}><span className="organizer-name d-block">By {Organizerdata.first_name}</span></Link>
+            </div>
+          </div>
+          <div className="col-4 text-end">
+            {FollowApi ? (
+              <button type="button" className="follow-btn">wait...</button>
+            ) : (
+              <>
+                {Followtype ? (
+                  <button onClick={() => followOrganizer()} type="button" class="Unfollow-btn-1">Following</button>
+                ) : (
+                  <button onClick={() => followOrganizer()} type="button" className="follow-btn">
+                    Follow
+                  </button>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
       <div className="border-botton-devider my-2"></div>
-      <div className="right-box-con mt-4 p-3">
+      <div className="right-box-con">
         {Followtypeloader ? (
           <div className="linear-background w-100"> </div>
         ) : (
           <>
             <div className="row align-items-center d-flex">
-              <div className="col-md-6 col-6">
+              <div className="col-12">
                 <p className="followers-title">Followers</p>
                 <p className="followers-count">{Organizerdata.followers ? Organizerdata.followers : 0}</p>
-              </div>
-              <div className="col-md-6 col-6 text-end">
-                {FollowApi ? (
-                  <button type="button" className="follow-btn">wait...</button>
-                ) : (
-                  <>
-                    {Followtype ? (
-                      <button onClick={() => followOrganizer()} type="button" class="Unfollow-btn-1">Following</button>
-                    ) : (
-                      <button onClick={() => followOrganizer()} type="button" className="follow-btn">
-                        Follow
-                      </button>
-                    )}
-                  </>
-                )}
               </div>
             </div>
           </>

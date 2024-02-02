@@ -376,12 +376,28 @@ const Dashboard = ({ title }) => {
                                                                     ) : (
                                                                         <>
                                                                             {CouponList.map((item, index) => (
-                                                                                <Col md={4} className="mb-5">
-                                                                                    <div className="tickret-show-box">
+                                                                                <Col md={4}>
+                                                                                    {/* <div className="tickret-show-box">
                                                                                         <img src={Ticketimg} alt="" className="ticketimg-bg" />
                                                                                         <p className="mb-0" style={{ fontSize: '16px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.name}</p>
                                                                                         <p className="">Points amount {item.point}</p>
                                                                                         <button onClick={() => CheckRedeem(item._id)} className="redem-btn">Redeem</button>
+                                                                                    </div> */}
+                                                                                    <div className="coupon-ticket-box">
+                                                                                        <div className="row">
+                                                                                            <div className="col-5 d-flex align-items-center justify-content-center box-1">
+                                                                                                <div className="text-center">
+                                                                                                    <p className="title-1">{item.point}</p>
+                                                                                                    <p className="title-2">Points Amount</p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div className="col-7 d-flex align-items-center justify-content-center box-2">
+                                                                                                <div className="text-center">
+                                                                                                    <p className="title-3">{item.name}</p>
+                                                                                                    <p onClick={() => CheckRedeem(item._id)} className="title-4">Redeem</p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </Col>
                                                                             ))}
@@ -401,14 +417,31 @@ const Dashboard = ({ title }) => {
                                                                         <>
                                                                             {
                                                                                 MyCouponList.map((item, index) => (
-                                                                                    <Col md={4} className="mb-5">
-                                                                                        <div className="tickret-show-box">
+                                                                                    <Col md={4}>
+                                                                                        {/* <div className="tickret-show-box">
                                                                                             <img src={Ticketimg} alt="" className="ticketimg-bg" />
                                                                                             <p className="mb-0" style={{ fontSize: '16px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.coupondata[0].name}</p>
                                                                                             <p className="">Points amount {item.coupondata[0].point}</p>
                                                                                             <span className="token-no-span">{item.tokenno}</span>
                                                                                             {item.isvalid == 0 ? (<button type="button" onClick={() => HandelCopyTxt(item.tokenno)} className="redem-copy-btn"><FiCopy /> Copy</button>) : (<button type="button" disabled className="btn btn-dark">Expired</button>)}
 
+                                                                                        </div> */}
+                                                                                        <div className="coupon-ticket-box">
+                                                                                            <div className="row">
+                                                                                                <div className="col-5 d-flex align-items-center justify-content-center box-1">
+                                                                                                    <div className="text-center">
+                                                                                                        <p className="title-1">{item.coupondata[0].point}</p>
+                                                                                                        <p className="title-2">Points Amount</p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div className="col-7 d-flex align-items-center justify-content-center box-2 py-2">
+                                                                                                    <div className="text-center">
+                                                                                                        <p className="title-3">{item.coupondata[0].name}</p>
+                                                                                                        <p onClick={() => HandelCopyTxt(item.tokenno)} className="title-6">{item.tokenno}</p>
+                                                                                                        {item.isvalid == 0 ? (<p onClick={() => HandelCopyTxt(item.tokenno)} className="title-4">Copy</p>) : (<p className="title-5">Expired</p>)}
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </Col>
                                                                                 ))

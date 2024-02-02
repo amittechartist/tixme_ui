@@ -1,40 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from 'react-router-dom';
 import NoRecord from '../../component/Norecordui'
-import card from "../../assets/card.png";
 import ArrowDown from '../../assets/arrowdrop.svg'
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import Select from 'react-select'
 import calendar from "../../assets/calendar.svg";
-import eventLogo from "../../assets/eventLogo.svg";
-import clock from "../../assets/clock.svg";
-import hourglass from "../../assets/hourglass.svg";
 import location from "../../assets/location (5) 1.svg";
 import InputSearchIcon from '../../assets/inputSearch.png'
 import Footer from '../../components/footer';
 import HeaderMenu from '../../components/headermenu';
 import MobileMenu from '../../components/mobilemenu';
-import Alert from 'react-bootstrap/Alert';
-import Indiaflag from "../../common/image/India.svg";
-import Usaflag from "../../common/image/usaf.svg";
-import Singapureflag from "../../common/image/singapur.svg";
-import { Range, getTrackBackground } from "react-range";
-import Whitestartbtn from "../../component/Whitestarbtn";
 import DateIcon from "../../common/icon/date 2.svg";
 import Nouserphoto from '../../common/image/nouser.png';
-import Accordion from 'react-bootstrap/Accordion';
 import Flatpickr from "react-flatpickr";
+import { FaTimes } from 'react-icons/fa';
 import "flatpickr/dist/themes/material_green.css";
-import { apiurl, onlyDayMonth, shortPer, app_url, get_date_time, get_min_date } from "../../common/Helpers";
-import { Link, useNavigate } from "react-router-dom";
+import { apiurl, onlyDayMonth, app_url, get_date_time, get_min_date } from "../../common/Helpers";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { useNavigate } from "react-router-dom";
 import Noimg from "../../common/image/noimg.jpg";
-import MultiRangeSlider from "../../component/multiRangeSlider/MultiRangeSlider";
 import toast from "react-hot-toast";
-import { Country, State, City } from 'country-state-city';
+import { FaFilter } from "react-icons/fa6";
 const Home = () => {
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const [searchParams] = useSearchParams();
     const [minValue, setMinValue] = useState(1);
     const [maxValue, setMaxValue] = useState(1000);
@@ -80,6 +71,26 @@ const Home = () => {
     const [Singapur, setSingapur] = useState();
     const [India, setIndia] = useState();
     const [Usa, setUsa] = useState();
+    const [Isany, setIsany] = useState(false);
+
+    const [showAll, setShowAll] = useState(false);
+    const visibleItems = showAll ? Listitems : Listitems.slice(0, 5);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const handleCheckboxChange = (id) => {
+        if (id == 'any') {
+            setSelectedCategories([]);
+            setIsany(!Isany);
+        } else {
+            if (selectedCategories.includes(id)) {
+                // Remove id from the selectedCategories array if it's already there (deselect)
+                setSelectedCategories(selectedCategories.filter((categoryId) => categoryId !== id));
+            } else {
+                // Add id to the selectedCategories array if it's not there (select)
+                setSelectedCategories([...selectedCategories, id]);
+            }
+            setIsany(false);
+        }
+    };
 
     const countryName = localStorage.getItem("countryname");
 
@@ -133,34 +144,33 @@ const Home = () => {
         }
     }
     const HandelPriceFilter = () => {
-        // Convert to numbers
-        const minPriceNum = parseFloat(Minprice);
-        const maxPriceNum = parseFloat(Maxprice);
-
-        if (minPriceNum || maxPriceNum) {
-            if (minPriceNum && maxPriceNum) {
-                if (minPriceNum >= maxPriceNum) {
-                    return toast.error("The minimum price must be below the maximum price");
-                }
-                setWantPricefilter(true);
-                fetchEvent();
-            } else {
-                return toast.error("Max and min price required");
-            }
-        } else {
-            setWantPricefilter(true);
-            fetchEvent();
-        }
+        setMobilefilter(false);
+        fetchEvent();
     };
-
-
     const fetchEvent = async () => {
         try {
+
+            const minPriceNum = parseFloat(Minprice);
+            const maxPriceNum = parseFloat(Maxprice);
+
+            if (minPriceNum || maxPriceNum) {
+                if (minPriceNum && maxPriceNum) {
+                    if (minPriceNum >= maxPriceNum) {
+                        return toast.error("The minimum price must be below the maximum price");
+                    }
+                    setWantPricefilter(true);
+                } else {
+                    return toast.error("Max and min price required");
+                }
+            } else {
+                setWantPricefilter(true);
+            }
+
             setEventloader(true)
             const requestData = {
                 limit: 50,
                 organizerid: null,
-                category: filtercategory ? filtercategory : null,
+                category: selectedCategories ? selectedCategories : null,
                 eventtype: Eventtype ? Eventtype : null,
                 tickettype: Ticketstype ? Ticketstype : null,
                 dateapitype: Dateapitype ? Dateapitype : null,
@@ -278,7 +288,7 @@ const Home = () => {
     }, []);
     useEffect(() => {
         if (categoryid) {
-            setFilterCategory(categoryid)
+            handleCheckboxChange(categoryid)
         }
         if (country_filter) {
             setCountryFilter(country_filter)
@@ -291,7 +301,7 @@ const Home = () => {
 
     useEffect(() => {
         fetchEvent();
-    }, [filtercategory, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, countryName, FiltersearchQuery, India, Singapur, Usa, CountryFilter]);
+    }, [selectedCategories, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, countryName, FiltersearchQuery, India, Singapur, Usa, CountryFilter]);
     const [activeKey, setActiveKey] = useState(null);
 
     function handleEnterPress(event) {
@@ -300,9 +310,181 @@ const Home = () => {
             fetchEvent();
         }
     }
-
+    const [mobilefilter, setMobilefilter] = useState(false);
     return (
         <>
+            <Modal isOpen={mobilefilter} toggle={() => setMobilefilter(!mobilefilter)} centered>
+                <ModalHeader>Filter
+                    <button className="close p-0" onClick={() => setMobilefilter(!mobilefilter)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
+                        <FaTimes />
+                    </button>
+                </ModalHeader>
+                <ModalBody>
+                    <div>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="events-page-search" id="inputForm1Div" style={{ height: '40px' }}>
+                                    <input
+                                        type="search"
+                                        id="form1"
+                                        className="form-control mt-lg-0"
+                                        placeholder="Search"
+                                        onChange={(e) => { setSearchInput(e.target.value) }}
+                                        value={SearchInput}
+                                        onKeyDown={handleEnterPress}
+                                        style={{ height: '40px', border: 'none' }}
+                                    />
+                                    <button className="dfssfdsfdsf" onClick={() => fetchEvent()} type="button" style={{ background: '#F6F6F6' }}>
+                                        <img src={InputSearchIcon} alt="" />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="col-md-12 mt-3">
+                                <p className="mb-0 theme-color">Country</p>
+                                <a style={{ fontSize: '13px' }} onClick={() => { setSingapur(Singapur == 'Singapore' ? '' : 'Singapore'); setCountryFilter('') }} className={Singapur || CountryFilter == 'Singapore' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
+                                <a style={{ fontSize: '13px' }} onClick={() => { setIndia(India == 'India' ? '' : 'India'); setCountryFilter('') }} className={India || CountryFilter == 'India' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>India</a>
+                                <a style={{ fontSize: '13px' }} onClick={() => { setUsa(Usa == 'united states' ? '' : 'united states'); setCountryFilter('') }} className={Usa || CountryFilter == 'united states' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
+                            </div>
+                            <div className="col-md-12 mt-3">
+                                <p className="mb-0 theme-color">Genres</p>
+                                <div>
+                                    <div>
+                                        <input
+                                            type="checkbox"
+                                            id={`checkbox-any`}
+                                            name={'any'}
+                                            checked={Isany}
+                                            onChange={() => handleCheckboxChange('any')}
+                                        />
+                                        <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-any`}>Any</label>
+                                    </div>
+                                    {visibleItems.map((item) => (
+                                        <div key={item._id}>
+                                            <input
+                                                type="checkbox"
+                                                id={`checkbox-${item._id}`}
+                                                name={item.name}
+                                                checked={selectedCategories.includes(item._id)}
+                                                onChange={() => handleCheckboxChange(item._id)}
+                                            />
+                                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
+                                        </div>
+                                    ))}
+                                    {Listitems.length > 5 && (
+                                        <button className="filter-show-cat-btn" onClick={() => setShowAll(!showAll)}>
+                                            {showAll ? 'Show Less' : 'Show More'}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
+                            <Col md={12} xs={12} className=" mt-3">
+                                <div>
+                                    <p className="mb-0 theme-color">Mode</p>
+                                    <div className="filterbutton-container">
+                                        <a style={{ paddingLeft: "16px", paddingRight: "16px" }} onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
+                                        <a onClick={() => setEventtype(Eventtype == 2 ? '' : 2)} className={Eventtype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>In-Person</a>
+                                    </div>
+                                </div>
+                            </Col>
+                            <Col md={12} xs={12} className="">
+                                <div>
+                                    <p className="mb-0 theme-color">Admission</p>
+                                    <div className="filterbutton-container">
+                                        <a style={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
+                                        <a style={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
+                                    </div>
+                                </div>
+                            </Col>
+
+                            <Col md={12} xs={12} className="mt-3">
+                                <div className="selectDiv" style={{ marginRight: '0px' }}>
+                                    <select
+                                        className="form-select category me-4"
+                                        aria-label="Default select example"
+                                        onChange={(event) => setDatetype(event.target.value)}
+                                        style={{ paddingTop: '8px', height: '40px' }}
+                                    >
+                                        <option value=''>Date</option>
+                                        <option value='Pick a date'>Pick a date</option>
+                                        <option value='Pick between two dates'>Pick Date Range</option>
+                                    </select>
+                                    <img src={ArrowDown} alt="" />
+                                </div>
+                            </Col>
+                            {Datetype && (
+                                <div className="col-md-12 mt-4">
+                                    {Datetype == "Pick a date" ? (
+                                        <>
+                                            <div class="input-group input-warning-o" style={{ position: 'relative' }}>
+                                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                                <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={startdate} />
+                                                <div className="date-style-picker">
+                                                    <Flatpickr
+                                                        value={Startdateselect}
+                                                        id='date-picker'
+                                                        className='form-control'
+                                                        onChange={date => setStartdateselect(date)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : ''}
+                                    {Datetype == "Pick between two dates" ? (
+                                        <>
+                                            <Col md={12} xs={12}>
+                                                <p className="mb-1">Start Date</p>
+                                                <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
+                                                    <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                                    <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={rangestartdate} />
+                                                    <div className="date-style-picker">
+                                                        <Flatpickr
+                                                            value={RangeStartdateselect}
+                                                            id='date-picker'
+                                                            className='form-control'
+                                                            onChange={date => setRangeStartdateselect(date)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                            <Col md={12} xs={12}>
+                                                <p className="mb-1">End Date</p>
+                                                <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
+                                                    <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                                    <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={enddate} />
+                                                    <div className="date-style-picker">
+                                                        <Flatpickr
+                                                            value={Enddateselect}
+                                                            id='date-picker'
+                                                            className='form-control'
+                                                            onChange={date => setEnddateselect(date)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        </>
+                                    ) : ''}
+                                </div>
+                            )}
+                            <Col md={12} xs={12} className="mt-3">
+                                <p className="mb-0 theme-color">Price Range</p>
+                            </Col>
+                            <Col md={6} className="mt-3">
+                                <input className="form-control" type="number" placeholder="Min price" min={1} onChange={(e) => setMinprice(e.target.value)}></input>
+                            </Col>
+                            <Col md={6} className="mt-3">
+                                <input className="form-control" type="number" placeholder="Max price" min={1} onChange={(e) => setMaxprice(e.target.value)}></input>
+                            </Col>
+                            <div className="col-md-6 col-6 my-4 ">
+                                <button className="btn theme-bg w-100 text-white" onClick={() => HandelPriceFilter()}>Apply</button>
+                            </div>
+                            <div className="col-md-6 col-6 my-4 pb-4 pb-md-0">
+                                <button type="button" className="btn theme-bg w-100 text-white" onClick={Resetfilter}>Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </ModalBody>
+            </Modal>
             <div className="content-area">
                 {" "}
                 <HeaderMenu />
@@ -311,9 +493,9 @@ const Home = () => {
                     <h1 className="banner-h banner-h-events text-white text-start text-uppercase animate__animated animate__bounce">Explore our events</h1>
                 </div>
                 <div className="event-view-body">
-                    <Row className="mx-4" style={{ marginTop: '50px' }}>
-                        <Col md={3} xl={3} lg={4} className="filter-according events-page-filter-box mb-4 mb-md-0" style={{height:"100%"}}>
-                            <div className="row">
+                    <Row className="mx-4 my-3 my-md-5">
+                        <Col md={3} xl={3} lg={4} className="col-xl-3 col-lg-4 col-md-3 col-12 d-md-inline d-none sticky-column filter-according events-page-filter-box mb-4 mb-md-0" style={{ height: "100%" }}>
+                            <div className="row" onKeyDown={handleEnterPress}>
                                 <div className="col-md-12">
                                     <div className="events-page-search" id="inputForm1Div" style={{ height: '40px' }}>
                                         <input
@@ -339,7 +521,7 @@ const Home = () => {
                                 </div>
                                 <div className="col-md-12 mt-3">
                                     <p className="mb-0 theme-color">Genres</p>
-                                    <div className="selectDiv" style={{ marginRight: '0px' }}>
+                                    {/* <div className="selectDiv" style={{ marginRight: '0px' }}>
                                         <select
                                             className="form-select category me-4"
                                             aria-label="Default select example"
@@ -352,6 +534,35 @@ const Home = () => {
                                             ))}
                                         </select>
                                         <img src={ArrowDown} alt="" />
+                                    </div> */}
+                                    <div>
+                                        <div>
+                                            <input
+                                                type="checkbox"
+                                                id={`checkbox-any`}
+                                                name={'any'}
+                                                checked={Isany}
+                                                onChange={() => handleCheckboxChange('any')}
+                                            />
+                                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-any`}>Any</label>
+                                        </div>
+                                        {visibleItems.map((item) => (
+                                            <div key={item._id}>
+                                                <input
+                                                    type="checkbox"
+                                                    id={`checkbox-${item._id}`}
+                                                    name={item.name}
+                                                    checked={selectedCategories.includes(item._id)}
+                                                    onChange={() => handleCheckboxChange(item._id)}
+                                                />
+                                                <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
+                                            </div>
+                                        ))}
+                                        {Listitems.length > 5 && (
+                                            <button className="filter-show-cat-btn" onClick={() => setShowAll(!showAll)}>
+                                                {showAll ? 'Show Less' : 'Show More'}
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
 
@@ -359,7 +570,7 @@ const Home = () => {
                                     <div>
                                         <p className="mb-0 theme-color">Mode</p>
                                         <div className="filterbutton-container">
-                                            <a style={{paddingLeft:"16px", paddingRight: "16px"}} onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
+                                            <a style={{ paddingLeft: "16px", paddingRight: "16px" }} onClick={() => setEventtype(Eventtype == 1 ? '' : 1)} className={Eventtype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Online</a>
                                             <a onClick={() => setEventtype(Eventtype == 2 ? '' : 2)} className={Eventtype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>In-Person</a>
                                         </div>
                                     </div>
@@ -368,8 +579,8 @@ const Home = () => {
                                     <div>
                                         <p className="mb-0 theme-color">Admission</p>
                                         <div className="filterbutton-container">
-                                            <a style={{paddingLeft:"20px", paddingRight: "20px"}} onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
-                                            <a style={{paddingLeft:"20px", paddingRight: "20px"}} onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
+                                            <a style={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => setTicketstype(Ticketstype == 2 ? '' : 2)} className={Ticketstype == 2 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Free</a>
+                                            <a style={{ paddingLeft: "20px", paddingRight: "20px" }} onClick={() => setTicketstype(Ticketstype == 1 ? '' : 1)} className={Ticketstype == 1 ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Paid</a>
                                         </div>
                                     </div>
                                 </Col>
@@ -475,7 +686,10 @@ const Home = () => {
                             </div>
 
                         </Col>
-                        <Col md={9} xl={9} lg={8}>
+                        <div className="col-12 d-inline d-md-none d-flex justify-content-end mb-2">
+                            <p onClick={() => setMobilefilter(!mobilefilter)} className="filter-btn-for-mob"><FaFilter className="filter-icon" /> Filter</p>
+                        </div>
+                        <Col md={9} xl={9} lg={8} className="col-xl-9 col-lg-8 col-md-9 col-12 scrollable-column">
                             <div className="event-category-section mb-5 in-event-page">
                                 <Container fluid className="">
                                     {Eventloader ? (
@@ -507,7 +721,7 @@ const Home = () => {
                                                 <Row className="event-box-mobile">
                                                     {Eventlist.map((item, index) => (
                                                         <div className="col-xl-4 col-lg-6 col-md-6 col-12 mb-3">
-                                                            <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                                                            <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
                                                                 <div style={{ position: 'relative' }}>
                                                                     <span className="event-category-img">{item.category_name}</span>
                                                                     {getCountryFlagImage(item.countryname)}

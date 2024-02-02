@@ -742,7 +742,7 @@ const Home = () => {
                 <Slider {...eventslistsettings}>
                   {EventlistSingapur.map((item, index) => (
                     <div className="home-events-box">
-                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%', position: 'relative' }}>
+                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%', position: 'relative' }}>
                         <div style={{ position: 'relative' }}>
                           <span className="event-category-img">{item.category_name}</span>
                           <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
@@ -815,7 +815,7 @@ const Home = () => {
                 <Slider {...eventslistsettings}>
                   {EventlistIndia.map((item, index) => (
                     <div className="home-events-box">
-                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%', position: 'relative' }}>
+                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%', position: 'relative' }}>
                         <div style={{ position: 'relative' }}>
                           <span className="event-category-img">{item.category_name}</span>
                           <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
@@ -888,7 +888,7 @@ const Home = () => {
                 <Slider {...eventslistsettings}>
                   {EventlistUsa.map((item, index) => (
                     <div className="home-events-box">
-                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%', position: 'relative' }}>
+                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%', position: 'relative' }}>
                         <div style={{ position: 'relative' }}>
                           <span className="event-category-img">{item.category_name}</span>
                           <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />

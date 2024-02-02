@@ -1,4 +1,12 @@
 @media only screen and (max-width: 900px) {
+    .filter-btn-for-mob {
+        border: 1px solid #003b8f;
+        color: #003b8f;
+        display: inline;
+        font-size: 20px;
+        padding: 5px 19px;
+        border-radius: 13px;
+    }
     .event-view-body {
         margin-left: 5px !important;
         margin-right: 5px !important;
@@ -49,9 +57,9 @@
         margin-bottom: -7px;
     }
     .row.evnt-page-save-shear-box {
-        margin-right: 0;
-        margin-bottom: -14px;
-        margin-top: 0px;
+        margin-right: 45px;
+        margin-bottom: 0;
+        margin-top: 17px;
     }
     .eventpage-cat-name {
         padding-left: 1rem;
@@ -1277,3 +1285,4 @@
     }
     
 }
+
