@@ -40652,11 +40652,11 @@ button:focus {
   box-shadow: unset;
 }
 
-.btn-close:before {
+/* .btn-close:before {
   content: '\f00d';
   font-weight: 600;
   font-size: 20px;
-}
+} */
 
 [data-theme-version="dark"] .btn-close:before {
   color: #fff;

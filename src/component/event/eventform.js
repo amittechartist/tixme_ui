@@ -2,40 +2,38 @@ import React, { useEffect, useRef, useState } from "react";
 import '../../common/css/autocompletestyle.css';
 import GroupIcon from '../../common/icon/Group.svg';
 import OnlineIcon from '../../common/icon/Host Online.svg';
-import { Container, Form, Image } from 'react-bootstrap';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import OffliveIcon from '../../common/icon/oflineeventlogo.svg';
-import whitestar from '../../common/icon/whitestar.svg';
-import Locationstart from '../../common/icon/locationstart.svg';
 import InfoIcon from "../../common/icon/info.svg";
 import LockIcon from "../../common/icon/lock.svg";
+import Table from 'react-bootstrap/Table';
+import { FiDelete } from "react-icons/fi";
+import { FiEdit } from "react-icons/fi";
 import WorldIcon from "../../common/icon/world.svg";
 import DateIcon from "../../common/icon/date 1.svg";
 import TimeIcon from "../../common/icon/time 1.svg";
-import { Button, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import WhitestarBtn from '../Whitestarbtn';
 import Select from 'react-select'
 import Flatpickr from "react-flatpickr";
-import { FaTimes } from 'react-icons/fa';
 import "flatpickr/dist/themes/material_green.css";
 import Lottie from "lottie-react";
 import TicketLotte from '../../lotte/ticketanimation.json';
 import '../../common/css/wiz.css';
 import TimezoneSelect from 'react-timezone-select'
-import { organizer_url, imgurl, apiurl, get_date_time, get_min_date } from '../../common/Helpers';
+import { shortPer, apiurl, get_date_time, get_min_date } from '../../common/Helpers';
 import {
     Modal,
     Input,
     ModalBody,
     ModalHeader
 } from 'reactstrap'
-const Type = ({ title, editid }) => {
+const Type = ({ title, editid, ticketeditid }) => {
     const MySwal = withReactContent(Swal);
     const navigate = useNavigate();
     const [Loader, setLoader] = useState(false);
@@ -51,19 +49,19 @@ const Type = ({ title, editid }) => {
     const [Category, setCategory] = useState();
     const [CategoryId, setCategoryId] = useState();
     const [Categoryname, setCategoryname] = useState();
-    const [EventtypeCategory, setEventtypeCategory] = useState();
     const [EventtypeCategoryId, setEventtypeCategoryId] = useState();
     const [EventtypeCategoryname, setEventtypeCategoryname] = useState();
-    const [Tag, setTag] = useState([]);
     const [Visibility, setVisibility] = useState(1);
     const [Location, setLocation] = useState();
     const [LocationLat, setLocationLat] = useState('');
+    const [GroupQty, setGroupQty] = useState('');
     const [LocationLag, setLocationLag] = useState('');
     const [EventSubtype, setEventSubtype] = useState(1);
     const [Startdateselect, setStartdateselect] = useState(new Date());
     const [Enddateselect, setEnddateselect] = useState(new Date());
     const [IsclockCountdown, setIsclockCountdown] = useState(false);
     const [IsSellingFast, setIsSellingFast] = useState(false);
+    const [Isgrouptickets, setIsgrouptickets] = useState(false);
     const [Displaystarttime, setDisplaystarttime] = useState(false);
     const [EditApiloader, setEditApiloader] = useState(false);
     const [Displayendtime, setDisplayendtime] = useState(false);
@@ -78,9 +76,11 @@ const Type = ({ title, editid }) => {
     const [TicketList, setTicketList] = useState([]);
     const [Tickettype, setTickettype] = useState(1);
     const [Ticketname, setTicketname] = useState();
+    const [Ticketdesc, setTicketdesc] = useState();
     const [Quantity, setQuantity] = useState();
     const [TicketStartdate, setTicketStartdate] = useState(new Date());
     const [TicketEndtdate, setTicketEndtdate] = useState(new Date());
+    const [TicketEventdata, setTicketEventdata] = useState(new Date());
     const [Price, setPrice] = useState();
     const [Tax, setTax] = useState();
     const [Pricedisable, setPricedisable] = useState(false);
@@ -98,15 +98,10 @@ const Type = ({ title, editid }) => {
     const [Bannerimg, setBannerimg] = useState(null);
     const organizerid = localStorage.getItem('organizerid')
     const [image, setImage] = useState(null);
-    const [BannerImage, setBannerImage] = useState(null);
-
-
     const [ThumbnailLoader, setThumbnailLoader] = useState(false);
     const [ThumbnailSuccess, setThumbnailSuccess] = useState(false);
-
     const [BannerLoader, setBannerLoader] = useState(false);
     const [BannerSuccess, setBannerSuccess] = useState(false);
-
     const [selectedTimezone, setSelectedTimezone] = useState(
         Intl.DateTimeFormat().resolvedOptions().timeZone
     )
@@ -121,7 +116,6 @@ const Type = ({ title, editid }) => {
     const uploadImageToServer = async (imageFile) => {
         const formData = new FormData();
         formData.append('image', imageFile); // 'image' is the parameter name expected by your API
-
         try {
             setThumbnailLoader(true);
             const response = await fetch('https://tixme.co/tixme_storage/api/upload-image', {
@@ -349,11 +343,29 @@ const Type = ({ title, editid }) => {
             setBannerLoader(false);
         }
     }
-    const TicketDelete = async (editid, pricename) => {
+    const UpdateTicket = async (id) => {
+        const getticketdata = TicketList.find(ticket => ticket.id === id);
+        if (getticketdata) {
+            setTickettype(getticketdata.ticket_type);
+            setTicketname(getticketdata.name);
+            setTicketdesc(getticketdata.description);
+            setQuantity(getticketdata.quantity);
+            setPrice(getticketdata.price);
+            setIsgrouptickets(getticketdata.groupqty > 1 ? true : false);
+            setGroupQty(getticketdata.groupqty);
+            setTicketEventdata(getticketdata.event_min_datetime[0]);
+            setTicketStartdate(getticketdata.scan_min_datetime[0]);
+            setTicketshow(true);
+        } else {
+            toast.error("No ticket found");
+        }
+    };
+
+    const TicketDelete = async (editid, id) => {
         try {
             const requestData = {
                 updateid: editid,
-                nameToRemove: pricename
+                ticketid: id
             };
             fetch(apiurl + 'event/remove/price', {
                 method: 'POST',
@@ -378,6 +390,7 @@ const Type = ({ title, editid }) => {
             console.error('Api error:', error);
         }
     }
+
     var check_eventcreateid = localStorage.getItem('eventcreateid');
     var Editid = '';
     if (check_eventcreateid !== null) {
@@ -418,6 +431,7 @@ const Type = ({ title, editid }) => {
         ticketstartdate = fromticketgetdate[0].Dateview;
         ticketstarttime = fromticketgetdate[0].Timeview;
     }
+    // console.log("date",get_date_time(TicketStartdate));
     const toticketgetdate = get_date_time(TicketEndtdate);
     var ticketenddate = '';
     var ticketendtime = '';
@@ -425,7 +439,6 @@ const Type = ({ title, editid }) => {
         ticketenddate = toticketgetdate[0].Dateview;
         ticketendtime = toticketgetdate[0].Timeview;
     }
-
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
@@ -443,6 +456,30 @@ const Type = ({ title, editid }) => {
         newTags.splice(index, 1);
         setTags(newTags);
     };
+    const updateTicketsType = async (id, EditId) => {
+        try {
+            const requestData = {
+                editid: EditId,
+                id: id,
+            };
+            fetch(apiurl + 'event/update/eventtickettype', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    toast.success("Updated");
+                })
+                .catch(error => {
+
+                });
+        } catch (error) {
+
+        }
+    }
     const HandelUpdatedetails = async () => {
         try {
             setLoader(true);
@@ -563,7 +600,6 @@ const Type = ({ title, editid }) => {
             setLoader(false);
         }
     }
-
     const HandelSubmit = async () => {
         try {
             setLoader(true);
@@ -651,6 +687,9 @@ const Type = ({ title, editid }) => {
         setTicketname('');
         setQuantity('');
         setPrice('');
+        setIsgrouptickets(false);
+        setTicketdesc('');
+        setGroupQty('');
         setPricedisable(false);
     }
     const selectCategory = (selectedValue) => {
@@ -668,7 +707,6 @@ const Type = ({ title, editid }) => {
         setCountryId(selectedValue.value);
         setCountryname(selectedValue.label);
     };
-
     const fetchCategory = async () => {
         try {
             fetch(apiurl + 'category/get-category-list', {
@@ -743,7 +781,7 @@ const Type = ({ title, editid }) => {
                 .then(data => {
 
                     if (data.success == true) {
-                        const fetchdata = data.data.allprice;
+                        const fetchdata = data.data.allprice.filter(item => item.isdelete === 0);
                         setTicketList(fetchdata);
                         if (fetchdata.length > 0) {
                             setIsEventTicket(false);
@@ -765,40 +803,41 @@ const Type = ({ title, editid }) => {
             setApiloader(false);
         }
     }
-
     const HandelPriceform = async () => {
         toast.success("Updated successfully");
-        // navigate(organizer_url + 'event/all-event-list');
     }
     const handelCreateTicket = async (updateid) => {
         try {
             if (!Tickettype) {
-                return toast.error('Select ticket type');
+                return toast.error('Select ticket type free or paid');
             }
             if (!Ticketname) {
                 return toast.error('Enter ticket name');
             }
             if (!Quantity) {
-                return toast.error('Enter ticket quantity');
+                return toast.error('Enter available ticket quantity');
             }
             if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
-            if (!Tax && Tickettype == 1) {
-                return toast.error('Enter tax amount or 0');
+            if (Isgrouptickets && !GroupQty) {
+                return toast.error('Enter group quantity');
             }
             setLoader(true);
             const requestData = {
-                tax: Tax,
                 updateid: updateid,
+                description: Ticketdesc,
                 ticket_type: Tickettype,
                 name: Ticketname,
                 quantity: Quantity,
-                startdate: ticketstartdate,
-                endtdate: ticketenddate,
-                starttime: ticketstarttime,
-                endttime: ticketendtime,
-                price: Price
+                startdate: EventSubtype == 2 ? get_date_time(TicketEventdata)[0].Dateview : get_date_time(Startdateselect)[0].Dateview,
+                starttime: EventSubtype == 2 ? get_date_time(TicketEventdata)[0].Timeview : get_date_time(Startdateselect)[0].Timeview,
+                scanstartdate: get_date_time(TicketStartdate)[0].Dateview,
+                scanstarttime: get_date_time(TicketStartdate)[0].Timeview,
+                scan_min_datetime: TicketStartdate,
+                event_min_datetime: EventSubtype == 2 ? TicketEventdata : Startdateselect,
+                price: Price,
+                groupqty: Isgrouptickets ? GroupQty : 1,
             };
             fetch(apiurl + 'event/update/price', {
                 method: 'POST',
@@ -811,7 +850,7 @@ const Type = ({ title, editid }) => {
                 .then(data => {
                     setLoader(false);
                     if (data.success == true) {
-                        toast.success('Updated', {
+                        toast.success('Created', {
                             duration: 3000,
                         });
                         setTicketshow(false);
@@ -891,7 +930,7 @@ const Type = ({ title, editid }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        setFormSection(2)
+
                         setName(data.data.name)
                         setEditId(data.data._id)
                         setDisplayname(data.data.display_name)
@@ -949,21 +988,29 @@ const Type = ({ title, editid }) => {
         }
     }
     useEffect(() => {
+        if (ticketeditid) {
+            setFormSection(4);
+            fetchAllTicket();
+        } else if (editid) {
+            setFormSection(2);
+            fetchAllTicket();
+        }
+    }, [ticketeditid]);
+    useEffect(() => {
+        if (ticketeditid || editid) {
+            fetchAllTicket();
+        }
+    }, [EditId]);
+    console.log(FormSection, "sss");
+    useEffect(() => {
         fetchCategory();
         fetchCountry();
         fetchEventtypeCategory();
         if (editid) {
             getEditdata(editid)
         }
-    }, []);
-    const [currentStep, setCurrentStep] = useState(1);
 
-    const steps = [
-        { title: 'Step 1' },
-        { title: 'Step 2' },
-        { title: 'Step 3' },
-        { title: 'Step 4' },
-    ];
+    }, []);
     return (
         <>
             {EditApiloader ? (
@@ -983,9 +1030,8 @@ const Type = ({ title, editid }) => {
                                                     <li
                                                         onClick={() => {
                                                             setFormSection(4);
-                                                            fetchAllTicket();
                                                         }}
-                                                        className={FormSection === 4 ? "active yesedit" : 'yesedit'} id="account"><strong>Price</strong></li>
+                                                        className={FormSection === 4 ? "active yesedit" : 'yesedit'} id="account"><strong>Tickets</strong></li>
                                                 </ul>
                                             </div>
                                         ) : (
@@ -994,7 +1040,7 @@ const Type = ({ title, editid }) => {
                                                     <li className={FormSection >= 1 ? "active noedit" : 'noedit'} id="account"><strong>Event Type</strong></li>
                                                     <li className={FormSection >= 2 ? "active noedit" : 'noedit'} id="account"><strong>Basic Info</strong></li>
                                                     <li className={FormSection >= 3 ? "active noedit" : 'noedit'} id="account"><strong>Details</strong></li>
-                                                    <li className={FormSection >= 4 ? "active noedit" : 'noedit'} id="account"><strong>Price</strong></li>
+                                                    <li className={FormSection >= 4 ? "active noedit" : 'noedit'} id="account"><strong>Tickets</strong></li>
                                                 </ul>
                                             </div>
                                         )}
@@ -1011,9 +1057,7 @@ const Type = ({ title, editid }) => {
                                                 <div className="event_category_box gradient-blue text-center float-right">
                                                     <h3 className="event-category-title theme-color">Online Event</h3>
                                                     <p className="event-category-desc text-black mb-4">Host online events using  Zoom, Google Meet, YouTube Live etc</p>
-                                                    <span onClick={() => { setEventtype(1); setFormSection(2); }}>
-                                                        <WhitestarBtn title={'Create Event'} />
-                                                    </span>
+                                                    <button type="button" onClick={() => { setEventtype(1); setFormSection(2); }} className=" text-white btn theme-bg">Create Event</button>
                                                     <div className="icon_section">
                                                         <img src={GroupIcon} />
                                                         <img src={OnlineIcon} />
@@ -1025,9 +1069,7 @@ const Type = ({ title, editid }) => {
                                                     <h3 className="event-category-title theme-color">Physical Event</h3>
                                                     <p className="event-category-desc text-black mb-4">Host in-person or outdoor events using our event management platform</p>
                                                     <div className="button-group">
-                                                        <span onClick={() => { setEventtype(2); setFormSection(2); }}>
-                                                            <WhitestarBtn title={'Create Event'} />
-                                                        </span>
+                                                        <button type="button" onClick={() => { setEventtype(2); setFormSection(2); }} className=" text-white btn theme-bg">Create Event</button>
                                                     </div>
                                                     <div className="icon_section">
                                                         <img src={GroupIcon} />
@@ -1192,13 +1234,7 @@ const Type = ({ title, editid }) => {
                                         <div className="col-md-12 pt-4">
                                             <p className="mb-0">Tell event-goers when your event starts and ends so they can make plans to attend.</p>
                                         </div>
-                                        <div className="col-md-4 mt-4">
-                                            <label htmlFor="">Events Date & Time</label>
-                                            <div className="tab-button-box">
-                                                <span onClick={() => setEventSubtype(1)} className={EventSubtype == 1 ? "tab-button-active" : ""}>Single Event</span>
-                                                <span onClick={() => setEventSubtype(2)} className={EventSubtype == 2 ? "tab-button-active" : ""}>Multiple Days</span>
-                                            </div>
-                                        </div>
+
                                         <div className="col-md-4 mt-4 d-flex align-items-end">
                                             <div className="select-wrapper w-100">
                                                 <p>Select time zone</p>
@@ -1208,9 +1244,9 @@ const Type = ({ title, editid }) => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="col-md-4 checkout-style-bottom">
-                                            <div className="row checkout-style-element Display-date-time-tic">
-                                                <div className="col-md-2">
+                                        <div className="col-md-8">
+                                            <div className="row mt-5">
+                                                <div className="col-md-1">
                                                     <div class="input-group mb-3">
                                                         <input checked={IsclockCountdown} onChange={handleIsclockCountdown} type="checkbox" class="form-check-input" />
                                                     </div>
@@ -1235,7 +1271,7 @@ const Type = ({ title, editid }) => {
                                                         data-enable-time
                                                         id='date-picker'
                                                         className='form-control'
-                                                        onChange={date => setStartdateselect(date)}
+                                                        onChange={date => { setStartdateselect(date); setTicketStartdate(date) }}
                                                     />
                                                 </div>
                                             </div>
@@ -1299,24 +1335,15 @@ const Type = ({ title, editid }) => {
                                         </div>
                                         <div className="col-md-12 mt-2">
                                             <div className="button-group mt-10">
-                                                <span onClick={() => setFormSection(1)}>
-                                                    <WhitestarBtn title={'Back'} />
-                                                </span>
+                                                <button type="button" onClick={() => setFormSection(1)} className="m-1 text-white btn theme-bg">Back</button>
                                                 {Loader ? (
-                                                    <span onClick={HandelPriceform}>
-                                                        <WhitestarBtn title={'Please wait...'} />
-                                                    </span>
+                                                    <button type="button" className="m-1 text-white btn theme-bg">Please wait...</button>
                                                 ) : (
                                                     <>
                                                         {EditId ? (
-                                                            <span onClick={() => HandelUpdatedetails()}>
-                                                                <WhitestarBtn title={'Update'} />
-                                                            </span>
-
+                                                            <button type="button" onClick={() => HandelUpdatedetails()} className="m-1 text-white btn theme-bg">Update</button>
                                                         ) : (
-                                                            <span onClick={() => HandelSubmit()}>
-                                                                <WhitestarBtn title={'Save'} />
-                                                            </span>
+                                                            <button type="button" onClick={() => HandelSubmit()} className="m-1 text-white btn theme-bg">Save</button>
                                                         )}
                                                     </>
                                                 )}
@@ -1414,24 +1441,15 @@ const Type = ({ title, editid }) => {
                                         <div className="col-md-12 mt-2">
                                             <div className="col-md-12 mt-2">
                                                 <div className="button-group mt-10">
-
-                                                    <span onClick={() => setFormSection(2)}>
-                                                        <WhitestarBtn title={'Back'} />
-                                                    </span>
+                                                    <button type="button" onClick={() => setFormSection(2)} className="m-1 text-white btn theme-bg">Back</button>
                                                     {Loader ? (
-                                                        <span onClick={HandelPriceform}>
-                                                            <WhitestarBtn title={'Please wait...'} />
-                                                        </span>
+                                                        <button type="button" className="m-1 text-white btn theme-bg">Please wait...</button>
                                                     ) : (
                                                         <>
                                                             {EditId ? (
-                                                                <span onClick={() => HandelUpdateEventDesc(EditId)}>
-                                                                    <WhitestarBtn title={'Update'} />
-                                                                </span>
+                                                                <button type="button" onClick={() => HandelUpdateEventDesc(EditId)} className="m-1 text-white btn theme-bg">Update</button>
                                                             ) : (
-                                                                <span onClick={() => HandelSubmit()}>
-                                                                    <WhitestarBtn title={'Save'} />
-                                                                </span>
+                                                                <button type="button" onClick={() => HandelSubmit()} className="m-1 text-white btn theme-bg">Save</button>
                                                             )}
                                                         </>
                                                     )}
@@ -1446,12 +1464,15 @@ const Type = ({ title, editid }) => {
                                         <Col md={12} className="text-center mb-5">
                                             <h2 className="theme-color mb-2 ">Event Tickets</h2>
                                         </Col>
-                                        <Col md={12} className="">
-                                            <Button variant="link" className="button-join" onClick={HandelCreateticket}>
-                                                <span>
-                                                    <span className="bg-style"><img height={30} width={30} src={whitestar} /></span><span className="bg-style bg-title-style">Add Ticket</span>
-                                                </span>
-                                            </Button>
+                                        <div className="col-md-4 mt-4">
+                                            <label htmlFor="">Events Tickets Type</label>
+                                            <div className="tab-button-box">
+                                                <span onClick={() => { setEventSubtype(1); updateTicketsType(1, EditId) }} className={EventSubtype == 1 ? "tab-button-active" : ""}>Single Event</span>
+                                                <span onClick={() => { setEventSubtype(2); updateTicketsType(2, EditId) }} className={EventSubtype == 2 ? "tab-button-active" : ""}>Multiple Events</span>
+                                            </div>
+                                        </div>
+                                        <Col md={12} className="text-end">
+                                            <button type="button" onClick={() => {HandelCreateticket(); emptyPriceForm();}} className="text-white btn theme-bg">Add Ticket</button>
                                         </Col>
                                         {Apiloader ? (
                                             <div className="linear-background w-100"> </div>
@@ -1459,87 +1480,70 @@ const Type = ({ title, editid }) => {
                                             <>
                                                 {
                                                     IsEventTicket ? (
-                                                        <Col md={12} className="mt-5 text-center" >
+                                                        <Col md={12} className="mt-3 text-center" >
                                                             <div className="no-data-found">
                                                                 <Lottie animationData={TicketLotte} style={lottewidth} />
                                                                 <p className="no_ticket_added">Ticket has not been added yet !</p>
                                                             </div>
                                                         </Col>
                                                     ) : (
-
-                                                        <Col md={12} className="mt-5">
-                                                            <div className="price-list-box">
-                                                                {TicketList.map((item, index) => (
-                                                                    <Row className="">
-                                                                        <Col md={12}>
-                                                                            <p className="price-title">
-                                                                                {item.name}
-                                                                            </p>
-                                                                        </Col>
-                                                                        <Col md={1}>
-                                                                            <span class="badge light badge-success">On sale</span>
-                                                                        </Col>
-                                                                        <Col md={3}>
-                                                                            <div>
-                                                                                <p className="price-section-box" style={{ marginBottom: '0px' }}>
-                                                                                    <span className="devide-dot">|</span> <span className="ticket-date">{item.startdate} at {item.starttime}</span>
-                                                                                </p>
-                                                                            </div>
-                                                                        </Col>
-                                                                        <Col md={3}>
-                                                                            <p className="ticket-sold-count">Sold : 0 / {item.quantity}</p>
-                                                                        </Col>
-                                                                        <Col md={1}>
-                                                                            <p className="ticket-price-p"> {item.price ? (<>{Currencyname} {item.price}</>) : (Currencyname + '00')}</p>
-                                                                            <p>{item.tax > 0 ? (<>(Tax : {item.tax}%)</>) : ''}</p>
-                                                                        </Col>
-                                                                        <Col md={2}>
-                                                                            <div class="dropdown">
-                                                                                <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
-                                                                                    <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
-                                                                                </button>
-                                                                                <div class="dropdown-menu">
-                                                                                    {/* <Button variant="link" class="dropdown-item">Edit</Button> */}
-                                                                                    <Button variant="link" onClick={() => CheckDelete(EditId, item.name)} class="dropdown-item">Delete</Button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Row>
-                                                                ))}
-                                                            </div>
+                                                        <Col md={12} className="mt-3 white-table">
+                                                            <Table responsive>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th className="text-center" key={1}>Name</th>
+                                                                        <th className="text-center" key={1}>Event date & time</th>
+                                                                        <th className="text-center" key={1}>Price</th>
+                                                                        <th className="text-center" key={1}>Group Qty</th>
+                                                                        <th className="text-center" key={1}>Scan start in</th>
+                                                                        <th className="text-center" key={1}>Description</th>
+                                                                        <th className="text-center" key={1}>Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {TicketList.map((item, index) => (
+                                                                        <>
+                                                                            {item.isdelete == 0 && (
+                                                                                <tr className="text-center">
+                                                                                    <td>{item.name}</td>
+                                                                                    <td>{item.startdate} {item.starttime}</td>
+                                                                                    <td>{item.price ? (<>{Currencyname} {item.price}</>) : (Currencyname + '00')}</td>
+                                                                                    <td>{item.groupqty}</td>
+                                                                                    <td>{item.scanstartdate} {item.scanstarttime}</td>
+                                                                                    <td>{shortPer(item.description, 20)}</td>
+                                                                                    <td>
+                                                                                        <button type="button" onClick={() => UpdateTicket(item.id)} className="p-2 m-1 btn theme-bg text-white"><FiEdit /></button>
+                                                                                        <button type="button" onClick={() => CheckDelete(EditId, item.id)} className="p-2 m-1 btn btn-danger text-white"><FiDelete /></button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            )}
+                                                                        </>
+                                                                    ))}
+                                                                </tbody>
+                                                            </Table>
                                                         </Col>
                                                     )}
                                             </>
                                         )}
                                         <div className="col-md-12 mt-2">
                                             <div className="button-group mt-10">
-                                                <span onClick={() => setFormSection(3)}>
-                                                    <WhitestarBtn title={'Back'} />
-                                                </span>
+                                                <button type="button" onClick={() => setFormSection(3)} className="m-1 text-white btn theme-bg">Back</button>
                                                 {Loader ? (
-                                                    <span onClick={HandelPriceform}>
-                                                        <WhitestarBtn title={'Please wait...'} />
-                                                    </span>
+                                                    <button type="button" className="m-1 text-white btn theme-bg">Please wait...</button>
                                                 ) : (
-                                                    <span onClick={HandelPriceform}>
-                                                        <WhitestarBtn title={'Update'} />
-                                                    </span>
+                                                    <button onClick={HandelPriceform} type="button" className="m-1 text-white btn theme-bg">Update</button>
                                                 )}
                                             </div>
                                         </div>
-                                    </Row>
+                                    </Row >
                                 ) : (<></>)}
-                            </Card.Body>
-                        </Card>
-                    </Col>
+                            </Card.Body >
+                        </Card >
+                    </Col >
                 </Row >
             )}
-            <Modal isOpen={Ticketshow} toggle={() => setTicketshow(!Ticketshow)} className='modal-dialog-centered modal-lg'>
-                <ModalHeader className='bg-transparent' toggle={() => setTicketshow(!Ticketshow)}>Create new ticket
-                    <button className="close p-0" onClick={() => setTicketshow(!Ticketshow)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-                        <FaTimes />
-                    </button>
-                </ModalHeader>
+            <Modal isOpen={Ticketshow} className='modal-dialog-centered modal-xs'>
+                <ModalHeader className='bg-transparent' toggle={() => setTicketshow(!Ticketshow)}>Create new ticket</ModalHeader>
                 <ModalBody className=''>
                     <Row>
                         <Col md={12} className="justify-content-center d-flex">
@@ -1551,26 +1555,77 @@ const Type = ({ title, editid }) => {
                             </div>
                         </Col>
                         <Col md={12} className="mb-2 mt-4">
-                            <label htmlFor="" className="text-black">Name</label>
-                            <input type="text" class="form-control input-default" onChange={(e) => setTicketname(e.target.value)} value={Ticketname} placeholder="Name" />
+                            <label htmlFor="" className="text-black">Ticket name</label>
+                            <input type="text" class="form-control input-default" onChange={(e) => setTicketname(e.target.value)} value={Ticketname} placeholder="Ticket name" />
                         </Col>
-                        <Col md={4} className="mb-2">
-                            <label htmlFor="" className="text-black">Available quantity</label>
-                            <input type="number" class="form-control input-default" onChange={(e) => setQuantity(e.target.value)} value={Quantity} placeholder="Available quantity" />
+                        <Col md={12} className="mb-2">
+                            <label htmlFor="" className="text-black">Ticket short description</label>
+                            <textarea type="text" class="form-control input-default" onChange={(e) => setTicketdesc(e.target.value)} placeholder="Ticket short description" >{Ticketdesc}</textarea>
                         </Col>
-                        <Col md={4} className="mb-2">
-                            <label htmlFor="" className="text-black">Price</label>
-                            <Input type="number" disabled={Pricedisable} class="form-control input-default" value={Price} onChange={(e) => setPrice(e.target.value)} placeholder="Price" />
+                        <Col md={6} className="mb-2">
+                            <label htmlFor="" className="text-black">Available ticket quantity</label>
+                            <input type="number" class="form-control input-default" onChange={(e) => setQuantity(e.target.value)} value={Quantity} placeholder="Available ticket quantity" />
                         </Col>
-                        <Col md={4} className="mb-2">
-                            <label htmlFor="" className="text-black">Tax (%)</label>
-                            <Input type="number" disabled={Pricedisable} class="form-control input-default" value={Tax} onChange={(e) => setTax(e.target.value)} placeholder="Tax" />
+                        <Col md={6} className="mb-2">
+                            <label htmlFor="" className="text-black">Ticket Price</label>
+                            <Input type="number" disabled={Pricedisable} class="form-control input-default" value={Price} onChange={(e) => setPrice(e.target.value)} placeholder="Ticket Price" />
                         </Col>
-                        <Col md={4} className="mb-2 mt-4">
-                            <label htmlFor="" className="text-black">Start date</label>
+                        <div className="col-6">
+                            <input
+                                type="checkbox"
+                                id={`checkbox-groupticket`}
+                                checked={Isgrouptickets}
+                                onChange={(event) => setIsgrouptickets(event.target.checked)}
+                            />
+                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-groupticket`}>Create a group tickets ?</label>
+                            <div>
+                                {Isgrouptickets && (
+                                    <>
+                                        <input type="number" class="form-control input-default" onChange={(e) => setGroupQty(e.target.value)} value={GroupQty} placeholder="Enter group quantity" />
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                        <div className="col-12">
+                            <div className="row">
+                                {EventSubtype == 2 && (
+                                    <>
+                                        <Col md={6} className="mb-2 mt-1">
+                                            <label htmlFor="" className="text-black">Event start in date</label>
+                                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
+                                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                                <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={get_date_time(TicketEventdata)[0].Dateview} />
+                                                <div className="date-style-picker">
+                                                    <Flatpickr
+                                                        value={TicketStartdate}
+                                                        data-enable-time
+                                                        id='date-picker'
+                                                        className='form-control'
+                                                        onChange={date => setTicketEventdata(date)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </Col>
+                                        <Col md={6} className="mb-2 mt-1">
+                                            <label htmlFor="" className="text-black">Event start in time</label>
+                                            <div class="input-group mb-3 input-warning-o">
+                                                <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
+                                                <input type="text" class="form-control date-border-redius-input  bg-white" placeholder="" readOnly value={get_date_time(TicketEventdata)[0].Timeview} />
+                                            </div>
+                                        </Col>
+                                        <Col md={12} className="mb-2"></Col>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                        <div className="col-12">
+                            <p className="mb-0">Ticket Scan Start From</p>
+                        </div>
+                        <Col md={6} className="mb-2 mt-1">
+                            <label htmlFor="" className="text-black">Date</label>
                             <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
                                 <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={ticketstartdate} />
+                                <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={get_date_time(TicketStartdate)[0].Dateview} />
                                 <div className="date-style-picker">
                                     <Flatpickr
                                         value={TicketStartdate}
@@ -1582,51 +1637,24 @@ const Type = ({ title, editid }) => {
                                 </div>
                             </div>
                         </Col>
-                        <Col md={4} className="mb-2  mt-4">
-                            <label htmlFor="" className="text-black">Start time</label>
+                        <Col md={6} className="mb-2 mt-1">
+                            <label htmlFor="" className="text-black">Time</label>
                             <div class="input-group mb-3 input-warning-o">
                                 <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                <input type="text" class="form-control date-border-redius-input  bg-white" placeholder="" readOnly value={ticketstarttime} />
+                                <input type="text" class="form-control date-border-redius-input  bg-white" placeholder="" readOnly value={get_date_time(TicketStartdate)[0].Timeview} />
                             </div>
                         </Col>
                         <Col md={12} className="mb-2"></Col>
-                        <Col md={4} className="mb-2">
-                            <label htmlFor="" className="text-black">End date</label>
-                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="form-control date-border-redius date-border-redius-input  bg-white" placeholder="" readOnly value={ticketenddate} />
-                                <div className="date-style-picker">
-                                    <Flatpickr
-                                        value={TicketEndtdate}
-                                        data-enable-time
-                                        id='date-picker'
-                                        className='form-control'
-                                        onChange={date => setTicketEndtdate(date)}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={4} className="mb-2">
-                            <label htmlFor="" className="text-black">End time</label>
-                            <div class="input-group mb-3 input-warning-o">
-                                <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                <input type="text" class="form-control date-border-redius-input  bg-white" placeholder="" readOnly value={ticketendtime} />
-                            </div>
-                        </Col>
-                        <Col md={12}>
-                            {EditId ? (
+                        <Col md={12} className="text-center">
+                            {EditId && (
                                 <>
                                     {Loader ? (
-                                        <span onClick={HandelPriceform}>
-                                            <WhitestarBtn title={'Please wait...'} />
-                                        </span>
+                                        <button type="button" className="text-white btn theme-bg w-100 ">Please wait...</button>
                                     ) : (
-                                        <span onClick={() => handelCreateTicket(EditId)}>
-                                            <WhitestarBtn title={'Add ticket'} />
-                                        </span>
+                                        <button type="button" onClick={() => handelCreateTicket(EditId)} className=" w-100 text-white btn theme-bg">Add ticket</button>
                                     )}
                                 </>
-                            ) : (<></>)}
+                            )}
                         </Col>
                     </Row>
                 </ModalBody>

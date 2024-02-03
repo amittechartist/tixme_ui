@@ -138,6 +138,7 @@ function App() {
           <Route path={organizer_url + 'dashboard'} element={<OrganizerLayout title={'Organizer Dashboard'}> <Dashboard /> </OrganizerLayout>} />
           <Route path={organizer_url + 'event/add-event'} element={<OrganizerLayout> <EventType title={'Create new event'} /> </OrganizerLayout>} />
           <Route path={`${organizer_url}event/edit-event/:id/:name`} element={<OrganizerLayout title={'Edit event'}> <EditEvent /> </OrganizerLayout>} />
+          <Route path={`${organizer_url}event/edit-event/:id/:name/:ticketid`} element={<OrganizerLayout title={'Edit event'}> <EditEvent /> </OrganizerLayout>} />
           <Route path={`${organizer_url}event/view-event/:id/:name`} element={<OrganizerLayout> <EventView title={'Event details'} /> </OrganizerLayout>} />
           <Route path={`${organizer_url}event/manage-ticket/:id/:name`} element={<OrganizerLayout title={'Mange Tickets'}> <ManageTicket title={'Mange Tickets'} /> </OrganizerLayout>} />
           <Route path={`${organizer_url}event/mange-attendee/:id/:name`} element={<OrganizerLayout title={'Mange Attendee'}> <Ticketattendee title={'Mange Attendee'} /> </OrganizerLayout>} />
