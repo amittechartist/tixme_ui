@@ -16,7 +16,6 @@ import { admin_url, app_url, apiurl, customer_url } from '../../common/Helpers';
 const Page = ({ title }) => {
     const navigate = useNavigate();
     const payment_id = localStorage.getItem('paymentid_token');
-
     const [ApiLoader, setApiLoader] = useState(true);
     const [pendingLoader, setpendingLoader] = useState(false);
     const [name, setname] = useState();

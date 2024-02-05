@@ -261,7 +261,7 @@ const Home = () => {
         .then(data => {
           if (data.success == true) {
             setEventdata(data.data);
-            setTicketsList(data.data.allprice);
+            setTicketsList(data.data.allprice.filter(item => item.isdelete === 0));
             setOrganizerdata(data.organizer)
             if (data.data.organizer_id) {
               fetchOrganizerEvent(data.data.organizer_id);
@@ -350,7 +350,7 @@ const Home = () => {
         .then(data => {
           if (data.success == true) {
             setEventdata(data.data);
-            setTicketsList(data.data.allprice);
+            setTicketsList(data.data.allprice.filter(item => item.isdelete === 0));
             if (data.data.organizer_id) {
               checkfollowOrganizer(data.data.organizer_id);
               fetchOrganizerEvent(data.data.organizer_id);
@@ -941,13 +941,22 @@ const Home = () => {
                       <CoundownDiv props={Eventdata.start_mindate} />
                     ) : ''}
                     <div className="start-in-box eventpage-box-style-event-view mb-5 my-5 event-page-ticket" style={{ position: 'relative' }}>
-                      {Eventdata.is_selling_fast && (
+                      {/* {Eventdata.is_selling_fast && (
                         <div className="Selling-Fast-box">
                           <p className="mb-0">Selling Fast</p>
                         </div>
-                      )}
-                      <div className={`right-box-title text-center ${Eventdata.is_selling_fast && 'mt-3'}`}>
-                        <p><Flip left cascade>Tickets</Flip></p>
+                      )} */}
+                      <div className={`right-box-title`}>
+                        <div className="row border-bottom-1">
+                          <div className="col-6 d-flex justify-content-start">
+                            <span><Flip left cascade>Tickets</Flip></span>
+                          </div>
+                          {Eventdata.is_selling_fast && (
+                            <div className="col-6 d-flex justify-content-end">
+                              <span className="selling-f-box">Selling Fast</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
                       {Eventdata.event_subtype_id == 2 ? (
                         <>
@@ -955,34 +964,39 @@ const Home = () => {
                             {Eventdata.allprice ? (
                               <>
                                 {Eventdata.allprice.map((items, index) => (
-                                  <div className="col-md-6 my-2">
-                                    <div className={`week-select-box text-center ${SelectedTicketId == items.id && 'week-select-box-active'}`} onClick={() => handelTicketselect(items.id)}>
-                                      <p className="mb-0 a">{getDayName(items.startdate)}</p>
-                                      <p className="mb-0 b">{getMonthName(items.startdate)}</p>
-                                      <div className="b-box"><p className="mb-0 c">{getDay(items.startdate)}</p></div>
-                                      <p className="mb-0 d">{items.starttime}</p>
-                                    </div>
-                                  </div>
+                                  <>
+                                    {items.isdelete === 0 && (
+                                      <div className="col-md-6 my-2">
+                                        <div className={`week-select-box text-center ${SelectedTicketId == items.id && 'week-select-box-active'}`} onClick={() => handelTicketselect(items.id)}>
+                                          <p className="mb-0 a">{getDayName(items.startdate)}</p>
+                                          <p className="mb-0 b">{getMonthName(items.startdate)}</p>
+                                          <div className="b-box"><p className="mb-0 c">{getDay(items.startdate)}</p></div>
+                                          <p className="mb-0 d">{items.starttime}</p>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </>
                                 ))}
                                 {selectedTicket && (
                                   <>
-                                    <div key={selectedTicket.id} className="right-box-con mt-4 in-event-page-cart-sec">
-                                      <div className="row align-items-center">
-                                        <div className="col-md-6 col-6">
-                                          <p className="Ticket-title mb-0">{selectedTicket.name}</p>
-                                          {selectedTicket.ticket_type == 1 ? (
-                                            <>
-                                              <span className="price  mb-0">{Eventdata.countrysymbol}{selectedTicket.price}</span>
-                                            </>
-                                          ) : (<>
-                                            <span className="price  mb-0">FREE</span>
-                                          </>)}
+                                    <div className="col-12">
+                                      <div className="row my-2">
+                                        <div className="col-6 justify-content-center">
+                                          <p className="mb-0" style={{ fontSize: '10px', height: '30px' }}>Ticket Type</p>
+                                          <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{selectedTicket.name}</p></div>
                                         </div>
-                                        <div className="col-md-6 col-6 d-flex justify-content-end">
-                                          <div className="d-flex align-items-stretch">
-                                            <span className="add_to_cart_btn" onClick={() => removeFromCart(selectedTicket.name, localQuantities[selectedTicket.name] || 0)}>-</span>
-                                            <span className="add_to_cart_count">{localQuantities[selectedTicket.name] || 0}</span>
-                                            <span className="add_to_cart_btn" onClick={() => addToCart(selectedTicket, Eventdata._id)}>+</span>
+                                        <div className="col-6 d-flex justify-content-center">
+                                          <div className="d-inline-block">
+                                            <div className="text-center">
+                                              <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price {selectedTicket.ticket_type == 1 ? Eventdata.countrysymbol + selectedTicket.price : 'Free'}</p>
+                                            </div>
+                                            <div className="">
+                                              <div className="row grediant-border d-flex align-items-center mx-1">
+                                                <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(selectedTicket.name, localQuantities[selectedTicket.name] || 0)}>-</span></div>
+                                                <div className="col-4"><span>{localQuantities[selectedTicket.name] || 0}</span></div>
+                                                <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(selectedTicket, Eventdata._id)}>+</span></div>
+                                              </div>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
@@ -1007,26 +1021,28 @@ const Home = () => {
                             onClick={() => addToCart(items, Eventdata._id)} */}
                               {Eventdata.allprice.map((items, index) => (
                                 <>
-                                  <div className="row mb-2">
-                                    <div className="col-6">
-                                      <p className="mb-0" style={{ fontSize: '10px', height: '30px' }}>Ticket Type</p>
-                                      <div style={{ padding: '6px 0px' }} className="grediant-border text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{items.name}</p></div>
-                                    </div>
-                                    <div className="col-6">
-                                      <div className="d-inline-block">
-                                        <div className="text-center">
-                                          <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price {items.ticket_type == 1 ? Eventdata.countrysymbol + items.price : 'Free'}</p>
-                                        </div>
-                                        <div className="">
-                                          <div className="row grediant-border d-flex align-items-center mx-1">
-                                            <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.name, localQuantities[items.name] || 0)}>-</span></div>
-                                            <div className="col-4"><span>{localQuantities[items.name] || 0}</span></div>
-                                            <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span></div>
+                                  {items.isdelete === 0 && (
+                                    <div className="row my-2">
+                                      <div className="col-6 justify-content-center">
+                                        <p className="mb-0" style={{ fontSize: '10px', height: '30px' }}>Ticket Type</p>
+                                        <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{items.name}</p></div>
+                                      </div>
+                                      <div className="col-6 d-flex justify-content-center">
+                                        <div className="d-inline-block">
+                                          <div className="text-center">
+                                            <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price {items.ticket_type == 1 ? Eventdata.countrysymbol + items.price : 'Free'}</p>
+                                          </div>
+                                          <div className="">
+                                            <div className="row grediant-border d-flex align-items-center mx-1">
+                                              <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.name, localQuantities[items.name] || 0)}>-</span></div>
+                                              <div className="col-4"><span>{localQuantities[items.name] || 0}</span></div>
+                                              <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span></div>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
+                                  )}
                                 </>
                               ))}
                             </>

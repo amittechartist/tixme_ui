@@ -476,7 +476,7 @@ select {
 
 .news-form {
   left: 10%;
-  top: 35%;
+  top: 38%;
 }
 
 .bg-ligh-blue {
@@ -490,7 +490,7 @@ select {
 
 /* footer */
 footer {
-  background: url(./assets/footerBg.png) top center;
+  background: url(./assets/footerBg.svg) top center;
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -1041,7 +1041,7 @@ input:focus {
 
   .news-form {
     left: 10%;
-    top: 35%;
+    top: 37%;
   }
 
   .address-sec {

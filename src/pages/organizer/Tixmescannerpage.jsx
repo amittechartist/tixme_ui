@@ -35,6 +35,7 @@ const Dashboard = ({ title }) => {
         const resultElement = document.getElementById('camera-result');
         if (resultElement && resultElement.textContent.trim() !== '') {
             let maintext = JSON.parse(resultElement.textContent.trim());
+            console.log("result",resultElement);
             localStorage.setItem('scandata', maintext.id)
             window.location.href = organizer_url + 'tixme-validate';
             clearInterval(intervalRef.current); // Stop the interval

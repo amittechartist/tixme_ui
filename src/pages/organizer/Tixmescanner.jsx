@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 import QrcodeLotte from '../../lotte/qr-code-scaner-gif.json'
 import Lottie from "lottie-react";
 import Whitebtn from '../../component/Whitestarbtn';
-import { admin_url, app_url, apiurl, customer_url, organizer_url } from '../../common/Helpers';
+import { admin_url, app_url, apiurl, qr_url, organizer_url } from '../../common/Helpers';
 import { Link, useNavigate } from 'react-router-dom';
 const Dashboard = ({ title }) => {
     const [openQrcode, setopenQrcode] = useState(false);
@@ -90,6 +90,7 @@ const Dashboard = ({ title }) => {
                                             <span className="ml-5" onClick={() => openscanner()}>
                                                 <Whitebtn title={'Scan QR'} />
                                             </span>
+                                            <Link to={qr_url} className='text-white theme-bg btn w-100'>Scan QR</Link>
                                         </div>
                                     </Card.Body>
                                 </Card>

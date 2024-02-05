@@ -78,6 +78,7 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [Ticketname, setTicketname] = useState();
     const [Ticketdesc, setTicketdesc] = useState();
     const [Quantity, setQuantity] = useState();
+    const [TicketUid, setTicketUid] = useState();
     const [TicketStartdate, setTicketStartdate] = useState(new Date());
     const [TicketEndtdate, setTicketEndtdate] = useState(new Date());
     const [TicketEventdata, setTicketEventdata] = useState(new Date());
@@ -355,6 +356,7 @@ const Type = ({ title, editid, ticketeditid }) => {
             setGroupQty(getticketdata.groupqty);
             setTicketEventdata(getticketdata.event_min_datetime[0]);
             setTicketStartdate(getticketdata.scan_min_datetime[0]);
+            setTicketUid(getticketdata.id)
             setTicketshow(true);
         } else {
             toast.error("No ticket found");
@@ -839,7 +841,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                 price: Price,
                 groupqty: Isgrouptickets ? GroupQty : 1,
             };
-            fetch(apiurl + 'event/update/price', {
+            fetch(apiurl + 'event/create/event-ticket', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -870,6 +872,72 @@ const Type = ({ title, editid, ticketeditid }) => {
             setLoader(false);
         }
     }
+    const handelUpdateTicket = async (updateid) => {
+        try {
+            if (!Tickettype) {
+                return toast.error('Select ticket type free or paid');
+            }
+            if (!Ticketname) {
+                return toast.error('Enter ticket name');
+            }
+            if (!Quantity) {
+                return toast.error('Enter available ticket quantity');
+            }
+            if (!Price && Tickettype == 1) {
+                return toast.error('Enter ticket price');
+            }
+            if (Isgrouptickets && !GroupQty) {
+                return toast.error('Enter group quantity');
+            }
+            setLoader(true);
+            const requestData = {
+                updateid: updateid,
+                ticketeditid: TicketUid,
+                description: Ticketdesc,
+                ticket_type: Tickettype,
+                name: Ticketname,
+                quantity: Quantity,
+                startdate: EventSubtype == 2 ? get_date_time(TicketEventdata)[0].Dateview : get_date_time(Startdateselect)[0].Dateview,
+                starttime: EventSubtype == 2 ? get_date_time(TicketEventdata)[0].Timeview : get_date_time(Startdateselect)[0].Timeview,
+                scanstartdate: get_date_time(TicketStartdate)[0].Dateview,
+                scanstarttime: get_date_time(TicketStartdate)[0].Timeview,
+                scan_min_datetime: TicketStartdate,
+                event_min_datetime: EventSubtype == 2 ? TicketEventdata : Startdateselect,
+                price: Price,
+                groupqty: Isgrouptickets ? GroupQty : 1,
+            };
+            fetch(apiurl + 'event/edit/event-ticket', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setLoader(false);
+                    if (data.success == true) {
+                        toast.success('Created', {
+                            duration: 3000,
+                        });
+                        setTicketshow(false);
+                        emptyPriceForm();
+                        fetchAllTicket();
+                    } else {
+                        toast.error(data.message);
+                    }
+                    setLoader(false);
+                })
+                .catch(error => {
+                    setLoader(false);
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+            setLoader(false);
+        }
+    }
+    
     const fetchEventtypeCategory = async () => {
         try {
             fetch(apiurl + 'category/get-event-type-list', {
@@ -1472,7 +1540,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                             </div>
                                         </div>
                                         <Col md={12} className="text-end">
-                                            <button type="button" onClick={() => {HandelCreateticket(); emptyPriceForm();}} className="text-white btn theme-bg">Add Ticket</button>
+                                            <button type="button" onClick={() => { HandelCreateticket(); emptyPriceForm(); setTicketUid(""); }} className="text-white btn theme-bg">Add Ticket</button>
                                         </Col>
                                         {Apiloader ? (
                                             <div className="linear-background w-100"> </div>
@@ -1651,7 +1719,13 @@ const Type = ({ title, editid, ticketeditid }) => {
                                     {Loader ? (
                                         <button type="button" className="text-white btn theme-bg w-100 ">Please wait...</button>
                                     ) : (
-                                        <button type="button" onClick={() => handelCreateTicket(EditId)} className=" w-100 text-white btn theme-bg">Add ticket</button>
+                                        <>
+                                            {TicketUid ? (
+                                                <button type="button" onClick={() => handelUpdateTicket(EditId)} className=" w-100 text-white btn theme-bg">Update ticket</button>
+                                            ) : (
+                                                <button type="button" onClick={() => handelCreateTicket(EditId)} className=" w-100 text-white btn theme-bg">Add ticket</button>
+                                            )}
+                                        </>
                                     )}
                                 </>
                             )}

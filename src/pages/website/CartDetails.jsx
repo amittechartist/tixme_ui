@@ -13,8 +13,12 @@ import HeaderMenu from '../../components/headermenu';
 import MobileMenu from '../../components/mobilemenu';
 import CartBG from '../../common/image/Cart BG.svg'
 import calendar from "../../assets/calendar.svg";
+import TopIcon from "../../assets/new/top.png"
+import arrow from "../../assets/arrow.svg";
 import hourglassIcon from "./eventpageicon/hourglass.png";
-import { apiurl, onlyDayMonth, shortPer, app_url, isEmail, get_percentage } from "../../common/Helpers";
+import { apiurl, app_url, isEmail, get_percentage } from "../../common/Helpers";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import { Link, useNavigate } from "react-router-dom";
 const Home = () => {
     const Beartoken = localStorage.getItem('userauth');
@@ -172,7 +176,9 @@ const Home = () => {
     //coupon check
 
     // login as guest
+    const [Phonenumber, setPhonenumber] = useState('');
     const [GLoginEmail, setGLoginEmail] = useState('');
+    const [GConfirmLoginEmail, setGConfirmLoginEmail] = useState('');
     const [LoginFname, setLoginFname] = useState('');
     const [LoginLname, setLoginLname] = useState('');
     const [LoginLoader, setLoginLoader] = useState(false);
@@ -182,12 +188,22 @@ const Home = () => {
             if (!GLoginEmail || !isEmail(GLoginEmail)) {
                 return toast.error("Enter valid email");
             }
+            if (!GConfirmLoginEmail || !isEmail(GConfirmLoginEmail)) {
+                return toast.error("Enter valid confirm email");
+            }
+            if (GLoginEmail.trim() !== GConfirmLoginEmail.trim()) {
+                return toast.error("Email and confirm email must me same");
+            }
             if (!LoginFname || !LoginLname) {
                 return toast.error("Name is required");
+            }
+            if (!Phonenumber) {
+                return toast.error("Enter your phone number");
             }
             setLoginLoader(true);
             const requestData = {
                 email: GLoginEmail,
+                phonenumber: Phonenumber,
                 fname: LoginFname,
                 lname: LoginLname,
             };
@@ -462,6 +478,7 @@ const Home = () => {
                 // navigate(app_url + 'auth/customer/login');
                 // setshowLoginasGuest(true);
                 setLoginmodal(true);
+                setshowLoginasGuest(false);
                 return;
             }
             setApiLoader(true);
@@ -566,25 +583,30 @@ const Home = () => {
         }
 
     };
-
+    const handlePhoneChange = (newPhone) => {
+        setPhonenumber(newPhone);
+    };
     return (
         <>
             {" "}
-            <Modal isOpen={Loginmodal} toggle={() => setLoginmodal(!Loginmodal)} centered>
-                <ModalHeader toggle={!Loginmodal}>{showLoginasGuest ? 'Log in as guest' : 'Log In'}
-                    <button className="close p-0" onClick={() => setLoginmodal(!Loginmodal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-                        <FaTimes />
-                    </button>
+            <Modal isOpen={Loginmodal} className='modal-dialog-centered modal-xs' toggle={() => setLoginmodal(!Loginmodal)} centered size={showLoginasGuest ? 'md' : 'xl'}>
+                <ModalHeader toggle={() => setLoginmodal(!Loginmodal)}>{showLoginasGuest ? 'Log in as guest' : 'Log In / Sign Up'}
                 </ModalHeader>
                 <ModalBody>
                     {showLoginasGuest ? (
                         <div className="row">
                             <Col md={12} style={{ borderTop: '1px solid #eee' }} className="mt-3 pt-4">
                                 <Row>
-                                    <Col md={12}>
+                                    <Col md={6}>
                                         <div className="form-group">
                                             <p>Email Address</p>
                                             <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setGLoginEmail(e.target.value)} value={GLoginEmail}></input>
+                                        </div>
+                                    </Col>
+                                    <Col md={6}>
+                                        <div className="form-group">
+                                            <p>Confirm Email Address</p>
+                                            <input className="form-control" type="text" placeholder="Confirm Email Address" onChange={(e) => setGConfirmLoginEmail(e.target.value)} value={GConfirmLoginEmail}></input>
                                         </div>
                                     </Col>
                                     <Col md={6}>
@@ -600,27 +622,72 @@ const Home = () => {
                                         </div>
                                     </Col>
                                     <Col md={12}>
+                                        <div className="form-group">
+                                            <p>Phone number</p>
+                                            <PhoneInput
+                                                country={"us"}
+                                                className="phone-number-with-code"
+                                                enableSearch={true}
+                                                placeholder={"Phone number"}
+                                                autoFormat={true}
+                                                value={Phonenumber}
+                                                onChange={handlePhoneChange}
+                                            />
+                                        </div>
+                                    </Col>
+
+                                    <Col md={12}>
                                         {LoginLoader ? (
                                             <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
                                         ) : (
                                             <button className="btn btn-primary w-100 theme-bg  my-2" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
                                         )}
                                     </Col>
-                                    <div className="border-bottom py-2"></div>
+                                    {/* <div className="border-bottom py-2"></div>
                                     <div className="text-center">OR</div>
                                     <div className="text-center">
-                                        <button type="button" style={{width:"230px"}} className="btn theme-bg text-white mt-3" onClick={() => setshowLoginasGuest(false)}>Log In</button>
+                                        <button type="button" style={{ width: "230px" }} className="btn theme-bg text-white mt-3" onClick={() => setshowLoginasGuest(false)}>Log In</button>
                                         <Link to={app_url + 'auth/customer/signup'}>
-                                           <button type="button" style={{width:"230px"}} className="btn theme-bg ml-1 text-white mt-3">Sign up</button>
+                                            <button type="button" style={{ width: "230px" }} className="btn theme-bg ml-1 text-white mt-3">Sign up</button>
                                         </Link>
-                                    </div>
+                                    </div> */}
                                 </Row>
-                                {/* /customer/login-as-guest */}
                             </Col>
                         </div>
                     ) : (
                         <div className="row">
-                            <div className="form-group col-md-12">
+                            <div className='row p-5 py-5 d-flex justify-content-center'>
+                                    <div className="col-12 col-md-5 col-lg-5 mt-5">
+                                        <div className="GetCustomerButtonBox">
+                                            <img src={TopIcon} alt="" className="TopLeftImg" />
+                                            <h4>Returning Customer</h4>
+                                            <Link to={app_url + 'auth/login-signup'}><button class="GetLatestUpdateButton CustomerButton login-pg-btn-cs" >
+                                                <div class="left text-center">
+                                                    <small class="ms-2">Log In / Sign Up</small>
+                                                </div>
+                                                <div class="right">
+                                                    <img src={arrow} alt="" style={{ width: "15px" }} />
+                                                </div>
+                                            </button></Link>
+                                        </div>
+                                    </div>
+                                    <div className="col-12 col-md-5 col-lg-5 mt-5">
+                                        <div className="GetCustomerButtonBox">
+                                            <img src={TopIcon} alt="" className="TopLeftImg" />
+                                            <h4>Login As Guest</h4>
+                                            <Link onClick={() => setshowLoginasGuest(true)}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
+                                                <div class="left text-center">
+                                                    <small class="ms-2">Log In</small>
+                                                </div>
+                                                <div class="right">
+                                                    <img src={arrow} alt="" style={{ width: "15px" }} />
+                                                </div>
+                                            </button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            {/* <div className="form-group col-md-12">
                                 <p>Email address</p>
                                 <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)}></input>
                             </div>
@@ -639,7 +706,7 @@ const Home = () => {
                             <div className="text-center">OR</div>
                             <div className="text-center">
                                 <button type="button" className="btn theme-bg w-100 text-white mt-3" onClick={() => setshowLoginasGuest(true)}>continue as guest</button>
-                            </div>
+                            </div> */}
                         </div>
                     )}
 
@@ -681,7 +748,7 @@ const Home = () => {
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div className="col-3">
+                                                                            <div className="col-4">
                                                                                 <div className="d-flex align-items-center">
                                                                                     <div >
                                                                                         <img height={20} width={20} src={Timelogo} alt="" />
@@ -692,18 +759,7 @@ const Home = () => {
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div className="col-3">
-                                                                                <div className="d-flex align-items-center">
-                                                                                    <div >
-                                                                                        <img height={20} width={20} src={hourglassIcon} alt="" />
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <p className="mb-0 aaa">Event Duration</p>
-                                                                                        <p className="mb-0 bbb">{item.event.event_duration}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col-3">
+                                                                            <div className="col-5">
                                                                                 <div className="mx-2">
                                                                                     <div className="py-2 eventpage-box-style-event-view text-center d-flex align-items-center justify-content-center">
                                                                                         <p className="mb-0 tc">{item.name}</p>
@@ -745,11 +801,11 @@ const Home = () => {
                                                                                 </p>
                                                                             </Col>
                                                                             <Col md={4}>
-                                                                                    {item.price > 0 ? (
-                                                                                        <span className="cart-price">{item.name} | Price : {currency_symble} {item.price}</span>
-                                                                                    ) : (
-                                                                                        <span className="cart-price">{item.name} | Price : Free</span>
-                                                                                    )}
+                                                                                {item.price > 0 ? (
+                                                                                    <span className="cart-price">{item.name} | Price : {currency_symble} {item.price}</span>
+                                                                                ) : (
+                                                                                    <span className="cart-price">{item.name} | Price : Free</span>
+                                                                                )}
                                                                             </Col>
                                                                             <Col md={4}>
                                                                                 <div className="d-inline-block">

@@ -1824,7 +1824,7 @@ body {
 }
 
 .coundown-box {
-  background: #EBF0F8;
+  /* background: #EBF0F8; */
   border-radius: 5px;
   padding: 9px 0px;
 }
@@ -2052,4 +2052,55 @@ img.coundown-clock {
   padding: 0px 14px;
   background: #fff;
   color: #000000;
+}
+
+span.selling-f-box {
+  background: #0248ab;
+  color: #fff !important;
+  font-size: 17px !important;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+.row.border-bottom-1 span {
+  font-size: 22px;
+  color: #0248ab;
+}
+.border-bottom-1 {
+  border-bottom: 1px solid #0248ab;
+  padding: 0px 0px 13px 0px;
+}
+.grediant-border-in-ticket {
+  background: linear-gradient(#fff, white) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  padding: 6px 15px;
+}
+
+.event-page-category-filter-box {
+  border: 1px solid #eee;
+  border-radius: 7px;
+  position: relative;
+  padding: 5px 0px;
+  cursor: pointer;
+}
+.event-page-category-filter-box img {
+  position: absolute;
+  right: 7px;
+  top: 9px;
+  height: 20px;
+  width: 20px;
+}
+.event-page-category-filter-box p {
+  margin-bottom: 0;
+  color: #6495ed;
+  padding-left: 14px;
+}
+.category-box-new {
+  position: relative;
+  border: 1px solid #eee;
+  top: -3px;
+  background: #fff;
+  padding: 3px 10px;
+  height: 200px;
+  overflow-y: auto;
 }

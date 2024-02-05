@@ -28,6 +28,7 @@ const Home = () => {
     }, []);
     const [searchParams] = useSearchParams();
     const [minValue, setMinValue] = useState(1);
+    const [CatDropdownopen, setCatDropdownopen] = useState(false);
     const [maxValue, setMaxValue] = useState(1000);
     const [wantPricefilter, setWantPricefilter] = useState(false);
     const [CountryList, setCountryList] = useState();
@@ -160,7 +161,7 @@ const Home = () => {
                     }
                     setWantPricefilter(true);
                 } else {
-                    return toast.error("Max and min price required");
+                    setWantPricefilter(true);
                 }
             } else {
                 setWantPricefilter(true);
@@ -178,8 +179,8 @@ const Home = () => {
                 display_name: SearchInput ? SearchInput : (FiltersearchQuery ? FiltersearchQuery : null),
                 fromdate: Datetype == "Pick between two dates" ? get_min_date(RangeStartdateselect) : null,
                 todate: Datetype == "Pick between two dates" ? get_min_date(Enddateselect) : null,
-                minprice: wantPricefilter ? Minprice : null,
-                maxprice: wantPricefilter ? Maxprice : null,
+                minprice: wantPricefilter ? Minprice ? Minprice : 1 : null,
+                maxprice: wantPricefilter ? Maxprice ? Maxprice : 100000000000000000000000000000000000000000000000000000000 : null,
                 country_filter: !India && !Singapur && !Usa ? CountryFilter ? CountryFilter : null : null,
                 india: India ? India : null,
                 singapur: Singapur ? Singapur : null,
@@ -346,7 +347,10 @@ const Home = () => {
                                 <a style={{ fontSize: '13px' }} onClick={() => { setUsa(Usa == 'united states' ? '' : 'united states'); setCountryFilter('') }} className={Usa || CountryFilter == 'united states' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
                             </div>
                             <div className="col-md-12 mt-3">
-                                <p className="mb-0 theme-color">Genres</p>
+                                <div className="event-page-category-filter-box">
+                                    <p className="mb-0 theme-color">Genres</p>
+                                    <img src={ArrowDown} alt="" />
+                                </div>
                                 <div>
                                     <div>
                                         <input
@@ -520,7 +524,46 @@ const Home = () => {
                                     <a style={{ fontSize: '13px' }} onClick={() => { setUsa(Usa == 'united states' ? '' : 'united states'); setCountryFilter('') }} className={Usa || CountryFilter == 'united states' ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
                                 </div>
                                 <div className="col-md-12 mt-3">
-                                    <p className="mb-0 theme-color">Genres</p>
+                                <p className="mb-0 theme-color">Genres</p>
+                                    <div style={{ position: 'relative' }}>
+                                        <div className="event-page-category-filter-box" onClick={() => setCatDropdownopen(!CatDropdownopen)}>
+                                            <p className="mb-0 theme-color">Select Category</p>
+                                            <img src={ArrowDown} alt="" />
+                                        </div>
+                                        {CatDropdownopen && (
+                                            <div className="category-box-new">
+                                                <div>
+                                                    <div>
+                                                        <input
+                                                            type="checkbox"
+                                                            id={`checkbox-any`}
+                                                            name={'any'}
+                                                            checked={Isany}
+                                                            onChange={() => handleCheckboxChange('any')}
+                                                        />
+                                                        <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-any`}>Any</label>
+                                                    </div>
+                                                    {visibleItems.map((item) => (
+                                                        <div key={item._id}>
+                                                            <input
+                                                                type="checkbox"
+                                                                id={`checkbox-${item._id}`}
+                                                                name={item.name}
+                                                                checked={selectedCategories.includes(item._id)}
+                                                                onChange={() => handleCheckboxChange(item._id)}
+                                                            />
+                                                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
+                                                        </div>
+                                                    ))}
+                                                    {Listitems.length > 5 && (
+                                                        <button className="filter-show-cat-btn" onClick={() => setShowAll(!showAll)}>
+                                                            {showAll ? 'Show Less' : 'Show More'}
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                     {/* <div className="selectDiv" style={{ marginRight: '0px' }}>
                                         <select
                                             className="form-select category me-4"
@@ -535,35 +578,7 @@ const Home = () => {
                                         </select>
                                         <img src={ArrowDown} alt="" />
                                     </div> */}
-                                    <div>
-                                        <div>
-                                            <input
-                                                type="checkbox"
-                                                id={`checkbox-any`}
-                                                name={'any'}
-                                                checked={Isany}
-                                                onChange={() => handleCheckboxChange('any')}
-                                            />
-                                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-any`}>Any</label>
-                                        </div>
-                                        {visibleItems.map((item) => (
-                                            <div key={item._id}>
-                                                <input
-                                                    type="checkbox"
-                                                    id={`checkbox-${item._id}`}
-                                                    name={item.name}
-                                                    checked={selectedCategories.includes(item._id)}
-                                                    onChange={() => handleCheckboxChange(item._id)}
-                                                />
-                                                <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
-                                            </div>
-                                        ))}
-                                        {Listitems.length > 5 && (
-                                            <button className="filter-show-cat-btn" onClick={() => setShowAll(!showAll)}>
-                                                {showAll ? 'Show Less' : 'Show More'}
-                                            </button>
-                                        )}
-                                    </div>
+
                                 </div>
 
                                 <Col md={12} xs={12} className=" mt-3">

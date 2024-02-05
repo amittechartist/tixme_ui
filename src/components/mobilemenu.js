@@ -283,7 +283,7 @@ const Header = () => {
                                 </Link>
                             </li>
                             <OrganizerSignupmob prorps={'pcheadermenu'} />
-                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-5  me-3">
+                            <li class="nav-item d-flex align-items-center justify-content-center me-xl-4  me-3">
                                 {customer_token || organizername ? (
                                     <>
                                         {customer_token ? (

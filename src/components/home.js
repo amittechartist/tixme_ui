@@ -1023,7 +1023,7 @@ const Home = () => {
                 placeholder="Email ID"
               />
             </div>
-            <div className="form-check mt-3 mb-4">
+            <div className="form-check">
               <input
                 className="form-check-input"
                 type="checkbox"
