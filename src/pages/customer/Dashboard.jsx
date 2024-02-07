@@ -311,7 +311,7 @@ const Dashboard = ({ title }) => {
                             </>
                         ) : (
                             <>
-                                <Col md={3} className="tickets-data-text">
+                                <Col md={6} xl={2} className="tickets-data-text">
                                     <div>
                                         <h5 className="text-bold">Email :</h5>
                                         <p>{CustomerData.email}</p>
@@ -325,10 +325,10 @@ const Dashboard = ({ title }) => {
                                         <p>{CustomerData.address} {CustomerData.address ? (',' + CustomerData.address) : ''}</p>
                                     </div>
                                 </Col>
-                                <Col md={2} className="tickets-data-text">
+                                <Col md={6} xl={2} className="tickets-data-text">
                                     <div>
                                         <h5 className="text-bold">City :</h5>
-                                        <p>{CustomerData.city ? CustomerData.city : '--'}</p>
+                                        <p>{'--'}</p>
                                     </div>
                                     <div>
                                         <h5 className="text-bold">State :</h5>
@@ -339,7 +339,7 @@ const Dashboard = ({ title }) => {
                                         <p>{CustomerData.country ? CustomerData.country : '--'}</p>
                                     </div>
                                 </Col>
-                                <Col md={3} className="tickets-data-text">
+                                <Col md={6} xl={3} className="tickets-data-text">
                                     <div>
                                         <h5 className="text-bold">BOOKING ID :</h5>
                                         <p>{Ordersavedata.bookingid}</p>
@@ -362,7 +362,7 @@ const Dashboard = ({ title }) => {
                                         </div>
                                     ) : ''}
                                 </Col>
-                                <Col md={4}>
+                                <Col md={6} xl={4}>
                                     <div className="tickets-data-text-last">
                                         <h4 style={{ fontWeight: '700' }}>Tickect Scan Status</h4>
                                         {Isscan ? (
@@ -371,19 +371,41 @@ const Dashboard = ({ title }) => {
                                             <span class="badge-theme-warning badge-theme"><FaClock /> Pending</span>
                                         )}
                                     </div>
+                                    <div>
+                                        <div className="row my-2">
+                                            {Orderitemlist.map((item, index) => (
+                                                <div className="col-6 col-md-4 col-lg-3 col-xl-3">
+                                                    <div className="m-2 text-center">
+                                                        {item.is_transfer == 1 ? (
+                                                            <img style={{ height: "auto", width: "50px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                        ) : (
+                                                            <>
+                                                                {item.scan_status == 0 ? (
+                                                                    <QRCode style={{ height: "auto", width: "50px" }} value={JSON.stringify({ id: item._id, time: 1, index: index })} />
+                                                                ) : (
+                                                                    <img style={{ height: "auto", width: "50px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                                )
+                                                                }
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </Col>
                                 {ShowQr ? (
                                     <Col md={12}>
                                         <Row className="pt-2 mt-4" style={{ borderTop: '1px solid #eee' }}>
                                             {Orderitemlist.map((item, index) => (
-                                                <Col md={3}>
+                                                <Col md={6} lg={4} xl={3}>
                                                     <div className="ticket-box">
                                                         <div className="ticket-qr text-center">
                                                             {item.is_transfer == 1 ? (
                                                                 <>
-                                                                    <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                                    <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
                                                                     <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                    <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{textTransform: 'capitalize'}}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                    <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                     <p className="mb-0 mt-4" style={{ fontWeight: 600, color: '#000' }}>Transferred to</p>
                                                                     <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> {item.owner_email}</span>
                                                                 </>
@@ -398,18 +420,18 @@ const Dashboard = ({ title }) => {
                                                                                     onChange={() => handleCheckboxChange(item._id)}
                                                                                     style={{ position: 'absolute', top: '10px', left: '10px' }}
                                                                                 />
-                                                                                <QRCode style={{ height: "auto", width: "150px" }} value={JSON.stringify({ id: item._id, time: 1, index: index })} />
+                                                                                <QRCode className="dashqrbig" value={JSON.stringify({ id: item._id, time: 1, index: index })} />
                                                                                 <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                                <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{textTransform: 'capitalize'}}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                                <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                                 <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
                                                                                 <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
                                                                             </div>
                                                                         </>
                                                                     ) : (
                                                                         <>
-                                                                            <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                                            <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
                                                                             <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                            <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{textTransform: 'capitalize'}}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                            <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                             <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
                                                                             <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> Success</span>
                                                                         </>
@@ -424,7 +446,7 @@ const Dashboard = ({ title }) => {
                                                 <>
                                                     <Col md={12}></Col>
                                                     <Col md={3}>
-                                                        <button type="button" onClick={() => {setModal(!modal); setModalTT(!modalTT); setModalLoader(false)}} className="w-100 btn btn-success">Transfer</button>
+                                                        <button type="button" onClick={() => { setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button>
                                                     </Col>
                                                 </>
                                             ) : ''}
@@ -514,48 +536,50 @@ const Dashboard = ({ title }) => {
                                                                             <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} className="list-thum-img" alt="" />
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
-                                                                            <div>
-                                                                                <span className="list-event-name">{item.eventData[0].name}</span>
-                                                                                <p className="list-event-desc mb-0">{shortPer(item.eventData[0].event_desc, 100)}</p>
-                                                                            </div>
-                                                                            <div className="list-event-location mb-3">
-                                                                                <div className="d-flex align-items-center text-center location-name">
-                                                                                    <img
-                                                                                        height={30}
-                                                                                        width={30}
-                                                                                        src={LocationIcon}
-                                                                                        alt=""
-                                                                                    />{" "}
-                                                                                    <span>{item.eventData[0].location}</span>
+                                                                            <div className="ml-3 ml-md-0">
+                                                                                <div>
+                                                                                    <span className="list-event-name">{item.eventData[0].name}</span>
+                                                                                    <p className="list-event-desc mb-0">{shortPer(item.eventData[0].event_desc, 100)}</p>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div className="desc_data">
-                                                                                <div className="organizer-name-sec px-2 py-2">
-                                                                                    <div className="d-inline-flex align-items-center border-right event-time-area">
-                                                                                        <div className="d-inline-block mr-1">
-                                                                                            <img height={30} width={30} src={Timelogo} alt="" />
-                                                                                        </div>
-                                                                                        <div className="d-inline-block">
-                                                                                            <span className="event-duration d-block">
-                                                                                                Event Time
-                                                                                            </span>
-                                                                                            <span className="event-time d-block">{item.eventData[0].start_time}</span>
-                                                                                        </div>
+                                                                                <div className="list-event-location mb-xl-3 mb-1">
+                                                                                    <div className="d-flex align-items-center text-center location-name">
+                                                                                        <img
+                                                                                            height={30}
+                                                                                            width={30}
+                                                                                            src={LocationIcon}
+                                                                                            alt=""
+                                                                                        />{" "}
+                                                                                        <span>{item.eventData[0].location}</span>
                                                                                     </div>
-                                                                                    <div className="d-inline-flex align-items-center time-ticket-sold-box">
-                                                                                        <div className="d-inline-block mr-1">
-                                                                                            <img
-                                                                                                height={30}
-                                                                                                width={30}
-                                                                                                src={Hourglasslogo}
-                                                                                                alt=""
-                                                                                            />
+                                                                                </div>
+                                                                                <div className="desc_data">
+                                                                                    <div className="organizer-name-sec px-2 py-2">
+                                                                                        <div className="d-inline-flex align-items-center border-right event-time-area">
+                                                                                            <div className="d-inline-block mr-1">
+                                                                                                <img height={30} width={30} src={Timelogo} alt="" />
+                                                                                            </div>
+                                                                                            <div className="d-inline-block">
+                                                                                                <span className="event-duration d-block">
+                                                                                                    Event Time
+                                                                                                </span>
+                                                                                                <span className="event-time d-block">{item.eventData[0].start_time}</span>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div className="d-inline-block">
-                                                                                            <span className="event-duration d-block">
-                                                                                                Event Duration
-                                                                                            </span>
-                                                                                            <span className="event-time d-block">{item.eventData[0].event_duration}</span>
+                                                                                        <div className="d-inline-flex align-items-center time-ticket-sold-box">
+                                                                                            <div className="d-inline-block mr-1">
+                                                                                                <img
+                                                                                                    height={30}
+                                                                                                    width={30}
+                                                                                                    src={Hourglasslogo}
+                                                                                                    alt=""
+                                                                                                />
+                                                                                            </div>
+                                                                                            <div className="d-inline-block">
+                                                                                                <span className="event-duration d-block">
+                                                                                                    Event Duration
+                                                                                                </span>
+                                                                                                <span className="event-time d-block">{item.eventData[0].event_duration}</span>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>

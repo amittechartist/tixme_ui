@@ -20,7 +20,7 @@ import Usaflag from "../common/image/usaf.svg";
 import Singapureflag from "../common/image/singapur.svg";
 import MobileMenu from './mobilemenu';
 import Arts from '../common/category/Group 1171274918.svg';
-import Business from '../common/category/rrrrrGroup 1171274982.svg';
+import Business from '../common/category/Business & Networking (2).svg';
 import Food from '../common/category/Group 1171274941.svg';
 import Music from '../common/category/Group 1171274913.svg';
 import NIGHTLIFE from '../common/category/Group 1171274914.svg';
@@ -66,6 +66,7 @@ const Home = () => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const interval = setInterval(() => {
       setIndex(current => (current + 1) % texts.length);
     }, 3000); // Change text every 3 seconds
@@ -131,7 +132,8 @@ const Home = () => {
   const [Updatesprivacy, setUpdatesprivacy] = useState(false);
   const [UpdatesName, setUpdatesName] = useState();
   const [UpdatesEmail, setUpdatesEmail] = useState();
-  const HandelUpdatesForm = async () => {
+  const HandelUpdatesForm = async (e) => {
+    e.preventDefault();
     try {
       if (!UpdatesName) {
         return toast.error('Enter your name');
@@ -201,7 +203,7 @@ const Home = () => {
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 2000,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
@@ -703,12 +705,12 @@ const Home = () => {
                     <Slider {...categorysettings}>
                       {filteredList.map((item, index) => (
                         <div className="cat-home-box">
-                          <div className="text-center position-relative">
+                          <div className="text-center position-relative" style={{overflow:'hidden'}}>
                             <div className="event-card pt-4" id="event-card" onClick={() => HandelCategorsearch(item._id)}>
                               <img className="event-img  animate__animated animate__bounce" src={CategoryImage[index].image} alt="" />
                               <small className="d-block text-card-color my-2 mt-3 home-category-slide-name"> {item.name} </small>
                             </div>
-                            <div className="fade-effect"></div>
+                            {/* <div className="fade-effect"></div> */}
                           </div>
                         </div>
                       ))}
@@ -767,7 +769,7 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' :  item.countrysymbol + item.displayprice + '.00' }</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
                             </div>
                           </div>
@@ -840,7 +842,7 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' :  item.countrysymbol + item.displayprice + '.00' }</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
                             </div>
                           </div>
@@ -913,7 +915,7 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' :  item.countrysymbol + item.displayprice + '.00' }</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
                             </div>
                           </div>
@@ -999,64 +1001,66 @@ const Home = () => {
           </div>
         </div>
         <div className="newsletter-sec pb-4 position-relative">
-          <div className="position-absolute md-absolute news-form">
-            <h5 className="fw-bold text-primary-color mb-0 pt-2 animate__animated animate__bounce">
-              Stay in the loop & receive event updates!
-            </h5>
-            <div className="d-flex mt-4 flex-md-row flex-column">
-              <input
-                className="w-auto form-control rounded me-md-3 me-5 mb-md-0 mb-3"
-                type="text"
-                name=""
-                id=""
-                onChange={(e) => setUpdatesName(e.target.value)}
-                value={UpdatesName}
-                placeholder="Name"
-              />
-              <input
-                className="w-auto form-control rounded me-md-0 me-5"
-                type="text"
-                name=""
-                id=""
-                onChange={(e) => setUpdatesEmail(e.target.value)}
-                value={UpdatesEmail}
-                placeholder="Email ID"
-              />
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                checked={Updatesprivacy}
-                onChange={(e) => setUpdatesprivacy(e.target.checked)}
-                id="flexCheckDefault"
-              />
-              <label className="form-check-label" for="flexCheckDefault">
-                I agree with the{" "}
-                <span className="text-primary-color">privacy statement</span>
-              </label>
-            </div>
-            {UpdatesLoader ? (
-              <button className="GetLatestUpdateButton">
-                <div className="left">
-                  <small className="ms-2">Please wait...</small>
-                </div>
-                <div className="right">
-                  <img style={{ width: "18px" }} src={arrow} alt="" />
-                </div>
-              </button>
-            ) : (
-              <button className="GetLatestUpdateButton" onClick={() => HandelUpdatesForm()}>
-                <div className="left">
-                  <small className="ms-2">Get TIXED!</small>
-                </div>
-                <div className="right">
-                  <img style={{ width: "18px" }} src={arrow} alt="" />
-                </div>
-              </button>
-            )}
+          <form onSubmit={HandelUpdatesForm}>
+            <div className="position-absolute md-absolute news-form">
+              <h5 className="fw-bold text-primary-color mb-0 pt-2 animate__animated animate__bounce">
+                Stay in the loop & receive event updates!
+              </h5>
+              <div className="d-flex mt-4 flex-md-row flex-column">
+                <input
+                  className="w-auto form-control rounded me-md-3 me-5 mb-md-0 mb-3"
+                  type="text"
+                  name=""
+                  id=""
+                  onChange={(e) => setUpdatesName(e.target.value)}
+                  value={UpdatesName}
+                  placeholder="Name"
+                />
+                <input
+                  className="w-auto form-control rounded me-md-0 me-5"
+                  type="text"
+                  name=""
+                  id=""
+                  onChange={(e) => setUpdatesEmail(e.target.value)}
+                  value={UpdatesEmail}
+                  placeholder="Email ID"
+                />
+              </div>
+              <div className="form-check my-xl-2 my-lg-2">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  checked={Updatesprivacy}
+                  onChange={(e) => setUpdatesprivacy(e.target.checked)}
+                  id="flexCheckDefault"
+                />
+                <label className="form-check-label" for="flexCheckDefault">
+                  I agree with the{" "}
+                  <span className="text-primary-color">privacy statement</span>
+                </label>
+              </div>
+              {UpdatesLoader ? (
+                <button className="GetLatestUpdateButton">
+                  <div className="left">
+                    <small className="ms-2">Please wait...</small>
+                  </div>
+                  <div className="right">
+                    <img style={{ width: "18px" }} src={arrow} alt="" />
+                  </div>
+                </button>
+              ) : (
+                <button type="submit" className="GetLatestUpdateButton">
+                  <div className="left">
+                    <small className="ms-2">Get TIXED!</small>
+                  </div>
+                  <div className="right">
+                    <img style={{ width: "18px" }} src={arrow} alt="" />
+                  </div>
+                </button>
+              )}
 
-          </div>
+            </div>
+          </form>
         </div>
       </div>
       <Footer />

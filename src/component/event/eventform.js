@@ -1635,7 +1635,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                             <input type="number" class="form-control input-default" onChange={(e) => setQuantity(e.target.value)} value={Quantity} placeholder="Available ticket quantity" />
                         </Col>
                         <Col md={6} className="mb-2">
-                            <label htmlFor="" className="text-black">Ticket Price</label>
+                            <label htmlFor="" className="text-black">Ticket price</label>
                             <Input type="number" disabled={Pricedisable} class="form-control input-default" value={Price} onChange={(e) => setPrice(e.target.value)} placeholder="Ticket Price" />
                         </Col>
                         <div className="col-6">

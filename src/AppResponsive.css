@@ -127,11 +127,44 @@
     .font-nav {
         font-size: 9px !important;
     }
-
+    .title-in-cart-view{
+        font-size: 16px;
+        padding-bottom: 10px;
+    }
+    .price-in-cart-page{
+        font-size: 12px;
+    }
+    .calculation-box h5 {
+        font-size: 14px;
+    }
+    .calculation-box h3 {
+        font-size: 16px;
+    }
+    .event-cart-display-price {
+        font-size: 11px;
+    }
+    .event-cart-price-box .small {
+        font-size: 11px;
+    }
+    .dashqrbig {
+        height: auto;
+        width: 80px;
+    }
+    .header .header-content {
+        height: 89% !important;
+    }
+    .row.cart-new-div {
+        top: 3px;
+    }
     .banner-h-home-pg {
         font-size: 32px;
     }
-
+    .list-event-desc {
+        font-size: 11px;
+    }
+    .list-event-location {
+        font-size: 12px;
+    }
     .animation-home-banner {
         margin-left: 17px;
         font-size: 26px;

@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { apiurl, organizer_url, isEmail, getSupportbagecolor, get_date_time, get_min_date, shortPer, customer_url } from '../../../common/Helpers';
-
-import { Button, Col, Row } from "react-bootstrap";
+import { apiurl, getSupportbagecolor, get_date_time, get_min_date, shortPer, customer_url } from '../../../common/Helpers';
+import { Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
-
 import Searchicon from '../../../common/icon/searchicon.png';
 import DateIcon from "../../../common/icon/date 2.svg";
-import WhiteButton from '../../../component/Whitestarbtn';
 import Norecord from '../../../component/Norecordui';
 import { Link, useNavigate } from "react-router-dom";
 import Select from 'react-select'
-import { FiPlus, FiFlag, FiClock, FiChevronDown } from "react-icons/fi";
+import { FiClock, FiChevronDown } from "react-icons/fi";
 import Swal from 'sweetalert2'
 import toast from "react-hot-toast";
 import withReactContent from 'sweetalert2-react-content'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 import { useParams } from 'react-router-dom';
 import { FaCircle } from "react-icons/fa6";
+// component
+import ContactDetails from '../../../component/ContactDetails';
 const Dashboard = ({ title }) => {
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal)
@@ -375,7 +374,7 @@ const Dashboard = ({ title }) => {
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
 
-                    <Row className="justify-content-center">
+                    <Row className="d-none  justify-content-center">
                         <Col md={12}>
                             <Card className="py-4">
                                 <Card.Body>
@@ -532,6 +531,15 @@ const Dashboard = ({ title }) => {
                             </Card >
                         </Col >
                     </Row >
+                    <Row className="justify-content-center">
+                        <div className="col-md-12">
+                            <Card className="py-4">
+                                <Card.Body>
+                                    <ContactDetails />
+                                </Card.Body>
+                            </Card>
+                        </div>
+                    </Row>
                 </div >
             </div >
 

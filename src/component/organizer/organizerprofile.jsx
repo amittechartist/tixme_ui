@@ -131,38 +131,46 @@ const Type = ({ props }) => {
       </div>
       <div className="border-botton-devider my-2"></div>
       <div className="right-box-con">
-        {Followtypeloader ? (
-          <div className="linear-background w-100"> </div>
-        ) : (
-          <>
-            <div className="row align-items-center d-flex">
-              <div className="col-12">
-                <p className="followers-title">Followers</p>
-                <p className="followers-count">{Organizerdata.followers ? Organizerdata.followers : 0}</p>
+        <div className="row">
+          <div className="col-12 col-lg-8 col-xl-8">
+            <div className="align-items-center py-2">
+              <div className="d-inline-block mr-1">
+                <img height={30} width={30} src={LocationIcon} alt="" />
+              </div>
+              <div className="d-inline-block">
+                <span className="event-page-organizer-deta d-block">
+                  {Organizerdata.countryname ? Organizerdata.countryname : '--'}
+                </span>
               </div>
             </div>
-          </>
-        )}
-        <div className="align-items-center py-2">
-          <div className="d-inline-block mr-1">
-            <img height={30} width={30} src={LocationIcon} alt="" />
+            <div className="align-items-center py-2">
+              <div className="d-inline-block mr-1">
+                <img height={30} width={30} src={MailIcon} alt="" />
+              </div>
+              <div className="d-inline-block">
+                <span className="event-page-organizer-deta d-block">
+                  {Organizerdata.email ? Organizerdata.email : '--'}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="d-inline-block">
-            <span className="event-page-organizer-deta d-block">
-              {Organizerdata.countryname ? Organizerdata.countryname : '--'}
-            </span>
+          <div className="col-12 col-lg-4 col-xl-4">
+            {Followtypeloader ? (
+              <div className="linear-background w-100"> </div>
+            ) : (
+              <>
+                <div className="row align-items-center d-flex">
+                  <div className="col-12">
+                    <p className="followers-title">Followers</p>
+                    <p className="followers-count">{Organizerdata.followers ? Organizerdata.followers : 0}</p>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
-        <div className="align-items-center py-2">
-          <div className="d-inline-block mr-1">
-            <img height={30} width={30} src={MailIcon} alt="" />
-          </div>
-          <div className="d-inline-block">
-            <span className="event-page-organizer-deta d-block">
-              {Organizerdata.email ? Organizerdata.email : '--'}
-            </span>
-          </div>
-        </div>
+
+
       </div>
     </div>
   );

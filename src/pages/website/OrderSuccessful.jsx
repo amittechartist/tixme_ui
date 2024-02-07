@@ -110,8 +110,8 @@ const Page = ({ title }) => {
         <>
             <Container>
                 <Row>
-                    <Col md={3}></Col>
-                    <Col md={6} className="my-5">
+                    <Col md={2}></Col>
+                    <Col md={8} className="my-5">
                         <div className="success-page-box">
                             <Card >
                                 <Card.Body>

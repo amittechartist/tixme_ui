@@ -92,9 +92,6 @@ const Home = () => {
             setIsany(false);
         }
     };
-
-    const countryName = localStorage.getItem("countryname");
-
     const [Onlydatevalue, setOnlydatevalue] = useState();
 
     const fromgetdate = get_date_time(Startdateselect);
@@ -150,7 +147,6 @@ const Home = () => {
     };
     const fetchEvent = async () => {
         try {
-
             const minPriceNum = parseFloat(Minprice);
             const maxPriceNum = parseFloat(Maxprice);
 
@@ -163,8 +159,6 @@ const Home = () => {
                 } else {
                     setWantPricefilter(true);
                 }
-            } else {
-                setWantPricefilter(true);
             }
 
             setEventloader(true)
@@ -229,7 +223,6 @@ const Home = () => {
         setSearchInput('');
         setWantPricefilter(false);
         navigate(app_url + 'events')
-        // fetchEvent()
         window.location.reload();
     }
 
@@ -302,9 +295,9 @@ const Home = () => {
 
     useEffect(() => {
         fetchEvent();
-    }, [selectedCategories, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, countryName, FiltersearchQuery, India, Singapur, Usa, CountryFilter]);
-    const [activeKey, setActiveKey] = useState(null);
-
+        console.log("sss",[selectedCategories, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, FiltersearchQuery, India, Singapur, Usa, CountryFilter]);
+    }, [selectedCategories, Eventtype, Ticketstype, Dateapitype, startdate, enddate, wantPricefilter, FiltersearchQuery, India, Singapur, Usa, CountryFilter]);
+    
     function handleEnterPress(event) {
         setFiltersearchQuery('')
         if (event.keyCode === 13 || event.which === 13) {
@@ -762,7 +755,7 @@ const Home = () => {
                                                                     </div>
                                                                     <div className="col-md-5  col-5">
                                                                         <div className="bg-fade rounded text-center event-cart-price-box">
-                                                                            <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
+                                                                            <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' :  item.countrysymbol + item.displayprice + '.00' }</span>
                                                                             <p className="small fw-bold mb-0 pb-0">Onwards</p>
                                                                         </div>
                                                                     </div>

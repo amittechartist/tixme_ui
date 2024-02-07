@@ -11,7 +11,8 @@ const About = () => {
     const [Loader, setLoader] = useState(false);
     const [LoginEmail, setLoginEmail] = useState();
     const [LoginPassword, setLoginPassword] = useState();
-    const HandelOrganizerLogin = async () => {
+    const HandelOrganizerLogin = async (e) => {
+        e.preventDefault();
         try {
             if (!LoginEmail) {
                 return toast.error('Email is required');
@@ -38,7 +39,7 @@ const About = () => {
                 .then(data => {
                     setLoader(false);
                     if (data.success == true) {
-                        console.warn("k",data.data._id);
+                        console.warn("k", data.data._id);
                         localStorage.setItem('organizerid', data.data._id);
                         localStorage.setItem('organizername', data.data.name);
                         localStorage.setItem('organizer_role', 1);
@@ -71,30 +72,32 @@ const About = () => {
                 <div class="banner-child bg-white px-0" style={{ border: '1px solid #eee' }}>
                     <div className='row form-area'>
                         <div className="col-md-6">
-                            <div>
-                                <h5 className="mb-md-5 mb-2 auth-page-title1" style={{ fontWeight: '600', color: '#000' }}>Do you already have an account? please log in with your email address.</h5>
-                                <div className="form-group">
-                                    <p>Email address</p>
-                                    <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)}></input>
-                                </div>
-                                <div className="form-group">
-                                    <p>Password</p>
-                                    <input className="form-control" type="password" placeholder="Password" onChange={(e) => setLoginPassword(e.target.value)}></input>
-                                </div>
-                                <p className="forgot-password-text">Forgot your password? <Link to={app_url + 'auth/organizer/forgot-password'} className='reset-password-link'>Reset your password</Link></p>
-                                <div className='button-area mt-4'>
+                            <form onSubmit={HandelOrganizerLogin}>
+                                <div>
+                                    <h5 className="mb-md-5 mb-2 auth-page-title1" style={{ fontWeight: '600', color: '#000' }}>Do you already have an account? please log in with your email address.</h5>
+                                    <div className="form-group">
+                                        <p>Email address</p>
+                                        <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)}></input>
+                                    </div>
+                                    <div className="form-group">
+                                        <p>Password</p>
+                                        <input className="form-control" type="password" placeholder="Password" onChange={(e) => setLoginPassword(e.target.value)}></input>
+                                    </div>
+                                    <p className="forgot-password-text">Forgot your password? <Link to={app_url + 'auth/organizer/forgot-password'} className='reset-password-link'>Reset your password</Link></p>
+                                    <div className='button-area mt-4'>
 
-                                    {Loader ? (
-                                        <button type='button' className="signup-page-button">Please wait...</button>
-                                    ) : (
-                                        <button type='button' className="signup-page-button" onClick={() => HandelOrganizerLogin()}>Login</button>
-                                    )}
+                                        {Loader ? (
+                                            <button type='button' className="signup-page-button">Please wait...</button>
+                                        ) : (
+                                            <button type='submit' className="signup-page-button">Login</button>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                         <div className="col-md-6">
                             <div className="text-center">
-                            <img className="no-result-img admin-login-img" src={SignupImg} />
+                                <img className="no-result-img admin-login-img" src={SignupImg} />
                             </div>
                         </div>
                     </div>

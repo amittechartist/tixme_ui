@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from "react";
-import JoinStartButton from "../../../common/elements/JoinStartButton";
 import Searchicon from '../../../common/icon/searchicon.png';
-import { Button, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import toast from 'react-hot-toast';
 import EditPng from '../../../common/icon/Edit.png';
 import ArrowPng from "../../../common/icon/Arrow.svg";
 import Norecord from '../../../component/Norecordui';
-import DateIcon from "../../../common/icon/date 1.svg";
-import TimeIcon from "../../../common/icon/time 1.svg";
 import { FaTimes } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useParams } from 'react-router-dom';
 import { apiurl, organizer_url, get_date_time } from '../../../common/Helpers';
 import { FiPlus } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
-import Flatpickr from "react-flatpickr";
-import "flatpickr/dist/themes/material_green.css";
+import { useNavigate } from "react-router-dom";
 import {
     Modal,
-    Input,
     ModalBody,
     ModalHeader
 } from 'reactstrap'
@@ -33,27 +27,10 @@ const Dashboard = ({ title }) => {
     const [allEvents, setallEvents] = useState([]);
     const [Ticketsoldlist, setTicketsoldlist] = useState([]);
     const [Eventdata, setEventdata] = useState([]);
-    const [Isgrouptickets, setIsgrouptickets] = useState(false);
-    const [Tickettype, setTickettype] = useState(1);
-    const [IsTicketMultiple, setIsTicketMultiple] = useState();
-    const [Ticketname, setTicketname] = useState();
-    const [Ticketdesc, setTicketdesc] = useState();
-    const [GroupQty, setGroupQty] = useState('');
-    const [Description, setDescription] = useState();
-    const [TicketEventdata, setTicketEventdata] = useState(new Date());
     const [TicketStartdate, setTicketStartdate] = useState(new Date());
-    const [TicketId, setTicketId] = useState();
-    const [Ticketoldname, setTicketoldname] = useState();
-    const [Quantity, setQuantity] = useState();
     const [TicketEndtdate, setTicketEndtdate] = useState(new Date());
-    const [Price, setPrice] = useState();
-    const [Tax, setTax] = useState();
-    const [Pricedisable, setPricedisable] = useState(false);
-    const [ApiLoader, setApiLoader] = useState(false);
     const [EditApiLoader, setEditApiLoader] = useState(false);
     const [IsEdit, setIsEdit] = useState(false);
-
-    const MySwal = withReactContent(Swal);
     const fetchAllTicket = async () => {
         try {
             setLoader(true);
@@ -137,191 +114,6 @@ const Dashboard = ({ title }) => {
         ticketenddate = toticketgetdate[0].Dateview;
         ticketendtime = toticketgetdate[0].Timeview;
     }
-    const handelCreateTicket = async () => {
-        try {
-            if (!Tickettype) {
-                return toast.error('Select ticket type');
-            }
-            if (!Ticketname) {
-                return toast.error('Enter ticket name');
-            }
-            if (!Quantity) {
-                return toast.error('Enter ticket quantity');
-            }
-            if (!Price && Tickettype == 1) {
-                return toast.error('Enter ticket price');
-            }
-            // if (!Tax && Tickettype == 1) {
-            //     return toast.error('Enter tax amount or 0');
-            // }
-            setApiLoader(true);
-            const requestData = {
-                tax: 0,
-                updateid: id,
-                ticket_type: Tickettype,
-                name: Ticketname,
-                description: Description,
-                quantity: Quantity,
-                startdate: ticketstartdate,
-                endtdate: ticketenddate,
-                starttime: ticketstarttime,
-                endttime: ticketendtime,
-                price: Price,
-                start_date_min: TicketStartdate,
-                end_date_min: TicketEndtdate
-            };
-            fetch(apiurl + 'event/update/price', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    setApiLoader(false);
-                    setTicketshow(false);
-                    if (data.success == true) {
-                        toast.success('Updated', {
-                            duration: 3000,
-                        });
-                        emptyPriceForm();
-                        fetchAllTicket();
-                    } else {
-                        toast.error(data.message);
-                    }
-                    setApiLoader(false);
-                })
-                .catch(error => {
-                    setApiLoader(false);
-                    console.error('Insert error:', error);
-                });
-        } catch (error) {
-            console.error('Api error:', error);
-            setApiLoader(false);
-        }
-    }
-    const handelEditTicketform = async () => {
-        try {
-            if (!Tickettype) {
-                return toast.error('Select ticket type');
-            }
-            if (!Ticketname) {
-                return toast.error('Enter ticket name');
-            }
-            if (!Quantity) {
-                return toast.error('Enter ticket quantity');
-            }
-            if (!Price && Tickettype == 1) {
-                return toast.error('Enter ticket price');
-            }
-            if (!Tax && Tickettype == 1) {
-                return toast.error('Enter tax amount or 0');
-            }
-            setApiLoader(true);
-            const requestData = {
-                tax: Tax,
-                updateid: id,
-                ticketid: TicketId,
-                ticket_type: Tickettype,
-                name: Ticketname,
-                description: Description,
-                oldname: Ticketoldname,
-                quantity: Quantity,
-                startdate: ticketstartdate,
-                endtdate: ticketenddate,
-                starttime: ticketstarttime,
-                endttime: ticketendtime,
-                price: Price,
-                start_date_min: TicketStartdate,
-                end_date_min: TicketEndtdate
-            };
-            fetch(apiurl + 'event/edit/price', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    setApiLoader(false);
-                    setTicketshow(false);
-                    if (data.success == true) {
-                        toast.success('Updated', {
-                            duration: 3000,
-                        });
-                        emptyPriceForm();
-                        fetchAllTicket();
-                    } else {
-                        toast.error(data.message);
-                    }
-                    setApiLoader(false);
-                })
-                .catch(error => {
-                    setApiLoader(false);
-                    console.error('Insert error:', error);
-                });
-        } catch (error) {
-            console.error('Api error:', error);
-            setApiLoader(false);
-        }
-    }
-    const HandelTicketEdit = async (ticketid) => {
-        try {
-            const requestData = {
-                updateid: id
-            };
-            fetch(apiurl + 'event/ticket-list', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                },
-                body: JSON.stringify(requestData),
-            })
-                .then(response => response.json())
-                .then(data => {
-
-                    if (data.success == true) {
-                        const fetchdata = data.data.allprice;
-                        const targetID = ticketid; // Provide the name you want to filter
-                        const filteredData = fetchdata.filter(item => item.id === targetID);
-                        if (filteredData.length > 0) {
-                            setIsEdit(true);
-                            setTicketshow(!Ticketshow);
-                            // setEditApiLoader(true);
-                            setIsTicketMultiple(data.data.event_subtype_id);
-                            setTickettype(filteredData[0].ticket_type);
-                            setTicketname(filteredData[0].name);
-                            setTicketId(filteredData[0].id);
-                            setQuantity(filteredData[0].quantity);
-                            setPrice(filteredData[0].ticket_amount);
-                            setTicketoldname(filteredData[0].name);
-                            setTax(filteredData[0].tax_value ? filteredData[0].tax_value : 0);
-                            setTicketStartdate(filteredData[0].start_date_min[0] ? filteredData[0].start_date_min : null);
-                            setTicketEndtdate(filteredData[0].end_date_min[0] ? filteredData[0].end_date_min : null);
-                            setEditApiLoader(false);
-                        } else {
-                            toast.error("Server issue");
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Insert error:', error);
-                });
-
-        } catch (error) {
-            console.error('Api error:', error);
-        }
-    }
-    function emptyPriceForm() {
-        setTickettype(1);
-        setTicketname('');
-        setTicketId('');
-        setQuantity('');
-        setPrice('');
-        setPricedisable(false);
-    }
     useEffect(() => {
         fetchAllTicket();
         fetchEvent();
@@ -355,7 +147,7 @@ const Dashboard = ({ title }) => {
                                     <Row className="justify-content-center">
                                         <Col md={12}>
                                             <Row>
-                                                <Col md={5}>
+                                                <Col md={4} xl={5}>
                                                     <div class="input-group mb-3 input-warning-o">
                                                         <span class="input-group-text"><img src={Searchicon} alt="" /></span>
                                                         <input
@@ -367,14 +159,13 @@ const Dashboard = ({ title }) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md={3}>
+                                                <Col md={4} xl={3}>
                                                     <button className="w-100 theme-btn-warning" onClick={() => navigate(`${organizer_url}event/mange-attendee/${Eventdata._id}/${Eventdata.name}`)}>
                                                         <span>Mange All Attendee</span>
                                                     </button>
                                                 </Col>
-                                                <Col md={2}></Col>
-                                                <Col md={2}>
-                                                    <button className="w-100 theme-btn" onClick={() => { setTicketshow(true); setIsEdit(false); }}>
+                                                <Col md={4} xl={4} className="d-flex justify-content-end">
+                                                    <button className="theme-btn" onClick={() => { setTicketshow(true); setIsEdit(false); }}>
                                                         <span className="theme-btn-icon"><FiPlus /></span> <span>Add Ticket</span>
                                                     </button>
                                                 </Col>

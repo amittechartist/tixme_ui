@@ -183,8 +183,12 @@ const Home = () => {
     const [LoginLname, setLoginLname] = useState('');
     const [LoginLoader, setLoginLoader] = useState(false);
     const [OneTimegettax, setOneTimegettax] = useState(true);
-    const HandelLoginasguest = async () => {
+    const HandelLoginasguest = async (e) => {
+        e.preventDefault();
         try {
+            if (!LoginFname || !LoginLname) {
+                return toast.error("Name is required");
+            }
             if (!GLoginEmail || !isEmail(GLoginEmail)) {
                 return toast.error("Enter valid email");
             }
@@ -193,9 +197,6 @@ const Home = () => {
             }
             if (GLoginEmail.trim() !== GConfirmLoginEmail.trim()) {
                 return toast.error("Email and confirm email must me same");
-            }
-            if (!LoginFname || !LoginLname) {
-                return toast.error("Name is required");
             }
             if (!Phonenumber) {
                 return toast.error("Enter your phone number");
@@ -590,103 +591,112 @@ const Home = () => {
         <>
             {" "}
             <Modal isOpen={Loginmodal} className='modal-dialog-centered modal-xs' toggle={() => setLoginmodal(!Loginmodal)} centered size={showLoginasGuest ? 'md' : 'xl'}>
-                <ModalHeader toggle={() => setLoginmodal(!Loginmodal)}>{showLoginasGuest ? 'Log in as guest' : 'Log In / Sign Up'}
+                <ModalHeader toggle={() => setLoginmodal(!Loginmodal)}>
                 </ModalHeader>
                 <ModalBody>
                     {showLoginasGuest ? (
-                        <div className="row">
-                            <Col md={12} style={{ borderTop: '1px solid #eee' }} className="mt-3 pt-4">
-                                <Row>
-                                    <Col md={6}>
-                                        <div className="form-group">
-                                            <p>Email Address</p>
-                                            <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setGLoginEmail(e.target.value)} value={GLoginEmail}></input>
-                                        </div>
-                                    </Col>
-                                    <Col md={6}>
-                                        <div className="form-group">
-                                            <p>Confirm Email Address</p>
-                                            <input className="form-control" type="text" placeholder="Confirm Email Address" onChange={(e) => setGConfirmLoginEmail(e.target.value)} value={GConfirmLoginEmail}></input>
-                                        </div>
-                                    </Col>
-                                    <Col md={6}>
-                                        <div className="form-group">
-                                            <p>First Name</p>
-                                            <input className="form-control" type="text" placeholder="First Name" onChange={(e) => setLoginFname(e.target.value)} value={LoginFname}></input>
-                                        </div>
-                                    </Col>
-                                    <Col md={6}>
-                                        <div className="form-group">
-                                            <p>Last Name</p>
-                                            <input className="form-control" type="text" placeholder="Last Name" onChange={(e) => setLoginLname(e.target.value)} value={LoginLname}></input>
-                                        </div>
-                                    </Col>
-                                    <Col md={12}>
-                                        <div className="form-group">
-                                            <p>Phone number</p>
-                                            <PhoneInput
-                                                country={"us"}
-                                                className="phone-number-with-code"
-                                                enableSearch={true}
-                                                placeholder={"Phone number"}
-                                                autoFormat={true}
-                                                value={Phonenumber}
-                                                onChange={handlePhoneChange}
-                                            />
-                                        </div>
-                                    </Col>
+                        <form onSubmit={HandelLoginasguest}>
+                            <div className="row">
+                                <Col md={12} style={{ borderTop: '1px solid #eee' }} className="mt-3 pt-4">
+                                    <Row>
+                                        <Col md={6}>
+                                            <div className="form-group">
+                                                <p>First Name</p>
+                                                <input className="form-control" type="text" placeholder="First Name" onChange={(e) => setLoginFname(e.target.value)} value={LoginFname}></input>
+                                            </div>
+                                        </Col>
+                                        <Col md={6}>
+                                            <div className="form-group">
+                                                <p>Last Name</p>
+                                                <input className="form-control" type="text" placeholder="Last Name" onChange={(e) => setLoginLname(e.target.value)} value={LoginLname}></input>
+                                            </div>
+                                        </Col>
+                                        <Col md={6}>
+                                            <div className="form-group">
+                                                <p>Email Address</p>
+                                                <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setGLoginEmail(e.target.value)} value={GLoginEmail}></input>
+                                            </div>
+                                        </Col>
+                                        <Col md={6}>
+                                            <div className="form-group">
+                                                <p>Confirm Email Address</p>
+                                                <input className="form-control" type="text" placeholder="Confirm Email Address" onChange={(e) => setGConfirmLoginEmail(e.target.value)} value={GConfirmLoginEmail}></input>
+                                            </div>
+                                        </Col>
 
-                                    <Col md={12}>
-                                        {LoginLoader ? (
-                                            <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
-                                        ) : (
-                                            <button className="btn btn-primary w-100 theme-bg  my-2" type="button" onClick={() => HandelLoginasguest()}>Login as guest</button>
-                                        )}
-                                    </Col>
-                                    {/* <div className="border-bottom py-2"></div>
-                                    <div className="text-center">OR</div>
-                                    <div className="text-center">
-                                        <button type="button" style={{ width: "230px" }} className="btn theme-bg text-white mt-3" onClick={() => setshowLoginasGuest(false)}>Log In</button>
-                                        <Link to={app_url + 'auth/customer/signup'}>
-                                            <button type="button" style={{ width: "230px" }} className="btn theme-bg ml-1 text-white mt-3">Sign up</button>
-                                        </Link>
-                                    </div> */}
-                                </Row>
-                            </Col>
-                        </div>
+                                        <Col md={12}>
+                                            <div className="form-group">
+                                                <p>Phone number</p>
+                                                <PhoneInput
+                                                    country={"us"}
+                                                    className="phone-number-with-code"
+                                                    enableSearch={true}
+                                                    placeholder={"Phone number"}
+                                                    autoFormat={true}
+                                                    value={Phonenumber}
+                                                    onChange={handlePhoneChange}
+                                                />
+                                            </div>
+                                        </Col>
+
+                                        <Col md={12}>
+                                            {LoginLoader ? (
+                                                <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
+                                            ) : (
+                                                <button className="btn btn-primary w-100 theme-bg  my-2" type="submit">Login as guest</button>
+                                            )}
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </div>
+                        </form>
                     ) : (
                         <div className="row">
                             <div className='row p-5 py-5 d-flex justify-content-center'>
-                                    <div className="col-12 col-md-5 col-lg-5 mt-5">
-                                        <div className="GetCustomerButtonBox">
-                                            <img src={TopIcon} alt="" className="TopLeftImg" />
-                                            <h4>Returning Customer</h4>
-                                            <Link to={app_url + 'auth/login-signup'}><button class="GetLatestUpdateButton CustomerButton login-pg-btn-cs" >
-                                                <div class="left text-center">
-                                                    <small class="ms-2">Log In / Sign Up</small>
-                                                </div>
-                                                <div class="right">
-                                                    <img src={arrow} alt="" style={{ width: "15px" }} />
-                                                </div>
-                                            </button></Link>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-md-5 col-lg-5 mt-5">
-                                        <div className="GetCustomerButtonBox">
-                                            <img src={TopIcon} alt="" className="TopLeftImg" />
-                                            <h4>Login As Guest</h4>
-                                            <Link onClick={() => setshowLoginasGuest(true)}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
-                                                <div class="left text-center">
-                                                    <small class="ms-2">Log In</small>
-                                                </div>
-                                                <div class="right">
-                                                    <img src={arrow} alt="" style={{ width: "15px" }} />
-                                                </div>
-                                            </button>
-                                            </Link>
-                                        </div>
+                                <div className="col-12 col-md-12 col-lg-4 mt-5">
+                                    <div className="GetCustomerButtonBox">
+                                        <img src={TopIcon} alt="" className="TopLeftImg" />
+                                        <h4 class="title-in-cart-view">Login As Guest</h4>
+                                        <Link onClick={() => setshowLoginasGuest(true)}><button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs">
+                                            <div class="left text-center">
+                                                <small class="ms-2">Log In</small>
+                                            </div>
+                                            <div class="right">
+                                                <img src={arrow} alt="" style={{ width: "15px" }} />
+                                            </div>
+                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
+                                <div className="col-12 col-md-12 col-lg-4 mt-5">
+                                    <div className="GetCustomerButtonBox">
+                                        <img src={TopIcon} alt="" className="TopLeftImg" />
+                                        <h4 class="title-in-cart-view">Returning Customer</h4>
+                                        <Link to={app_url + 'auth/customer/login'}><button class="GetLatestUpdateButton CustomerButton login-pg-btn-cs" >
+                                            <div class="left text-center">
+                                                <small class="ms-2">Log In</small>
+                                            </div>
+                                            <div class="right">
+                                                <img src={arrow} alt="" style={{ width: "15px" }} />
+                                            </div>
+                                        </button></Link>
+                                    </div>
+                                </div>
+                                <div className="col-12 col-md-12 col-lg-4 mt-5">
+                                    <div className="GetCustomerButtonBox">
+                                        <img src={TopIcon} alt="" className="TopLeftImg" />
+                                        <h4 class="title-in-cart-view">New Customer</h4>
+                                        <Link to={app_url + 'auth/customer/signup'}><button class="GetLatestUpdateButton CustomerButton login-pg-btn-cs" >
+                                            <div class="left text-center">
+                                                <small class="ms-2">Sign Up</small>
+                                            </div>
+                                            <div class="right">
+                                                <img src={arrow} alt="" style={{ width: "15px" }} />
+                                            </div>
+                                        </button></Link>
+                                    </div>
+                                </div>
+                            </div>
                             {/* <div className="form-group col-md-12">
                                 <p>Email address</p>
                                 <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)}></input>
@@ -769,11 +779,11 @@ const Home = () => {
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div className="col-md-3">
+                                                                <div className="col-md-3 d-md-flex align-items-md-center">
                                                                     <div className="ml-3 text-center">
-                                                                        <p className="mb-0">Price {item.price > 0 ? currency_symble + ' ' + item.price : 'Free'}</p>
+                                                                        <p className="mb-0 price-in-cart-page">Price {item.price > 0 ? currency_symble + ' ' + item.price + '.00' : 'Free'}</p>
                                                                         <div className="">
-                                                                            <div className="row grediant-border d-flex align-items-center mx-3">
+                                                                            <div className="row grediant-border d-flex align-items-center mx-xl-3 mx-0">
                                                                                 <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span></div>
                                                                                 <div className="col-4"><span>{item.quantity}</span></div>
                                                                                 <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item.ticket)}>+</span></div>
@@ -802,7 +812,7 @@ const Home = () => {
                                                                             </Col>
                                                                             <Col md={4}>
                                                                                 {item.price > 0 ? (
-                                                                                    <span className="cart-price">{item.name} | Price : {currency_symble} {item.price}</span>
+                                                                                    <span className="cart-price">{item.name} | Price : {currency_symble} {item.price}.00 </span>
                                                                                 ) : (
                                                                                     <span className="cart-price">{item.name} | Price : Free</span>
                                                                                 )}
@@ -831,14 +841,14 @@ const Home = () => {
                                                 <div className="linear-background w-100"> </div>
                                             ) : (
                                                 <div className="cart-amount-box ">
-                                                    <Card className="eventpage-box-style-event-view">
+                                                    <Card className="eventpage-box-style-event-view calculation-box">
                                                         <Card.Body >
                                                             <Row>
                                                                 <div className="my-2 col-6">
                                                                     <h5 className="cart-amount-small-title">Subtotal</h5>
                                                                 </div>
                                                                 <div className="my-2 text-end  col-6">
-                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}</h5>
+                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}.00</h5>
                                                                 </div>
                                                                 {/* {Iswallet ? (
                                                                 <>
@@ -885,7 +895,7 @@ const Home = () => {
                                                                                             <h5 className="cart-amount-small-title">{item.name}</h5>
                                                                                         </div>
                                                                                         <div className="col-md-6 col-6 my-2 text-end">
-                                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)}</h5>
+                                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)}.00</h5>
                                                                                         </div>
                                                                                     </>
                                                                                 ))}
@@ -900,7 +910,7 @@ const Home = () => {
                                                                             <h5 className="cart-amount-small-title">Discount</h5>
                                                                         </div>
                                                                         <div className="my-2 text-end  col-6">
-                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}</h5>
+                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}.00</h5>
                                                                         </div>
                                                                     </>
                                                                 ) : ''}
@@ -911,22 +921,22 @@ const Home = () => {
                                                                     <h3 className="cart-amount-small-title theme-color font-600">Total</h3>
                                                                 </div>
                                                                 <div className="col-6 text-end">
-                                                                    <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}</h3>
+                                                                    <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}.00</h3>
                                                                 </div>
                                                                 <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">
                                                                     <Row>
-                                                                        <Col md={8}>
+                                                                        <Col md={12} xl={8}>
                                                                             <input className="form-control" readOnly={Iscoupon} type="text" placeholder="Enter coupon code" onChange={(e) => setCouponId(e.target.value)} value={CouponId}></input>
                                                                         </Col>
-                                                                        <Col md={4}>
+                                                                        <Col md={12} xl={4}>
                                                                             {CouponCheckLoader ? (
                                                                                 <button className="btn btn-primary w-100" type="button">Wait..</button>
                                                                             ) : (
                                                                                 <>
                                                                                     {Iscoupon ? (
-                                                                                        <button onClick={() => HandelRemoveToken()} type="button" className="btn btn-danger w-100 mt-2 theme-bg" >Remove</button>
+                                                                                        <button onClick={() => HandelRemoveToken()} type="button" className="btn btn-danger w-100 mt-xl-0 mt-2 theme-bg" >Remove</button>
                                                                                     ) : (
-                                                                                        <button onClick={() => HandelCouponCheck()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Apply</button>
+                                                                                        <button onClick={() => HandelCouponCheck()} type="button" className="btn btn-primary w-100 mt-xl-0 mt-2 theme-bg" >Apply</button>
                                                                                     )}
                                                                                 </>
                                                                             )}

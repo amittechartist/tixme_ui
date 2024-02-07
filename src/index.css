@@ -299,9 +299,7 @@ input#form1 {
   color: #6494ed8e !important;
 }
 
-select {
-  color: #6495ed !important;
-}
+
 
 .fade {
   background: linear-gradient(to bottom, #fff, transparent);
@@ -545,8 +543,13 @@ footer span {
 
 .contact-sec {
   background: url(./assets/contactFormBg.png) top center;
-  background-size: contain;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
+
+}
+
+.contact-sec-box {
+  width: 600px;
 }
 
 label {
@@ -743,6 +746,7 @@ input:focus {
     background-position-x: -80px;
     background-position-y: -100px;
   }
+
   .news-form {
     left: 5%;
     top: 10%;

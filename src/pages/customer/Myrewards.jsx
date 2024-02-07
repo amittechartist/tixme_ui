@@ -383,7 +383,7 @@ const Dashboard = ({ title }) => {
                                                                                         <p className="">Points amount {item.point}</p>
                                                                                         <button onClick={() => CheckRedeem(item._id)} className="redem-btn">Redeem</button>
                                                                                     </div> */}
-                                                                                    <div className="coupon-ticket-box">
+                                                                                    <div className="coupon-ticket-box mx-xl-4 mx-1">
                                                                                         <div className="row">
                                                                                             <div className="col-5 d-flex align-items-center justify-content-center box-1">
                                                                                                 <div className="text-center">

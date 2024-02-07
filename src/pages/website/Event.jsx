@@ -18,7 +18,7 @@ import CoundownDiv from '../../component/coundown';
 import Noimg from "../../common/image/noimg.jpg";
 import calendar from "../../assets/calendar.svg";
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import ShareIcon from "../../common/icon/share.svg";
 import WhiteShareIcon from "../../common/icon/whiteshear.svg";
 import EventImg from "../../common/event1.png";
@@ -26,14 +26,12 @@ import FlagIcon from "../../common/icon/flag.svg";
 import Flip from "react-reveal/Flip";
 import Fade from "react-reveal/Fade";
 import Slide from "react-reveal/Slide";
-import Whitestarbtn from "../../component/Whitestarbtn";
 import toast from "react-hot-toast";
-
-import locationIconevent from "./eventpageicon/location.png";
-import hourglassIcon from "./eventpageicon/hourglass.png";
-import timeIcon from "./eventpageicon/time.png";
-import dataIcon from "./eventpageicon/data.png";
-import mapIcon from "./eventpageicon/map.png";
+import locationIconevent from "./eventpageicon/Location (8).svg";
+import hourglassIcon from "./eventpageicon/hourglass.svg";
+import timeIcon from "./eventpageicon/clock.svg";
+import dataIcon from "./eventpageicon/date 2.svg";
+import mapIcon from "./eventpageicon/map (2).svg";
 import { FaRegHeart } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa6";
 const Home = () => {
@@ -63,13 +61,10 @@ const Home = () => {
 
   function getCountryFlagImage(country) {
     if (country == "India") {
-      // return <img className="event-card-flag" src={Indiaflag}  />;
     } else if (country == "United states") {
-      // return <img className="event-card-flag" src={Usaflag}  />;
     } else if (country == "Singapore") {
-      // return <img className="event-card-flag" src={Singapureflag}  />;
     } else {
-      return null; // or a default image if you have one
+      return null;
     }
   }
 
@@ -373,11 +368,11 @@ const Home = () => {
       console.error('Api error:', error);
     }
   }
-  const fetchOrganizerEvent = async () => {
+  const fetchOrganizerEvent = async (id) => {
     try {
       const requestData = {
-        limit: 2,
-        organizerid: null
+        limit: 4,
+        organizerid: id
       }
       fetch(apiurl + "website/all-events-list", {
         method: "POST",
@@ -808,7 +803,7 @@ const Home = () => {
                   <div className="col-12 col-md-7 col-lg-8 col-xl-8">
                     <div className="event-vew-page-margin">
                       <div className="desc-sec">
-                        <span className="sec-title">
+                        <span className="sec-title" style={{ color: '#003B8F' }}>
                           <Fade bottom>Description</Fade>
                         </span>
                         <Fade bottom>
@@ -829,17 +824,7 @@ const Home = () => {
                           {position && <Marker position={position} />}
                         </GoogleMap>
                       </div>
-                      <div className="desc-sec">
-                        <span onClick={() => navigate(app_url + 'privacy-policy')} className="sec-title cursor-pointer">
-                          Return Policy{" "}
-                          <span>
-                            <img src={ShareIcon} alt="" />
-                          </span>
-                        </span>
-                        <p onClick={() => navigate(app_url + 'contact')} className="report cursor-pointer">
-                          <img src={FlagIcon} alt="" /> Report this event
-                        </p>
-                      </div>
+
                       <Row className="d-none">
                         <Col md={12}>
                           <Slide bottom>
@@ -868,72 +853,7 @@ const Home = () => {
                           </Slide>
                         </Col>
                       </Row>
-                      <Row>
-                        <Col md={12}>
-                          <div className="start-in-box eventpage-box-style-event-view mb-5 More-events">
-                            <Row>
-                              <Col md={12}>
-                                <div className="right-box-title">
-                                  <p className="pl-3 pb-1">More events from this organiser</p>
-                                </div>
-                              </Col>
-                              <Col md={12}>
-                                <Row className="p-1 d-flex justify-content-center" >
-                                  {OrganizerEventlist.map((item, index) => (
-                                    <>
-                                      <div className="col-xl-5 col-xxl-5 col-lg-6 col-md-6 col-12 my-3" >
-                                        <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
-                                          <div style={{ position: 'relative' }}>
-                                            <span className="event-category-img">{item.category_name}</span>
-                                            {getCountryFlagImage(item.countryname)}
-                                            <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
-                                            <div className="d-flex align-items-center event-date-small-box">
-                                              <span className="event-date-small">
-                                                <img className="card-icon me-2" src={calendar} alt="" />
-                                                <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
-                                                  {onlyDayMonth(item.start_date)}
-                                                </span>
-                                              </span>
-                                            </div>
-                                          </div>
-                                          <div className="row px-2 mt-2">
-                                            <div className="col-md-7 d-flex align-items-center col-7">
-                                              <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
-                                              <div className="d-flex flex-column align-items-start justify-content-start">
-                                                <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
-                                                <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                                                  {item.organizer_name}
-                                                </p>
-                                              </div>
-                                            </div>
-                                            <div className="col-md-5  col-5">
-                                              <div className="bg-fade rounded text-center event-cart-price-box">
-                                                <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
-                                                <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <div className="row mt-1">
-                                            <div className="col-md-12">
-                                              <div className="d-flex align-items-center justify-content-start my-2 mx-2">
-                                                <img className="card-icon me-1" src={locationIcon} alt="" />
-                                                <p className="text-primary-color fw-bold mb-0 event-cart-location">
-                                                  {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
-                                                </p>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
-                                        </div>
-                                      </div>
-                                    </>
-                                  ))}
-                                </Row>
-                              </Col>
-                            </Row>
-                          </div>
-                        </Col>
-                      </Row>
+
                     </div>
                   </div>
                   <div className="col-12 col-md-5 col-lg-4 col-xl-4">
@@ -941,11 +861,6 @@ const Home = () => {
                       <CoundownDiv props={Eventdata.start_mindate} />
                     ) : ''}
                     <div className="start-in-box eventpage-box-style-event-view mb-5 my-5 event-page-ticket" style={{ position: 'relative' }}>
-                      {/* {Eventdata.is_selling_fast && (
-                        <div className="Selling-Fast-box">
-                          <p className="mb-0">Selling Fast</p>
-                        </div>
-                      )} */}
                       <div className={`right-box-title`}>
                         <div className="row border-bottom-1">
                           <div className="col-6 d-flex justify-content-start">
@@ -966,14 +881,34 @@ const Home = () => {
                                 {Eventdata.allprice.map((items, index) => (
                                   <>
                                     {items.isdelete === 0 && (
-                                      <div className="col-md-6 my-2">
-                                        <div className={`week-select-box text-center ${SelectedTicketId == items.id && 'week-select-box-active'}`} onClick={() => handelTicketselect(items.id)}>
-                                          <p className="mb-0 a">{getDayName(items.startdate)}</p>
-                                          <p className="mb-0 b">{getMonthName(items.startdate)}</p>
-                                          <div className="b-box"><p className="mb-0 c">{getDay(items.startdate)}</p></div>
-                                          <p className="mb-0 d">{items.starttime}</p>
+                                      <>
+                                        {/* <div className="col-md-6 my-2"> */}
+                                        {/* <div className={`week-select-box text-center ${SelectedTicketId == items.id && 'week-select-box-active'}`} onClick={() => handelTicketselect(items.id)}> */}
+                                        {/* <p className="mb-0 a">{getDayName(items.startdate)}</p> */}
+                                        {/* <p className="mb-0 b">{getMonthName(items.startdate)}</p> */}
+                                        {/* <div className="b-box"><p className="mb-0 c">{getDay(items.startdate)}</p></div> */}
+                                        {/* <p className="mb-0 d">{items.starttime}</p> */}
+                                        {/* </div> */}
+                                        {/* </div> */}
+                                        <div className="col-12 my-3">
+                                          <div className={`row new-week-ticket-box ${SelectedTicketId == items.id && 'new-week-ticket-box-active'}`} onClick={() => handelTicketselect(items.id)}>
+                                            <div className="col-6  d-flex align-items-end">
+                                              <div className="d-flex align-items-center">
+                                                <div className="day-box-1">
+                                                  <p className="day-name-1">{getDay(items.startdate)}</p>
+                                                </div>
+                                                <div>
+                                                  <p className="week-name-1">{getDayName(items.startdate)}</p>
+                                                  <p className="month-name-1">{getMonthName(items.startdate)}</p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div className="col-6 text-end d-flex align-items-end justify-content-end">
+                                              <p className="time-name-1">{items.starttime}</p>
+                                            </div>
+                                          </div>
                                         </div>
-                                      </div>
+                                      </>
                                     )}
                                   </>
                                 ))}
@@ -982,13 +917,13 @@ const Home = () => {
                                     <div className="col-12">
                                       <div className="row my-2">
                                         <div className="col-6 justify-content-center">
-                                          <p className="mb-0" style={{ fontSize: '10px', height: '30px' }}>Ticket Type</p>
+                                          <p className="mb-0" style={{ fontSize: '15px', height: '30px' }}>Ticket Type</p>
                                           <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{selectedTicket.name}</p></div>
                                         </div>
                                         <div className="col-6 d-flex justify-content-center">
                                           <div className="d-inline-block">
                                             <div className="text-center">
-                                              <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price {selectedTicket.ticket_type == 1 ? Eventdata.countrysymbol + selectedTicket.price : 'Free'}</p>
+                                              <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price : {selectedTicket.ticket_type == 1 ? Eventdata.countrysymbol + selectedTicket.price + '.00' : 'Free'}</p>
                                             </div>
                                             <div className="">
                                               <div className="row grediant-border d-flex align-items-center mx-1">
@@ -1024,13 +959,13 @@ const Home = () => {
                                   {items.isdelete === 0 && (
                                     <div className="row my-2">
                                       <div className="col-6 justify-content-center">
-                                        <p className="mb-0" style={{ fontSize: '10px', height: '30px' }}>Ticket Type</p>
+                                        <p className="mb-0" style={{ fontSize: '15px', height: '30px' }}>Ticket Type</p>
                                         <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{items.name}</p></div>
                                       </div>
                                       <div className="col-6 d-flex justify-content-center">
                                         <div className="d-inline-block">
                                           <div className="text-center">
-                                            <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price {items.ticket_type == 1 ? Eventdata.countrysymbol + items.price : 'Free'}</p>
+                                            <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price : {items.ticket_type == 1 ? Eventdata.countrysymbol + items.price + '.00' : 'Free'}</p>
                                           </div>
                                           <div className="">
                                             <div className="row grediant-border d-flex align-items-center mx-1">
@@ -1056,7 +991,7 @@ const Home = () => {
                       </div>
                       <div className="text-center">
                         {Paynowbtnstatus ? (
-                          <button onClick={() => saveCartToLocalStorage()} type="button" className="btn theme-bg text-white mt-4 px-5">Pay Now</button>
+                          <button onClick={() => saveCartToLocalStorage()} type="button" className="btn theme-bg text-white mt-3 w-100">Pay Now</button>
                         ) : ''}
                       </div>
                     </div>
@@ -1067,6 +1002,66 @@ const Home = () => {
             </div>
             <div className="event-category-section mb-5 in-event-page">
               <Container fluid className="">
+                {OrganizerEventlist.length > 0 && (
+                  <Row className="mt-2">
+                    <Col md={12}>
+                      <h2 className="desc-sec theme-color">More events from this organiser</h2>
+                    </Col>
+                    <Col md={12}>
+                      <Row className="p-1" >
+                        {OrganizerEventlist.map((item, index) => (
+                          <>
+                            <div className="col-xl-3 col-xxl-3 col-md-4 col-12 mb-3" >
+                              <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                                <div style={{ position: 'relative' }}>
+                                  <span className="event-category-img">{item.category_name}</span>
+                                  {getCountryFlagImage(item.countryname)}
+                                  <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
+                                  <div className="d-flex align-items-center event-date-small-box">
+                                    <span className="event-date-small">
+                                      <img className="card-icon me-2" src={calendar} alt="" />
+                                      <span className="text-primary-color fw-bold me-0 mb-0 mt-md-0">
+                                        {onlyDayMonth(item.start_date)}
+                                      </span>
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="row px-2 mt-2">
+                                  <div className="col-md-7 d-flex align-items-center col-7">
+                                    <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
+                                    <div className="d-flex flex-column align-items-start justify-content-start">
+                                      <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                                      <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
+                                        {item.organizer_name}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="col-md-5  col-5">
+                                    <div className="bg-fade rounded text-center event-cart-price-box">
+                                      <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' : item.countrysymbol + item.displayprice + '.00'}</span>
+                                      <p className="small fw-bold mb-0 pb-0">Onwards</p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="row mt-1">
+                                  <div className="col-md-12">
+                                    <div className="d-flex align-items-center justify-content-start my-2 mx-2">
+                                      <img className="card-icon me-1" src={locationIcon} alt="" />
+                                      <p className="text-primary-color fw-bold mb-0 event-cart-location">
+                                        {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                              </div>
+                            </div>
+                          </>
+                        ))}
+                      </Row>
+                    </Col>
+                  </Row>
+                )}
                 <Row className="event-box-mobile">
 
                   <Col md={12}>
@@ -1100,7 +1095,7 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol}{item.displayprice}</span>
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' : item.countrysymbol + item.displayprice + '.00'}</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
                             </div>
                           </div>

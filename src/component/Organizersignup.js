@@ -26,7 +26,8 @@ const Locationbtn = ({ prorps }) => {
     const [Loader, setLoader] = useState(false);
     const MySwal = withReactContent(Swal)
 
-    const HandelOrganizersignup = async () => {
+    const HandelOrganizersignup = async (e) => {
+        e.preventDefault();
         try {
             if (!Firstname || !Lastname || !Email || !Confirmemail || !Phonenumber) {
                 return toast.error('Required field must not be empty');
@@ -136,80 +137,82 @@ const Locationbtn = ({ prorps }) => {
                     </button>
                 </ModalHeader>
                 <ModalBody>
-                    <Row>
-                        <Col md={12}>
-                            <div className="form-group">
-                                <p>Email address <span className="text-danger">*</span></p>
-                                <input className="form-control" type="text" placeholder="email Address" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
-                            </div>
-                            <div className="form-group">
-                                <p>Confirm Email address <span className="text-danger">*</span></p>
-                                <input className="form-control" type="text" placeholder="Confirm email Address" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
-                            </div>
-                        </Col>
-                        <Col md={6}>
-                            <div className="form-group">
-                                <p>First Name <span className="text-danger">*</span></p>
-                                <input className="form-control" type="text" placeholder="First Name" value={Firstname} onChange={(e) => setFirstname(e.target.value)}></input>
-                            </div>
-                        </Col>
-                        <Col md={6}>
-                            <div className="form-group">
-                                <p>Last Name <span className="text-danger">*</span></p>
-                                <input className="form-control" type="text" placeholder="Last Name" value={Lastname} onChange={(e) => setLastname(e.target.value)}></input>
-                            </div>
-                        </Col>
-                        <Col md={6}>
-                            <div className="form-group">
-                                <p>Phone number <span className="text-danger">*</span></p>
-                                {/* <input className="form-control" type="number" placeholder="Phone number" value={Phonenumber} onChange={handlePhoneChange}></input> */}
-                                <PhoneInput
-                                    country={'us'}
-                                    className="phone-number-with-code"
-                                    enableSearch={true}
-                                    placeholder={'Phone number'}
-                                    autoFormat={true}
-                                    value={Phonenumber}
-                                    onChange={handlePhoneChange}
-                                />
-                            </div>
-                        </Col>
-                        <Col md={6}>
-                            <div className="form-group">
-                                <p>Select country <span className="text-danger">*</span></p>
-                                <Select
-                                    isClearable={false}
-                                    options={CountryOption}
-                                    className='react-select'
-                                    classNamePrefix='select'
-                                    onChange={selectCountry}
-                                    value={Country}
-                                />
+                    <form onSubmit={HandelOrganizersignup}>
+                        <Row>
+                            <Col md={12}>
+                                <div className="form-group">
+                                    <p>Email address <span className="text-danger">*</span></p>
+                                    <input className="form-control" type="text" placeholder="email Address" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
+                                </div>
+                                <div className="form-group">
+                                    <p>Confirm Email address <span className="text-danger">*</span></p>
+                                    <input className="form-control" type="text" placeholder="Confirm email Address" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
+                                </div>
+                            </Col>
+                            <Col md={6}>
+                                <div className="form-group">
+                                    <p>First Name <span className="text-danger">*</span></p>
+                                    <input className="form-control" type="text" placeholder="First Name" value={Firstname} onChange={(e) => setFirstname(e.target.value)}></input>
+                                </div>
+                            </Col>
+                            <Col md={6}>
+                                <div className="form-group">
+                                    <p>Last Name <span className="text-danger">*</span></p>
+                                    <input className="form-control" type="text" placeholder="Last Name" value={Lastname} onChange={(e) => setLastname(e.target.value)}></input>
+                                </div>
+                            </Col>
+                            <Col md={6}>
+                                <div className="form-group">
+                                    <p>Phone number <span className="text-danger">*</span></p>
+                                    {/* <input className="form-control" type="number" placeholder="Phone number" value={Phonenumber} onChange={handlePhoneChange}></input> */}
+                                    <PhoneInput
+                                        country={'us'}
+                                        className="phone-number-with-code"
+                                        enableSearch={true}
+                                        placeholder={'Phone number'}
+                                        autoFormat={true}
+                                        value={Phonenumber}
+                                        onChange={handlePhoneChange}
+                                    />
+                                </div>
+                            </Col>
+                            <Col md={6}>
+                                <div className="form-group">
+                                    <p>Select country <span className="text-danger">*</span></p>
+                                    <Select
+                                        isClearable={false}
+                                        options={CountryOption}
+                                        className='react-select'
+                                        classNamePrefix='select'
+                                        onChange={selectCountry}
+                                        value={Country}
+                                    />
 
+                                </div>
+                            </Col>
+                            <div className="form-group">
+                                <p>Message</p>
+                                <textarea class="form-control" rows="3" value={Message} onChange={(e) => setMessage(e.target.value)}></textarea>
                             </div>
-                        </Col>
-                        <div className="form-group">
-                            <p>Message</p>
-                            <textarea class="form-control" rows="3" value={Message} onChange={(e) => setMessage(e.target.value)}></textarea>
-                        </div>
-                        <Col md={12}>
-                            {Loader ? (
-                                <button type='button' className="signup-page-button">Please wait...</button>
-                            ) : (
-                                <button type='button' className="signup-page-button" onClick={() => HandelOrganizersignup()}>Contact Us</button>
-                            )}
-                        </Col>
-                    </Row>
+                            <Col md={12}>
+                                {Loader ? (
+                                    <button type='button' className="signup-page-button">Please wait...</button>
+                                ) : (
+                                    <button type='submit' className="signup-page-button">Contact Us</button>
+                                )}
+                            </Col>
+                        </Row>
+                    </form>
                 </ModalBody>
             </Modal>
-                <button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs" onClick={() => setContactModal(!ContactModal)}>
-                    <div class="left text-center">
-                        <small class="ms-2">Get in Touch</small>
-                    </div>
-                    <div class="right">
-                        <img src={arrow} alt="" style={{ width: "15px" }} />
-                    </div>
-                </button>
+            <button class="GetLatestUpdateButton CustomerButton  login-pg-btn-cs" onClick={() => setContactModal(!ContactModal)}>
+                <div class="left text-center">
+                    <small class="ms-2">Get in Touch</small>
+                </div>
+                <div class="right">
+                    <img src={arrow} alt="" style={{ width: "15px" }} />
+                </div>
+            </button>
         </>
     )
 }

@@ -368,19 +368,19 @@ const Dashboard = ({ title }) => {
                                     <Row className="justify-content-center">
                                         <Col md={12} style={{ position: 'relative', zIndex: '2' }}>
                                             <Row>
-                                                <Col md={3}>
+                                                <Col md={6} xl={2}>
                                                     <div class="input-group mb-3 input-warning-o">
                                                         <span class="input-group-text"><img src={Searchicon} alt="" /></span>
                                                         <input
                                                             type="text"
                                                             className="form-control"
-                                                            placeholder="Search events"
+                                                            placeholder="Search"
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md={3} className="react-select-h mb-3">
+                                                <Col md={6} xl={3} className="react-select-h mb-3 dash-select-box">
                                                     <Select
                                                         isClearable={false}
                                                         options={CategoryOption}
@@ -392,14 +392,14 @@ const Dashboard = ({ title }) => {
                                                     />
 
                                                 </Col>
-                                                <Col md={2}>
+                                                <Col md={4} xl={3}>
                                                     <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
                                                         <input type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
                                                     </div>
                                                 </Col>
-                                                <Col md={2} className="react-select-h mb-3">
+                                                <Col md={4} xl={2} className="react-select-h mb-3">
                                                     <Select
                                                         className="react-select"
                                                         onChange={handleVisibilityChange}
@@ -410,7 +410,7 @@ const Dashboard = ({ title }) => {
                                                     />
                                                 </Col>
 
-                                                <Col md={2}>
+                                                <Col md={4} xl={2}>
                                                     <button className="w-100 theme-btn" onClick={() => navigate(organizer_url + 'event/add-event')}>
                                                         <span className="theme-btn-icon"><FiPlus /></span> <span>Add event</span>
                                                     </button>
@@ -450,41 +450,32 @@ const Dashboard = ({ title }) => {
                                                                             </div>
                                                                             <div className="desc_data">
                                                                                 <div className="organizer-name-sec px-2 py-2">
-                                                                                    <div className="d-inline-flex align-items-center border-right event-time-area">
-                                                                                        <div className="d-inline-block mr-1">
-                                                                                            <img height={30} width={30} src={Timelogo} alt="" />
-                                                                                        </div>
-                                                                                        <div className="d-inline-block">
-                                                                                            <span className="event-duration d-block">
-                                                                                                Event Time
-                                                                                            </span>
-                                                                                            <span className="event-time d-block">{item.start_time}</span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div className="d-inline-flex align-items-center time-ticket-sold-box">
-                                                                                        <div className="d-inline-block mr-1">
-                                                                                            <img
-                                                                                                height={30}
-                                                                                                width={30}
-                                                                                                src={Hourglasslogo}
-                                                                                                alt=""
-                                                                                            />
-                                                                                        </div>
-                                                                                        <div className="d-inline-block">
-                                                                                            <span className="event-duration d-block">
-                                                                                                Event Duration
-                                                                                            </span>
-                                                                                            <span className="event-time d-block">{item.event_duration}</span>
-                                                                                        </div>
-                                                                                        {item.allprice ? (
-                                                                                            <>
-                                                                                                <div className="list-ticket-count">
-                                                                                                    <p className="mb-0 list-Total-Ticket">Total Ticket</p>
-                                                                                                    <span className="list-Ticket-amount">{item.OrderItem ? item.OrderItem.length : 0} / {item.allprice.reduce((total, price) => total + parseInt(price.quantity, 10), 0)}</span> <span className="list-Ticket-sold">SOLD</span>
+                                                                                    <div className="row my-2">
+                                                                                        <div className="col-12 col-md-6 border-md-right d-flex align-items-center">
+                                                                                            <div className="d-inline-flex align-items-center event-time-area">
+                                                                                                <div className="d-inline-block mr-1">
+                                                                                                    <img height={30} width={30} src={Timelogo} alt="" />
                                                                                                 </div>
-                                                                                            </>
-                                                                                        ) : ''}
+                                                                                                <div className="d-inline-block">
+                                                                                                    <span className="event-duration d-block">
+                                                                                                        Event Time
+                                                                                                    </span>
+                                                                                                    <span className="event-time d-block">{item.start_time}</span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div className="col-12 col-md-6  d-flex align-items-center">
+                                                                                            {item.allprice ? (
+                                                                                                <>
+                                                                                                    <div className="list-ticket-count">
+                                                                                                        <p className="mb-0 list-Total-Ticket">Total Ticket</p>
+                                                                                                        <span className="list-Ticket-amount">{item.OrderItem ? item.OrderItem.length : 0} / {item.allprice.reduce((total, price) => total + parseInt(price.quantity, 10), 0)}</span> <span className="list-Ticket-sold">SOLD</span>
+                                                                                                    </div>
+                                                                                                </>
+                                                                                            ) : ''}
+                                                                                        </div>
                                                                                     </div>
+
                                                                                 </div>
                                                                             </div>
                                                                         </Col>
@@ -493,7 +484,7 @@ const Dashboard = ({ title }) => {
                                                                                 <div className="text-end mr-5">
                                                                                     <span className="list-event-category-img">{item.category_name}</span>
                                                                                 </div>
-                                                                                <div className="text-end mr-5 mt-3 mb-3">
+                                                                                <div className="text-end mr-5 mt-xl-3 mb-xl-3 mb-1 mt-1">
                                                                                     <span className="mb-5">
                                                                                         <img src={DateIcon} alt="" />
                                                                                         <span className="on-img-date-val">{onlyDayMonth(item.start_date)}</span>

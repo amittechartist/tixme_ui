@@ -16,12 +16,12 @@ const Faqs = () => {
           <h1 className="banner-h text-white text-uppercase fw-bold mb-0 pb-0 animate__animated animate__bounce">
             FAQ’s
           </h1>
-          <div className="banner-child bg-white">
+          <div className="banner-child bg-white ">
             <div
-              className="accordion accordion-flush mx-4 my-3"
+              className="accordion accordion-flush mx-4 my-5"
               id="accordionFlushExample"
             >
-              <div className="accordion-item">
+              <div className="accordion-item mt-4">
                 <h2 className="accordion-header" id="flush-headingOne">
                   <button
                     className="accordion-button collapsed"

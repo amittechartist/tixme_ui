@@ -303,7 +303,7 @@ const Dashboard = ({ title }) => {
         }
     }
     useEffect(() => {
-        if(!Beartoken){
+        if (!Beartoken) {
             return navigate(app_url)
         }
         fetchmyEvent();
@@ -394,7 +394,7 @@ const Dashboard = ({ title }) => {
         <>
             <Modal isOpen={modal} toggle={() => setModal(!modal)} centered size={'xl'}>
                 <ModalHeader toggle={!modal}>Order Details
-                <button className="close p-0" onClick={() => setModal(!modal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
+                    <button className="close p-0" onClick={() => setModal(!modal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
                         <FaTimes />
                     </button>
                 </ModalHeader>
@@ -408,7 +408,7 @@ const Dashboard = ({ title }) => {
                             </>
                         ) : (
                             <>
-                                <Col md={3} className="tickets-data-text">
+                                <Col md={6} xl={2} className="tickets-data-text">
                                     <div>
                                         <h5 className="text-bold">Email :</h5>
                                         <p>{CustomerData.email}</p>
@@ -422,10 +422,10 @@ const Dashboard = ({ title }) => {
                                         <p>{CustomerData.address} {CustomerData.address ? (',' + CustomerData.address) : ''}</p>
                                     </div>
                                 </Col>
-                                <Col md={2} className="tickets-data-text">
+                                <Col md={6} xl={2} className="tickets-data-text">
                                     <div>
-                                        <h5 className="text-bold">City :</h5>
-                                        <p>{CustomerData.city ? CustomerData.city : '--'}</p>
+                                        <h5 className="text-bold">Event Name :</h5>
+                                        <p>{OrderData.name ? OrderData.name : '--'}</p>
                                     </div>
                                     <div>
                                         <h5 className="text-bold">State :</h5>
@@ -436,7 +436,7 @@ const Dashboard = ({ title }) => {
                                         <p>{CustomerData.country ? CustomerData.country : '--'}</p>
                                     </div>
                                 </Col>
-                                <Col md={3} className="tickets-data-text">
+                                <Col  md={6} xl={3} className="tickets-data-text">
                                     <div>
                                         <h5 className="text-bold">BOOKING ID :</h5>
                                         <p>{Ordersavedata.bookingid}</p>
@@ -459,7 +459,7 @@ const Dashboard = ({ title }) => {
                                         </div>
                                     ) : ''}
                                 </Col>
-                                <Col md={4}>
+                                <Col  md={6} xl={4}>
                                     <div className="tickets-data-text-last">
                                         <h4 style={{ fontWeight: '700' }}>Tickect Scan Status</h4>
                                         {Isscan ? (
@@ -467,6 +467,28 @@ const Dashboard = ({ title }) => {
                                         ) : (
                                             <span class="badge-theme-warning badge-theme"><FaClock /> Pending</span>
                                         )}
+                                    </div>
+                                    <div>
+                                        <div className="row my-2">
+                                            {Orderitemlist.map((item, index) => (
+                                                <div className="col-6 col-md-4 col-lg-3 col-xl-3">
+                                                    <div className="m-2 text-center">
+                                                        {item.is_transfer == 1 ? (
+                                                            <img style={{ height: "auto", width: "50px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                        ) : (
+                                                            <>
+                                                                {item.scan_status == 0 ? (
+                                                                    <QRCode style={{ height: "auto", width: "50px" }} value={JSON.stringify({ id: item._id, time: 1, index: index })} />
+                                                                ) : (
+                                                                    <img style={{ height: "auto", width: "50px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                                )
+                                                                }
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </Col>
                                 {ShowQr ? (
@@ -478,9 +500,9 @@ const Dashboard = ({ title }) => {
                                                         <div className="ticket-qr text-center">
                                                             {item.is_transfer == 1 ? (
                                                                 <>
-                                                                    <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                                    <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
                                                                     <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                    <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{textTransform: 'capitalize'}}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                    <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                     <p className="mb-0 mt-4" style={{ fontWeight: 600, color: '#000' }}>Transferred to</p>
                                                                     <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> {item.owner_email}</span>
                                                                 </>
@@ -495,18 +517,18 @@ const Dashboard = ({ title }) => {
                                                                                     onChange={() => handleCheckboxChange(item._id)}
                                                                                     style={{ position: 'absolute', top: '10px', left: '10px' }}
                                                                                 />
-                                                                                <QRCode style={{ height: "auto", width: "150px" }} value={JSON.stringify({ id: item._id, time: 1, index: index })} />
+                                                                                <QRCode className="dashqrbig" value={JSON.stringify({ id: item._id, time: 1, index: index })} />
                                                                                 <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                                <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{textTransform: 'capitalize'}}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                                <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                                 <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
                                                                                 <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
                                                                             </div>
                                                                         </>
                                                                     ) : (
                                                                         <>
-                                                                            <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                                            <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
                                                                             <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                            <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{textTransform: 'capitalize'}}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                            <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                             <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
                                                                             <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> Success</span>
                                                                         </>
@@ -521,7 +543,7 @@ const Dashboard = ({ title }) => {
                                                 <>
                                                     <Col md={12}></Col>
                                                     <Col md={3}>
-                                                        <button type="button" onClick={() => {setModal(!modal); setModalTT(!modalTT); setModalLoader(false)}} className="w-100 btn btn-success">Transfer</button>
+                                                        <button type="button" onClick={() => { setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button>
                                                     </Col>
                                                 </>
                                             ) : ''}
@@ -583,7 +605,7 @@ const Dashboard = ({ title }) => {
                 </ModalBody>
             </Modal>
             <Modal isOpen={Daterange} toggle={() => setDaterange(!Daterange)} centered>
-                <ModalHeader toggle={!Daterange}>Select date</ModalHeader>
+                <ModalHeader toggle={() => setDaterange(!Daterange)}>Select date</ModalHeader>
                 <ModalBody>
                     <Row>
                         <Col md={6} className="mb-2 mt-0">
@@ -617,7 +639,7 @@ const Dashboard = ({ title }) => {
                             </div>
                         </Col>
                         <Col md={6}>
-                            <button onClick={HandelDatefilter} className="mb-0 mr-5  btn btn-success list-Ticket-mng-1 w-100" type="button">Filter</button>
+                            <button onClick={HandelDatefilter} className="mb-0 mr-5  btn theme-bg text-white list-Ticket-mng-1 w-100" type="button">Filter</button>
                         </Col>
                         <Col md={6}>
                             <button onClick={HandelDatefilterreset} className="mb-0 mr-5  btn btn-dark list-Ticket-mng-1 w-100" type="button">Reset</button>
@@ -632,21 +654,21 @@ const Dashboard = ({ title }) => {
                             <Card className="py-4 grey-bg">
                                 <Card.Body>
                                     <Row className="justify-content-center">
-                                        <Col md={12} style={{ position: 'relative', zIndex: '2' }}>
+                                        <Col md={12} style={{ position: 'relative', zIndex: '2' }} className="mb-md-3 mb-xl-2">
                                             <Row>
-                                                <Col md={3}>
+                                                <Col md={6} xl={3}>
                                                     <div class="input-group mb-3 input-warning-o">
                                                         <span class="input-group-text"><img src={Searchicon} alt="" /></span>
                                                         <input
                                                             type="text"
                                                             className="form-control"
-                                                            placeholder="Search events"
+                                                            placeholder="Search"
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md={3} className="react-select-h mb-3">
+                                                <Col md={6} xl={3} className="react-select-h mb-3 dash-select-box">
                                                     <Select
                                                         isClearable={false}
                                                         options={CategoryOption}
@@ -663,14 +685,14 @@ const Dashboard = ({ title }) => {
                                                         ))}
                                                     </select> */}
                                                 </Col>
-                                                <Col md={3}>
+                                                <Col md={6} xl={3}>
                                                     <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
-                                                        <input style={{cursor: 'pointer'}} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range"  />
+                                                        <input style={{ cursor: 'pointer' }} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
                                                     </div>
                                                 </Col>
-                                                <Col md={3}>
+                                                <Col md={6} xl={3}>
                                                     <button className="w-100 theme-btn" onClick={() => navigate(app_url + 'events')}>
                                                         <span className="theme-btn-icon"><FiPlus /></span> <span>Buy Tickets</span>
                                                     </button>
@@ -685,7 +707,7 @@ const Dashboard = ({ title }) => {
                                                     <>
                                                         {Listitems.map((item, index) => (
                                                             <Col md={12} className="event_list_box_main">
-                                                            <Link to={`${customer_url}support-tickets/${item.eventData[0]._id}/${item._id}`}><button className="list-rais-ticket-btn" type="button">Raise Ticket</button></Link>
+                                                                <Link to={`${customer_url}support-tickets/${item.eventData[0]._id}/${item._id}`}><button className="list-rais-ticket-btn" type="button">Raise Ticket</button></Link>
                                                                 <button className="list-active-ticket-btn" onClick={() => { setModal(!modal); fetchOrderData(item._id, 1) }} type="button">Ticket <img src={ArrowPng} className="arraw-svg ml-3" alt="" /></button>
                                                                 <div className="event_list_box">
                                                                     <Row>
@@ -697,7 +719,7 @@ const Dashboard = ({ title }) => {
                                                                                 <Link to={`${app_url}event/${item.eventData[0]._id}/${item.eventData[0].name}`}><span className="list-event-name">{item.eventData[0].name}</span></Link>
                                                                                 <p className="list-event-desc mb-0">{shortPer(item.eventData[0].event_desc, 100)}</p>
                                                                             </div>
-                                                                            <div className="list-event-location mb-3">
+                                                                            <div className="list-event-location mb-xl-3 mb-1">
                                                                                 <div className="d-flex align-items-center text-center location-name">
                                                                                     <img
                                                                                         height={30}
@@ -751,7 +773,7 @@ const Dashboard = ({ title }) => {
                                                                                         <span className="on-img-date-val">{item.eventData[0].start_date}</span>
                                                                                     </span>
                                                                                 </div>
-                                                                                
+
                                                                             </div>
                                                                         </Col>
                                                                     </Row>

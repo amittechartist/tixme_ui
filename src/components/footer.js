@@ -10,8 +10,8 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <>
-      <footer className="footer py-5 mt-4 bg-gray">
-        <div className="row m-auto w-100 container-fluid bg-gray">
+      <footer className="footer py-5 mt-4">
+        <div className="row m-auto w-100 container-fluid">
           <div className="col-lg-5 col-12">
             <div className="mx-footer">
               <img className="footer-logo animate__animated animate__bounce" src={footerLogo} alt="" />
@@ -20,7 +20,7 @@ const Footer = () => {
                 is to redefine events, making each occasion an unforgettable and
                 cherished memory.
               </p>
-              <div className="d-flex">
+              <div className="d-flex footer-logo-box1">
                 <span>
                   <img className="social-icon me-4" src={facebook} alt="" />
                   <img className="social-icon me-4" src={instagram} alt="" />
@@ -35,19 +35,19 @@ const Footer = () => {
               QUICK LINKS
             </h6>
             <div className="">
-              <Link to={app_url}>
+              <Link to={app_url} onClick={() => window.scrollTo(0, 0)}>
                 <span className="text-primary-color mt-3">Home</span>
               </Link>
-              <Link to={app_url + 'events'}>
+              <Link to={app_url + 'events'} onClick={() => window.scrollTo(0, 0)}>
                 <span className="text-primary-color mt-3">Events</span>
               </Link>
-              <Link to={app_url + 'aboutus'}>
+              <Link to={app_url + 'aboutus'} onClick={() => window.scrollTo(0, 0)}>
                 <span className="text-primary-color mt-3">About Us</span>
               </Link>
-              <Link to={app_url + 'contact'}>
+              <Link to={app_url + 'contact'} onClick={() => window.scrollTo(0, 0)}>
                 <span className="text-primary-color mt-3">Contact Us</span>
               </Link>
-              <Link to={app_url + 'auth/login-signup'}>
+              <Link to={app_url + 'auth/login-signup'} onClick={() => window.scrollTo(0, 0)}>
                 <span className="text-primary-color mt-3">Login/Signup</span>
               </Link>
             </div>
@@ -58,13 +58,13 @@ const Footer = () => {
               <Link to={app_url}>
                 <span className="text-primary-color mt-3">Purchase Policy</span>
               </Link>
-              <Link to={app_url + 'privacy-policy'}>
+              <Link to={app_url + 'privacy-policy'} onClick={() => window.scrollTo(0, 0)}>
                 <span className="text-primary-color mt-3">Privacy Policy</span>
               </Link>
-              <Link to={app_url + 'organizers'}>
+              <Link to={app_url + 'organizers'} onClick={() => window.scrollTo(0, 0)}>
                 <span className="text-primary-color mt-3">Organizers</span>
               </Link>
-              <Link to={app_url + 'faq'}>
+              <Link to={app_url + 'faq'} onClick={() => window.scrollTo(0, 0)}>
                 <span className="text-primary-color mt-3">FAQs</span>
               </Link>
             </div>

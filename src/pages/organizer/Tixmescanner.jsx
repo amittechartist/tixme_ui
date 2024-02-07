@@ -87,10 +87,7 @@ const Dashboard = ({ title }) => {
                                         <div>
                                             <h2 className="">{title}</h2>
                                             <Lottie className="py-2" animationData={QrcodeLotte} style={lottewidth} />
-                                            <span className="ml-5" onClick={() => openscanner()}>
-                                                <Whitebtn title={'Scan QR'} />
-                                            </span>
-                                            <Link to={qr_url} className='text-white theme-bg btn w-100'>Scan QR</Link>
+                                            <Link onClick={() => openscanner()} className='text-white theme-bg btn w-100'>Scan QR</Link>
                                         </div>
                                     </Card.Body>
                                 </Card>
