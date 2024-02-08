@@ -199,11 +199,11 @@ const About = () => {
                                     {Newpassloader ? (
                                         <>
                                             <div className="form-group">
-                                                <p>Password <span className="text-danger">*</span></p>
+                                                <p>Password <span className="text-danger">*</span><span className="text-danger">*</span></p>
                                                 <input className="form-control" type="password" placeholder="Password" value={Password} onChange={(e) => setPassword(e.target.value)}></input>
                                             </div>
                                             <div className="form-group">
-                                                <p>Confirm Password <span className="text-danger">*</span></p>
+                                                <p>Confirm Password <span className="text-danger">*</span><span className="text-danger">*</span></p>
                                                 <input className="form-control" type="password" placeholder="Confirm Password" value={ConfirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}></input>
                                             </div>
                                         </>
@@ -211,7 +211,7 @@ const About = () => {
                                         <>
                                             {Otploader ? (
                                                 <div className="form-group">
-                                                    <p>OTP</p>
+                                                    <p>OTP <span className="text-danger">*</span></p>
                                                     <input
                                                         className="form-control"
                                                         type="text"  // Use type="text" to allow for maxLength attribute
@@ -223,8 +223,8 @@ const About = () => {
                                                 </div>
                                             ) : (
                                                 <div className="form-group">
-                                                    <p>Email</p>
-                                                    <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setEmail(e.target.value)}></input>
+                                                    <p>Email Id<span className="text-danger">*</span></p>
+                                                    <input className="form-control" type="text" placeholder="Email Id" onChange={(e) => setEmail(e.target.value)}></input>
                                                 </div>
                                             )}
                                         </>

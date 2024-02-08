@@ -13,10 +13,10 @@ const Faqs = () => {
         <HeaderMenu />
         <div className="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
           <MobileMenu />
-          <h1 className="banner-h text-white text-uppercase fw-bold mb-0 pb-0 animate__animated animate__bounce">
+          <h1 className="banner-h text-white text-uppercase fw-bold pb-0 animate__animated animate__bounce">
             FAQ’s
           </h1>
-          <div className="banner-child bg-white ">
+          <div className="banner-child bg-white p-3">
             <div
               className="accordion accordion-flush mx-4 my-5"
               id="accordionFlushExample"
@@ -167,7 +167,7 @@ const Faqs = () => {
             </div>
           </div>
         </div>
-        <div style={{ height: "400px" }}></div>
+      <div className="faq-page-space"></div>
       </div>
       <Footer />
     </>

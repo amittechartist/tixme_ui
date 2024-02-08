@@ -436,7 +436,7 @@ const Dashboard = ({ title }) => {
                                         <p>{CustomerData.country ? CustomerData.country : '--'}</p>
                                     </div>
                                 </Col>
-                                <Col  md={6} xl={3} className="tickets-data-text">
+                                <Col md={6} xl={3} className="tickets-data-text">
                                     <div>
                                         <h5 className="text-bold">BOOKING ID :</h5>
                                         <p>{Ordersavedata.bookingid}</p>
@@ -459,7 +459,7 @@ const Dashboard = ({ title }) => {
                                         </div>
                                     ) : ''}
                                 </Col>
-                                <Col  md={6} xl={4}>
+                                <Col md={6} xl={4}>
                                     <div className="tickets-data-text-last">
                                         <h4 style={{ fontWeight: '700' }}>Tickect Scan Status</h4>
                                         {Isscan ? (
@@ -712,7 +712,9 @@ const Dashboard = ({ title }) => {
                                                                 <div className="event_list_box">
                                                                     <Row>
                                                                         <Col md={4}>
-                                                                            <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} className="list-thum-img" alt="" />
+                                                                            <div className="dash-list-banner-1">
+                                                                                <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} className="list-thum-img" alt="" />
+                                                                            </div>
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div>

@@ -40,14 +40,14 @@ const Home = () => {
       {" "}
       <div className="content-area">
         <HeaderMenu />
-        <div className="mx-lg-4 my-lg-3 banner-organizer-page bg-primary-color rounded-8 position-relative">
+        <div className="mx-lg-4 my-lg-3 banner-events-page bg-primary-color rounded-8 position-relative">
           <MobileMenu />
-          <h1 className="banner-h text-white text-start text-uppercase animate__animated animate__bounce">Explore our organizers</h1>
+          <h1 className="banner-h banner-h-events text-white text-start text-uppercase animate__animated animate__bounce">Explore our organizers</h1>
         </div>
-        <Row className="mx-4" style={{ marginTop: '50px' }}>
+        <Row className="event-view-body">
           <div className="row p-3">
             {organizers.map((items, index) => (
-              <div className="col-12 col-md-2" key={index}>
+              <div className="col-6 col-md-4 col-lg-3 col-xl-3 my-2" key={index}>
                 <div className="organizer-box text-center">
                   <img src={items.profile_picture ? items.profile_picture : Noimg} className="organizer-dp" alt="" style={{ borderRadius: '8px' }} />
                   <p className="organizer-box-name mb-0">{items.name}</p>

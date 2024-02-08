@@ -69,6 +69,7 @@ import Faqs from "./components/faqs";
 import Contact from "./components/contact";
 import About from "./components/about";
 import Policy from "./components/policy";
+import PurchasePolicy from "./components/PurchasePolicy";
 
 import WebsiteLayout from './layout/website/Layout'
 import XYZ from './pages/website/XYZ';
@@ -112,6 +113,7 @@ function App() {
           <Route path={app_url + 'terms-and-conditions'} element={<WebsiteLayout> <Terms title={'Terms & conditions'} /> </WebsiteLayout>} />
           <Route path={app_url + 'aboutus'} element={<About />} />
           <Route path={app_url + 'privacy-policy'} element={<Policy />} />
+          <Route path={app_url + 'purchase-policy'} element={<PurchasePolicy />} />
           <Route path={app_url + 'faq'} element={<Faqs />} />
           <Route path={app_url + 'contact'} element={<Contact />} />
           <Route path={app_url + 'organizers'} element={<Organizers title={'Organizers'} />} />

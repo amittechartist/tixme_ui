@@ -430,7 +430,9 @@ const Dashboard = ({ title }) => {
                                                                 <div className="event_list_box">
                                                                     <Row>
                                                                         <Col md={4}>
-                                                                            <img src={item.thum_image ? item.thum_image : Eimage} className="list-thum-img" alt="" />
+                                                                            <div className="dash-list-banner-1">
+                                                                                <img src={item.thum_image ? item.thum_image : Eimage} className="list-thum-img" alt="" />
+                                                                            </div>
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div>

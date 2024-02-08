@@ -2160,3 +2160,28 @@ span.selling-f-box {
     margin-left: 26px;
     margin-right: 5px;
 }
+.dash-list-banner-1 {
+    height: 208px;
+    width: 300px;
+}
+.faq-page-space{
+  height: 475px;
+}
+.scroll-top-box {
+  height: 40px;
+  width: 40px;
+  background: #0047ab;
+  color: #fff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 63px;
+  right: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.scroll-top-box span {
+  line-height: 0px;
+}

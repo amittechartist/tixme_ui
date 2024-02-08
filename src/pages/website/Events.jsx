@@ -173,9 +173,9 @@ const Home = () => {
                 minprice: Minprice ? Minprice : 1,
                 maxprice: Maxprice ? Maxprice : 100000000000000000000000000000000000000000000000000000000,
                 country_filter: selectedCountry ? selectedCountry : null,
-                india: India ? India : null,
-                singapur: Singapur ? Singapur : null,
-                usa: Usa ? Usa : null,
+                // india: India ? India : null,
+                // singapur: Singapur ? Singapur : null,
+                // usa: Usa ? Usa : null,
             }
             fetch(apiurl + "website/all-events-list", {
                 method: "POST",
@@ -210,7 +210,7 @@ const Home = () => {
         setDateapitype('');
         setDatevalue({ value: "", label: "Select" });
         navigate(app_url + 'events')
-        // window.location.reload();
+        window.location.reload();
     }
 
     const DatefilterOption = [

@@ -48,9 +48,9 @@ const Page = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        
+
                     } else {
-                        
+
                     }
                 })
                 .catch(error => {
@@ -58,7 +58,7 @@ const Page = ({ title }) => {
                 });
         } catch (error) {
             console.error('Api error:', error);
-        } 
+        }
     }
     const checkPayment = async () => {
         try {
@@ -164,27 +164,27 @@ const Page = ({ title }) => {
 
                                                                 <Col md={4}><p className="data-title text-start">Date</p></Col>
                                                                 <Col md={8}><p className="data-value text-end">{date} {time}</p></Col>
-                                                                
+
                                                             </Row>
                                                         </div>
                                                         <div className="row">
                                                             <div className="col-md-12 text-center">
                                                                 <p className="mb-0">Your transaction was successful.</p>
-                                                                <p className="mb-0">We have sent you a confirmation to <span style={{color: '#0047ab'}}>{email}</span>.</p>
-                                                                <p>If you could not find an email from <span style={{color: '#0047ab'}}>TIXME</span>, check your spam or junk email folder.</p>
+                                                                <p className="mb-0">We have sent you a confirmation to <span style={{ color: '#0047ab' }}>{email}</span>.</p>
+                                                                <p>If you could not find an email from <span style={{ color: '#0047ab' }}>TIXME</span>, check your spam or junk email folder.</p>
                                                             </div>
                                                             <Col md={12} className="mt-4">
-                                                                    <span>
-                                                                        <Link to={customer_url + 'my-order-list'}>
-                                                                            <Whitebtn title={'View Order'} />
-                                                                        </Link>
-                                                                    </span>
-                                                                    <span>
-                                                                        <Link to={app_url}>
-                                                                            <Whitebtn title={'Home'} />
-                                                                        </Link>
-                                                                    </span>
-                                                                </Col>
+                                                                <span>
+                                                                    <Link to={customer_url + 'my-order-list'}>
+                                                                        <Whitebtn title={'View Order'} />
+                                                                    </Link>
+                                                                </span>
+                                                                <span>
+                                                                    <Link to={app_url}>
+                                                                        <Whitebtn title={'Home'} />
+                                                                    </Link>
+                                                                </span>
+                                                            </Col>
                                                         </div>
                                                     </Col>
                                                 )}

@@ -76,11 +76,11 @@ const About = () => {
                                 <div>
                                     <h5 className="mb-md-5 mb-2 auth-page-title1" style={{ fontWeight: '600', color: '#000' }}>Do you already have an account? please log in with your email address.</h5>
                                     <div className="form-group">
-                                        <p>Email address</p>
-                                        <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setLoginEmail(e.target.value)}></input>
+                                        <p>Email Id<span className="text-danger">*</span></p>
+                                        <input className="form-control" type="text" placeholder="Email Id" onChange={(e) => setLoginEmail(e.target.value)}></input>
                                     </div>
                                     <div className="form-group">
-                                        <p>Password</p>
+                                        <p>Password<span className="text-danger">*</span></p>
                                         <input className="form-control" type="password" placeholder="Password" onChange={(e) => setLoginPassword(e.target.value)}></input>
                                     </div>
                                     <p className="forgot-password-text">Forgot your password? <Link to={app_url + 'auth/organizer/forgot-password'} className='reset-password-link'>Reset your password</Link></p>

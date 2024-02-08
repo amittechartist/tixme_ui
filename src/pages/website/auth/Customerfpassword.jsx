@@ -210,7 +210,7 @@ const About = () => {
                                         <>
                                             {Otploader ? (
                                                 <div className="form-group">
-                                                    <p>OTP</p>
+                                                    <p>OTP<span className="text-danger">*</span></p>
                                                     <input
                                                         className="form-control"
                                                         type="number"  // Use type="text" to allow for maxLength attribute
@@ -222,8 +222,8 @@ const About = () => {
                                                 </div>
                                             ) : (
                                                 <div className="form-group">
-                                                    <p>Email</p>
-                                                    <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setEmail(e.target.value)}></input>
+                                                    <p>Email Id<span className="text-danger">*</span></p>
+                                                    <input className="form-control" type="text" placeholder="Email Id" onChange={(e) => setEmail(e.target.value)}></input>
                                                 </div>
                                             )}
                                         </>

@@ -88,7 +88,7 @@ const Contact = () => {
                   <div className="col-lg-4">
                     <div className="mb-3">
                       <label for="exampleInputEmail1" className="form-label">
-                        First Name
+                        First Name<span className="text-danger">*</span>
                       </label>
                       <input
                         type="text"
@@ -102,7 +102,7 @@ const Contact = () => {
                   <div className="col-lg-4">
                     <div className="mb-3">
                       <label for="exampleInputEmail1" className="form-label">
-                        Last Name
+                        Last Name<span className="text-danger">*</span>
                       </label>
                       <input
                         type="text"
@@ -116,7 +116,7 @@ const Contact = () => {
                   <div className="col-lg-4">
                     <div className="mb-3">
                       <label for="exampleInputEmail1" className="form-label">
-                        Email ID
+                        Email ID<span className="text-danger">*</span>
                       </label>
                       <input
                         type="text"
@@ -131,7 +131,7 @@ const Contact = () => {
                   <div className="col-lg-4 extra-phone-css">
                     <div className="mb-3">
                       <label for="exampleInputEmail1" className="form-label">
-                        Phone Number
+                        Phone Number<span className="text-danger">*</span>
                       </label>
                       {/* <input
                         type="number"
@@ -152,7 +152,7 @@ const Contact = () => {
                     </div>
                   </div>
                   <div className="col-lg-8">
-                    <p className="text-primary-color fw-bold mb-3">Subject</p>
+                    <p className="text-primary-color fw-bold mb-3">Subject<span className="text-danger">*</span></p>
                     <div className="d-flex flex-md-row flex-column">
                       <div className="form-check me-3">
                         <input
@@ -185,7 +185,7 @@ const Contact = () => {
                   <div className="col-lg-8">
                     <div className="mb-3 mt-lg-0 mt-3">
                       <label for="exampleInputEmail1" className="form-label">
-                        Message
+                        Message<span className="text-danger">*</span>
                       </label>
                       <input
                         type="text"

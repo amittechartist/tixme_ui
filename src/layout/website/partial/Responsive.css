@@ -7,6 +7,12 @@
         padding: 5px 19px;
         border-radius: 13px;
     }
+    .row.evnt-page-save-shear-box {
+        top: 27px;
+    }
+    .faq-page-space{
+        height: 670px;
+      }
     .dashqrbig{
         height: auto;
         width: 60px;

@@ -1532,7 +1532,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                         <Col md={12} className="text-center mb-5">
                                             <h2 className="theme-color mb-2 ">Event Tickets</h2>
                                         </Col>
-                                        <div className="col-md-4 mt-4">
+                                        <div className="col-md-12 mt-4">
                                             <label htmlFor="">Events Tickets Type</label>
                                             <div className="tab-button-box">
                                                 <span onClick={() => { setEventSubtype(1); updateTicketsType(1, EditId) }} className={EventSubtype == 1 ? "tab-button-active" : ""}>Single Event</span>
@@ -1556,7 +1556,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                                         </Col>
                                                     ) : (
                                                         <Col md={12} className="mt-3 white-table">
-                                                            <Table responsive>
+                                                            <Table responsive className="dash-table-1">
                                                                 <thead>
                                                                     <tr>
                                                                         <th className="text-center" key={1}>Name</th>

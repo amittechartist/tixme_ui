@@ -7,9 +7,14 @@ import youtube from "./assets/youtube.svg";
 import support from "./assets/support.svg";
 import { app_url } from "../common/Helpers";
 import { Link } from "react-router-dom";
+import { FaAngleUp } from "react-icons/fa6";
 const Footer = () => {
+  const scrollTop = () => {
+    window.scrollTo(0, 0);
+  }
   return (
     <>
+      <div onClick={() => scrollTop()} className="scroll-top-box"><span><FaAngleUp /></span></div>
       <footer className="footer py-5 mt-4">
         <div className="row m-auto w-100 container-fluid">
           <div className="col-lg-5 col-12">
@@ -55,7 +60,7 @@ const Footer = () => {
           <div className="col-lg-2 col-12 footer-link ps-lg-0 ps-4 mt-lg-0 mt-5">
             <h6 className="fw-bold text-primary-color mb-0  text-underline">OTHER LINKS</h6>
             <div className="">
-              <Link to={app_url}>
+              <Link to={app_url + 'purchase-policy'}>
                 <span className="text-primary-color mt-3">Purchase Policy</span>
               </Link>
               <Link to={app_url + 'privacy-policy'} onClick={() => window.scrollTo(0, 0)}>
@@ -70,7 +75,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="col-lg-3 col-12 d-flex justify-content-center align-items-start flex-column text-center ps-lg-0 ps-4 mt-lg-0 mt-4">
-            <img className="support-img ms-4 mb-1 animate__animated animate__bounce" style={{paddingLeft : "20px"}} src={support} alt="" />
+            <img className="support-img ms-4 mb-1 animate__animated animate__bounce" style={{ paddingLeft: "20px" }} src={support} alt="" />
             <h6 className="fw-bold text-primary-color mb-0">24/7 CUSTOMER CARE</h6>
           </div>
         </div>
