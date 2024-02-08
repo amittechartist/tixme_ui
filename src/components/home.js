@@ -937,7 +937,7 @@ const Home = () => {
                   ))}
                 </Slider>
                 <div className="d-flex justify-content-end">
-                  <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("united states")}>More events</button>
+                  <button type="button" className="btn theme-bg text-white my-2" onClick={() => viewMoreButtonClick("United states")}>More events</button>
                 </div>
               </div>
             )}

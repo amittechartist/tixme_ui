@@ -2123,7 +2123,7 @@ span.selling-f-box {
 
 .event-page-category-filter-box p {
   margin-bottom: 0;
-  color: #6495ed;
+  color: #b1c8f6;
   padding-left: 14px;
 }
 
@@ -2155,4 +2155,8 @@ span.selling-f-box {
 .footer-logo-box1 {
   position: relative;
   left: -15px;
+}
+.event-page-mergin-currect {
+    margin-left: 26px;
+    margin-right: 5px;
 }
