@@ -3,56 +3,20 @@ import aboutUs from "../common/category/Group (4).svg";
 import Silver from "./assets/Sliver.svg";
 import Gold from "./assets/Gold.svg";
 import Platinum from "./assets/Platinum.svg";
-import google from "./assets/google.svg";
-import airBNB from "./assets/airBNB.svg";
-import booking from "./assets/booking.com.svg";
-import expedia from "./assets/expedia.svg";
-import Slider from "react-slick";
 import Footer from './footer';
 import HeaderMenu from './headermenu';
 import MobileMenu from './mobilemenu';
-import RAwway from '../common/right.png';
 import Journey1 from '../common/image/aboutus/Low Fee.svg'
 import Journey2 from '../common/image/aboutus/Support (5).svg'
 import Journey3 from '../common/image/aboutus/Techonolgy.svg'
 import Journey4 from '../common/image/aboutus/Membership.svg'
+// component
+import HomeCountBox from '../component/HomeCountBox';
+import OURPARTNERS from '../component/OURPARTNERS';
 const About = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  function SampleNextArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <img className="right-aww-sl" src={RAwway} onClick={onClick} alt="" />
-    );
-  }
-  
-  function SamplePrevArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <img className="left-aww-sl" src={RAwway} onClick={onClick} alt="" />
-    );
-  }
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-    responsive: [
-      {
-        breakpoint: 768, // Adjust the breakpoint as needed
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
   return (
     <>
       {/* <!-- mobile nav --> */}
@@ -172,63 +136,8 @@ const About = () => {
             </div>
           </div>
         </div>
-        <div className="count-sec">
-          <div className="row">
-            <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-              <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
-                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">EVENT HOSTED</h6>
-                <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
-              </div>
-            </div>
-            <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-              <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
-                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Ticket Sold</h6>
-                <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
-              </div>
-            </div>
-            <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-              <div>
-                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">
-                  Partners & Organizers
-                </h6>
-                <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="partner-sec">
-          <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
-          OUR PARTNERS
-          </h3>
-          <div className="partnetSlider">
-            <Slider {...settings}>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={google} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={airBNB} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={booking} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={expedia} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={google} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={airBNB} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={booking} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={expedia} alt="google" />
-              </div>
-            </Slider>
-          </div>
-        </div>
+        <HomeCountBox />
+        <OURPARTNERS />
       </div>
       <Footer />
     </>

@@ -51,9 +51,9 @@ const About = () => {
                             duration: 3000,
                         });
                         const checkIshavecart = localStorage.getItem('cart');
-                        if(checkIshavecart){
+                        if (checkIshavecart) {
                             navigate(app_url + 'cart-details');
-                        }else{
+                        } else {
                             navigate(app_url);
                         }
                     } else {
@@ -100,11 +100,17 @@ const About = () => {
                             setLoader(false);
                             if (data.success == true) {
                                 localStorage.setItem('userauth', data.token);
+                                localStorage.setItem('username', data.username);
                                 localStorage.setItem('user_role', 1);
                                 toast.success('Login successful', {
                                     duration: 3000,
                                 });
-                                navigate(app_url);
+                                const checkIshavecart = localStorage.getItem('cart');
+                                if (checkIshavecart) {
+                                    navigate(app_url + 'cart-details');
+                                } else {
+                                    navigate(app_url);
+                                }
                             } else {
                                 toast.error(data.message);
                             }

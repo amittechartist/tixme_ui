@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import JoinStartButton from "../../../common/elements/JoinStartButton";
 import Searchicon from '../../../common/icon/searchicon.png';
+import ArrowDown from '../../../assets/arrowdrop.svg'
 import Norecord from '../../../component/Norecordui';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/initialize';
@@ -49,13 +49,16 @@ const Dashboard = ({ title }) => {
     const [Listitems, setListitems] = useState([]);
     const [allEvents, setAllEvents] = useState([]);
     const [CategoryList, setCategoryList] = useState([]);
-
+    const [CatDropdownopen, setCatDropdownopen] = useState(false);
     const [Startdate, setStartdate] = useState(new Date());
     const [Endtdate, setEndtdate] = useState(new Date());
     const [viewStartdate, setviewStartdate] = useState();
     const [viewEndtdate, setviewEndtdate] = useState();
     const [valueStartdate, setvalueStartdate] = useState();
     const [valueEndtdate, setvalueEndtdate] = useState();
+    const [Isany, setIsany] = useState(false);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [Datetype, setDatetype] = useState();
 
     const handelStartdatechange = (date) => {
         setStartdate(date);
@@ -69,6 +72,32 @@ const Dashboard = ({ title }) => {
         setviewEndtdate(get_end_date[0].Dateview);
         setvalueEndtdate(get_min_date(date));
     }
+    const handleCategoryChange = (id) => {
+        if (id == 'any') {
+            setSelectedCategories([]);
+            setIsany(!Isany);
+        } else {
+            if (selectedCategories.includes(id)) {
+                setSelectedCategories(selectedCategories.filter((categoryId) => categoryId !== id));
+            } else {
+                setSelectedCategories([...selectedCategories, id]);
+            }
+            setIsany(false);
+        }
+    };
+    useEffect(() => {
+        // Check if there are selected categories and if allEvents is not empty
+        if (selectedCategories.length > 0 && allEvents.length > 0) {
+            // Filter events where the category ID of the event matches any of the selected category IDs
+            const filteredEvents = allEvents.filter(event =>
+                event.eventData[0].category && selectedCategories.includes(event.eventData[0].category.toString())
+            );
+            setListitems(filteredEvents);
+        } else if (selectedCategories.length === 0) {
+            // If no categories are selected, potentially show all events or handle accordingly
+            setListitems(allEvents); // Or a different handling if needed when no categories are selected
+        }
+    }, [selectedCategories, allEvents]);
 
     const [Daterange, setDaterange] = useState(false);
 
@@ -125,31 +154,68 @@ const Dashboard = ({ title }) => {
         setvalueEndtdate('');
         setListitems(allEvents);
         setDaterange(!Daterange);
+        setDatetype('');
     }
-    const HandelDatefilter = () => {
-        if (!valueStartdate) {
-            return toast.error('Start date is requied')
+    // const HandelDatefilter = () => {
+    //     if (!valueStartdate) {
+    //         return toast.error('Start date is requied')
+    //     }
+    //     if (!valueEndtdate) {
+    //         return toast.error('End date is requied')
+    //     }
+    //     handleDateRangeChange(valueStartdate, valueEndtdate);
+    // }
+    const handelDateselectchange = (value) => {
+        if (value && value.length > 0) {
+            setDatetype(value);
+            setDaterange(!Daterange);
         }
-        if (!valueEndtdate) {
-            return toast.error('End date is requied')
-        }
-        handleDateRangeChange(valueStartdate, valueEndtdate);
-    }
-    const handleDateRangeChange = (startDate, endDate) => {
-        if (startDate && endDate) {
-            const filteredEvents = allEvents.filter(event => {
-                const eventStart = event.eventData[0].start_mindate;
-                const eventEnd = event.eventData[0].end_mindate;
+    };
+    const handleDateRangeChange = (e) => {
+        e.preventDefault();
+        if (Datetype && Datetype == 'Pick between two dates') {
+            if (valueStartdate && valueEndtdate) {
+                const filteredEvents = allEvents.filter(event => {
+                    const eventStart = event.eventData[0].start_mindate;
+                    const eventEnd = event.eventData[0].end_mindate;
 
-                // Check if the event's date range is within the given date range
-                return eventStart >= startDate && eventEnd <= endDate;
-            });
-            setListitems(filteredEvents);
+                    // Check if the event's date range is within the given date range
+                    return eventStart >= valueStartdate && eventEnd <= valueEndtdate;
+                });
+                setListitems(filteredEvents);
+                setDaterange(!Daterange);
+            } else {
+                setListitems(allEvents);
+                return toast.error('Start and end date is required');
+            }
         } else {
-            // If either startDate or endDate is missing, reset to show all events
-            setListitems(allEvents);
+            if (valueStartdate) {
+                const filteredEvents = allEvents.filter(event => {
+                    const eventStart = event.eventData[0].start_mindate;
+                    // Check if the event's date range is within the given date range
+                    return eventStart >= valueStartdate;
+                });
+                setListitems(filteredEvents);
+                setDaterange(!Daterange);
+            } else {
+                setListitems(allEvents);
+                return toast.error('Date is required');
+            }
         }
-        setDaterange(!Daterange);
+        // if (startDate && endDate) {
+        //     const filteredEvents = allEvents.filter(event => {
+        //         const eventStart = event.eventData[0].start_mindate;
+        //         const eventEnd = event.eventData[0].end_mindate;
+
+        //         // Check if the event's date range is within the given date range
+        //         return eventStart >= startDate && eventEnd <= endDate;
+        //     });
+        //     setListitems(filteredEvents);
+        // } else {
+        //     // If either startDate or endDate is missing, reset to show all events
+        //     setListitems(allEvents);
+        // }
+        // setDaterange(!Daterange);
     };
 
     // const HandelTransferTicket = async () => {
@@ -238,15 +304,16 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        const transformedCategories = data.data.map(category => ({
-                            value: category._id,
-                            label: category.name
-                        }));
-                        const allOption = { value: 'all', label: 'All' };
-                        transformedCategories.unshift(allOption);
+                        setCategoryList(data.data);
+                        // const transformedCategories = data.data.map(category => ({
+                        //     value: category._id,
+                        //     label: category.name
+                        // }));
+                        // const allOption = { value: 'all', label: 'All' };
+                        // transformedCategories.unshift(allOption);
 
-                        // Update CategoryList state
-                        setCategoryList(transformedCategories);
+                        // // Update CategoryList state
+                        // setCategoryList(transformedCategories);
                     } else {
 
                     }
@@ -389,7 +456,6 @@ const Dashboard = ({ title }) => {
             setTransferLoader(false);
         }
     }
-
     return (
         <>
             <Modal isOpen={modal} toggle={() => setModal(!modal)} centered size={'xl'}>
@@ -449,7 +515,7 @@ const Dashboard = ({ title }) => {
                                         <h5 className="text-bold">Total Ticket :</h5>
                                         <p>{Orderitemlist.length}</p>
                                     </div>
-                                    {Orderitemlist.length > 0 ? (
+                                    {/* {Orderitemlist.length > 0 ? (
                                         <div>
                                             {ShowQr ? (
                                                 <button className="btn btn-success list-Ticket-mng-1" onClick={() => setShowQr(!ShowQr)} type="button">Hide All Scanners</button>
@@ -457,7 +523,7 @@ const Dashboard = ({ title }) => {
                                                 <button className="btn btn-success list-Ticket-mng-1" onClick={() => setShowQr(!ShowQr)} type="button">View All Scanners</button>
                                             )}
                                         </div>
-                                    ) : ''}
+                                    ) : ''} */}
                                 </Col>
                                 <Col md={6} xl={4}>
                                     <div className="tickets-data-text-last">
@@ -468,7 +534,7 @@ const Dashboard = ({ title }) => {
                                             <span class="badge-theme-warning badge-theme"><FaClock /> Pending</span>
                                         )}
                                     </div>
-                                    <div>
+                                    <div className="d-none">
                                         <div className="row my-2">
                                             {Orderitemlist.map((item, index) => (
                                                 <div className="col-6 col-md-4 col-lg-3 col-xl-3">
@@ -491,65 +557,63 @@ const Dashboard = ({ title }) => {
                                         </div>
                                     </div>
                                 </Col>
-                                {ShowQr ? (
-                                    <Col md={12}>
-                                        <Row className="pt-2 mt-4" style={{ borderTop: '1px solid #eee' }}>
-                                            {Orderitemlist.map((item, index) => (
-                                                <Col md={3}>
-                                                    <div className="ticket-box">
-                                                        <div className="ticket-qr text-center">
-                                                            {item.is_transfer == 1 ? (
-                                                                <>
-                                                                    <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
-                                                                    <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                    <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
-                                                                    <p className="mb-0 mt-4" style={{ fontWeight: 600, color: '#000' }}>Transferred to</p>
-                                                                    <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> {item.owner_email}</span>
-                                                                </>
-                                                            ) : (
-                                                                <div className="text-center">
-                                                                    {item.scan_status == 0 ? (
-                                                                        <>
-                                                                            <div className="transfer_box" style={{ position: 'relative' }}>
-                                                                                <input
-                                                                                    type="checkbox"
-                                                                                    checked={checkedItemIds.includes(item._id)}
-                                                                                    onChange={() => handleCheckboxChange(item._id)}
-                                                                                    style={{ position: 'absolute', top: '10px', left: '10px' }}
-                                                                                />
-                                                                                <QRCode className="dashqrbig" value={JSON.stringify({ id: item._id, time: 1, index: index })} />
-                                                                                <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                                <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
-                                                                                <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
-                                                                                <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
-                                                                            </div>
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
+                                <Col md={12}>
+                                    <Row className="pt-2 mt-4" style={{ borderTop: '1px solid #eee' }}>
+                                        {Orderitemlist.map((item, index) => (
+                                            <Col md={3}>
+                                                <div className="ticket-box">
+                                                    <div className="ticket-qr text-center">
+                                                        {item.is_transfer == 1 ? (
+                                                            <>
+                                                                <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
+                                                                <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
+                                                                <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                <p className="mb-0 mt-4" style={{ fontWeight: 600, color: '#000' }}>Transferred to</p>
+                                                                <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> {item.owner_email}</span>
+                                                            </>
+                                                        ) : (
+                                                            <div className="text-center">
+                                                                {item.scan_status == 0 ? (
+                                                                    <>
+                                                                        <div className="transfer_box" style={{ position: 'relative' }}>
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                checked={checkedItemIds.includes(item._id)}
+                                                                                onChange={() => handleCheckboxChange(item._id)}
+                                                                                style={{ position: 'absolute', top: '10px', left: '10px' }}
+                                                                            />
+                                                                            <QRCode className="dashqrbig" value={JSON.stringify({ id: item._id, time: 1, index: index })} />
                                                                             <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
                                                                             <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                             <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
-                                                                            <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> Success</span>
-                                                                        </>
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                        </div>
+                                                                            <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
+                                                                        </div>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
+                                                                        <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
+                                                                        <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                        <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
+                                                                        <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> Success</span>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
+                                                </div>
+                                            </Col>
+                                        ))}
+                                        {checkedItemIds.length > 0 ? (
+                                            <>
+                                                <Col md={12}></Col>
+                                                <Col md={3}>
+                                                    <button type="button" onClick={() => { setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button>
                                                 </Col>
-                                            ))}
-                                            {checkedItemIds.length > 0 ? (
-                                                <>
-                                                    <Col md={12}></Col>
-                                                    <Col md={3}>
-                                                        <button type="button" onClick={() => { setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button>
-                                                    </Col>
-                                                </>
-                                            ) : ''}
-                                        </Row>
-                                    </Col>
-                                ) : ''}
+                                            </>
+                                        ) : ''}
+                                    </Row>
+                                </Col>
                             </>
                         )}
                     </Row>
@@ -607,44 +671,48 @@ const Dashboard = ({ title }) => {
             <Modal isOpen={Daterange} toggle={() => setDaterange(!Daterange)} centered>
                 <ModalHeader toggle={() => setDaterange(!Daterange)}>Select date</ModalHeader>
                 <ModalBody>
-                    <Row>
-                        <Col md={6} className="mb-2 mt-0">
-                            <label htmlFor="" className="text-black">Start Date</label>
-                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate} />
-                                <div className="date-style-picker">
-                                    <Flatpickr
-                                        value={Startdate}
-                                        id='date-picker'
-                                        className='form-control'
-                                        onChange={date => handelStartdatechange(date)}
-                                    />
+                    <form onSubmit={handleDateRangeChange}>
+                        <Row>
+                            <Col md={6} className="mb-2 mt-0">
+                                <label htmlFor="" className="text-black">{Datetype && Datetype == 'Pick between two dates' ? 'Start Date' : 'Select A Date'} </label>
+                                <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
+                                    <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                    <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate} />
+                                    <div className="date-style-picker">
+                                        <Flatpickr
+                                            value={Startdate}
+                                            id='date-picker'
+                                            className='form-control'
+                                            onChange={date => handelStartdatechange(date)}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                        </Col>
-                        <Col md={6} className="mb-2 mt-0">
-                            <label htmlFor="" className="text-black">End Date</label>
-                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewEndtdate} />
-                                <div className="date-style-picker">
-                                    <Flatpickr
-                                        value={Endtdate}
-                                        id='date-picker'
-                                        className='form-control'
-                                        onChange={date => handelEnddatechange(date)}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6}>
-                            <button onClick={HandelDatefilter} className="mb-0 mr-5  btn theme-bg text-white list-Ticket-mng-1 w-100" type="button">Filter</button>
-                        </Col>
-                        <Col md={6}>
-                            <button onClick={HandelDatefilterreset} className="mb-0 mr-5  btn btn-dark list-Ticket-mng-1 w-100" type="button">Reset</button>
-                        </Col>
-                    </Row>
+                            </Col>
+                            {Datetype && Datetype == 'Pick between two dates' ? (
+                                <Col md={6} className="mb-2 mt-0">
+                                    <label htmlFor="" className="text-black">End Date</label>
+                                    <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
+                                        <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                        <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewEndtdate} />
+                                        <div className="date-style-picker">
+                                            <Flatpickr
+                                                value={Endtdate}
+                                                id='date-picker'
+                                                className='form-control'
+                                                onChange={date => handelEnddatechange(date)}
+                                            />
+                                        </div>
+                                    </div>
+                                </Col>
+                            ) : (<Col md={6} className="mb-2 mt-0"></Col>)}
+                            <Col md={6}>
+                                <button className="mb-0 mr-5  btn theme-bg text-white list-Ticket-mng-1 w-100" type="submit">Filter</button>
+                            </Col>
+                            <Col md={6}>
+                                <button onClick={HandelDatefilterreset} className="mb-0 mr-5  btn btn-dark list-Ticket-mng-1 w-100" type="button">Reset</button>
+                            </Col>
+                        </Row>
+                    </form>
                 </ModalBody>
             </Modal>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
@@ -669,27 +737,60 @@ const Dashboard = ({ title }) => {
                                                     </div>
                                                 </Col>
                                                 <Col md={6} xl={3} className="react-select-h mb-3 dash-select-box">
-                                                    <Select
-                                                        isClearable={false}
-                                                        options={CategoryOption}
-                                                        className='react-select'
-                                                        classNamePrefix='select'
-                                                        placeholder='Select Category'
-                                                        onChange={HandelselectCategory}
-                                                        value={SelectCategoryValue}
-                                                    />
-                                                    {/* <select name="" id="" className="theme-dropdown dropdown-custome category-select">
-                                                        <option value=''>Category</option>
-                                                        {CategoryList.map((item, index) => (
-                                                            <option value={item._id}>{item.name}</option>
-                                                        ))}
-                                                    </select> */}
+                                                    <div style={{ position: 'relative' }}>
+                                                        <div className="event-page-category-filter-box" onClick={() => setCatDropdownopen(!CatDropdownopen)}>
+                                                            <p className="mb-0 theme-color">Select Category</p>
+                                                            <img src={ArrowDown} alt="" />
+                                                        </div>
+                                                        {CatDropdownopen && (
+                                                            <div className="category-box-new-for-dashboard">
+                                                                <div>
+                                                                    <div>
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            id={`checkbox-any`}
+                                                                            name={'any'}
+                                                                            checked={Isany}
+                                                                            onChange={() => handleCategoryChange('any')}
+                                                                        />
+                                                                        <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-any`}>Any</label>
+                                                                    </div>
+                                                                    {CategoryList.map((item) => (
+                                                                        <div key={item._id}>
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                id={`checkbox-${item._id}`}
+                                                                                name={item.name}
+                                                                                checked={selectedCategories.includes(item._id)}
+                                                                                onChange={() => handleCategoryChange(item._id)}
+                                                                            />
+                                                                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </Col>
                                                 <Col md={6} xl={3}>
-                                                    <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
+                                                    {/* <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
                                                         <input style={{ cursor: 'pointer' }} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
+                                                    </div> */}
+                                                    <div className="selectDiv" style={{ marginRight: '0px' }}>
+                                                        <select
+                                                            className="form-select category me-4"
+                                                            aria-label="Default select example"
+                                                            value={Datetype}
+                                                            onChange={(event) => { handelDateselectchange(event.target.value) }}
+                                                            style={{ paddingTop: '8px', height: '40px', color: '#0047ab' }}
+                                                        >
+                                                            <option value=''>Date</option>
+                                                            <option value='Pick a date'>Date Picker</option>
+                                                            <option value='Pick between two dates'>Date Range Picker</option>
+                                                        </select>
+                                                        <img className="select-arrow-custome" src={ArrowDown} alt="" />
                                                     </div>
                                                 </Col>
                                                 <Col md={6} xl={3}>
@@ -706,7 +807,7 @@ const Dashboard = ({ title }) => {
                                                 {Listitems.length > 0 ? (
                                                     <>
                                                         {Listitems.map((item, index) => (
-                                                            <Col md={12} className="event_list_box_main">
+                                                            <Col md={12} className="event_list_box_main my-sm-5 my-lg-5 my-xl-5">
                                                                 <Link to={`${customer_url}support-tickets/${item.eventData[0]._id}/${item._id}`}><button className="list-rais-ticket-btn" type="button">Raise Ticket</button></Link>
                                                                 <button className="list-active-ticket-btn" onClick={() => { setModal(!modal); fetchOrderData(item._id, 1) }} type="button">Ticket <img src={ArrowPng} className="arraw-svg ml-3" alt="" /></button>
                                                                 <div className="event_list_box">

@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import dropdown from "./assets/dropdown.svg";
 import Select from 'react-select'
 import calendar from "./assets/calendar.svg";
-import google from "./assets/google.svg";
-import airBNB from "./assets/airBNB.svg";
-import booking from "./assets/booking.com.svg";
-import expedia from "./assets/expedia.svg";
 import ArrowDown from './assets/arrowdrop.svg'
-import arrow from "./assets/arrow.svg";
 import { useTransition, animated } from 'react-spring';
 import locationIcon from "./assets/location (5) 1.svg";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -37,7 +32,10 @@ import { Button, Col, Row } from "react-bootstrap";
 import Noimg from "../common/image/noimg.jpg";
 import toast from "react-hot-toast";
 import { Country, State, City } from 'country-state-city';
-
+// component
+import HomeCountBox from '../component/HomeCountBox';
+import OURPARTNERS from '../component/OURPARTNERS';
+import NewsLetter from '../component/Newsletter';
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
   return (
@@ -127,56 +125,6 @@ const Home = () => {
       setCountryname(selectedCountry.label);
     }
   }
-
-  const [UpdatesLoader, setUpdatesLoader] = useState(false);
-  const [Updatesprivacy, setUpdatesprivacy] = useState(false);
-  const [UpdatesName, setUpdatesName] = useState();
-  const [UpdatesEmail, setUpdatesEmail] = useState();
-  const HandelUpdatesForm = async (e) => {
-    e.preventDefault();
-    try {
-      if (!UpdatesName) {
-        return toast.error('Enter your name');
-      }
-      if (!UpdatesEmail || !isEmail(UpdatesEmail)) {
-        return toast.error('Enter valid email id');
-      }
-      if (!Updatesprivacy) {
-        return toast.error('Please agree to the privacy statement.');
-      }
-      setUpdatesLoader(true);
-      const requestData = {
-        name: UpdatesName,
-        email: UpdatesEmail,
-      }
-      fetch(apiurl + "website/subscribe-insert", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Set the Content-Type header to JSON
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success === true) {
-            toast.success(data.message);
-            setUpdatesprivacy(false);
-            setUpdatesName('');
-            setUpdatesEmail('');
-          } else {
-            toast.error(data.message);
-          }
-          setUpdatesLoader(false);
-        })
-        .catch((error) => {
-          console.error("Insert error:", error);
-          setUpdatesLoader(false);
-        });
-    } catch (error) {
-      console.error("Login api error:", error);
-      setUpdatesLoader(false);
-    }
-  };
   const settings = {
     dots: false,
     infinite: true,
@@ -335,6 +283,7 @@ const Home = () => {
   useEffect(() => {
     fetchCountry();
   }, []);
+
   // useEffect(() => {
   //   const getCurrentLocation = () => {
   //     if (navigator.geolocation) {
@@ -705,7 +654,7 @@ const Home = () => {
                     <Slider {...categorysettings}>
                       {filteredList.map((item, index) => (
                         <div className="cat-home-box">
-                          <div className="text-center position-relative" style={{overflow:'hidden'}}>
+                          <div className="text-center position-relative" style={{ overflow: 'hidden' }}>
                             <div className="event-card pt-4" id="event-card" onClick={() => HandelCategorsearch(item._id)}>
                               <img className="event-img  animate__animated animate__bounce" src={CategoryImage[index].image} alt="" />
                               <small className="d-block text-card-color my-2 mt-3 home-category-slide-name"> {item.name} </small>
@@ -769,7 +718,7 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' :  item.countrysymbol + item.displayprice + '.00' }</span>
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' : item.countrysymbol + item.displayprice + '.00'}</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
                             </div>
                           </div>
@@ -842,7 +791,7 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' :  item.countrysymbol + item.displayprice + '.00' }</span>
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' : item.countrysymbol + item.displayprice + '.00'}</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
                             </div>
                           </div>
@@ -915,7 +864,7 @@ const Home = () => {
                           </div>
                           <div className="col-md-5  col-5">
                             <div className="bg-fade rounded text-center event-cart-price-box">
-                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' :  item.countrysymbol + item.displayprice + '.00' }</span>
+                              <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' : item.countrysymbol + item.displayprice + '.00'}</span>
                               <p className="small fw-bold mb-0 pb-0">Onwards</p>
                             </div>
                           </div>
@@ -943,125 +892,9 @@ const Home = () => {
             )}
           </div>
         </div>
-        <div className="count-sec">
-          <div className="row">
-            <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-              <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
-                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Events Hosted</h6>
-                <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
-              </div>
-            </div>
-            <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-              <div className="border-style-home-page pb-md-0 pb-2 pb-mb-4">
-                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">Tickets Sold</h6>
-                <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
-              </div>
-            </div>
-            <div className="col-md-4 text-center pt-4 pb-md-5 pb-0">
-              <div>
-                <h6 className="fw-bold text-primary-color mb-0 animate__animated animate__bounce">
-                  Partners & Organizers
-                </h6>
-                <p className="mb-0 fs-3 text-primary-color fw-bold">6067+</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="partner-sec">
-          <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
-            OUR PARTNERS
-          </h3>
-          <div className="partnetSlider">
-            <Slider {...settings}>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={google} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={airBNB} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={booking} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={expedia} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={google} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={airBNB} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={booking} alt="google" />
-              </div>
-              <div className="d-flex justify-content-center">
-                <img className="company_logo" src={expedia} alt="google" />
-              </div>
-            </Slider>
-          </div>
-        </div>
-        <div className="newsletter-sec pb-4 position-relative">
-          <form onSubmit={HandelUpdatesForm}>
-            <div className="position-absolute md-absolute news-form">
-              <h5 className="fw-bold text-primary-color mb-0 pt-2 animate__animated animate__bounce">
-                Stay in the loop & receive event updates!
-              </h5>
-              <div className="d-flex mt-4 flex-md-row flex-column">
-                <input
-                  className="w-auto form-control rounded me-md-3 me-5 mb-md-0 mb-3"
-                  type="text"
-                  name=""
-                  id=""
-                  onChange={(e) => setUpdatesName(e.target.value)}
-                  value={UpdatesName}
-                  placeholder="Name"
-                />
-                <input
-                  className="w-auto form-control rounded me-md-0 me-5"
-                  type="text"
-                  name=""
-                  id=""
-                  onChange={(e) => setUpdatesEmail(e.target.value)}
-                  value={UpdatesEmail}
-                  placeholder="Email ID"
-                />
-              </div>
-              <div className="form-check my-xl-2 my-lg-2">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  checked={Updatesprivacy}
-                  onChange={(e) => setUpdatesprivacy(e.target.checked)}
-                  id="flexCheckDefault"
-                />
-                <label className="form-check-label" for="flexCheckDefault">
-                  I agree with the{" "}
-                  <span className="text-primary-color">privacy statement</span>
-                </label>
-              </div>
-              {UpdatesLoader ? (
-                <button className="GetLatestUpdateButton">
-                  <div className="left">
-                    <small className="ms-2">Please wait...</small>
-                  </div>
-                  <div className="right">
-                    <img style={{ width: "18px" }} src={arrow} alt="" />
-                  </div>
-                </button>
-              ) : (
-                <button type="submit" className="GetLatestUpdateButton">
-                  <div className="left">
-                    <small className="ms-2">Get TIXED!</small>
-                  </div>
-                  <div className="right">
-                    <img style={{ width: "18px" }} src={arrow} alt="" />
-                  </div>
-                </button>
-              )}
-
-            </div>
-          </form>
-        </div>
+        <HomeCountBox />
+        <OURPARTNERS/>
+        <NewsLetter/>
       </div>
       <Footer />
     </>

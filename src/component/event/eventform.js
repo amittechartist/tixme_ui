@@ -77,6 +77,7 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [Tickettype, setTickettype] = useState(1);
     const [Ticketname, setTicketname] = useState();
     const [Ticketdesc, setTicketdesc] = useState();
+    const [displayaddress, setdisplayaddress] = useState();    
     const [Quantity, setQuantity] = useState();
     const [TicketUid, setTicketUid] = useState();
     const [TicketStartdate, setTicketStartdate] = useState(new Date());
@@ -937,7 +938,7 @@ const Type = ({ title, editid, ticketeditid }) => {
             setLoader(false);
         }
     }
-    
+
     const fetchEventtypeCategory = async () => {
         try {
             fetch(apiurl + 'category/get-event-type-list', {
@@ -1153,15 +1154,15 @@ const Type = ({ title, editid, ticketeditid }) => {
                                             <h2 className="theme-color mb-2 ">Event Basic Info</h2>
                                         </Col>
                                         <div className="col-md-6">
-                                            <label htmlFor="" className="text-black">Event Name</label>
+                                            <label htmlFor="" className="text-black">Event Name<span className="text-danger">*</span></label>
                                             <input type="text" class="form-control input-default" value={Name} onChange={(e) => setName(e.target.value)} placeholder="Enter Event Name" />
                                         </div>
                                         <div className="col-md-6">
-                                            <label htmlFor="" className="text-black">Event Display Name <img src={InfoIcon} /></label>
+                                            <label htmlFor="" className="text-black">Event Display Name<span className="text-danger">*</span> <img className="cursor-pointer" title="test" height={15} width={15} src={InfoIcon} /></label>
                                             <input type="text" class="form-control input-default " value={Displayname} onChange={(e) => setDisplayname(e.target.value)} placeholder="Enter Event Display Name" />
                                         </div>
                                         <div className="col-md-4 mt-4">
-                                            <label htmlFor="" className="text-black">Select Category</label>
+                                            <label htmlFor="" className="text-black">Select Category<span className="text-danger">*</span></label>
                                             <Select
                                                 isClearable={false}
                                                 options={CategoryOption}
@@ -1173,7 +1174,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                         </div>
                                         <div className="col-md-8 mt-4"></div>
                                         <div className="col-md-4 mt-4">
-                                            <label htmlFor="" className="text-black">Select Currency</label>
+                                            <label htmlFor="" className="text-black">Select Currency<span className="text-danger">*</span></label>
                                             <Select
                                                 isClearable={false}
                                                 options={CurrencyOption}
@@ -1184,12 +1185,11 @@ const Type = ({ title, editid, ticketeditid }) => {
                                             />
                                         </div>
                                         <div className="col-md-2 mt-4">
-                                            <label htmlFor="" className="text-black">Display price</label>
+                                            <label htmlFor="" className="text-black">Display price<span className="text-danger">*</span></label>
                                             <input type="text" class="form-control input-default" value={Displayprice} onChange={(e) => setDisplayprice(e.target.value)} placeholder="Enter Amount" />
                                         </div>
                                         <div className="col-md-2  mt-4">
-                                            <label htmlFor="" className="text-black">Display cut price</label>
-                                            <input type="text" class="form-control input-default" value={Displaycutprice} onChange={(e) => setDisplaycutprice(e.target.value)} placeholder="Enter Amount" />
+
                                         </div>
                                         <div className="col-md-3 mt-4">
                                             <div className="row mt-4">
@@ -1230,7 +1230,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                         </div>
                                         <div className="col-md-8"></div>
                                         <div className="col-md-8 mt-4">
-                                            <label htmlFor="">Event Visibility</label>
+                                            <label htmlFor="">Event Visibility<span className="text-danger">*</span></label>
                                             <div className="tab-button-box">
                                                 {/* tab-button-active */}
                                                 <span onClick={() => setVisibility(1)} className={Visibility == 1 ? "tab-button-active" : ""}><img src={WorldIcon} alt="" /> Public</span>
@@ -1248,7 +1248,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                         </div>
                                         <div className="col-md-12 mt-4"></div>
                                         <div className="col-md-3 mt-4">
-                                            <label htmlFor="" className="text-black">Select Country</label>
+                                            <label htmlFor="" className="text-black">Select Country<span className="text-danger">*</span></label>
                                             <Select
                                                 isClearable={false}
                                                 options={CountryOption}
@@ -1258,9 +1258,9 @@ const Type = ({ title, editid, ticketeditid }) => {
                                                 value={Country}
                                             />
                                         </div>
-                                        <div className="col-md-6 mt-4">
+                                        <div className="col-md-4 mt-4">
                                             {/* ... (other code) */}
-                                            <label htmlFor="" className="text-black">Address</label>
+                                            <label htmlFor="" className="text-black">Address<span className="text-danger">*</span></label>
                                             <PlacesAutocomplete
                                                 value={Location}
                                                 onChange={(e) => setLocation(e)}
@@ -1287,6 +1287,10 @@ const Type = ({ title, editid, ticketeditid }) => {
                                                 )}
                                             </PlacesAutocomplete>
                                         </div>
+                                        <div className="col-md-5 mt-4">
+                                            <label htmlFor="" className="text-black">Display Address<span className="text-danger">*</span></label>
+                                            <input type="text" class="form-control input-default" value={displayaddress} onChange={(e) => setdisplayaddress(e.target.value)} placeholder="Enter Display Address" />
+                                        </div>
                                         <div className="col-12 col-md-4 mt-4">
                                             <label htmlFor="" className="text-black">City</label>
                                             <input type="text" class="form-control input-default" value={Cityname} onChange={(e) => setCityname(e.target.value)} placeholder="Enter City Name" />
@@ -1305,7 +1309,7 @@ const Type = ({ title, editid, ticketeditid }) => {
 
                                         <div className="col-md-4 mt-4 d-flex align-items-end">
                                             <div className="select-wrapper w-100">
-                                                <p>Select time zone</p>
+                                                <p>Select time zone<span className="text-danger">*</span></p>
                                                 <TimezoneSelect
                                                     value={selectedTimezone}
                                                     onChange={setSelectedTimezone}

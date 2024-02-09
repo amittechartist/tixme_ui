@@ -56,7 +56,7 @@ const Dashboard = ({ title }) => {
                 .then(data => {
                     if (data.success == true) {
                         setpicture(data.data.picture);
-                        setName(data.data.first_name);
+                        setName(data.data.first_name || data.data.name);
                         setuserdata(data.data);
                         setLoader(false);
                     }
@@ -270,7 +270,7 @@ const Dashboard = ({ title }) => {
                                                     ) : (
                                                         <>
                                                             <Col md={6}>
-                                                                <img src={picture ? picture : Nouserphoto} height={50} width={50} alt="" /> <span className="rewrd-user-name1">Hi <span style={{ textTransform: 'capitalize' }}>{name}</span></span>
+                                                                <img src={picture ? picture : Nouserphoto} height={50} width={50} alt="" /> <span className="rewrd-user-name1">Hi, <span style={{ textTransform: 'capitalize' }}>{name}</span></span>
                                                             </Col>
                                                             <Col md={6}>
                                                                 <div className="text-end">

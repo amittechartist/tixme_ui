@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from './partial/Header';
 import Sidebar from './partial/Sidebar';
 import Footer from './partial/Footer';
 import Logo from '../../common/logo.svg';
 import { app_url } from "../../common/Helpers";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 const Layout = ({ children, title }) => {
+    const [name, setname] = useState('');
+    const location = useLocation(); 
     function d() {
         const mainWrapperView = document.getElementById('main-wrapper view');
         const xyx = document.getElementsByClassName('hamburger');
@@ -22,7 +24,14 @@ const Layout = ({ children, title }) => {
             }
         }
     }
-
+    const isDashboard = location.pathname;
+    useEffect(() => {
+        if(isDashboard == '/tixme_ui/organizer/dashboard' || isDashboard == '/tixme_ui/customer/dashboard' || isDashboard == '/organizer/dashboard' || isDashboard == '/organizer/dashboard' && localStorage.getItem('organizername')){
+            setname('Hi, ' + localStorage.getItem('organizername'));
+        }else{
+            setname("");
+        }
+    }, [isDashboard]);
     return (
         <>
             <div id="main-wrapper view" className="">
@@ -37,7 +46,7 @@ const Layout = ({ children, title }) => {
                             </div>
                         </div>
                     </div>
-                    <Header title={title} />
+                    <Header title={name || title} />
                     <Sidebar />
                     {children}
                     <Footer />

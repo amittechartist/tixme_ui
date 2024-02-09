@@ -17,7 +17,7 @@ import "flatpickr/dist/themes/material_green.css";
 import { useParams } from 'react-router-dom';
 import { FaCircle } from "react-icons/fa6";
 // component
-import ContactDetails from '../../../component/ContactDetails';
+import ContactDetails from '../../../component/ContactusFrorm';
 const Dashboard = ({ title }) => {
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal)

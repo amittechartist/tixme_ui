@@ -7,6 +7,7 @@ import {
     ModalBody,
     ModalHeader
 } from 'reactstrap';
+import ArrowDown from '../../../assets/arrowdrop.svg'
 import Norecord from '../../../component/Norecordui';
 import { Button, Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
@@ -29,13 +30,11 @@ import Select from 'react-select'
 import { Link, useNavigate } from "react-router-dom";
 const Dashboard = ({ title }) => {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
     const statusOptions = [
         { value: '', label: 'Any' },
         { value: '1', label: 'Active' },
         { value: '2', label: 'Deactive' }
     ];
-
     const [Loader, setLoader] = useState(false);
     const navigate = useNavigate();
     const [Listitems, setListitems] = useState([]);
@@ -43,7 +42,7 @@ const Dashboard = ({ title }) => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [visibilityFilter, setVisibilityFilter] = useState('');
-
+    const [CatDropdownopen, setCatDropdownopen] = useState(false);
     const [CategoryList, setCategoryList] = useState([]);
     const organizerid = localStorage.getItem('organizerid')
     const MySwal = withReactContent(Swal);
@@ -54,6 +53,31 @@ const Dashboard = ({ title }) => {
     const [viewEndtdate, setviewEndtdate] = useState();
     const [valueStartdate, setvalueStartdate] = useState();
     const [valueEndtdate, setvalueEndtdate] = useState();
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [Isany, setIsany] = useState(false);
+    const handleCategoryChange = (id) => {
+        if (id == 'any') {
+            setSelectedCategories([]);
+            setIsany(!Isany);
+        } else {
+            if (selectedCategories.includes(id)) {
+                setSelectedCategories(selectedCategories.filter((categoryId) => categoryId !== id));
+            } else {
+                setSelectedCategories([...selectedCategories, id]);
+            }
+            setIsany(false);
+        }
+    };
+    useEffect(() => {
+        if (selectedCategories.length > 0 && allEvents.length > 0) {
+            const filteredEvents = allEvents.filter(event =>
+                event.eventData[0].category && selectedCategories.includes(event.eventData[0].category.toString())
+            );
+            setListitems(filteredEvents);
+        } else if (selectedCategories.length === 0) {
+            setListitems(allEvents);
+        }
+    }, [selectedCategories, allEvents]);
 
     const handelStartdatechange = (date) => {
         setStartdate(date);
@@ -381,16 +405,40 @@ const Dashboard = ({ title }) => {
                                                     </div>
                                                 </Col>
                                                 <Col md={6} xl={3} className="react-select-h mb-3 dash-select-box">
-                                                    <Select
-                                                        isClearable={false}
-                                                        options={CategoryOption}
-                                                        className='react-select'
-                                                        classNamePrefix='select'
-                                                        placeholder='Select Category'
-                                                        onChange={HandelselectCategory}
-                                                        value={SelectCategoryValue}
-                                                    />
-
+                                                    <div style={{ position: 'relative' }}>
+                                                        <div className="event-page-category-filter-box" onClick={() => setCatDropdownopen(!CatDropdownopen)}>
+                                                            <p className="mb-0 theme-color">Select Category</p>
+                                                            <img src={ArrowDown} alt="" />
+                                                        </div>
+                                                        {CatDropdownopen && (
+                                                            <div className="category-box-new-for-dashboard">
+                                                                <div>
+                                                                    <div>
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            id={`checkbox-any`}
+                                                                            name={'any'}
+                                                                            checked={Isany}
+                                                                            onChange={() => handleCategoryChange('any')}
+                                                                        />
+                                                                        <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-any`}>Any</label>
+                                                                    </div>
+                                                                    {CategoryList.map((item) => (
+                                                                        <div key={item._id}>
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                id={`checkbox-${item._id}`}
+                                                                                name={item.name}
+                                                                                checked={selectedCategories.includes(item._id)}
+                                                                                onChange={() => handleCategoryChange(item._id)}
+                                                                            />
+                                                                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </Col>
                                                 <Col md={4} xl={3}>
                                                     <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>

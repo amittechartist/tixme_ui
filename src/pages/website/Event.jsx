@@ -780,6 +780,16 @@ const Home = () => {
               <Container fluid>
                 <Row>
                   <div className="col-md-12 col-12 mb-5">
+                    <div className="event-page-banner-1">
+                      <img
+                        alt=""
+                        src={Eventdata.banner_image ? Eventdata.banner_image : EventImg}
+                        fetchpriority="high"
+                        data-testid="hero-img"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-12 col-12 mb-5 d-none">
                     <div className="event-hero">
                       {/* style={{ backgroundImage: `url("${Eventdata.banner_image ? Eventdata.banner_image : EventImg}")` }} */}
                       <div

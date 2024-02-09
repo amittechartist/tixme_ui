@@ -29,6 +29,7 @@ const Home = () => {
     const [searchParams] = useSearchParams();
     const [minValue, setMinValue] = useState(1);
     const [CatDropdownopen, setCatDropdownopen] = useState(false);
+    const [zzz, setzzz] = useState(false);
     const [maxValue, setMaxValue] = useState(1000);
     const [wantPricefilter, setWantPricefilter] = useState(false);
     const [CountryList, setCountryList] = useState();
@@ -99,7 +100,7 @@ const Home = () => {
             setSelectedCountry([...selectedCountry, id]);
         }
     };
-
+    console.log("s",selectedCountry);
     const [Onlydatevalue, setOnlydatevalue] = useState();
 
     const fromgetdate = get_date_time(Startdateselect);
@@ -166,42 +167,45 @@ const Home = () => {
                 eventtype: Eventtype ? Eventtype : null,
                 tickettype: Ticketstype ? Ticketstype : null,
                 dateapitype: Dateapitype ? Dateapitype : null,
-                onlydate: Datetype == "Pick a date" ? startdate : null,
+                onlydate: Datetype === "Pick a date" ? startdate : null,
                 display_name: SearchInput ? SearchInput : null,
-                fromdate: Datetype == "Pick between two dates" ? get_min_date(RangeStartdateselect) : null,
-                todate: Datetype == "Pick between two dates" ? get_min_date(Enddateselect) : null,
+                fromdate: Datetype === "Pick between two dates" ? get_min_date(RangeStartdateselect) : null,
+                todate: Datetype === "Pick between two dates" ? get_min_date(Enddateselect) : null,
                 minprice: Minprice ? Minprice : 1,
                 maxprice: Maxprice ? Maxprice : 100000000000000000000000000000000000000000000000000000000,
                 country_filter: selectedCountry ? selectedCountry : null,
-                // india: India ? India : null,
-                // singapur: Singapur ? Singapur : null,
-                // usa: Usa ? Usa : null,
             }
-            fetch(apiurl + "website/all-events-list", {
+            const response = await fetch(apiurl + "website/all-events-list", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json", // Set the Content-Type header to JSON
                 },
                 body: JSON.stringify(requestData),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success == true) {
-                        setEventlist(data.data);
-                    } else {
-                    }
-                    setEventloader(false)
-                    setMobilefilter(false);
-                })
-                .catch((error) => {
-                    console.error("Insert error:", error);
-                    setEventloader(false)
-                });
+            });
+    
+            if (!response.ok) {
+                // If the response is not ok, throw an error
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json();
+    
+            if (data.success === true) {
+                setEventlist(data.data);
+                console.log("ss", data.data);
+            } else {
+                // Handle the case where data.success is not true
+                console.error("Error: ", data.message);
+            }
         } catch (error) {
-            console.error("Login api error:", error);
-            setEventloader(false)
+            console.error("Error: ", error.message || "An error occurred");
+        } finally {
+            // Set loading to false regardless of outcome
+            setEventloader(false);
+            setMobilefilter(false);
         }
     };
+    
     const Resetfilter = async () => {
         window.scrollTo(0, 0);
         setDatetype('');
@@ -267,13 +271,13 @@ const Home = () => {
         fetchCategory();
     }, []);
     useEffect(() => {
-        if (categoryid) {
+        if (categoryid && categoryid.length > 0) {
             handleCheckboxChange(categoryid)
         }
-        if (country_params) {
+        if (country_params && country_params.length > 0) {
             handleCountrychange(country_params);
         }
-        if (searchQuery) {
+        if (searchQuery && searchQuery.length > 0) {
             setFiltersearchQuery(true);
             setSearchInput(searchQuery);
         }
@@ -285,6 +289,7 @@ const Home = () => {
         // startdate, enddate
         // Dateapitype
         // wantPricefilter
+        console.log("s");
     }, [selectedCategories, Eventtype, Ticketstype, FiltersearchQuery, selectedCountry]);
     const [mobilefilter, setMobilefilter] = useState(false);
     return (

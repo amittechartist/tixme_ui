@@ -474,7 +474,7 @@ input#form1 {
 
 .news-form {
   left: 10%;
-  top: 38%;
+  top: 36%;
 }
 
 .bg-ligh-blue {
@@ -736,22 +736,22 @@ input:focus {
   }
 
   .newsletter-sec {
-    background: url(./assets/Newsletter.png);
-    height: 500px;
-    width: 88vw;
-    margin: 0 auto;
-    background-size: cover;
-    margin: 3rem 1.5rem;
-    background-repeat: no-repeat;
-    background-position-x: -80px;
-    background-position-y: -100px;
-  }
+    height: 376px;
+    width: 90vw;
+    margin: auto;
+    background-color: #D9E4F3;
+    background-image: none;
+    border-radius: 15px;
+}
+.position-absolute {
+  position: relative !important;
+}
 
   .news-form {
     left: 5%;
-    top: 10%;
+    top: 17%;
     right: 5%;
-  }
+}
 
   .bottom-line {
     border-right: 0px !important;
@@ -962,8 +962,8 @@ input:focus {
 
   .news-form {
     left: 10%;
-    top: 33%;
-  }
+    top: 36%;
+}
 
   .about-img {
     height: 200px;

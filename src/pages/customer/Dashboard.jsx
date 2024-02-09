@@ -516,8 +516,8 @@ const Dashboard = ({ title }) => {
                                     <Row className="justify-content-center">
                                         <Col md={12} style={{ position: 'relative', zIndex: '2' }}>
                                             <Row>
-                                                <Col md={12}>
-                                                    <h3 style={{ color: '#0047ab' }}>Upcoming events</h3>
+                                                <Col md={12} className="py-0 py-lg-2">
+                                                    <h3 style={{ color: '#0047ab' }}>Upcoming Events</h3>
                                                 </Col>
                                             </Row>
                                         </Col>
