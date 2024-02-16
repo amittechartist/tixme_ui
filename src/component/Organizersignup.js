@@ -139,16 +139,6 @@ const Locationbtn = ({ prorps }) => {
                 <ModalBody>
                     <form onSubmit={HandelOrganizersignup}>
                         <Row>
-                            <Col md={12}>
-                                <div className="form-group">
-                                    <p>Email address <span className="text-danger">*</span></p>
-                                    <input className="form-control" type="text" placeholder="email Address" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
-                                </div>
-                                <div className="form-group">
-                                    <p>Confirm Email address <span className="text-danger">*</span></p>
-                                    <input className="form-control" type="text" placeholder="Confirm email Address" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
-                                </div>
-                            </Col>
                             <Col md={6}>
                                 <div className="form-group">
                                     <p>First Name <span className="text-danger">*</span></p>
@@ -159,6 +149,16 @@ const Locationbtn = ({ prorps }) => {
                                 <div className="form-group">
                                     <p>Last Name <span className="text-danger">*</span></p>
                                     <input className="form-control" type="text" placeholder="Last Name" value={Lastname} onChange={(e) => setLastname(e.target.value)}></input>
+                                </div>
+                            </Col>
+                            <Col md={12}>
+                                <div className="form-group">
+                                    <p>Email address <span className="text-danger">*</span></p>
+                                    <input className="form-control" type="text" placeholder="email Address" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
+                                </div>
+                                <div className="form-group">
+                                    <p>Confirm Email address <span className="text-danger">*</span></p>
+                                    <input className="form-control" type="text" placeholder="Confirm email Address" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
                                 </div>
                             </Col>
                             <Col md={6}>

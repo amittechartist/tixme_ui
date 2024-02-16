@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
+import Footer from '../../../components/footer';
 import 'react-phone-input-2/lib/style.css';
 import { Link } from "react-router-dom";
-import { FiLogIn } from "react-icons/fi";
 // import { FiPlus } from "react-icons/fi";
 import OrganizerSignup from '../../../component/Organizersignup';
 import { app_url, apiurl, isEmail } from '../../../common/Helpers';
@@ -278,8 +278,8 @@ const About = () => {
                 </div>
             </div>
             {/* </div> */}
-            <div class="space-height" style={{ height: '600px' }}></div>
-
+            <div class="space-height" style={{ height: '400px' }}></div>
+            <Footer />
         </>
     );
 };

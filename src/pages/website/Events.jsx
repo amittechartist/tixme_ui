@@ -22,13 +22,17 @@ import { useNavigate } from "react-router-dom";
 import Noimg from "../../common/image/noimg.jpg";
 import toast from "react-hot-toast";
 import { FaFilter } from "react-icons/fa6";
+import Select from "react-select";
+import makeAnimated from 'react-select/animated';
 const Home = () => {
+    const animatedComponents = makeAnimated();
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
     const [searchParams] = useSearchParams();
     const [minValue, setMinValue] = useState(1);
     const [CatDropdownopen, setCatDropdownopen] = useState(false);
+    const [CategoryList, setCategoryList] = useState([]);
     const [zzz, setzzz] = useState(false);
     const [maxValue, setMaxValue] = useState(1000);
     const [wantPricefilter, setWantPricefilter] = useState(false);
@@ -55,6 +59,7 @@ const Home = () => {
     const [filtercategory, setFilterCategory] = useState('');
     const [FiltersearchQuery, setFiltersearchQuery] = useState(false);
     const [SearchInput, setSearchInput] = useState('');
+    const [alreadyusersearcher, setalreadyusersearcher] = useState(false);
     const [CountryFilter, setCountryFilter] = useState('');
     const [Ticketstype, setTicketstype] = useState('');
     const [Dateapitype, setDateapitype] = useState('');
@@ -74,9 +79,14 @@ const Home = () => {
     const [Isany, setIsany] = useState(false);
 
     const [showAll, setShowAll] = useState(false);
-    const visibleItems = showAll ? Listitems : Listitems.slice(0, 5);
+    const visibleItems = Listitems;
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState([]);
+    const GetCategoryName = (id) => {
+        const category = CategoryList.find(item => item.value === id);
+        return category ? category.label : 'Unknown';
+    }
+
     const handleCheckboxChange = (id) => {
         if (id == 'any') {
             setSelectedCategories([]);
@@ -100,7 +110,7 @@ const Home = () => {
             setSelectedCountry([...selectedCountry, id]);
         }
     };
-    console.log("s",selectedCountry);
+    console.log("s", selectedCountry);
     const [Onlydatevalue, setOnlydatevalue] = useState();
 
     const fromgetdate = get_date_time(Startdateselect);
@@ -138,7 +148,11 @@ const Home = () => {
                     if (data.success == true) {
                         const updatedList = [...data.data];
                         setListitems(updatedList);
-
+                        const CategoryOption = data.data.map(category => ({
+                            value: category._id,
+                            label: category.name
+                        }));
+                        setCategoryList(CategoryOption);
                     } else {
 
                     }
@@ -150,7 +164,13 @@ const Home = () => {
             console.error('Api error:', error);
         }
     }
+    const EventCategoryOption = [
+        {
+            options: CategoryList
+        }
+    ]
     const fetchEvent = async (e) => {
+        console.log("sd");
         if (e) e.preventDefault();
         try {
             if (Minprice && Maxprice) {
@@ -168,12 +188,12 @@ const Home = () => {
                 tickettype: Ticketstype ? Ticketstype : null,
                 dateapitype: Dateapitype ? Dateapitype : null,
                 onlydate: Datetype === "Pick a date" ? startdate : null,
-                display_name: SearchInput ? SearchInput : null,
+                display_name: alreadyusersearcher || SearchInput ? SearchInput : searchQuery > 0 ? searchQuery : null,
                 fromdate: Datetype === "Pick between two dates" ? get_min_date(RangeStartdateselect) : null,
                 todate: Datetype === "Pick between two dates" ? get_min_date(Enddateselect) : null,
                 minprice: Minprice ? Minprice : 1,
                 maxprice: Maxprice ? Maxprice : 100000000000000000000000000000000000000000000000000000000,
-                country_filter: selectedCountry ? selectedCountry : null,
+                country_filter: selectedCountry.length > 0 ? selectedCountry : country_params ? [country_params] : null,
             }
             const response = await fetch(apiurl + "website/all-events-list", {
                 method: "POST",
@@ -182,14 +202,14 @@ const Home = () => {
                 },
                 body: JSON.stringify(requestData),
             });
-    
+
             if (!response.ok) {
                 // If the response is not ok, throw an error
                 throw new Error('Network response was not ok');
             }
-    
+
             const data = await response.json();
-    
+
             if (data.success === true) {
                 setEventlist(data.data);
                 console.log("ss", data.data);
@@ -205,7 +225,7 @@ const Home = () => {
             setMobilefilter(false);
         }
     };
-    
+
     const Resetfilter = async () => {
         window.scrollTo(0, 0);
         setDatetype('');
@@ -274,11 +294,11 @@ const Home = () => {
         if (categoryid && categoryid.length > 0) {
             handleCheckboxChange(categoryid)
         }
-        if (country_params && country_params.length > 0) {
-            handleCountrychange(country_params);
-        }
+        // if (country_params && country_params.length > 0) {
+        //     handleCountrychange(country_params);
+        // }
         if (searchQuery && searchQuery.length > 0) {
-            setFiltersearchQuery(true);
+            // setFiltersearchQuery(true);
             setSearchInput(searchQuery);
         }
     }, []);
@@ -289,8 +309,8 @@ const Home = () => {
         // startdate, enddate
         // Dateapitype
         // wantPricefilter
-        console.log("s");
-    }, [selectedCategories, Eventtype, Ticketstype, FiltersearchQuery, selectedCountry]);
+
+    }, [selectedCategories, Eventtype, Ticketstype, FiltersearchQuery, selectedCountry, startdate, enddate, Datetype]);
     const [mobilefilter, setMobilefilter] = useState(false);
     return (
         <>
@@ -311,7 +331,7 @@ const Home = () => {
                                             id="form1"
                                             className="form-control mt-lg-0"
                                             placeholder="Search"
-                                            onChange={(e) => { setSearchInput(e.target.value) }}
+                                            onChange={(e) => { setSearchInput(e.target.value); setalreadyusersearcher(true); }}
                                             value={SearchInput}
                                             style={{ height: '40px', border: 'none' }}
                                         />
@@ -322,15 +342,24 @@ const Home = () => {
                                 </div>
                                 <div className="col-md-12 mt-3">
                                     <p className="mb-0 theme-color">Country</p>
-                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("Singapore")} className={selectedCountry.includes("Singapore") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
-                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("India")} className={selectedCountry.includes("India") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>India</a>
-                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("United states")} className={selectedCountry.includes("United states") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
+                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("Singapore")} className={selectedCountry.length > 0 ? selectedCountry.includes("Singapore") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n ggg' : country_params == "Singapore" && 'tag-active hobby-box copy-n'}>Singapore</a>
+                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("India")} className={selectedCountry.length > 0 ? selectedCountry.includes("India") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n ggg' : country_params == "India" && 'tag-active hobby-box copy-n'}>India</a>
+                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("United states")} className={selectedCountry.length > 0 ? selectedCountry.includes("United states") ? 'tag-active hobby-box copy-n ggg' : 'hobby-box copy-n' : country_params == "United states" && 'tag-active hobby-box copy-n'}>United states</a>
                                 </div>
                                 <div className="col-md-12 mt-3">
+
                                     <p className="mb-0 theme-color">Genres</p>
                                     <div style={{ position: 'relative' }}>
-                                        <div className="event-page-category-filter-box" onClick={() => setCatDropdownopen(!CatDropdownopen)}>
-                                            <p className="mb-0 theme-color">Select Category</p>
+                                        <div className="event-page-category-filter-box event-page-category-filter-box1" onClick={() => setCatDropdownopen(!CatDropdownopen)}>
+                                            {selectedCategories.length > 0 ? (
+                                                <>
+                                                    {selectedCategories.map((item, index) => (
+                                                        <span onClick={() => handleCheckboxChange(item)}>{GetCategoryName(item)}</span>
+                                                    ))}
+                                                </>
+                                            ) : (
+                                                <p className="mb-0 theme-color">Select Category</p>
+                                            )}
                                             <img src={ArrowDown} alt="" />
                                         </div>
                                         {CatDropdownopen && (
@@ -495,7 +524,7 @@ const Home = () => {
                                                     id="form1"
                                                     className="form-control mt-lg-0"
                                                     placeholder="Search"
-                                                    onChange={(e) => { setSearchInput(e.target.value) }}
+                                                    onChange={(e) => { setSearchInput(e.target.value); setalreadyusersearcher(true); }}
                                                     value={SearchInput}
                                                     style={{ height: '40px', border: 'none' }}
                                                 />
@@ -506,15 +535,29 @@ const Home = () => {
                                         </div>
                                         <div className="col-md-12 mt-3">
                                             <p className="mb-0 theme-color">Country</p>
-                                            <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("Singapore")} className={selectedCountry.includes("Singapore") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
-                                            <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("India")} className={selectedCountry.includes("India") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>India</a>
-                                            <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("United states")} className={selectedCountry.includes("United states") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
+                                            <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("Singapore")} className={selectedCountry.length > 0 ? selectedCountry.includes("Singapore") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n' : country_params == "Singapore" ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
+                                            <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("India")} className={selectedCountry.length > 0 ? selectedCountry.includes("India") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n' : country_params == "India" ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>India</a>
+                                            <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("United states")} className={selectedCountry.length > 0 ? selectedCountry.includes("United states") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n' : country_params == "United states" ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
                                         </div>
                                         <div className="col-md-12 mt-3">
                                             <p className="mb-0 theme-color">Genres</p>
+                                            {/* <Select
+                                                closeMenuOnSelect={false}
+                                                components={animatedComponents}
+                                                isMulti
+                                                options={EventCategoryOption}
+                                            /> */}
                                             <div style={{ position: 'relative' }}>
-                                                <div className="event-page-category-filter-box" onClick={() => setCatDropdownopen(!CatDropdownopen)}>
-                                                    <p className="mb-0 theme-color">Select Category</p>
+                                                <div className="event-page-category-filter-box event-page-category-filter-box1" onClick={() => setCatDropdownopen(!CatDropdownopen)}>
+                                                    {selectedCategories.length > 0 ? (
+                                                        <>
+                                                            {selectedCategories.map((item, index) => (
+                                                                <span onClick={() => handleCheckboxChange(item)}>{GetCategoryName(item)}</span>
+                                                            ))}
+                                                        </>
+                                                    ) : (
+                                                        <p className="mb-0 theme-color">Select Category</p>
+                                                    )}
                                                     <img src={ArrowDown} alt="" />
                                                 </div>
                                                 {CatDropdownopen && (
@@ -542,11 +585,11 @@ const Home = () => {
                                                                     <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
                                                                 </div>
                                                             ))}
-                                                            {Listitems.length > 5 && (
+                                                            {/* {Listitems.length > 5 && (
                                                                 <button className="filter-show-cat-btn" onClick={() => setShowAll(!showAll)}>
                                                                     {showAll ? 'Show Less' : 'Show More'}
                                                                 </button>
-                                                            )}
+                                                            )} */}
                                                         </div>
                                                     </div>
                                                 )}
@@ -657,7 +700,7 @@ const Home = () => {
                                     </div>
                                 </form>
                             </Col>
-                            <div className="col-12 d-inline d-md-none d-flex justify-content-end mb-2">
+                            <div className="col-12 d-inline d-md-none d-flex justify-content-start mb-2 sticky-mobile-e-filter">
                                 <p onClick={() => setMobilefilter(!mobilefilter)} className="filter-btn-for-mob"><FaFilter className="filter-icon" /> Filter</p>
                             </div>
                             <Col md={9} xl={9} lg={8} className="col-xl-9 col-lg-8 col-md-9 col-12 scrollable-column">

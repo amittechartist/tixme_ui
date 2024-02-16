@@ -65,8 +65,8 @@ const Dashboard = ({ title }) => {
         }
     }
 
-    const CountTicketSold = (name) => {
-        const filteredList = Ticketsoldlist.filter(item => item.ticket_name === name);
+    const CountTicketSold = (id) => {
+        const filteredList = Ticketsoldlist.filter(item => item.ticket_id === id);
         return filteredList.length;
     }
     const fetchEvent = async () => {
@@ -161,7 +161,7 @@ const Dashboard = ({ title }) => {
                                                 </Col>
                                                 <Col md={4} xl={3}>
                                                     <button className="w-100 theme-btn-warning" onClick={() => navigate(`${organizer_url}event/mange-attendee/${Eventdata._id}/${Eventdata.name}`)}>
-                                                        <span>Mange All Attendee</span>
+                                                        <span>Manage All Attendee</span>
                                                     </button>
                                                 </Col>
                                                 <Col md={4} xl={4} className="d-flex justify-content-end">
@@ -198,11 +198,11 @@ const Dashboard = ({ title }) => {
                                                                                     </Col>
                                                                                     <Col md={3} className="ticket-sts-box  text-center  border-right">
                                                                                         <p>Ticket Sold</p>
-                                                                                        <h2>{CountTicketSold(item.name)}</h2>
+                                                                                        <h2>{CountTicketSold(item.id)}</h2>
                                                                                     </Col>
                                                                                     <Col md={3} className="ticket-sts-box  text-center  border-right">
                                                                                         <p>Ticket Available</p>
-                                                                                        <h2><h2>{parseInt(item.quantity, 10) - parseInt(CountTicketSold(item.name), 10)}</h2></h2>
+                                                                                        <h2><h2>{parseInt(item.quantity, 10) - parseInt(CountTicketSold(item.id), 10)}</h2></h2>
                                                                                     </Col>
                                                                                     <Col md={3} className="ticket-sts-box  text-center">
                                                                                         <p>Revenue</p>
@@ -210,7 +210,7 @@ const Dashboard = ({ title }) => {
                                                                                             <h2>
                                                                                                 {item.price > 0 ? (
                                                                                                     <>
-                                                                                                        {Eventdata.countrysymbol}{parseInt(item.price, 10) * parseInt(CountTicketSold(item.name), 10)}
+                                                                                                        {Eventdata.countrysymbol}{parseInt(item.price, 10) * parseInt(CountTicketSold(item.id), 10)}
                                                                                                     </>
                                                                                                 ) : 'FREE'}
 

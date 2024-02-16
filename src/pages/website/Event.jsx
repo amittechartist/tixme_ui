@@ -45,6 +45,7 @@ const Home = () => {
   const [isFirstRender, setIsFirstRender] = useState(false);
   const [Eventdata, setEventdata] = useState();
   const [TicketsList, setTicketsList] = useState([]);
+  const [TicketsSelledList, setTicketsSelledList] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [SelectedTicketId, setSelectedTicketId] = useState(null);
   const [Followtype, setFollowtype] = useState(false);
@@ -124,51 +125,6 @@ const Home = () => {
         });
     } catch (error) {
       console.error("Login api error:", error);
-    }
-  }
-  const followOrganizer = async () => {
-    try {
-      if (!Beartoken) {
-        toast.error("You need to login first");
-        return false;
-      }
-      setFollowApi(true)
-      const requestData = {
-        organizerid: Organizerdata._id
-      }
-      fetch(apiurl + "website/follow-organizer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${Beartoken}`, // Set the Content-Type header to JSON
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success == true) {
-            setOrganizerdata(data.data);
-            if (data.typestatus == 1) {
-              setFollowtype(false)
-
-            } else if (data.typestatus == 2) {
-              setFollowtype(true)
-
-            } else {
-              toast.error("Internal Server Error");
-            }
-          } else {
-
-          }
-          setFollowApi(false)
-        })
-        .catch((error) => {
-          console.error("Insert error:", error);
-          setFollowApi(false)
-        });
-    } catch (error) {
-      console.error("Login api error:", error);
-      setFollowApi(false)
     }
   }
   const checkfollowOrganizer = async (organizer_id) => {
@@ -258,6 +214,7 @@ const Home = () => {
             setEventdata(data.data);
             setTicketsList(data.data.allprice.filter(item => item.isdelete === 0));
             setOrganizerdata(data.organizer)
+            setTicketsSelledList(data.orderqtylist)
             if (data.data.organizer_id) {
               fetchOrganizerEvent(data.data.organizer_id);
               checkfollowOrganizer(data.data.organizer_id);
@@ -345,6 +302,7 @@ const Home = () => {
         .then(data => {
           if (data.success == true) {
             setEventdata(data.data);
+            setTicketsSelledList(data.orderqtylist)
             setTicketsList(data.data.allprice.filter(item => item.isdelete === 0));
             if (data.data.organizer_id) {
               checkfollowOrganizer(data.data.organizer_id);
@@ -470,42 +428,70 @@ const Home = () => {
     let url = `${app_url}events/?categoryId=${encodeURIComponent(value)}`;
     navigate(url);
   };
+  const CountSoldOut = (item) => {
+    const totalQuantity = TicketsSelledList.filter((i) => i.ticket_id == item.id)
+      .reduce((acc, item) => acc + item.quantity, 0);
+    const qty_avl = Number(item.quantity) - Number(totalQuantity);
+    if (qty_avl == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
   const addToCart = (item, id) => {
-    // Initialize cartItems as an empty array if it's undefined
+    const totalQuantity = TicketsSelledList.filter((i) => i.ticket_id == item.id)
+      .reduce((acc, item) => acc + item.quantity, 0);
     const existingItem = cartItems.find((cartItem) => cartItem.name === item.name);
-
+    const qty_avl = Number(item.quantity) - Number(totalQuantity);
     localStorage.setItem('inside_cart_id', id);
+
+    if (qty_avl == 0) {
+      return toast.error("Cannot add more than the available quantity");
+    }
+    // Set payment gateway and currency symbol based on currency code
     if (Eventdata.currencycode.trim() === "USD") {
       localStorage.setItem('payment_gatway', 'Stripe');
       localStorage.setItem('currency_symble', '$');
-    }
-    if (Eventdata.currencycode.trim() === "SGD") {
+    } else if (Eventdata.currencycode.trim() === "SGD") {
       localStorage.setItem('payment_gatway', 'hitpay');
       localStorage.setItem('currency_symble', 'S$');
-    }
-    if (Eventdata.currencycode.trim() === "INR") {
+    } else if (Eventdata.currencycode.trim() === "INR") {
       localStorage.setItem('payment_gatway', 'rezorpay');
       localStorage.setItem('currency_symble', '₹');
     }
-    localStorage.setItem('cart_insert_id', id);
-    if (existingItem) {
 
-      const updatedCart = cartItems.map((cartItem) =>
-        cartItem.name === item.name ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
-      );
-      setCartItems(updatedCart);
+    localStorage.setItem('cart_insert_id', id);
+
+    if (existingItem) {
+      // Check if adding one more quantity exceeds the available quantity
+      if (existingItem.quantity + 1 <= qty_avl) {
+        const updatedCart = cartItems.map((cartItem) =>
+          cartItem.name === item.name ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+        );
+        setCartItems(updatedCart);
+
+        // Update local quantity state
+        setLocalQuantities({
+          ...localQuantities,
+          [item.name]: (localQuantities[item.name] || 0) + 1,
+        });
+      } else {
+        // Show an alert or message if the quantity exceeds the available quantity
+        toast.error("Cannot add more than the available quantity");
+      }
     } else {
       setCartItems([...cartItems, { ...item, quantity: 1, eventId, event: Eventdata, ticket: item }]);
+
+      // Update local quantity state for the new item
+      setLocalQuantities({
+        ...localQuantities,
+        [item.name]: 1,
+      });
     }
 
-    // Update local quantity state
-    setLocalQuantities({
-      ...localQuantities,
-      [item.name]: (localQuantities[item.name] || 0) + 1,
-    });
-
-    setIsFirstRender(true)
+    setIsFirstRender(true);
   };
+
 
 
   const removeFromCart = (itemName, quantity) => {
@@ -592,8 +578,8 @@ const Home = () => {
     window.open(mapsUrl, "_blank");
   };
   const handelTicketselect = (id) => {
-    const ticket = TicketsList.find(ticket => ticket.id === id);
-    setSelectedTicket(ticket);
+    const matchingTickets = TicketsList.filter(ticket => ticket.datetimeid === id && ticket.isdelete === 0);
+    setSelectedTicket(matchingTickets); // Set the array of matching tickets
     setSelectedTicketId(id);
     localStorage.removeItem('cart');
     localStorage.removeItem('cart_insert_id');
@@ -660,7 +646,7 @@ const Home = () => {
                         <span className="text-white event-time d-block">{Eventdata.start_time}</span>
                       </div>
                     </div>
-                    <div className="d-inline-flex align-items-center border-right event-time-area px-2">
+                    <div className={`d-inline-flex align-items-center ${Eventdata.eventtype == 2 && 'border-right'} event-time-area px-2`}>
                       <div className="d-inline-block mr-1">
                         <img height={30} width={'auto'} className="ml-2" src={hourglassIcon} alt="" />
                       </div>
@@ -669,24 +655,23 @@ const Home = () => {
                         <span className="text-white event-time d-block">{Eventdata.event_duration}</span>
                       </div>
                     </div>
-                    <div className="d-inline-flex align-items-center">
-                      <div className="d-inline-block mr-1">
-                        <img height={30} width={'auto'} src={locationIconevent} alt="" />
+                    {Eventdata.eventtype == 2 && (
+                      <div className="d-inline-flex align-items-center">
+                        <div className="d-inline-block mr-1">
+                          <img height={30} width={'auto'} src={locationIconevent} alt="" />
+                        </div>
+                        <div className="d-inline-block">
+                          <span className="event-duration d-block eventpage-location-name">
+                            {Eventdata.location}
+                          </span>
+                          {Eventdata.Lag && Eventdata.lat ? (
+                            <span onClick={() => openGoogleMapswithlon(Eventdata.lat, Eventdata.Lag)} className="text-white event-time d-block cursor-pointer py-0">Get direction</span>
+                          ) : (
+                            <span onClick={openGoogleMaps} className="text-white event-time d-block cursor-pointer py-0">Get direction</span>
+                          )}
+                        </div>
                       </div>
-                      <div className="d-inline-block">
-                        <span className="event-duration d-block eventpage-location-name">
-                          {Eventdata.location}
-                        </span>
-                        {Eventdata.Lag && Eventdata.lat ? (
-                          <span onClick={() => openGoogleMapswithlon(Eventdata.lat, Eventdata.Lag)} className="text-white event-time d-block cursor-pointer py-0">Get direction</span>
-                        ) : (
-                          <span onClick={openGoogleMaps} className="text-white event-time d-block cursor-pointer py-0">Get direction</span>
-                        )}
-                      </div>
-                      <div className="d-inline-block mr-1 ml-3">
-                        <img height={30} width={30} src={mapIcon} alt="" />
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -825,16 +810,17 @@ const Home = () => {
                       {/* <div className="desc-sec">
                       <span className="sec-title">Map xxx</span>
                     </div> */}
-                      <div className="event-page-menu-div">
-                        <GoogleMap
-                          center={position}
-                          zoom={15}
-                          mapContainerStyle={{ height: '300px', width: '100%' }}
-                        >
-                          {position && <Marker position={position} />}
-                        </GoogleMap>
-                      </div>
-
+                      {Eventdata.eventtype == 2 && (
+                        <div className="event-page-menu-div">
+                          <GoogleMap
+                            center={position}
+                            zoom={15}
+                            mapContainerStyle={{ height: '300px', width: '100%' }}
+                          >
+                            {position && <Marker position={position} />}
+                          </GoogleMap>
+                        </div>
+                      )}
                       <Row className="d-none">
                         <Col md={12}>
                           <Slide bottom>
@@ -888,33 +874,27 @@ const Home = () => {
                           <div className="row">
                             {Eventdata.allprice ? (
                               <>
-                                {Eventdata.allprice.map((items, index) => (
+                                {Eventdata.event_dates.map((items, index) => (
                                   <>
-                                    {items.isdelete === 0 && (
+                                    {items.is_delete === 0 && (
                                       <>
-                                        {/* <div className="col-md-6 my-2"> */}
-                                        {/* <div className={`week-select-box text-center ${SelectedTicketId == items.id && 'week-select-box-active'}`} onClick={() => handelTicketselect(items.id)}> */}
-                                        {/* <p className="mb-0 a">{getDayName(items.startdate)}</p> */}
-                                        {/* <p className="mb-0 b">{getMonthName(items.startdate)}</p> */}
-                                        {/* <div className="b-box"><p className="mb-0 c">{getDay(items.startdate)}</p></div> */}
-                                        {/* <p className="mb-0 d">{items.starttime}</p> */}
-                                        {/* </div> */}
-                                        {/* </div> */}
                                         <div className="col-12 my-3">
-                                          <div className={`row new-week-ticket-box ${SelectedTicketId == items.id && 'new-week-ticket-box-active'}`} onClick={() => handelTicketselect(items.id)}>
-                                            <div className="col-6  d-flex align-items-end">
-                                              <div className="d-flex align-items-center">
-                                                <div className="day-box-1">
-                                                  <p className="day-name-1">{getDay(items.startdate)}</p>
-                                                </div>
-                                                <div>
-                                                  <p className="week-name-1">{getDayName(items.startdate)}</p>
-                                                  <p className="month-name-1">{getMonthName(items.startdate)}</p>
+                                          <div className="mx-2">
+                                            <div className={`row new-week-ticket-box ${SelectedTicketId == items.id && 'new-week-ticket-box-active'}`} onClick={() => handelTicketselect(items.id)}>
+                                              <div className="col-6  d-flex align-items-end">
+                                                <div className="d-flex align-items-center">
+                                                  <div className="day-box-1">
+                                                    <p className="day-name-1">{getDay(items.date)}</p>
+                                                  </div>
+                                                  <div>
+                                                    <p className="week-name-1">{getDayName(items.date)}</p>
+                                                    <p className="month-name-1">{getMonthName(items.date)}</p>
+                                                  </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                            <div className="col-6 text-end d-flex align-items-end justify-content-end">
-                                              <p className="time-name-1">{items.starttime}</p>
+                                              <div className="col-6 text-end d-flex align-items-end justify-content-end">
+                                                <p className="time-name-1">{items.time}</p>
+                                              </div>
                                             </div>
                                           </div>
                                         </div>
@@ -924,28 +904,35 @@ const Home = () => {
                                 ))}
                                 {selectedTicket && (
                                   <>
-                                    <div className="col-12">
-                                      <div className="row my-2">
-                                        <div className="col-6 justify-content-center">
-                                          <p className="mb-0" style={{ fontSize: '15px', height: '30px' }}>Ticket Type</p>
-                                          <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{selectedTicket.name}</p></div>
-                                        </div>
-                                        <div className="col-6 d-flex justify-content-center">
-                                          <div className="d-inline-block">
-                                            <div className="text-center">
-                                              <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price : {selectedTicket.ticket_type == 1 ? Eventdata.countrysymbol + selectedTicket.price + '.00' : 'Free'}</p>
-                                            </div>
-                                            <div className="">
-                                              <div className="row grediant-border d-flex align-items-center mx-1">
-                                                <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(selectedTicket.name, localQuantities[selectedTicket.name] || 0)}>-</span></div>
-                                                <div className="col-4"><span>{localQuantities[selectedTicket.name] || 0}</span></div>
-                                                <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(selectedTicket, Eventdata._id)}>+</span></div>
+                                    {selectedTicket.map((item) => (
+                                      <div className="col-12">
+                                        <div className="row my-3">
+                                          <div className="col-6 justify-content-center">
+                                            <p className="mb-0" style={{ fontSize: '15px', height: '30px' }}>Ticket Type</p>
+                                            <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{item.name}</p></div>
+                                          </div>
+                                          <div className="col-6 d-flex justify-content-center">
+                                            <div className="d-inline-block">
+                                              <div className="text-center">
+                                                <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price : {item.ticket_type == 1 ? Eventdata.countrysymbol + item.price + '.00' : 'Free'}</p>
+                                              </div>
+                                              <div className="">
+                                                <div className="row grediant-border d-flex align-items-center mx-1">
+                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span></div>
+                                                  <div className="col-4"><span>{localQuantities[item.name] || 0}</span></div>
+                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item, Eventdata._id)}>+</span></div>
+                                                </div>
                                               </div>
                                             </div>
                                           </div>
+                                          {item.description && (
+                                            <div className="col-12 ticket-type-dsc">
+                                              <p>{item.description}</p>
+                                            </div>
+                                          )}
                                         </div>
                                       </div>
-                                    </div>
+                                    ))}
                                   </>
                                 )}
                               </>
@@ -967,7 +954,7 @@ const Home = () => {
                               {Eventdata.allprice.map((items, index) => (
                                 <>
                                   {items.isdelete === 0 && (
-                                    <div className="row my-2">
+                                    <div className="row my-3">
                                       <div className="col-6 justify-content-center">
                                         <p className="mb-0" style={{ fontSize: '15px', height: '30px' }}>Ticket Type</p>
                                         <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{items.name}</p></div>
@@ -978,11 +965,19 @@ const Home = () => {
                                             <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price : {items.ticket_type == 1 ? Eventdata.countrysymbol + items.price + '.00' : 'Free'}</p>
                                           </div>
                                           <div className="">
-                                            <div className="row grediant-border d-flex align-items-center mx-1">
-                                              <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.name, localQuantities[items.name] || 0)}>-</span></div>
-                                              <div className="col-4"><span>{localQuantities[items.name] || 0}</span></div>
-                                              <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span></div>
-                                            </div>
+                                            {CountSoldOut(items) ? (
+                                              <>
+                                                <div className="row grediant-border d-flex align-items-center mx-1">
+                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.name, localQuantities[items.name] || 0)}>-</span></div>
+                                                  <div className="col-4"><span>{localQuantities[items.name] || 0}</span></div>
+                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span></div>
+                                                </div>
+                                              </>
+                                            ) : (
+                                              <>
+                                                <button type="button" className="btn theme-bg text-white w-100">Sold Out</button>
+                                              </>
+                                            )}
                                           </div>
                                         </div>
                                       </div>
@@ -996,7 +991,7 @@ const Home = () => {
                           )}
                         </>
                       )}
-                      <div className="text-center">
+                      <div className="text-center py-2">
                         <span className="main-title">Total Price : {Eventdata.countrysymbol}{eventTotalPrice.toFixed(2)}</span>{" "}
                       </div>
                       <div className="text-center">
@@ -1022,7 +1017,7 @@ const Home = () => {
                         {OrganizerEventlist.map((item, index) => (
                           <>
                             <div className="col-xl-3 col-xxl-3 col-md-4 col-12 mb-3" >
-                              <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                              <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden mx-3 mx-md-0" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
                                 <div style={{ position: 'relative' }}>
                                   <span className="event-category-img">{item.category_name}</span>
                                   {getCountryFlagImage(item.countryname)}
@@ -1079,7 +1074,7 @@ const Home = () => {
                   </Col>
                   {Eventlist.map((item, index) => (
                     <div className="col-xl-3 col-xxl-3 col-md-4 col-12 mb-3" >
-                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
+                      <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden mx-3 mx-md-0" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
                         <div style={{ position: 'relative' }}>
                           <span className="event-category-img">{item.category_name}</span>
                           {getCountryFlagImage(item.countryname)}

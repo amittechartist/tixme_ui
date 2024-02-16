@@ -17,6 +17,7 @@ import AdminTicketView from './pages/admin/support/SupportReply';
 import Contactlist from './pages/admin/contact/Contactlist';
 import AllEventlist from './pages/admin/event/AllEventlist';
 import Membership from './pages/admin/membership/Membership';
+import Newsletter from './pages/admin/membership/Newsletter';
 import Addcoupon from './pages/admin/membership/Addcoupon';
 import AdminCustomerProfile from './pages/admin/CustomerProfile';
 import AdminOrganizerProfile from './pages/admin/OrganizerProfile';
@@ -52,6 +53,7 @@ import Tixmescanner from './pages/organizer/Tixmescanner';
 import Tixmescannerpage from './pages/organizer/Tixmescannerpage';
 import Qrvalidation from './pages/organizer/Qrvalidation';
 import OrganizerProfile from './pages/organizer/OrganizerProfile';
+import OrganizerMailing from './pages/organizer/OrganizerMailing';
 import OrganizerLayout from './layout/organizer/Layout'
 // auth
 import CustomerLogin from './pages/website/auth/CustomerLogin';
@@ -75,11 +77,7 @@ import WebsiteLayout from './layout/website/Layout'
 import XYZ from './pages/website/XYZ';
 import Scaner from './pages/website/Scaner';
 import Event from './pages/website/Event';
-// import Aboutus from './pages/website/aboutus';
 import Terms from './pages/website/Terms';
-// import Privacy from './pages/website/Privacy';
-// import Faq from './pages/website/Faq';
-// import Contact from './pages/website/Contact';
 import Organizers from './pages/website/Organizers';
 import OrganizerDetails from './pages/website/OrganizerDetails';
 import Raiseticket from './pages/website/Raiseticket';
@@ -157,6 +155,7 @@ function App() {
           <Route path={organizer_url + 'tixme-validate'} element={<OrganizerLayout> <Qrvalidation title={'QR validate'} /> </OrganizerLayout>} />
           <Route path={organizer_url + 'analytics'} element={<OrganizerLayout> <Analytics title={'Analytics'} /> </OrganizerLayout>} />
           <Route path={organizer_url + 'my-profile'} element={<OrganizerLayout title={'My profile'}> <OrganizerProfile /> </OrganizerLayout>} />
+          <Route path={organizer_url + 'mailing'} element={<OrganizerLayout title={'Mailing By Invitation'}> <OrganizerMailing /> </OrganizerLayout>} />
           {/* Admin */}
           <Route path={admin_url + 'dashboard'} element={<AdminLayout title={'Admin Dashboard'}> <AdminDashboard /> </AdminLayout>} />
           <Route path={admin_url + 'add-category'} element={<AdminLayout title={'Add Category'}> <AddCategory /> </AdminLayout>} />
@@ -177,6 +176,7 @@ function App() {
           <Route path={admin_url + 'support-tickets'} element={<AdminLayout title={'Manage Tickets'}> <Supportlist /> </AdminLayout>} />
           <Route path={admin_url + 'contact-us'} element={<AdminLayout title={'Contact us list'}> <Contactlist /> </AdminLayout>} />
           <Route path={admin_url + 'membership'} element={<AdminLayout title={'Membership'}> <Membership /> </AdminLayout>} />
+          <Route path={admin_url + 'newsletter'} element={<AdminLayout title={'Newsletter'}> <Newsletter /> </AdminLayout>} />
           <Route path={admin_url + 'taxadd'} element={<AdminLayout title={'Add Tax'}> <Taxadd /> </AdminLayout>} />
           <Route path={`${admin_url}view-support-ticket/:id`} element={<AdminLayout title={'Mange Tickets'}> <AdminTicketView /> </AdminLayout>} />
           <Route path={`${admin_url}event/view-event/:id/:name`} element={<AdminLayout> <EventView title={'Event details'} /> </AdminLayout>} />

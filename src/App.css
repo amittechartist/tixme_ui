@@ -1806,7 +1806,7 @@ body {
   width: 100%;
   height: 100%;
   padding-left: 31px;
-  top: 20px;
+  top: 2px;
 }
 
 .row.cart-new-div .tc {
@@ -2205,4 +2205,68 @@ span.selling-f-box {
   width: 100%;
   height: 100%;
   border-radius: 10px;
+}
+.events-date-time-box {
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 10px 10px;
+    position: relative;
+}
+.action-btn-box1 {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+}
+.faq-content-area .accordion-button:not(.collapsed) {
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+}
+span.sidebar-icon {
+  font-size: 24px;
+  line-height: 0px;
+  margin-right: 10px;
+  color: #555 !important;
+}
+.ticket-type-dsc p {
+  margin: 0px;
+  font-size: 15px;
+}
+.ticket-type-dsc {
+  padding-top: 8px;
+}
+.faq-acc-item{
+  border: none !important;
+}
+.faq-acc-item .accordion-button:focus {
+  border-color: none !important;
+  box-shadow: none !important;
+}
+.event-page-category-filter-box1 span::before {
+  content: 'X';
+  position: absolute;
+  right: 3px;
+  top: 6px;
+  background: #fff;
+  color: #0047ab;
+  height: 14px;
+  width: 14px;
+  text-align: center;
+  line-height: 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 9px;
+}
+.event-page-category-filter-box1 span {
+  background: #0047ab;
+  color: #fff;
+  margin: 3px 5px;
+  padding: 5px 23px 5px 4px;
+  font-size: 13px;
+  border-radius: 6px;
+  position: relative;
+  display: inline-block;
+}
+.event-page-category-filter-box1 {
+  display: inline-block;
+  width: 100%;
 }

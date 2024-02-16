@@ -102,7 +102,7 @@ const Type = ({ props }) => {
               <img
                 height={70}
                 width={70}
-                src={Organizerdata.profile_picture ? Organizerdata.profile_picture : Nouserphoto}
+                src={Organizerdata && Organizerdata.profile_picture ? Organizerdata.profile_picture : Nouserphoto}
                 alt=""
                 className="organiger-logo"
               />

@@ -3,149 +3,204 @@
         border: 1px solid #003b8f;
         color: #003b8f;
         display: inline;
-        font-size: 20px;
-        padding: 5px 19px;
-        border-radius: 13px;
+        font-size: 14px;
+        padding: 3px 14px;
+        border-radius: 4px;
     }
+
+    .scrollable-column {
+        overflow-y: visible;
+        height: auto;
+        scrollbar-width: none;
+    }
+
+    .sticky-mobile-e-filter {
+        position: sticky;
+        top: -2px;
+        background-color: #ffffff;
+        z-index: 1000;
+        left: 0;
+        padding-top: 21px;
+        padding-bottom: 9px;
+    }
+
     .row.evnt-page-save-shear-box {
-        top: 27px;
+        top: 0px;
     }
-    .faq-page-space{
+
+    .faq-page-space {
         height: 670px;
-      }
-    .dashqrbig{
+    }
+
+    .dashqrbig {
         height: auto;
         width: 60px;
-      }
+    }
+
     .contact-sec-box {
         width: 250px;
     }
+
     .contact-sec span {
         line-height: 1.4rem;
     }
+
     .contact-sec {
         font-size: 12px !important;
     }
+
     .event-view-body {
         margin-left: 5px !important;
         margin-right: 5px !important;
     }
+
     .event-image-part img {
         height: auto;
         width: 200px;
         border-radius: 11px;
     }
+
     .home-fil-mar {
         margin-left: 10px;
         margin-right: 10px;
     }
+
     .banner-h-home-pg {
         font-size: 30px;
     }
+
     .banner-h-home-pg {
         padding-left: 1rem;
     }
+
     .home-event-in-box {
         margin-left: 3rem;
         margin-right: 3rem;
     }
+
     .event-vew-page-margin {
         margin-right: 5px;
     }
+
     .event-page-menu-div {
         margin: 10px;
     }
+
     .GetCustomerButtonBox h4 {
         padding-bottom: 10px;
         font-size: 13px;
     }
+
     .BeyondTickets-sec {
         margin-top: 40px;
     }
-    .home-event-in-box{
+
+    .home-event-in-box {
         margin-top: 227px;
     }
+
     .banner-h-home-pg {
         padding-top: 18px;
     }
+
     .event-sec.home-event-in-box h5 {
         font-size: 14px !important;
     }
+
     .banner-h-mob-event {
         padding-top: 20px;
         margin-bottom: -7px;
     }
+
     .row.evnt-page-save-shear-box {
         margin-right: 45px;
         margin-bottom: 0;
-        margin-top: 17px;
+        margin-top: 0px;
     }
+
     .eventpage-cat-name {
         padding-left: 1rem;
         padding-top: 2rem;
     }
+
     .banner-event {
         height: 270px !important;
     }
+
     .banner-organizer-page {
         height: 88px;
     }
+
     .banner-h-events {
         padding-top: 2.3rem !important;
         padding-bottom: 38px;
     }
-    .OURPARTNER-padding{
+
+    .OURPARTNER-padding {
         padding: 0px 8px 0px 0px;
-      }
+    }
+
     .auth-page-title1 {
         font-size: 14px;
     }
-    .hobby-box{
+
+    .hobby-box {
         font-size: 15px;
     }
+
     .border-style-home-page {
         border-right: none;
         border-bottom: 1px solid #003b8f;
         margin: 0px 30px;
     }
-    .admin-login-img{
+
+    .admin-login-img {
         height: auto;
         width: 300px;
     }
+
     .banner-child-event {
         margin: 0px 10px;
         border-radius: 10px;
     }
+
     .event-banner {
         height: 100px;
     }
+
     .banner-event {
         height: 390px;
     }
+
     p.sssas {
         margin-bottom: 0px;
         font-size: 9px;
     }
+
     img.flag-icon {
         left: -6px;
         top: -13px;
         width: 40px;
     }
-    .singel-event-page-head-box{
+
+    .singel-event-page-head-box {
         margin: 10px 0px 0px 10px;
     }
+
     .animation-home-banner {
         margin-left: 15px;
         font-size: 18px;
         padding: 16px 0px 40px 15px;
-        border: 2px dashed  #fff;
+        border: 2px dashed #fff;
         width: 337px;
         border-radius: 10px;
         margin-top: 15px;
     }
+
     .nav-control {
-  display: inline;
-}
+        display: inline;
+    }
+
     .header-item-overlay {
         z-index: 34;
         position: fixed;
@@ -157,6 +212,7 @@
         opacity: 0.75;
         height: 66px;
     }
+
     .header-container {
         display: flex;
         justify-content: space-between;
@@ -168,6 +224,7 @@
         top: 0;
         z-index: 35;
     }
+
     .flip-text-animation {
         height: 50px;
     }
@@ -502,12 +559,15 @@
     .event-desc.event-page-margin {
         margin-top: 50px;
     }
-    .mob-d-none{
+
+    .mob-d-none {
         display: none;
     }
+
     .form-area {
         padding: 20px 20px;
     }
+
     .desc-sec p {
         font-size: 10px;
     }
@@ -1057,6 +1117,7 @@
     .bm-burger-button {
         display: initial;
     }
+
     .signup-form-section {
         margin-top: 25px;
     }
@@ -1245,7 +1306,7 @@
         margin: 11px !important;
     }
 
-    
+
 
     img.web-icon-about {
         top: 68px;
@@ -1302,6 +1363,5 @@
     .border-top-doted {
         /*margin-left: 16px;*/
     }
-    
-}
 
+}

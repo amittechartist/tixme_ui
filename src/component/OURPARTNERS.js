@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
+
 import google from "../assets/google.svg";
 import airBNB from "../assets/airBNB.svg";
 import booking from "../assets/booking.com.svg";
 import expedia from "../assets/expedia.svg";
 import RAwway from '../common/right.png';
+import a from "../assets/our/a.png";
+import b from "../assets/our/b.png";
+import c from "../assets/our/c.png";
+import d from "../assets/our/d.png";
+import e from '../assets/our/e.png';
+import f from '../assets/our/f.png';
 import Slider from "react-slick";
 const Component = () => {
     function SampleNextArrow(props) {
@@ -59,16 +66,22 @@ const Component = () => {
                         <img className="company_logo" src={expedia} alt="google" />
                     </div>
                     <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={google} alt="google" />
+                        <img className="company_logo" src={a} alt="google" />
                     </div>
                     <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={airBNB} alt="google" />
+                        <img className="company_logo" src={b} alt="google" />
                     </div>
                     <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={booking} alt="google" />
+                        <img className="company_logo" src={c} alt="google" />
                     </div>
                     <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={expedia} alt="google" />
+                        <img className="company_logo" src={d} alt="google" />
+                    </div>
+                    <div className="d-flex justify-content-center">
+                        <img className="company_logo" src={e} alt="google" />
+                    </div>
+                    <div className="d-flex justify-content-center">
+                        <img className="company_logo" src={f} alt="google" />
                     </div>
                 </Slider>
             </div>

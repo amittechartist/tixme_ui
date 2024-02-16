@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import JoinStartButton from "../../../common/elements/JoinStartButton";
 import Searchicon from '../../../common/icon/searchicon.png';
+import Noimg from "../../../common/image/noimg.jpg";
 import {
     Modal,
     Input,
@@ -16,9 +17,7 @@ import Swal from 'sweetalert2';
 import Timelogo from "../../../common/icon/time 1.svg";
 import withReactContent from 'sweetalert2-react-content';
 import LocationIcon from "../../../common/icon/location.svg";
-import Eimg from '../../../common/icon/Edit.svg';
 import Eimage from "../../../common/image/eimage.png";
-import Hourglasslogo from "../../../common/icon/hourglass.svg";
 import EditPng from '../../../common/icon/Edit.png';
 import DateIcon from "../../../common/icon/date 2.svg";
 import ArrowPng from "../../../common/icon/Arrow.svg";
@@ -473,13 +472,13 @@ const Dashboard = ({ title }) => {
                                                     <>
                                                         {Listitems.map((item, index) => (
                                                             <Col md={12} className="event_list_box_main">
-                                                                <Link to={`${organizer_url}support-tickets/${item._id}`}><button className="list-rais-ticket-btn" type="button">Raise Ticket</button></Link>
+                                                                <Link to={`${organizer_url}support-tickets`}><button className="list-rais-ticket-btn" type="button">Support</button></Link>
                                                                 <button onClick={() => HandelChangeStatus(item._id)} className="list-active-ticket-btn" type="button">{item.visibility == 1 ? 'Active' : 'Deactive'}<img src={ArrowPng} className="arraw-svg ml-3" alt="" /></button>
                                                                 <div className="event_list_box">
                                                                     <Row>
                                                                         <Col md={4}>
                                                                             <div className="dash-list-banner-1">
-                                                                                <img src={item.thum_image ? item.thum_image : Eimage} className="list-thum-img" alt="" />
+                                                                                <img src={item.thum_image ? item.thum_image : Noimg} className="list-thum-img" alt="" />
                                                                             </div>
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
@@ -487,62 +486,74 @@ const Dashboard = ({ title }) => {
                                                                                 <span className="list-event-name text-capitalize">{item.name}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} src={EditPng} alt="" /></span>
                                                                                 <p className="list-event-desc mb-0">{shortPer(item.event_desc, 100)}</p>
                                                                             </div>
-                                                                            <div className="list-event-location">
-                                                                                <div className="d-flex align-items-center text-center location-name">
-                                                                                    <img
-                                                                                        height={30}
-                                                                                        width={30}
-                                                                                        src={LocationIcon}
-                                                                                        alt=""
-                                                                                    />{" "}
-                                                                                    <span>{item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="desc_data">
-                                                                                <div className="organizer-name-sec px-2 py-2">
-                                                                                    <div className="row my-2">
-                                                                                        <div className="col-12 col-md-6 border-md-right d-flex align-items-center">
-                                                                                            <div className="d-inline-flex align-items-center event-time-area">
-                                                                                                <div className="d-inline-block mr-1">
-                                                                                                    <img height={30} width={30} src={Timelogo} alt="" />
-                                                                                                </div>
-                                                                                                <div className="d-inline-block">
-                                                                                                    <span className="event-duration d-block">
-                                                                                                        Event Time
-                                                                                                    </span>
-                                                                                                    <span className="event-time d-block">{item.start_time}</span>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div className="col-12 col-md-6  d-flex align-items-center">
-                                                                                            {item.allprice ? (
-                                                                                                <>
-                                                                                                    <div className="list-ticket-count">
-                                                                                                        <p className="mb-0 list-Total-Ticket">Total Ticket</p>
-                                                                                                        <span className="list-Ticket-amount">{item.OrderItem ? item.OrderItem.length : 0} / {item.allprice.reduce((total, price) => total + parseInt(price.quantity, 10), 0)}</span> <span className="list-Ticket-sold">SOLD</span>
-                                                                                                    </div>
-                                                                                                </>
-                                                                                            ) : ''}
+                                                                            <div className="my-2">
+                                                                                {item.eventtype == 2 ? (
+                                                                                    <div className="list-event-location">
+                                                                                        <div className="d-flex align-items-center text-center location-name">
+                                                                                            <img
+                                                                                                height={30}
+                                                                                                width={30}
+                                                                                                src={LocationIcon}
+                                                                                                alt=""
+                                                                                            />{" "}
+                                                                                            <span>{item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}</span>
                                                                                         </div>
                                                                                     </div>
-
+                                                                                ) : (
+                                                                                    <div>
+                                                                                        <span>This is a online event</span>
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                            <div className="d-inline-flex align-items-center event-time-area my-2">
+                                                                                <div className="d-inline-block mr-1">
+                                                                                    <img height={30} width={30} src={DateIcon} alt="" />
                                                                                 </div>
+                                                                                <div className="d-inline-block">
+                                                                                    <span className="event-time d-block">{item.start_date ? item.start_date : 'No date selected'}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="d-inline-flex align-items-center event-time-area my-2">
+                                                                                <div className="d-inline-block mr-1">
+                                                                                    <img height={30} width={30} src={Timelogo} alt="" />
+                                                                                </div>
+                                                                                <div className="d-inline-block">
+                                                                                    <span className="event-time d-block">{item.start_time ? item.start_time : 'No Time selected'}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div>
+                                                                                {item.allprice ? (
+                                                                                    <>
+                                                                                        <div className="">
+                                                                                            {/* list-ticket-count */}
+                                                                                            <p className="mb-0 list-Total-Ticket">Total Ticket</p>
+                                                                                            <span className="list-Ticket-amount">
+                                                                                                {item.eventData
+                                                                                                    .filter(price => price.status === "1") // Filter items where isdelete == 0
+                                                                                                    .reduce((total, price) => total + parseInt(price.quantity, 10), 0)}
+                                                                                                /
+                                                                                                {item.allprice
+                                                                                                    .filter(price => price.isdelete === 0) // Filter items where isdelete == 0
+                                                                                                    .reduce((total, price) => total + parseInt(price.quantity, 10), 0)}
+                                                                                            </span> <span className="list-Ticket-sold">SOLD</span>
+                                                                                        </div>
+                                                                                    </>
+                                                                                ) : ''}
                                                                             </div>
                                                                         </Col>
                                                                         <Col md={3} className="py-3">
                                                                             <div className="mob-style">
-                                                                                <div className="text-end mr-5">
+                                                                                <div className="text-end mr-5 mb-2">
                                                                                     <span className="list-event-category-img">{item.category_name}</span>
                                                                                 </div>
-                                                                                <div className="text-end mr-5 mt-xl-3 mb-xl-3 mb-1 mt-1">
-                                                                                    <span className="mb-5">
-                                                                                        <img src={DateIcon} alt="" />
-                                                                                        <span className="on-img-date-val">{onlyDayMonth(item.start_date)}</span>
-                                                                                    </span>
+                                                                                <div className="text-end mr-5">
+                                                                                    <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/manage-ticket/${item._id}/${item.name}`)}>TICKETS</button>
                                                                                 </div>
                                                                                 <div className="text-end mr-5">
-                                                                                    <p className="mb-0 mr-5 list-Ticket-1">Ticket</p>
-                                                                                    <button className="btn btn-success list-Ticket-mng-1" type="button" onClick={() => navigate(`${organizer_url}event/manage-ticket/${item._id}/${item.name}`)}>Manage</button>
+                                                                                    <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/mange-attendee/${item._id}/${item.name}`)}>ATTENDEES</button>
+                                                                                </div>
+                                                                                <div className="text-end mr-5">
+                                                                                    <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/manage-ticket/${item._id}/${item.name}`)}>REPORTS & ANALYTICS</button>
                                                                                 </div>
                                                                             </div>
                                                                         </Col>

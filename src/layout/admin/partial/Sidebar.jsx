@@ -184,6 +184,12 @@ const Sidebar = () => {
                             </ul>
                         </li>
                         <li onClick={() => d()}>
+                            <Link to={admin_url + 'newsletter'} className="ai-icon" aria-expanded="false">
+                                <img src={DashboardIcon} alt="Your Logo" />
+                                <span className="nav-text">Newsletter</span>
+                            </Link>
+                        </li>
+                        <li onClick={() => d()}>
                             <Link to={admin_url + 'contact-us'} className="ai-icon" aria-expanded="false">
                                 <img src={DashboardIcon} alt="Your Logo" />
                                 <span className="nav-text">Contact us</span>

@@ -50,7 +50,8 @@ const Home = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [rewardPoints, setRewardPoints] = useState('');
     const [PaymentGatwayname, setPaymentGatwayname] = useState('');
-
+    const [TicketsSelledList, setTicketsSelledList] = useState([]);
+    const [Loader, setLoader] = useState(false);
     //coupon check
     const [CouponId, setCouponId] = useState('');
     const [CouponData, setCouponData] = useState('');
@@ -64,55 +65,6 @@ const Home = () => {
         setDiscountAmount('');
         setSubtotal(allItemsTotalPrice);
     }
-    const [LoginbtnLoader, setLoginbtnLoader] = useState(false);
-    const [LoginEmail, setLoginEmail] = useState();
-    const [LoginPassword, setLoginPassword] = useState();
-    const HandelCustomerLogin = async () => {
-        try {
-            if (!LoginEmail) {
-                return toast.error('Email is required');
-            }
-            if (!isEmail(LoginEmail)) {
-                return toast.error('Enter valid email address');
-            }
-            if (!LoginPassword) {
-                return toast.error('Password is required');
-            }
-            setLoginbtnLoader(true);
-            const requestData = {
-                email: LoginEmail,
-                password: LoginPassword
-            };
-            fetch(apiurl + 'auth/customer/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                },
-                body: JSON.stringify(requestData),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    setLoginbtnLoader(false);
-                    if (data.success == true) {
-                        localStorage.setItem('userauth', data.token);
-                        localStorage.setItem('username', data.username);
-                        localStorage.setItem('user_role', 1);
-                        setLoginToken(data.token);
-                        setLoginmodal(!Loginmodal);
-                        setApiLoader(true);
-                    } else {
-                        toast.error(data.message);
-                    }
-                })
-                .catch(error => {
-                    setLoginbtnLoader(false);
-                    toast.error('Insert error: ' + error.message);
-                    console.error('Insert error:', error);
-                });
-        } catch (error) {
-            console.error('Api error:', error);
-        }
-    };
     const HandelCouponCheck = async () => {
         try {
             if (allItemsTotalPrice && allItemsTotalPrice <= 0) {
@@ -174,7 +126,6 @@ const Home = () => {
         }
     }
     //coupon check
-
     // login as guest
     const [Phonenumber, setPhonenumber] = useState('');
     const [GLoginEmail, setGLoginEmail] = useState('');
@@ -198,8 +149,8 @@ const Home = () => {
             if (GLoginEmail.trim() !== GConfirmLoginEmail.trim()) {
                 return toast.error("Email and confirm email must me same");
             }
-            if (!Phonenumber) {
-                return toast.error("Enter your phone number");
+            if (!Phonenumber || Phonenumber.length < 10) {
+                return toast.error("Enter valid phone number");
             }
             setLoginLoader(true);
             const requestData = {
@@ -280,7 +231,35 @@ const Home = () => {
             setOneTimegettax(false)
         }
     }
-
+    const fetchData = async (id) => {
+        try {
+            const requestData = {
+                id: id
+            };
+            setLoader(true);
+            fetch(apiurl + 'event/view-event-details', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        setTicketsSelledList(data.orderqtylist)
+                    }
+                    setLoader(false);
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                    setLoader(false);
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+            setLoader(false);
+        }
+    }
     useEffect(() => {
         if (GuestToken || LoginToken) {
             saveCartToLocalStorage();
@@ -339,6 +318,9 @@ const Home = () => {
     }, [country_name]);
     useEffect(() => {
         // getUserdata()
+        if (localStorage.getItem('inside_cart_id')) {
+            fetchData(localStorage.getItem('inside_cart_id'));
+        }
         loadCartFromLocalStorage();
         window.scrollTo(0, 0);
     }, []);
@@ -403,18 +385,21 @@ const Home = () => {
 
     const addToCart = (item) => {
         // Initialize cartItems as an empty array if it's undefined
+        const totalQuantity = TicketsSelledList.filter((i) => i.ticket_id == item.id)
+            .reduce((acc, item) => acc + item.quantity, 0);
+        const qty_avl = Number(item.quantity) - Number(totalQuantity);
+        console.log(qty_avl, "fuct");
         const existingItem = cartItems.find((cartItem) => cartItem.name === item.name);
 
-        if (existingItem) {
+        if (existingItem.quantity + 1 <= qty_avl) {
             // If item already exists in cart, update quantity
             const updatedCart = cartItems.map((cartItem) =>
                 cartItem.name === item.name ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
             );
             setCartItems(updatedCart);
-        } else {
-
+        }else{
+            toast.error("Cannot add more than the available quantity");
         }
-
         // Update local quantity state
         setLocalQuantities({
             ...localQuantities,
@@ -591,8 +576,7 @@ const Home = () => {
         <>
             {" "}
             <Modal isOpen={Loginmodal} className='modal-dialog-centered modal-xs' toggle={() => setLoginmodal(!Loginmodal)} centered size={showLoginasGuest ? 'md' : 'xl'}>
-                <ModalHeader toggle={() => setLoginmodal(!Loginmodal)}>
-                </ModalHeader>
+                <ModalHeader toggle={() => setLoginmodal(!Loginmodal)}>Log In As Guest</ModalHeader>
                 <ModalBody>
                     {showLoginasGuest ? (
                         <form onSubmit={HandelLoginasguest}>
@@ -635,10 +619,15 @@ const Home = () => {
                                                     autoFormat={true}
                                                     value={Phonenumber}
                                                     onChange={handlePhoneChange}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter') {
+                                                            e.preventDefault();
+                                                            HandelLoginasguest(e);
+                                                        }
+                                                    }}
                                                 />
                                             </div>
                                         </Col>
-
                                         <Col md={12}>
                                             {LoginLoader ? (
                                                 <button className="btn btn-primary w-100 my-2" type="button">Please wait...</button>
@@ -735,122 +724,126 @@ const Home = () => {
                             <h2 className="Your-cart-text font-weight-bold">Your cart</h2>
                         </Col>
                         <Col md={12}>
-                            {cartItems.length > 0 ? (
+                            {Loader ? (
+                                <div className="linear-background w-100"> </div>
+                            ) : (
                                 <>
-                                    <Row>
-                                        <Col md={8}>
-                                            {screenWidth > 900 ? (
-                                                <>
-                                                    {cartItems.map((item, index) => (
-                                                        <div className="cart-new-bg mb-3" style={{ position: 'relative' }}>
-                                                            <div className="row cart-new-div">
-                                                                <div className="col-md-9">
-                                                                    <div>
-                                                                        <p className="Ticket-title mb-0">{item.event.display_name}</p>
-                                                                        <div className="row d-flex align-items-center">
-                                                                            <div className="col-3">
-                                                                                <div className="d-flex align-items-center">
-                                                                                    <div >
-                                                                                        <img height={20} width={20} src={calendar} alt="" />
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <p className="mb-0 aaa">{item.event.event_subtype_id == 2 ? item.startdate : item.event.start_date}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col-4">
-                                                                                <div className="d-flex align-items-center">
-                                                                                    <div >
-                                                                                        <img height={20} width={20} src={Timelogo} alt="" />
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        <p className="mb-0 aaa">Event Time</p>
-                                                                                        <p className="mb-0 bbb">{item.event.event_subtype_id == 2 ? item.starttime : item.event.start_time}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col-5">
-                                                                                <div className="mx-2">
-                                                                                    <div className="py-2 eventpage-box-style-event-view text-center d-flex align-items-center justify-content-center">
-                                                                                        <p className="mb-0 tc">{item.name}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="col-md-3 d-md-flex align-items-md-center">
-                                                                    <div className="ml-3 text-center">
-                                                                        <p className="mb-0 price-in-cart-page">Price {item.price > 0 ? currency_symble + ' ' + item.price + '.00' : 'Free'}</p>
-                                                                        <div className="">
-                                                                            <div className="row grediant-border d-flex align-items-center mx-xl-3 mx-0">
-                                                                                <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span></div>
-                                                                                <div className="col-4"><span>{item.quantity}</span></div>
-                                                                                <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item.ticket)}>+</span></div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <img src={CartBG} style={{ height: '100%', width: '100%', objectFit: 'contain' }} alt="" />
-                                                        </div>
-                                                    ))}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {cartItems.map((item, index) => (
-                                                        <Card>
-                                                            <Card.Body>
-                                                                <div className="cart-details-box">
-                                                                    <div className="right-box-con in-event-page-cart-sec">
-                                                                        <Row>
-                                                                            <Col md={12}>
+                                    {cartItems.length > 0 ? (
+                                        <>
+                                            <Row>
+                                                <Col md={8}>
+                                                    {screenWidth > 900 ? (
+                                                        <>
+                                                            {cartItems.map((item, index) => (
+                                                                <div className="cart-new-bg mb-3" style={{ position: 'relative' }}>
+                                                                    <div className="row cart-new-div">
+                                                                        <div className="col-md-12">
+                                                                            <div>
                                                                                 <p className="Ticket-title mb-0">{item.event.display_name}</p>
-                                                                                <p className="mb-0">
-                                                                                    <span><img height={20} width={20} src={Timelogo} alt="" /></span>Event Time - {item.event.start_time}
-                                                                                </p>
-                                                                            </Col>
-                                                                            <Col md={4}>
-                                                                                {item.price > 0 ? (
-                                                                                    <span className="cart-price">{item.name} | Price : {currency_symble} {item.price}.00 </span>
-                                                                                ) : (
-                                                                                    <span className="cart-price">{item.name} | Price : Free</span>
-                                                                                )}
-                                                                            </Col>
-                                                                            <Col md={4}>
-                                                                                <div className="d-inline-block">
-                                                                                    <span>
-                                                                                        <span className="cart-minus cart-btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span>
-                                                                                        <span className="cart-number">{item.quantity}</span>
-                                                                                        <span className="cart-plus cart-btn" onClick={() => addToCart(item.ticket)}>+</span>
-                                                                                    </span>
+                                                                                <div className="row d-flex align-items-center">
+                                                                                    <div className="col-3">
+                                                                                        <div className="d-flex align-items-center">
+                                                                                            <div >
+                                                                                                <img height={20} width={20} src={calendar} alt="" />
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <p className="mb-0 aaa">{item.event.event_subtype_id == 2 ? item.startdate : item.event.start_date}</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div className="col-3">
+                                                                                        <div className="d-flex align-items-center">
+                                                                                            <div >
+                                                                                                <img height={20} width={20} src={Timelogo} alt="" />
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <p className="mb-0 aaa">Event Time</p>
+                                                                                                <p className="mb-0 bbb">{item.event.event_subtype_id == 2 ? item.starttime : item.event.start_time}</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div className="col-3">
+                                                                                        <div className="mx-2">
+                                                                                            <div className="py-2 eventpage-box-style-event-view text-center d-flex align-items-center justify-content-center">
+                                                                                                <p className="mb-0 tc">{item.name}</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div className="col-md-3 d-md-flex">
+                                                                                        <div className="ml-3 text-center">
+                                                                                            <p className="mb-0 price-in-cart-page">Price {item.price > 0 ? currency_symble + ' ' + item.price + '.00' : 'Free'}</p>
+                                                                                            <div className="">
+                                                                                                <div className="row grediant-border d-flex align-items-center mx-xl-3 mx-0">
+                                                                                                    <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span></div>
+                                                                                                    <div className="col-4"><span>{item.quantity}</span></div>
+                                                                                                    <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item.ticket)}>+</span></div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </Col>
-                                                                        </Row>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
+                                                                    <img src={CartBG} style={{ height: '100%', width: '100%', objectFit: 'contain' }} alt="" />
                                                                 </div>
-                                                            </Card.Body>
-                                                        </Card>
-                                                    ))}
-                                                </>
-                                            )}
+                                                            ))}
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            {cartItems.map((item, index) => (
+                                                                <Card>
+                                                                    <Card.Body>
+                                                                        <div className="cart-details-box">
+                                                                            <div className="right-box-con in-event-page-cart-sec">
+                                                                                <Row>
+                                                                                    <Col md={12}>
+                                                                                        <p className="Ticket-title mb-0">{item.event.display_name}</p>
+                                                                                        <p className="mb-0">
+                                                                                            <span><img height={20} width={20} src={Timelogo} alt="" /></span>Event Time - {item.event.start_time}
+                                                                                        </p>
+                                                                                    </Col>
+                                                                                    <Col md={4}>
+                                                                                        {item.price > 0 ? (
+                                                                                            <span className="cart-price">{item.name} | Price : {currency_symble} {item.price}.00 </span>
+                                                                                        ) : (
+                                                                                            <span className="cart-price">{item.name} | Price : Free</span>
+                                                                                        )}
+                                                                                    </Col>
+                                                                                    <Col md={4}>
+                                                                                        <div className="d-inline-block">
+                                                                                            <span>
+                                                                                                <span className="cart-minus cart-btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span>
+                                                                                                <span className="cart-number">{item.quantity}</span>
+                                                                                                <span className="cart-plus cart-btn" onClick={() => addToCart(item.ticket)}>+</span>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </Col>
+                                                                                </Row>
+                                                                            </div>
+                                                                        </div>
+                                                                    </Card.Body>
+                                                                </Card>
+                                                            ))}
+                                                        </>
+                                                    )}
 
-                                        </Col>
-                                        <Col md={4}>
-                                            {amountLoader ? (
-                                                <div className="linear-background w-100"> </div>
-                                            ) : (
-                                                <div className="cart-amount-box ">
-                                                    <Card className="eventpage-box-style-event-view calculation-box">
-                                                        <Card.Body >
-                                                            <Row>
-                                                                <div className="my-2 col-6">
-                                                                    <h5 className="cart-amount-small-title">Subtotal</h5>
-                                                                </div>
-                                                                <div className="my-2 text-end  col-6">
-                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}.00</h5>
-                                                                </div>
-                                                                {/* {Iswallet ? (
+                                                </Col>
+                                                <Col md={4}>
+                                                    {amountLoader ? (
+                                                        <div className="linear-background w-100"> </div>
+                                                    ) : (
+                                                        <div className="cart-amount-box ">
+                                                            <Card className="eventpage-box-style-event-view calculation-box">
+                                                                <Card.Body >
+                                                                    <Row>
+                                                                        <div className="my-2 col-6">
+                                                                            <h5 className="cart-amount-small-title">Subtotal</h5>
+                                                                        </div>
+                                                                        <div className="my-2 text-end  col-6">
+                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}.00</h5>
+                                                                        </div>
+                                                                        {/* {Iswallet ? (
                                                                 <>
                                                                     <Col md={12}>
                                                                         <div class="widget-stat card" style={{background: '#003b8f'}}>
@@ -873,7 +866,7 @@ const Home = () => {
                                                                     </Col>
                                                                 </>
                                                             ) : ''} */}
-                                                                {/* {WantRedeem ? (
+                                                                        {/* {WantRedeem ? (
                                                                 <Col md={12} className="mb-3">
                                                                     <h3 className="cart-amount-small-title theme-color font-600">Reward Points</h3>
                                                                     <input type="text" class="form-control" placeholder="Enter Reward Points"
@@ -883,101 +876,103 @@ const Home = () => {
                                                                 </Col>
 
                                                             ) : ''} */}
-                                                                {allItemsTotalPrice > 0 ? (
-                                                                    <>
-                                                                        {TaxlistLoader ? (
-                                                                            <div className="linear-background w-100" style={{ height: '100px' }}> </div>
-                                                                        ) : (
+                                                                        {allItemsTotalPrice > 0 ? (
                                                                             <>
-                                                                                {taxlist.map((item, index) => (
+                                                                                {TaxlistLoader ? (
+                                                                                    <div className="linear-background w-100" style={{ height: '100px' }}> </div>
+                                                                                ) : (
                                                                                     <>
-                                                                                        <div className="my-2 col-md-6 col-6">
-                                                                                            <h5 className="cart-amount-small-title">{item.name}</h5>
-                                                                                        </div>
-                                                                                        <div className="col-md-6 col-6 my-2 text-end">
-                                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)}.00</h5>
-                                                                                        </div>
-                                                                                    </>
-                                                                                ))}
+                                                                                        {taxlist.map((item, index) => (
+                                                                                            <>
+                                                                                                <div className="my-2 col-md-6 col-6">
+                                                                                                    <h5 className="cart-amount-small-title">{item.name}</h5>
+                                                                                                </div>
+                                                                                                <div className="col-md-6 col-6 my-2 text-end">
+                                                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)}.00</h5>
+                                                                                                </div>
+                                                                                            </>
+                                                                                        ))}
 
+                                                                                    </>
+                                                                                )}
                                                                             </>
-                                                                        )}
-                                                                    </>
-                                                                ) : ''}
-                                                                {DiscountAmount ? (
-                                                                    <>
-                                                                        <div className="my-2 col-6">
-                                                                            <h5 className="cart-amount-small-title">Discount</h5>
-                                                                        </div>
-                                                                        <div className="my-2 text-end  col-6">
-                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}.00</h5>
-                                                                        </div>
-                                                                    </>
-                                                                ) : ''}
-                                                                <Col md={12} className="py-3">
-                                                                    <div className="border-bottom"></div>
-                                                                </Col>
-                                                                <div className="col-6">
-                                                                    <h3 className="cart-amount-small-title theme-color font-600">Total</h3>
-                                                                </div>
-                                                                <div className="col-6 text-end">
-                                                                    <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}.00</h3>
-                                                                </div>
-                                                                <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">
-                                                                    <Row>
-                                                                        <Col md={12} xl={8}>
-                                                                            <input className="form-control" readOnly={Iscoupon} type="text" placeholder="Enter coupon code" onChange={(e) => setCouponId(e.target.value)} value={CouponId}></input>
+                                                                        ) : ''}
+                                                                        {DiscountAmount ? (
+                                                                            <>
+                                                                                <div className="my-2 col-6">
+                                                                                    <h5 className="cart-amount-small-title">Discount</h5>
+                                                                                </div>
+                                                                                <div className="my-2 text-end  col-6">
+                                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}.00</h5>
+                                                                                </div>
+                                                                            </>
+                                                                        ) : ''}
+                                                                        <Col md={12} className="py-3">
+                                                                            <div className="border-bottom"></div>
                                                                         </Col>
-                                                                        <Col md={12} xl={4}>
-                                                                            {CouponCheckLoader ? (
-                                                                                <button className="btn btn-primary w-100" type="button">Wait..</button>
+                                                                        <div className="col-6">
+                                                                            <h3 className="cart-amount-small-title theme-color font-600">Total</h3>
+                                                                        </div>
+                                                                        <div className="col-6 text-end">
+                                                                            <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}.00</h3>
+                                                                        </div>
+                                                                        <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">
+                                                                            <Row>
+                                                                                <Col md={12} xl={8}>
+                                                                                    <input className="form-control" readOnly={Iscoupon} type="text" placeholder="Enter coupon code" onChange={(e) => setCouponId(e.target.value)} value={CouponId}></input>
+                                                                                </Col>
+                                                                                <Col md={12} xl={4}>
+                                                                                    {CouponCheckLoader ? (
+                                                                                        <button className="btn btn-primary w-100" type="button">Wait..</button>
+                                                                                    ) : (
+                                                                                        <>
+                                                                                            {Iscoupon ? (
+                                                                                                <button onClick={() => HandelRemoveToken()} type="button" className="btn btn-danger w-100 mt-xl-0 mt-2 theme-bg" >Remove</button>
+                                                                                            ) : (
+                                                                                                <button onClick={() => HandelCouponCheck()} type="button" className="btn btn-primary w-100 mt-xl-0 mt-2 theme-bg" >Apply</button>
+                                                                                            )}
+                                                                                        </>
+                                                                                    )}
+                                                                                </Col>
+                                                                            </Row>
+                                                                        </Col>
+                                                                        <Col md={12}>
+                                                                            {ApiLoader ? (
+                                                                                <Button className='signup-page-btn  w-100 mt-2 theme-bg'>Please wait...</Button>
                                                                             ) : (
                                                                                 <>
-                                                                                    {Iscoupon ? (
-                                                                                        <button onClick={() => HandelRemoveToken()} type="button" className="btn btn-danger w-100 mt-xl-0 mt-2 theme-bg" >Remove</button>
-                                                                                    ) : (
-                                                                                        <button onClick={() => HandelCouponCheck()} type="button" className="btn btn-primary w-100 mt-xl-0 mt-2 theme-bg" >Apply</button>
-                                                                                    )}
+                                                                                    <div className="mt-3 paynow-btn-box">
+                                                                                        <span >
+                                                                                            <button onClick={() => saveCartToLocalStorage()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Pay now</button>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    {/* {IsCountryName ? (
+                                                                        ): (
+                                                                                <button type = "button" className = "btn btn-dark w-100">Select country</button>
+                                                                        )} */}
                                                                                 </>
                                                                             )}
                                                                         </Col>
                                                                     </Row>
-                                                                </Col>
-                                                                <Col md={12}>
-                                                                    {ApiLoader ? (
-                                                                        <Button className='signup-page-btn  w-100 mt-2 theme-bg'>Please wait...</Button>
-                                                                    ) : (
-                                                                        <>
-                                                                            <div className="mt-3 paynow-btn-box">
-                                                                                <span >
-                                                                                    <button onClick={() => saveCartToLocalStorage()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Pay now</button>
-                                                                                </span>
-                                                                            </div>
-                                                                            {/* {IsCountryName ? (
-                                                                        ): (
-                                                                                <button type = "button" className = "btn btn-dark w-100">Select country</button>
-                                                                        )} */}
-                                                                        </>
-                                                                    )}
-                                                                </Col>
-                                                            </Row>
-                                                        </Card.Body>
-                                                    </Card>
-                                                </div>
-                                            )}
-                                        </Col>
-                                    </Row>
+                                                                </Card.Body>
+                                                            </Card>
+                                                        </div>
+                                                    )}
+                                                </Col>
+                                            </Row>
+                                        </>
+                                    ) : (
+                                        <Row>
+                                            <Col md={12}>
+                                                <Card>
+                                                    <Card.Body>
+                                                        <h2 className="text-danger " style={{ fontWeight: '600' }}>Your cart is empty !</h2>
+                                                    </Card.Body>
+                                                </Card>
+                                            </Col>
+                                        </Row>
+                                    )}
                                 </>
-                            ) : (
-                                <Row>
-                                    <Col md={12}>
-                                        <Card>
-                                            <Card.Body>
-                                                <h2 className="text-danger " style={{ fontWeight: '600' }}>Your cart is empty !</h2>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                </Row>
                             )}
                         </Col>
                     </Row>

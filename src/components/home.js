@@ -26,7 +26,7 @@ import InputSearchIcon from '../assets/inputSearch.png'
 import { MdMyLocation } from "react-icons/md";
 import { FaTimes } from 'react-icons/fa';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { apiurl, onlyDayMonth, app_url, isEmail } from "../common/Helpers";
+import { apiurl, onlyDayMonth, app_url, isEmail, shortPer } from "../common/Helpers";
 import { useNavigate } from "react-router-dom";
 import { Button, Col, Row } from "react-bootstrap";
 import Noimg from "../common/image/noimg.jpg";
@@ -151,7 +151,7 @@ const Home = () => {
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 1,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 2000,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
@@ -733,7 +733,7 @@ const Home = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                        <div className="desc-h ms-3 fw-bold mb-0">{shortPer(item.display_name,30)}</div>
                         {getCountryFlagImage(item.countryname)}
                       </div>
                     </div>
@@ -806,7 +806,7 @@ const Home = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                        <div className="desc-h ms-3 fw-bold mb-0">{shortPer(item.display_name,30)}</div>
                         {getCountryFlagImage(item.countryname)}
                       </div>
                     </div>
@@ -879,7 +879,7 @@ const Home = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="desc-h ms-3 fw-bold mb-0">{item.display_name}</div>
+                        <div className="desc-h ms-3 fw-bold mb-0">{shortPer(item.display_name,30)}</div>
                         {getCountryFlagImage(item.countryname)}
                       </div>
                     </div>

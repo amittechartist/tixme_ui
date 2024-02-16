@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import HeaderMenu from "../../../components/headermenu";
 import MobileMenu from "../../../components/mobilemenu";
+import Footer from '../../../components/footer';
 import { FaEnvelope } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { apiurl, app_url, isEmail } from "../../../common/Helpers";
@@ -510,11 +511,10 @@ const About = () => {
                     {Hobby.map((item, index) => (
                       <span
                         key={item.name}
-                        className={`hobby-box ${
-                          selectedHobbies.includes(item.name)
-                            ? "hobby-active"
-                            : ""
-                        }`}
+                        className={`hobby-box ${selectedHobbies.includes(item.name)
+                          ? "hobby-active"
+                          : ""
+                          }`}
                         onClick={() => toggleHobby(item.name)}
                       >
                         {item.name}
@@ -599,7 +599,8 @@ const About = () => {
         </div>
       </div>
       {/* </div> */}
-      <div class="space-height" style={{ height: "600px" }}></div>
+      <div class="space-height" style={{ height: "650px" }}></div>
+      <Footer />
     </>
   );
 };

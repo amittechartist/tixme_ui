@@ -49,6 +49,7 @@ const Dashboard = ({ title }) => {
     const [viewEndtdate, setviewEndtdate] = useState();
     const [valueStartdate, setvalueStartdate] = useState();
     const [valueEndtdate, setvalueEndtdate] = useState();
+    const [EventData, setEventData] = useState();
     const handelStartdatechange = (date) => {
         setStartdate(date);
         const get_start_date = get_date_time(date);
@@ -106,7 +107,7 @@ const Dashboard = ({ title }) => {
             setLoader(true);
             const requestData = {
                 eventid: id,
-                ticket_name: ticket_name ? ticket_name : null
+                ticket_id: ticket_name ? ticket_name : null
             };
             fetch(apiurl + 'order/event/orders-list', {
                 method: 'POST',
@@ -120,6 +121,7 @@ const Dashboard = ({ title }) => {
                     if (data.success == true) {
                         setListitems(data.data);
                         setDataList(data.data);
+                        setEventData(data.eventdata);
                     }
                     setLoader(false);
                 })
@@ -438,15 +440,19 @@ const Dashboard = ({ title }) => {
                                                 <Col md={3}>
 
                                                     <div className="input-group mb-3 input-warning-o">
-                                                        <span className="input-group-text search-box-icon-1"><FaRegCreditCard /></span>
                                                         <select
                                                             className="form-select"
                                                             onChange={e => handleVisibilityChange(e.target.value)}
                                                             defaultValue=""
                                                         >
                                                             <option value="">Select Ticket Type</option>
-                                                            <option value="2">Free</option>
-                                                            <option value="1">Paid</option>
+                                                            {EventData.allprice.map((item) => (
+                                                                <>
+                                                                    {item.isdelete == 0 && (
+                                                                        <option value={item.id}>{item.name}</option>
+                                                                    )}
+                                                                </>
+                                                            ))}
                                                         </select>
                                                     </div>
                                                 </Col>
@@ -479,7 +485,6 @@ const Dashboard = ({ title }) => {
                                                                     <th className="text-center" key={1}>Amount</th>
                                                                     <th className="text-center" key={1}>TYPE</th>
                                                                     <th className="text-center" key={1}>Creation date</th>
-                                                                    <th className="text-center" key={1}>Support</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -520,11 +525,6 @@ const Dashboard = ({ title }) => {
                                                                             )}
                                                                         </td>
                                                                         <td>{item.date} {item.time} <span onClick={() => { setModal(!modal); fetchOrderData(item._id) }} className="order-view-btn"><FaChevronDown /></span></td>
-                                                                        <td>
-                                                                            {item.is_support && item.is_support == 1 ? (
-                                                                                <><span class="badge-theme-danger badge-theme mx-2"><FaLifeRing /></span></>
-                                                                            ) : ''}
-                                                                        </td>
                                                                     </tr>
                                                                 ))}
                                                             </tbody>

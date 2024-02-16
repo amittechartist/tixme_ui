@@ -4,14 +4,14 @@ export const admin_url = app_url + 'admin/';
 export const organizer_url = app_url + 'organizer/';
 export const customer_url = app_url + 'customer/';
 
-export const apiurl = 'http://localhost:5001/api/v1/';
-export const imgurl = 'http://localhost:5001/uploads/';
-export const qr_url = 'http://localhost:3002/scanner/organizer/tixme-scanner-page/';
+// export const apiurl = 'http://localhost:5001/api/v1/';
+// export const imgurl = 'http://localhost:5001/uploads/';
+// export const qr_url = 'http://localhost:3002/scanner/organizer/tixme-scanner-page/';
 
 
-// export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
-// export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
-// export const qr_url = 'https://tixme.co/scanner/organizer/tixme-scanner-page';
+export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
+export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
+export const qr_url = 'https://tixme.co/scanner/organizer/tixme-scanner-page';
 
 
 
@@ -32,6 +32,13 @@ export const get_date_time = (date) => {
     const Timeview = new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     return [{ Dateview, Timeview }];
+};
+export const formatDateToYYYYMMDD = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = (`0${d.getMonth() + 1}`).slice(-2); // Add leading 0 if needed
+    const day = (`0${d.getDate()}`).slice(-2); // Add leading 0 if needed
+    return `${year}-${month}-${day}`;
 };
 export const get_min_date = (date) => {
     const year = new Date(date).getFullYear();

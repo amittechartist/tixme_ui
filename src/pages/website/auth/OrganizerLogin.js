@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
+import Footer from '../../../components/footer';
 import toast from 'react-hot-toast';
 import { apiurl, app_url, isEmail, organizer_url } from '../../../common/Helpers';
 import { Link, useNavigate } from "react-router-dom";
@@ -104,7 +105,8 @@ const About = () => {
                 </div>
             </div>
             {/* </div> */}
-            <div class="space-height" style={{ height: '600px' }}></div>
+            <div class="space-height" style={{ height: '300px' }}></div>
+            <Footer/>
         </>
     );
 };
