@@ -43,12 +43,6 @@ const Dashboard = ({ title }) => {
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
-                    <div className="page-titles">
-                        <Link className="page-theme-btn position-right" to={admin_url + 'active-organizers'}>View organizer</Link>
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item">{title}</li>
-                        </ol>
-                    </div>
                     <Row className="justify-content-center">
                         <Col md={12}>
                             <Card className="py-4">
@@ -61,10 +55,11 @@ const Dashboard = ({ title }) => {
                                                 ) : (
                                                     <table class="table table-responsive-md">
                                                         <thead>
-                                                            <tr>
+                                                            <tr className="bb2s">
                                                                 <th style={{ width: '80px' }}><strong>#</strong></th>
                                                                 <th><strong>Name</strong></th>
                                                                 <th><strong>Email</strong></th>
+                                                                <th><strong>Phone</strong></th>
                                                                 <th><strong>Date</strong></th>
                                                                 <th><strong>Subject</strong></th>
                                                                 <th><strong>Message</strong></th>
@@ -72,10 +67,11 @@ const Dashboard = ({ title }) => {
                                                         </thead>
                                                         <tbody>
                                                             {Listitems.map((item, index) => (
-                                                                <tr>
+                                                                <tr className="blr2s">
                                                                     <td><strong>{index + 1}</strong></td>
                                                                     <td>{item.name}</td>
                                                                     <td>{item.email}</td>
+                                                                    <td>{item.phone && '+' + item.phone}</td>
                                                                     <td>{item.date}</td>
                                                                     <td>{item.subject}</td>
                                                                     <td>{item.message}</td>

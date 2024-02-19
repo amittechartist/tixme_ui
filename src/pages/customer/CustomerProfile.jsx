@@ -483,7 +483,7 @@ const Dashboard = ({ title }) => {
                                                                         <div className="col-sm-3 col-5">
                                                                             <h5 className="f-w-500">Location <span className="pull-end">:</span></h5>
                                                                         </div>
-                                                                        <div className="col-sm-9 col-7"><span>{address}, {fcountry ? 'City - ' + fcity + ',' : ''}  {fcountry ? 'Country - ' + fcountry + ',' : ''} Pincode - {pincode}</span>
+                                                                        <div className="col-sm-9 col-7"><span>{address && address + ','} {fcountry.length > 0 ? 'City - ' + fcity.length > 0 + ',' : ''}  {fcountry.length > 0 ? 'Country - ' + fcountry.length > 0 + ',' : ''} {pincode && 'Pincode -' + pincode}</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>

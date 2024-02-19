@@ -23,6 +23,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Home = () => {
     const Beartoken = localStorage.getItem('userauth');
     const country_name = localStorage.getItem("countryname");
+    const EventCartId = localStorage.getItem("cart_insert_id");
 
     const pgatway_name = localStorage.getItem("payment_gatway");
     const currency_symble = localStorage.getItem("currency_symble");
@@ -198,12 +199,16 @@ const Home = () => {
     const [totaltaxamount, setTotaltaxamount] = useState();
     const getTaxes = async () => {
         try {
+            const requestData = {
+                eventid: EventCartId,
+            };
             setTaxlistLoader(true);
             fetch(apiurl + 'order/get-taxes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
+                body: JSON.stringify(requestData),
             })
                 .then(response => response.json())
                 .then(data => {
@@ -212,8 +217,7 @@ const Home = () => {
                         if (data.data) {
                             const totalTax = data.data.reduce((accumulator, item) => {
                                 return accumulator + (item.taxamount || 0);
-                            }, 0);
-
+                            }, 0);  
                             setTotaltaxamount(totalTax);
                         }
                     }
@@ -423,7 +427,9 @@ const Home = () => {
         setIsFirstRender(true);
     };
     const calculateTotalPrice = () => {
-        getTaxes();
+        if(EventCartId){
+            getTaxes();
+        }
         if (!cartItems || cartItems.length === 0) {
             setAllItemsTotalPrice(0);
             setEventTotalPrice(0);

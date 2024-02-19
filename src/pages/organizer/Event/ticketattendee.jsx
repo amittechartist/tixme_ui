@@ -5,7 +5,6 @@ import {
     ModalBody,
     ModalHeader
 } from 'reactstrap';
-import { FaLifeRing } from 'react-icons/fa';
 import DateIcon from "../../../common/icon/date 2.svg";
 import Norecord from '../../../component/Norecordui';
 import QRsuccess from '../../../common/icon/qr-code-pay.png';
@@ -13,8 +12,7 @@ import toast from 'react-hot-toast';
 import { Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import { useParams } from 'react-router-dom';
-import { FiDownloadCloud } from "react-icons/fi";
-import { FiPlus, FiFlag, FiClock, FiChevronDown } from "react-icons/fi";
+import { FiClock, FiChevronDown } from "react-icons/fi";
 import QRCode from 'react-qr-code';
 import { FaRegCreditCard } from "react-icons/fa";
 import Searchicon from '../../../common/icon/searchicon.png';
@@ -28,10 +26,12 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 
 const Dashboard = ({ title }) => {
+    const { id, name, ticket_id } = useParams();
     const [Loader, setLoader] = useState(false);
     const [ModalLoader, setModalLoader] = useState(true);
     const [Listitems, setListitems] = useState([]);
     const [dataList, setDataList] = useState([]);
+    const [Tickettype, setTickettype] = useState();
     const [activeItem, setActiveItem] = useState('all');
 
     const [Ordersavedata, setOrdersavedata] = useState();
@@ -39,7 +39,6 @@ const Dashboard = ({ title }) => {
     const [OrderData, setOrderData] = useState();
     const [CustomerData, setCustomerData] = useState();
     const [Isscan, setIsscan] = useState(false);
-    const { id, name, ticket_name } = useParams();
     const [modal, setModal] = useState(false);
     const [ShowQr, setShowQr] = useState(false);
 
@@ -107,7 +106,7 @@ const Dashboard = ({ title }) => {
             setLoader(true);
             const requestData = {
                 eventid: id,
-                ticket_id: ticket_name ? ticket_name : null
+                // ticket_id: ticket_name ? ticket_name : null
             };
             fetch(apiurl + 'order/event/orders-list', {
                 method: 'POST',
@@ -195,7 +194,12 @@ const Dashboard = ({ title }) => {
     }
     useEffect(() => {
         fetchOrders();
-    }, []);
+        setTickettype(ticket_id);
+    }, [ticket_id]);    
+    console.log(ticket_id);
+    useEffect(() => {
+        handleVisibilityChange();
+    }, [Tickettype]);
 
     const [searchTerm, setSearchTerm] = useState('');
     const handleSearchChange = (event) => {
@@ -215,19 +219,23 @@ const Dashboard = ({ title }) => {
         }
     };
 
-    const handleVisibilityChange = (selectedVisibility) => {
-        if (selectedVisibility === '1') {
-            // Filter events where order_amount is not null and greater than 0
+    const handleVisibilityChange = () => {
+        // if (selectedVisibility === '1') {
+        //     const filteredEvents = dataList.filter(event =>
+        //         event.order_amount != null && event.order_amount > 0);
+        //     setListitems(filteredEvents);
+        // } else if (selectedVisibility === '2') {
+        //     const filteredEvents = dataList.filter(event =>
+        //         event.order_amount == null);
+        //     setListitems(filteredEvents);
+        // } else {
+        //     setListitems(dataList);
+        // }
+        if (Tickettype) {
             const filteredEvents = dataList.filter(event =>
-                event.order_amount != null && event.order_amount > 0);
-            setListitems(filteredEvents);
-        } else if (selectedVisibility === '2') {
-            // Filter events where order_amount is null
-            const filteredEvents = dataList.filter(event =>
-                event.order_amount == null);
+                event.ticket_id == Tickettype);
             setListitems(filteredEvents);
         } else {
-            // If no valid option is selected, show all events
             setListitems(dataList);
         }
     };
@@ -407,7 +415,7 @@ const Dashboard = ({ title }) => {
                             <Card className="py-1 grey-bg">
                                 <Card.Body>
                                     <Row className="justify-content-center">
-                                        <Col md={6}>
+                                        <Col md={12}>
                                             <h3>{name}</h3>
                                         </Col>
                                         <Col md={6} className="text-end">
@@ -437,24 +445,26 @@ const Dashboard = ({ title }) => {
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
                                                     </div>
                                                 </Col>
-                                                <Col md={3}>
 
-                                                    <div className="input-group mb-3 input-warning-o">
-                                                        <select
-                                                            className="form-select"
-                                                            onChange={e => handleVisibilityChange(e.target.value)}
-                                                            defaultValue=""
-                                                        >
-                                                            <option value="">Select Ticket Type</option>
-                                                            {EventData.allprice.map((item) => (
-                                                                <>
-                                                                    {item.isdelete == 0 && (
-                                                                        <option value={item.id}>{item.name}</option>
-                                                                    )}
-                                                                </>
-                                                            ))}
-                                                        </select>
-                                                    </div>
+                                                <Col md={3}>
+                                                    {Loader ? '' : (
+                                                        <div className="input-group mb-3 input-warning-o">
+                                                            <select
+                                                                className="form-select"
+                                                                onChange={e => setTickettype(e.target.value)}
+                                                                defaultValue=""
+                                                            >
+                                                                <option value="">Select Ticket Type</option>
+                                                                {EventData && EventData.allprice.map((item) => (
+                                                                    <>
+                                                                        {item.isdelete == 0 && (
+                                                                            <option selected={Tickettype == item.id} value={item.id}>{item.name}</option>
+                                                                        )}
+                                                                    </>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                    )}
                                                 </Col>
                                                 <Col md={6}>
                                                     <div class="input-group mb-3 input-warning-o">

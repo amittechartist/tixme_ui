@@ -5,7 +5,6 @@ import {
     ModalBody,
     ModalHeader
 } from 'reactstrap';
-import { FaLifeRing } from 'react-icons/fa';
 import DateIcon from "../../../common/icon/date 2.svg";
 import Norecord from '../../../component/Norecordui';
 import QRsuccess from '../../../common/icon/qr-code-pay.png';
@@ -13,12 +12,11 @@ import toast from 'react-hot-toast';
 import { Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import { useParams } from 'react-router-dom';
-import { FiDownloadCloud } from "react-icons/fi";
-import { FiPlus, FiFlag, FiClock, FiChevronDown } from "react-icons/fi";
+import { FiClock, FiChevronDown } from "react-icons/fi";
 import QRCode from 'react-qr-code';
 import { FaRegCreditCard } from "react-icons/fa";
 import Searchicon from '../../../common/icon/searchicon.png';
-import { apiurl, shortPer, get_min_date, get_date_time } from '../../../common/Helpers';
+import { apiurl, shortPer, get_date_time, get_min_date } from '../../../common/Helpers';
 import Table from 'react-bootstrap/Table';
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaClock } from "react-icons/fa6";
@@ -28,10 +26,12 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 
 const Dashboard = ({ title }) => {
+    const { id, name, ticket_id } = useParams();
     const [Loader, setLoader] = useState(false);
     const [ModalLoader, setModalLoader] = useState(true);
     const [Listitems, setListitems] = useState([]);
     const [dataList, setDataList] = useState([]);
+    const [Tickettype, setTickettype] = useState();
     const [activeItem, setActiveItem] = useState('all');
 
     const [Ordersavedata, setOrdersavedata] = useState();
@@ -39,10 +39,8 @@ const Dashboard = ({ title }) => {
     const [OrderData, setOrderData] = useState();
     const [CustomerData, setCustomerData] = useState();
     const [Isscan, setIsscan] = useState(false);
-    const { id, name } = useParams();
     const [modal, setModal] = useState(false);
     const [ShowQr, setShowQr] = useState(false);
-
 
     const [Startdate, setStartdate] = useState(new Date());
     const [Endtdate, setEndtdate] = useState(new Date());
@@ -50,6 +48,7 @@ const Dashboard = ({ title }) => {
     const [viewEndtdate, setviewEndtdate] = useState();
     const [valueStartdate, setvalueStartdate] = useState();
     const [valueEndtdate, setvalueEndtdate] = useState();
+    const [EventData, setEventData] = useState();
     const handelStartdatechange = (date) => {
         setStartdate(date);
         const get_start_date = get_date_time(date);
@@ -98,6 +97,7 @@ const Dashboard = ({ title }) => {
     };
 
 
+
     const generateRandomNumber = () => {
         return Math.floor(10000 + Math.random() * 90000); // Generates a random 5-digit number
     };
@@ -105,7 +105,8 @@ const Dashboard = ({ title }) => {
         try {
             setLoader(true);
             const requestData = {
-                eventid: id
+                eventid: id,
+                // ticket_id: ticket_name ? ticket_name : null
             };
             fetch(apiurl + 'order/event/orders-list', {
                 method: 'POST',
@@ -119,6 +120,7 @@ const Dashboard = ({ title }) => {
                     if (data.success == true) {
                         setListitems(data.data);
                         setDataList(data.data);
+                        setEventData(data.eventdata);
                     }
                     setLoader(false);
                 })
@@ -192,7 +194,12 @@ const Dashboard = ({ title }) => {
     }
     useEffect(() => {
         fetchOrders();
-    }, []);
+        setTickettype(ticket_id);
+    }, [ticket_id]);    
+    console.log(ticket_id);
+    useEffect(() => {
+        handleVisibilityChange();
+    }, [Tickettype]);
 
     const [searchTerm, setSearchTerm] = useState('');
     const handleSearchChange = (event) => {
@@ -212,19 +219,23 @@ const Dashboard = ({ title }) => {
         }
     };
 
-    const handleVisibilityChange = (selectedVisibility) => {
-        if (selectedVisibility === '1') {
-            // Filter events where order_amount is not null and greater than 0
+    const handleVisibilityChange = () => {
+        // if (selectedVisibility === '1') {
+        //     const filteredEvents = dataList.filter(event =>
+        //         event.order_amount != null && event.order_amount > 0);
+        //     setListitems(filteredEvents);
+        // } else if (selectedVisibility === '2') {
+        //     const filteredEvents = dataList.filter(event =>
+        //         event.order_amount == null);
+        //     setListitems(filteredEvents);
+        // } else {
+        //     setListitems(dataList);
+        // }
+        if (Tickettype) {
             const filteredEvents = dataList.filter(event =>
-                event.order_amount != null && event.order_amount > 0);
-            setListitems(filteredEvents);
-        } else if (selectedVisibility === '2') {
-            // Filter events where order_amount is null
-            const filteredEvents = dataList.filter(event =>
-                event.order_amount == null);
+                event.ticket_id == Tickettype);
             setListitems(filteredEvents);
         } else {
-            // If no valid option is selected, show all events
             setListitems(dataList);
         }
     };
@@ -275,6 +286,7 @@ const Dashboard = ({ title }) => {
                     </Row>
                 </ModalBody>
             </Modal>
+
             <Modal isOpen={modal} toggle={() => setModal(!modal)} centered size={'xl'}>
                 <ModalHeader toggle={!modal}>Order Details</ModalHeader>
                 <ModalBody>
@@ -359,7 +371,7 @@ const Dashboard = ({ title }) => {
                                                                 <>
                                                                     <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
                                                                     <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                    <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{textTransform: 'capitalize'}}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                    <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                     <p className="mb-0 mt-4" style={{ fontWeight: 600, color: '#000' }}>Transferred to</p>
                                                                     <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> {item.owner_email}</span>
                                                                 </>
@@ -369,7 +381,7 @@ const Dashboard = ({ title }) => {
                                                                         <>
                                                                             <QRCode style={{ height: "auto", width: "150px" }} value={JSON.stringify({ id: item._id, time: generateRandomNumber(), index: index })} />
                                                                             <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                            v
+                                                                            <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                             <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
                                                                             <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
                                                                         </>
@@ -377,7 +389,7 @@ const Dashboard = ({ title }) => {
                                                                         <>
                                                                             <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
                                                                             <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                            <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{textTransform: 'capitalize'}}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                            <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                             <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
                                                                             <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> Success</span>
                                                                         </>
@@ -403,7 +415,7 @@ const Dashboard = ({ title }) => {
                             <Card className="py-1 grey-bg">
                                 <Card.Body>
                                     <Row className="justify-content-center">
-                                        <Col md={6}>
+                                        <Col md={12}>
                                             <h3>{name}</h3>
                                         </Col>
                                         <Col md={6} className="text-end">
@@ -429,24 +441,30 @@ const Dashboard = ({ title }) => {
                                                 <Col md={3}>
                                                     <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
-                                                        <input type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range"  />
+                                                        <input type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
                                                     </div>
                                                 </Col>
-                                                <Col md={3}>
 
-                                                    <div className="input-group mb-3 input-warning-o">
-                                                        <span className="input-group-text search-box-icon-1"><FaRegCreditCard /></span>
-                                                        <select
-                                                            className="form-select"
-                                                            onChange={e => handleVisibilityChange(e.target.value)}
-                                                            defaultValue=""
-                                                        >
-                                                            <option value="">Select Ticket Type</option>
-                                                            <option value="2">Free</option>
-                                                            <option value="1">Paid</option>
-                                                        </select>
-                                                    </div>
+                                                <Col md={3}>
+                                                    {Loader ? '' : (
+                                                        <div className="input-group mb-3 input-warning-o" >
+                                                            <select
+                                                                className="form-select"
+                                                                onChange={e => setTickettype(e.target.value)}
+                                                                defaultValue=""
+                                                            >
+                                                                <option value="">Select Ticket Type</option>
+                                                                {EventData && EventData.allprice.map((item) => (
+                                                                    <>
+                                                                        {item.isdelete == 0 && (
+                                                                            <option selected={Tickettype == item.id} value={item.id}>{item.name}</option>
+                                                                        )}
+                                                                    </>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                    )}
                                                 </Col>
                                                 <Col md={6}>
                                                     <div class="input-group mb-3 input-warning-o">
@@ -471,20 +489,21 @@ const Dashboard = ({ title }) => {
                                                         <Table responsive>
                                                             <thead>
                                                                 <tr>
-                                                                    <th className="text-center" key={1}>Name</th>
+                                                                    <th className="text-center" key={1}>Customer Name</th>
                                                                     <th className="text-center" key={1}>Booking ID</th>
                                                                     <th className="text-center" key={1}>Status</th>
                                                                     <th className="text-center" key={1}>Amount</th>
                                                                     <th className="text-center" key={1}>TYPE</th>
                                                                     <th className="text-center" key={1}>Creation date</th>
-                                                                    <th className="text-center" key={1}>Support</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 {Listitems.map((item, index) => (
                                                                     <tr>
-                                                                        <td>{item.customer_name}
-                                                                        
+                                                                        <td>
+
+                                                                            {item.customer_name}
+
                                                                         </td>
                                                                         <td>{shortPer(item.bookingid, 20)}</td>
                                                                         <td>
@@ -516,9 +535,6 @@ const Dashboard = ({ title }) => {
                                                                             )}
                                                                         </td>
                                                                         <td>{item.date} {item.time} <span onClick={() => { setModal(!modal); fetchOrderData(item._id) }} className="order-view-btn"><FaChevronDown /></span></td>
-                                                                        <td>{item.is_support && item.is_support == 1 ? (
-                                                                                <><span class="badge-theme-danger badge-theme mx-2"><FaLifeRing /></span></>
-                                                                            ) : ''}</td>
                                                                     </tr>
                                                                 ))}
                                                             </tbody>

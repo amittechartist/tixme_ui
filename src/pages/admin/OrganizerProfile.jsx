@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 const Dashboard = ({ title }) => {
     const navigate = useNavigate();
     const [Loader, setLoader] = useState(false);
-    const [ApiLoader, setApiLoader] = useState(false);
+    const [ApiLoader, setApiLoader] = useState(true);
 
     const [inputValue, setInputValue] = useState('');
     const [tags, setTags] = useState([]);
@@ -44,6 +44,7 @@ const Dashboard = ({ title }) => {
 
     const [Hobby, setHobby] = useState([]);
     const [selectedHobbies, setSelectedHobbies] = useState([]);
+    const [Orgdata, setOrgdata] = useState();
 
     const fetchData = async () => {
         try {
@@ -61,15 +62,9 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        setname(data.data.name);
-                        setfname(data.data.first_name);
-                        setlname(data.data.last_name);
-                        setemail(data.data.email);
-                        setphone_number(data.data.phone_number);
-                        
-                        
+                        setOrgdata(data.data); 
+                        setApiLoader(false)
                     }
-                    setApiLoader(false)
                 })
                 .catch(error => {
                     console.error('Insert error:', error);
@@ -80,47 +75,9 @@ const Dashboard = ({ title }) => {
             setApiLoader(false)
         }
     }
-    const fetchHobby = async () => {
-        try {
-            fetch(apiurl + 'website/hobby/list', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success == true) {
-                        setHobby(data.data)
-                    }
-                })
-                .catch(error => {
-                    setLoader(false);
-                    // toast.error('Insert error: ' + error.message);
-                    console.error('Insert error:', error);
-                });
-        } catch (error) {
-            console.error(error.message);
-        }
-    }
-    const toggleHobby = (id) => {
-        const updatedHobbies = [...selectedHobbies];
-    
-        if (updatedHobbies.includes(id)) {
-            // Hobby is already selected, remove it
-            const index = updatedHobbies.indexOf(id);
-            updatedHobbies.splice(index, 1);
-        } else {
-            // Hobby is not selected, add it
-            updatedHobbies.push(id);
-        }
-
-        setSelectedHobbies(updatedHobbies);
-    };
-    useEffect(() => {
-        
+    console.log("x",Orgdata);
+    useEffect(() => {   
         fetchData();
-        fetchHobby();
     }, []);
 
     return (
@@ -141,18 +98,18 @@ const Dashboard = ({ title }) => {
                                     </div>
                                     <div className="profile-info">
                                         <div className="profile-photo">
-                                            <img src={picture ? picture : Nouserphoto} className="img-fluid rounded-circle" alt="" />
+                                            <img src={Orgdata.picture ? Orgdata.picture : Nouserphoto} className="img-fluid rounded-circle" alt="" />
                                         </div>
                                         <div className="profile-details">
 
                                             {ApiLoader ? (<div className="mt-5 mb-3 l-background w-100" style={{ height: '100px' }}> </div>) : (
                                                 <>
                                                     <div className="profile-name px-3 pt-2">
-                                                        <h4 className="text-primary mb-0">{name}</h4>
-                                                        <p>{phone_number ? '+' + phone_number : 'No phone number'}</p>
+                                                        <h4 className="text-primary mb-0">{Orgdata.name}</h4>
+                                                        <p>{Orgdata.phone_number ? '+' + Orgdata.phone_number : 'No phone number'}</p>
                                                     </div>
                                                     <div className="profile-email px-2 pt-2">
-                                                        <h4 className="text-muted mb-0">{email}</h4>
+                                                        <h4 className="text-muted mb-0">{Orgdata.email}</h4>
                                                         <p>Email</p>
                                                     </div>
                                                     
@@ -183,12 +140,12 @@ const Dashboard = ({ title }) => {
                                                                 
                                                                 <div className="profile-personal-info">
                                                                     
-                                                                    <div className="row mb-2">
+                                                                <div className="row mb-2">
                                                                         <div className="col-sm-3 col-5">
                                                                             <h5 className="f-w-500">Name <span className="pull-end">:</span>
                                                                             </h5>
                                                                         </div>
-                                                                        <div className="col-sm-9 col-7"><span>{name}</span>
+                                                                        <div className="col-sm-9 col-7"><span>{Orgdata.name}</span>
                                                                         </div>
                                                                     </div>
                                                                     <div className="row mb-2">
@@ -196,14 +153,47 @@ const Dashboard = ({ title }) => {
                                                                             <h5 className="f-w-500">Email <span className="pull-end">:</span>
                                                                             </h5>
                                                                         </div>
-                                                                        <div className="col-sm-9 col-7"><span>{email}</span>
+                                                                        <div className="col-sm-9 col-7"><span>{Orgdata.email}</span>
                                                                         </div>
                                                                     </div>
                                                                     <div className="row mb-2">
                                                                         <div className="col-sm-3 col-5">
                                                                             <h5 className="f-w-500">Phone Number <span className="pull-end">:</span></h5>
                                                                         </div>
-                                                                        <div className="col-sm-9 col-7"><span>{phone_number ? '+' + phone_number : 'No phone number'}</span>
+                                                                        <div className="col-sm-9 col-7"><span>{Orgdata.phone_number ? '+' + Orgdata.phone_number : 'No phone number'}</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="row mb-2">
+                                                                        <div className="col-sm-3 col-5">
+                                                                            <h5 className="f-w-500">Account no<span className="pull-end">:</span>
+                                                                            </h5>
+                                                                        </div>
+                                                                        <div className="col-sm-9 col-7"><span>{Orgdata.Bankaccount}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="row mb-2">
+                                                                        <div className="col-sm-3 col-5">
+                                                                            <h5 className="f-w-500">Bank name<span className="pull-end">:</span>
+                                                                            </h5>
+                                                                        </div>
+                                                                        <div className="col-sm-9 col-7"><span>{Orgdata.Bankname}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="row mb-2">
+                                                                        <div className="col-sm-3 col-5">
+                                                                            <h5 className="f-w-500">Account holder name<span className="pull-end">:</span>
+                                                                            </h5>
+                                                                        </div>
+                                                                        <div className="col-sm-9 col-7"><span>{Orgdata.Holdername}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="row mb-2">
+                                                                        <div className="col-sm-3 col-5">
+                                                                            <h5 className="f-w-500">SWIFT code<span className="pull-end">:</span>
+                                                                            </h5>
+                                                                        </div>
+                                                                        <div className="col-sm-9 col-7"><span>{Orgdata.Swift}</span>
                                                                         </div>
                                                                     </div>
                                                                     

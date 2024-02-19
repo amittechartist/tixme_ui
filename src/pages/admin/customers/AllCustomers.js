@@ -4,10 +4,12 @@ import { Button, Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import { apiurl, admin_url } from '../../../common/Helpers';
 import { Link } from "react-router-dom";
+import Norecord from '../../../component/Norecordui';
 const Dashboard = ({ title }) => {
     const { id, name } = useParams();
     const [Loader, setLoader] = useState(false);
     const [Listitems, setListitems] = useState([]);
+    const [intervalId, setIntervalId] = useState(null);
     const fetchList = async () => {
         try {
             setLoader(true)
@@ -72,26 +74,36 @@ const Dashboard = ({ title }) => {
         } else {
             fetchList();
         }
+        const interval = setInterval(() => {
+            if (id) {
+                fetchListWithfilter();
+            } else {
+                fetchList();
+            }
+        }, 3000);
+
+        // Save the interval ID so it can be cleared later
+        setIntervalId(interval);
+
+        // Clear the interval when the component unmounts
+        return () => clearInterval(interval);
     }, [id]);
     return (
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
-                    <div className="page-titles">
-                        <Link className="page-theme-btn position-right" to={admin_url + 'active-organizers'}>View organizer</Link>
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item">{title}</li>
-                        </ol>
-                    </div>
                     <Row className="justify-content-center">
                         <Col md={12}>
-                            <Card className="py-4">
-                                <Card.Body>
+                            <Card className="">
+                                <Card.Header>
+                                    <h5 className="text-capitalize">{name && name + ' Customers'}</h5>
+                                </Card.Header>
+                                <Card.Body className="py-4">
                                     <Row className="justify-content-center">
                                         <Col md={12}>
-                                            {Loader ? (
+                                            {/* {Loader ? (
                                                 <div className="linear-background w-100"> </div>
-                                            ) : (
+                                            ) : ( */}
                                                 <>
                                                     {Listitems.length > 0 ? (
                                                         <>
@@ -112,7 +124,7 @@ const Dashboard = ({ title }) => {
                                                                                 <td><strong>{index + 1}</strong></td>
                                                                                 <td>{item.name}</td>
                                                                                 <td>{item.email}</td>
-                                                                                <td>{item.area_code}{item.phone_number}</td>
+                                                                                <td>+{item.phone_number}</td>
                                                                                 <td>
                                                                                     <div class="dropdown">
                                                                                         <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
@@ -130,12 +142,10 @@ const Dashboard = ({ title }) => {
                                                             </div>
                                                         </>
                                                     ) : (
-                                                        <div class="no-data-box">
-                                                            <p>No Data Found !</p>
-                                                        </div>
+                                                        <Norecord />
                                                     )}
                                                 </>
-                                            )}
+                                            {/* )} */}
                                         </Col>
                                     </Row>
                                 </Card.Body>

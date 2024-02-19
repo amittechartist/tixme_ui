@@ -51,12 +51,12 @@ const Dashboard = ({ title }) => {
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
-                    <div className="page-titles">
+                    {/* <div className="page-titles">
                         <Link className="page-theme-btn position-right" to={admin_url + 'add-event-type'}>Add Event Type</Link>
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item">{title}</li>
                         </ol>
-                    </div>
+                    </div> */}
                     <Row className="justify-content-center">
                         {Loader ? (
                             <div className="linear-background w-100"> </div>

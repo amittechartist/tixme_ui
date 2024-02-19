@@ -365,6 +365,7 @@ const Home = () => {
   const [allItemsTotalPrice, setAllItemsTotalPrice] = useState(0);
   const [eventTotalPrice, setEventTotalPrice] = useState(0);
   const [localQuantities, setLocalQuantities] = useState({});
+  
   const eventId = id; // Assuming Eventdata has _id property
 
   useEffect(() => {
@@ -466,14 +467,14 @@ const Home = () => {
       // Check if adding one more quantity exceeds the available quantity
       if (existingItem.quantity + 1 <= qty_avl) {
         const updatedCart = cartItems.map((cartItem) =>
-          cartItem.name === item.name ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
         );
         setCartItems(updatedCart);
 
         // Update local quantity state
         setLocalQuantities({
           ...localQuantities,
-          [item.name]: (localQuantities[item.name] || 0) + 1,
+          [item.id]: (localQuantities[item.id] || 0) + 1,
         });
       } else {
         // Show an alert or message if the quantity exceeds the available quantity
@@ -485,7 +486,7 @@ const Home = () => {
       // Update local quantity state for the new item
       setLocalQuantities({
         ...localQuantities,
-        [item.name]: 1,
+        [item.id]: 1,
       });
     }
 
@@ -494,9 +495,9 @@ const Home = () => {
 
 
 
-  const removeFromCart = (itemName, quantity) => {
+  const removeFromCart = (Id, quantity) => {
     const updatedCart = cartItems.map((cartItem) =>
-      cartItem.name === itemName ? { ...cartItem, quantity: cartItem.quantity > 0 ? cartItem.quantity - 1 : 0 } : cartItem
+      cartItem.id === Id ? { ...cartItem, quantity: cartItem.quantity > 0 ? cartItem.quantity - 1 : 0 } : cartItem
     );
 
     const filteredCart = updatedCart.filter((cartItem) => cartItem.quantity > 0);
@@ -505,7 +506,7 @@ const Home = () => {
     // Update local quantity state
     setLocalQuantities({
       ...localQuantities,
-      [itemName]: quantity > 0 ? quantity - 1 : 0,
+      [Id]: quantity > 0 ? quantity - 1 : 0,
     });
     setIsFirstRender(true)
   };
@@ -918,8 +919,8 @@ const Home = () => {
                                               </div>
                                               <div className="">
                                                 <div className="row grediant-border d-flex align-items-center mx-1">
-                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span></div>
-                                                  <div className="col-4"><span>{localQuantities[item.name] || 0}</span></div>
+                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.id, localQuantities[item.id] || 0)}>-</span></div>
+                                                  <div className="col-4"><span>{localQuantities[item.id] || 0}</span></div>
                                                   <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item, Eventdata._id)}>+</span></div>
                                                 </div>
                                               </div>
@@ -968,8 +969,8 @@ const Home = () => {
                                             {CountSoldOut(items) ? (
                                               <>
                                                 <div className="row grediant-border d-flex align-items-center mx-1">
-                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.name, localQuantities[items.name] || 0)}>-</span></div>
-                                                  <div className="col-4"><span>{localQuantities[items.name] || 0}</span></div>
+                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.id, localQuantities[items.id] || 0)}>-</span></div>
+                                                  <div className="col-4"><span>{localQuantities[items.id] || 0}</span></div>
                                                   <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span></div>
                                                 </div>
                                               </>

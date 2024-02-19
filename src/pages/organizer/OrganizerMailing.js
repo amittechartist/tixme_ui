@@ -13,15 +13,97 @@ import ContactDetails from '../../component/ContactDetails';
 const Dashboard = () => {
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal)
-
+    const organizerid = localStorage.getItem('organizerid');
+    // Loader
+    const [Loader, setLoader] = useState(false);
+    // states
     const [EventList, setEventList] = useState([]);
+    const [EventListOption, setEventListOption] = useState([]);
+    const [AttendanceListOption, setAttendanceListOption] = useState([]);
+    const [AttendanceSelected, setAttendanceSelected] = useState([]);
     const [Eventselected, setEventselected] = useState();
+    const [EventPreselected, setEventPreselected] = useState();
+    const [ticketOptions, setTicketOptions] = useState([]);
+    const [Ticketselected, setTicketselected] = useState();
 
     const EventOption = [
         {
-            options: EventList
+            options: EventListOption
         }
     ]
+    const EventPreOption = [
+        {
+            options: EventListOption
+        }
+    ]
+    const AttendanceOption = [
+        {
+            options: AttendanceListOption
+        }
+    ]
+    const TicketTypeOption = [
+        {
+            options: ticketOptions
+        }
+    ]
+
+    const handleEventChange = () => {
+        const newTicketOptions = [];
+        if (EventPreselected) {
+            EventPreselected.forEach(selectedEvent => {
+                const selectedEventData = EventList.find(event => event._id === selectedEvent.value);
+                if (selectedEventData) {
+                    const filteredTicketOptions = selectedEventData.allprice
+                        .filter(ticket => ticket.isdelete === 0)
+                        .map(ticket => ({ value: ticket.id, label: ticket.name }));
+                    newTicketOptions.push(...filteredTicketOptions);
+                }
+            });
+        }
+        setTicketOptions(newTicketOptions);
+    };
+    const getMyEvents = async () => {
+        try {
+            setLoader(true)
+            const requestData = {
+                id: organizerid,
+            };
+            fetch(apiurl + 'event/list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        setEventList(data.data);
+                        const Option = data.data.map(i => ({
+                            value: i._id,
+                            label: i.display_name
+                        }));
+                        setEventListOption(Option);
+                    }
+                    setLoader(false)
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                    setLoader(false)
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+            setLoader(false)
+        }
+    }
+
+    useEffect(() => {
+        getMyEvents();
+    }, []);
+    useEffect(() => {
+        handleEventChange();
+        setTicketselected("");
+    }, [EventPreselected]);
     return (
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
@@ -78,22 +160,35 @@ const Dashboard = () => {
                                                                     <p>My Previous Events</p>
                                                                     <Select
                                                                         isClearable={false}
-                                                                        options={EventOption}
+                                                                        options={EventPreOption}
+                                                                        isMulti
                                                                         className='react-select'
                                                                         classNamePrefix='select'
-                                                                        onChange={setEventselected}
-                                                                        value={Eventselected}
+                                                                        onChange={setEventPreselected}
+                                                                        value={EventPreselected}
+                                                                    />
+                                                                </div>
+                                                                <div className="form-group">
+                                                                    <p>Event Ticket Type</p>
+                                                                    <Select
+                                                                        isClearable={false}
+                                                                        options={TicketTypeOption}
+                                                                        isMulti
+                                                                        className='react-select'
+                                                                        classNamePrefix='select'
+                                                                        onChange={setTicketselected}
+                                                                        value={Ticketselected}
                                                                     />
                                                                 </div>
                                                                 <div className="form-group">
                                                                     <p>My Event Attendance</p>
                                                                     <Select
                                                                         isClearable={false}
-                                                                        options={EventOption}
+                                                                        options={AttendanceOption}
                                                                         className='react-select'
                                                                         classNamePrefix='select'
-                                                                        onChange={setEventselected}
-                                                                        value={Eventselected}
+                                                                        onChange={setAttendanceSelected}
+                                                                        value={AttendanceSelected}
                                                                     />
                                                                 </div>
                                                                 <div>

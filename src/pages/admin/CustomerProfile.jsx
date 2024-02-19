@@ -26,9 +26,9 @@ const Dashboard = ({ title }) => {
     const [address, setaddress] = useState();
     const [city, setcity] = useState();
     const [state, setstate] = useState();
-    const [country, setcountry] = useState();
-    const [pincode, setpincode] = useState();
-    const [picture, setpicture] = useState();
+    const [country, setcountry] = useState("");
+    const [pincode, setpincode] = useState("");
+    const [picture, setpicture] = useState("");
 
     const [ufname, setufname] = useState();
     const [ulname, setulname] = useState();
@@ -238,7 +238,7 @@ const Dashboard = ({ title }) => {
                                                                         <div className="col-sm-3 col-5">
                                                                             <h5 className="f-w-500">Location <span className="pull-end">:</span></h5>
                                                                         </div>
-                                                                        <div className="col-sm-9 col-7"><span>{address}, {country ? 'City - ' + city + ',' : ''}  {country ? 'Country - ' + country + ',' : ''} Pincode - {pincode}</span>
+                                                                        <div className="col-sm-9 col-7"><span>{address && address + ','} {country && 'City - ' + city.length > 0 + ','}  {country && 'Country - ' + country.length > 0 + ','}{pincode && 'Pincode -' + pincode}</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>

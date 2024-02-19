@@ -55,7 +55,7 @@ const Dashboard = ({ title }) => {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [Isany, setIsany] = useState(false);
     const handleCategoryChange = (id) => {
-        if (id == 'any') {
+        if (id == 'all') {
             setSelectedCategories([]);
             setIsany(!Isany);
         } else {
@@ -70,7 +70,7 @@ const Dashboard = ({ title }) => {
     useEffect(() => {
         if (selectedCategories.length > 0 && allEvents.length > 0) {
             const filteredEvents = allEvents.filter(event =>
-                event.eventData[0].category && selectedCategories.includes(event.eventData[0].category.toString())
+                event.category && selectedCategories.includes(event.category.toString())
             );
             setListitems(filteredEvents);
         } else if (selectedCategories.length === 0) {
@@ -412,26 +412,16 @@ const Dashboard = ({ title }) => {
                                                         {CatDropdownopen && (
                                                             <div className="category-box-new-for-dashboard">
                                                                 <div>
-                                                                    <div>
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            id={`checkbox-any`}
-                                                                            name={'any'}
-                                                                            checked={Isany}
-                                                                            onChange={() => handleCategoryChange('any')}
-                                                                        />
-                                                                        <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-any`}>Any</label>
-                                                                    </div>
                                                                     {CategoryList.map((item) => (
-                                                                        <div key={item._id}>
+                                                                        <div key={item.value}>
                                                                             <input
                                                                                 type="checkbox"
-                                                                                id={`checkbox-${item._id}`}
-                                                                                name={item.name}
-                                                                                checked={selectedCategories.includes(item._id)}
-                                                                                onChange={() => handleCategoryChange(item._id)}
+                                                                                id={`checkbox-${item.value}`}
+                                                                                name={item.label}
+                                                                                checked={selectedCategories.includes(item.value)}
+                                                                                onChange={() => handleCategoryChange(item.value)}
                                                                             />
-                                                                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
+                                                                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item.value}`}>{item.label}</label>
                                                                         </div>
                                                                     ))}
                                                                 </div>
@@ -483,8 +473,8 @@ const Dashboard = ({ title }) => {
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div>
-                                                                                <span className="list-event-name text-capitalize">{item.name}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} src={EditPng} alt="" /></span>
-                                                                                <p className="list-event-desc mb-0">{shortPer(item.event_desc, 100)}</p>
+                                                                                <span className="list-event-name text-capitalize">{shortPer(item.name, 30)}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} src={EditPng} alt="" /></span>
+                                                                                <p className="list-event-desc mb-0">{shortPer(item.event_desc, 30)}</p>
                                                                             </div>
                                                                             <div className="my-2">
                                                                                 {item.eventtype == 2 ? (
@@ -526,7 +516,7 @@ const Dashboard = ({ title }) => {
                                                                                     <>
                                                                                         <div className="">
                                                                                             {/* list-ticket-count */}
-                                                                                            <p className="mb-0 list-Total-Ticket">Total Ticket</p>
+                                                                                            <p className="mb-0 list-Total-Ticket">Total Ticket
                                                                                             <span className="list-Ticket-amount">
                                                                                                 {item.eventData
                                                                                                     .filter(price => price.status === "1") // Filter items where isdelete == 0
@@ -536,6 +526,8 @@ const Dashboard = ({ title }) => {
                                                                                                     .filter(price => price.isdelete === 0) // Filter items where isdelete == 0
                                                                                                     .reduce((total, price) => total + parseInt(price.quantity, 10), 0)}
                                                                                             </span> <span className="list-Ticket-sold">SOLD</span>
+                                                                                            </p>
+                                                                                            
                                                                                         </div>
                                                                                     </>
                                                                                 ) : ''}

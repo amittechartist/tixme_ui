@@ -15,6 +15,7 @@ import { FaUsers } from "react-icons/fa6";
 const Sidebar = () => {
     const [Listitems, setListitems] = useState([]);
     const [Countrylist, setCountrylist] = useState([]);
+    const [CustomerDropdown, setCustomerDropdown] = useState(false);
     const fetchList = async () => {
         try {
 
@@ -96,20 +97,22 @@ const Sidebar = () => {
                             <span className="nav-text">Dashboard</span>
                         </Link>
                         </li>
-                        <li onClick={() => d()}>
+                        <li onClick={() => { d(); setCustomerDropdown(!CustomerDropdown) }}>
                             <a href="javascript:void(0);" class="has-arrow ai-icon" aria-expanded="false">
-                            <img src={DashboardIcon} alt="Your Logo" />
+                                <img src={DashboardIcon} alt="Your Logo" />
                                 <span class="nav-text">Customers</span>
                             </a>
-                            <ul aria-expanded="false">
-                                {Listitems.map((item, index) => (
-                                    <li>
-                                        <Link className='text-black' to={`${admin_url}customers/${item._id}/${item.name}`}>{item.name}</Link>
+                            {CustomerDropdown && (
+                                <ul aria-expanded="false">
+                                    {Listitems.map((item, index) => (
+                                        <li onClick={() => setCustomerDropdown(!CustomerDropdown)}>
+                                            <Link className='text-black' to={`${admin_url}customers/${item._id}/${item.name}`}>{item.name}</Link>
                                         </li>
-                                ))}
-                                <li>
-                                    <Link className='text-black' to={admin_url + 'all-customers'}>No Membership</Link></li>
-                            </ul>
+                                    ))}
+                                    {/* <li>
+                                    <Link className='text-black' to={admin_url + 'all-customers'}>No Membership</Link></li> */}
+                                </ul>
+                            )}
                         </li>
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'all-category'} className="ai-icon" aria-expanded="false">
@@ -141,24 +144,24 @@ const Sidebar = () => {
                                 <span className="nav-text">All Event</span>
                             </Link>
                         </li>
-                        <li onClick={() => d()}>
+                        {/* <li onClick={() => d()}>
                             <Link to={admin_url + 'support-tickets'} className="ai-icon" aria-expanded="false">
                                 <img src={DashboardIcon} alt="Your Logo" />
                                 <span className="nav-text">Support</span>
                             </Link>
-                        </li >
+                        </li > */}
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'addcoupon'} className="ai-icon" aria-expanded="false">
                                 <img src={DashboardIcon} alt="Your Logo" />
                                 <span className="nav-text">Add Coupon</span>
                             </Link>
                         </li>
-                        <li onClick={() => d()}>
+                        {/* <li onClick={() => d()}>
                             <Link to={admin_url + 'taxadd'} className="ai-icon" aria-expanded="false">
                                 <img src={DashboardIcon} alt="Your Logo" />
                                 <span className="nav-text">Add Tax</span>
                             </Link>
-                        </li>
+                        </li> */}
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'membership'} className="ai-icon" aria-expanded="false">
                                 <img src={DashboardIcon} alt="Your Logo" />
@@ -171,7 +174,7 @@ const Sidebar = () => {
                                 <span className="nav-text">Payout request</span>
                             </Link>
                         </li > */}
-                        <li onClick={() => d()}>
+                        <li onClick={() => d()} className="d-none">
                             <a href="javascript:void(0);" class="has-arrow ai-icon" aria-expanded="false">
                                 <img src={EventIcon} alt="Your Logo" />
                                 <span class="nav-text">Payout request</span>
@@ -196,11 +199,11 @@ const Sidebar = () => {
                             </Link>
                         </li >
                         <li onClick={() => d()}>
-                            <div onClick={Logout} className="ai-icon cursor-pointer" aria-expanded="false">
+                            <a onClick={() => Logout()} className="ai-icon" aria-expanded="false">
                                 <img src={DashboardIcon} alt="Your Logo" />
                                 <span className="nav-text">Logout</span>
-                            </div>
-                        </li>
+                            </a>
+                        </li >
                     </ul>
                 </div>
             </div>

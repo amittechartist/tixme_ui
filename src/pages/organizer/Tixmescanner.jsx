@@ -13,7 +13,8 @@ const Dashboard = ({ title }) => {
     const navigate = useNavigate();
     const openscanner = () => {
         // setopenQrcode(true)
-        navigate(organizer_url + 'tixme-scanner-page')
+        // navigate(organizer_url + 'tixme-scanner-page')
+        window.location.href = qr_url;
     }
     const lottewidth = {
         width: 'auto',

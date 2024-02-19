@@ -88,6 +88,7 @@ const Page = ({ title }) => {
                         setdate(data.data.date);
                         settime(data.data.time);
                         checkMembership(data.data.userid);
+                        HandeSendMail(data.data.main_orderid);
                         setApiLoader(false);
                     } else {
                         toast.error(data.data)
@@ -104,6 +105,32 @@ const Page = ({ title }) => {
             console.error('Api error:', error);
         }
     }
+    const HandeSendMail = async (id) => {
+        try {
+            const requestData = {
+                id: id,
+            }
+            fetch(apiurl + 'order/order-confirmation-mail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        
+                    }
+                })
+                .catch(error => {
+                    console.error('error:', error);
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+    }
+    
     useEffect(() => {
         checkPayment();
     }, []);

@@ -6,7 +6,7 @@ export const customer_url = app_url + 'customer/';
 
 // export const apiurl = 'http://localhost:5001/api/v1/';
 // export const imgurl = 'http://localhost:5001/uploads/';
-// export const qr_url = 'http://localhost:3002/scanner/organizer/tixme-scanner-page/';
+// export const qr_url = 'http://localhost:3001/scanner/organizer/tixme-scanner-page/';
 
 
 export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
@@ -63,11 +63,11 @@ export const shortPer = (paragraph, maxLength) => {
 export const getSupportbagecolor = (status) => {
     if (status == 0) {
         return 'text-warning';
-    } else if(status == 1){
+    } else if (status == 1) {
         return 'text-primary';
-    }else if(status == 2){
+    } else if (status == 2) {
         return 'text-success';
-    }else{
+    } else {
         return '';
     }
 }
@@ -96,3 +96,12 @@ export const getMonthName = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'long' });
 };
+export const isEndDateValid = (startDate, startTime, endDate, endTime) => {
+    const formattedStartDate = `${startDate.slice(0, 4)}-${startDate.slice(4, 6)}-${startDate.slice(6)}`;
+    const formattedEndDate = `${endDate.slice(0, 4)}-${endDate.slice(4, 6)}-${endDate.slice(6)}`;
+
+    const startDateTime = new Date(`${formattedStartDate} ${startTime}`);
+    const endDateTime = new Date(`${formattedEndDate} ${endTime}`);
+
+    return endDateTime > startDateTime;
+}

@@ -170,7 +170,7 @@ const About = () => {
         countryvalue: selectedCountry ? selectedCountry.value : "",
         pincode: Pincode,
         agree_to_terms: 1,
-        agree_to_receive_marketing: 1,
+        agree_to_receive_marketing: Marketing ? 1 : 0,
         password: Password,
       };
       fetch(apiurl + "auth/customer/signup", {
@@ -275,6 +275,30 @@ const About = () => {
                       <>
                         <div className="form-group">
                           <p>
+                            First Name <span className="text-danger">*</span>
+                          </p>
+                          <input
+                            className="form-control"
+                            type="text"
+                            placeholder="First Name"
+                            value={Firstname}
+                            onChange={(e) => setFirstname(e.target.value)}
+                          ></input>
+                        </div>
+                        <div className="form-group">
+                          <p>
+                            Last Name <span className="text-danger">*</span>
+                          </p>
+                          <input
+                            className="form-control"
+                            type="text"
+                            placeholder="Last Name"
+                            value={Lastname}
+                            onChange={(e) => setLastname(e.target.value)}
+                          ></input>
+                        </div>
+                        <div className="form-group">
+                          <p>
                             Email Address <span className="text-danger">*</span>
                           </p>
                           <input
@@ -296,30 +320,6 @@ const About = () => {
                             placeholder="Confirm Email ID"
                             value={Confirmemail}
                             onChange={(e) => setConfirmemail(e.target.value)}
-                          ></input>
-                        </div>
-                        <div className="form-group">
-                          <p>
-                            First Name <span className="text-danger">*</span>
-                          </p>
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="First Name"
-                            value={Firstname}
-                            onChange={(e) => setFirstname(e.target.value)}
-                          ></input>
-                        </div>
-                        <div className="form-group">
-                          <p>
-                            Last Name <span className="text-danger">*</span>
-                          </p>
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Last Name"
-                            value={Lastname}
-                            onChange={(e) => setLastname(e.target.value)}
                           ></input>
                         </div>
                         <div className="form-group">
@@ -414,10 +414,16 @@ const About = () => {
                       </p>
                       <input
                         className="form-control"
-                        type="number"
+                        type="tel" 
                         placeholder="WhatsApp Number"
                         value={WhatsappNumber}
-                        onChange={(e) => setWhatsappNumber(e.target.value)}
+                        onChange={(e) => {
+                          const newValue = e.target.value.replace(/\D/g, '');
+                          // Limit input to 10 digits
+                          if (newValue.length <= 10) {
+                            setWhatsappNumber(newValue);
+                          }
+                        }}
                       ></input>
                     </div>
                     <div className="form-group">

@@ -69,6 +69,7 @@ const Locationbtn = ({ prorps }) => {
                 .then(data => {
                     setLoader(false);
                     if (data.success == true) {
+                        emptyField();
                         MySwal.fire({
                             icon: 'success',
                             title: '',
@@ -76,6 +77,7 @@ const Locationbtn = ({ prorps }) => {
                         }).then((result) => {
                             navigate(app_url);
                         });
+                        setContactModal(false);
                     } else {
                         toast.error(data.message);
                     }
@@ -88,7 +90,15 @@ const Locationbtn = ({ prorps }) => {
         } catch (error) {
             console.error('Api error:', error);
         }
-
+    }
+    const emptyField = () => {
+        setConfirmemail("");
+        setEmail("");
+        setPhonenumber("");
+        setFirstname("");
+        setLastname("");
+        setMessage("");
+        setSelectedCountry("");
     }
     const handlePhoneChange = (newPhone) => {
         setPhonenumber(newPhone);
@@ -96,20 +106,10 @@ const Locationbtn = ({ prorps }) => {
     return (
         <>
             <Modal isOpen={ContactModal} toggle={() => setContactModal(!ContactModal)} centered>
-            <ModalHeader toggle={() => setContactModal(!ContactModal)}> </ModalHeader>
+                <ModalHeader toggle={() => setContactModal(!ContactModal)}> </ModalHeader>
                 <ModalBody>
                     <form onSubmit={HandelOrganizersignup}>
                         <Row>
-                            <Col md={12}>
-                                <div className="form-group">
-                                    <p>Email Address <span className="text-danger">*</span></p>
-                                    <input className="form-control" type="text" placeholder="Email Address" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
-                                </div>
-                                <div className="form-group">
-                                    <p>Confirm Email Address <span className="text-danger">*</span></p>
-                                    <input className="form-control" type="text" placeholder="Confirm Email Address" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
-                                </div>
-                            </Col>
                             <Col md={6}>
                                 <div className="form-group">
                                     <p>First Name <span className="text-danger">*</span></p>
@@ -120,6 +120,16 @@ const Locationbtn = ({ prorps }) => {
                                 <div className="form-group">
                                     <p>Last Name <span className="text-danger">*</span></p>
                                     <input className="form-control" type="text" placeholder="Last Name" value={Lastname} onChange={(e) => setLastname(e.target.value)}></input>
+                                </div>
+                            </Col>
+                            <Col md={12}>
+                                <div className="form-group">
+                                    <p>Email Address <span className="text-danger">*</span></p>
+                                    <input className="form-control" type="text" placeholder="Email Address" value={Email} onChange={(e) => setEmail(e.target.value)}></input>
+                                </div>
+                                <div className="form-group">
+                                    <p>Confirm Email Address <span className="text-danger">*</span></p>
+                                    <input className="form-control" type="text" placeholder="Confirm Email Address" value={Confirmemail} onChange={(e) => setConfirmemail(e.target.value)}></input>
                                 </div>
                             </Col>
                             <Col md={6}>
@@ -168,7 +178,7 @@ const Locationbtn = ({ prorps }) => {
                 <li class="nav-item d-flex align-items-center justify-content-center me-xl-4 me-3">
                     <Link
                         class="nav-link text-primary-theme pe-1 font-nav"
-                        onClick={() => setContactModal(!ContactModal)}
+                        onClick={() => { setContactModal(!ContactModal); emptyField(); }}
                     >
                         List Your Event{" "}
                         <img class="nav-plus" src={plus} alt="" />
@@ -179,7 +189,7 @@ const Locationbtn = ({ prorps }) => {
                 <li className="nav-item d-flex align-items-center justify-content-start">
                     <Link
                         className="nav-link text-primary-theme pe-1 font-nav"
-                        onClick={() => setContactModal(!ContactModal)}
+                        onClick={() => { setContactModal(!ContactModal); emptyField(); }}
                     >
                         List Your Event {" "}
                         <img class="nav-plus" src={plus} alt="" />

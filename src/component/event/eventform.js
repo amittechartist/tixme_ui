@@ -26,7 +26,7 @@ import Lottie from "lottie-react";
 import TicketLotte from '../../lotte/ticketanimation.json';
 import '../../common/css/wiz.css';
 import TimezoneSelect from 'react-timezone-select'
-import { shortPer, apiurl, get_date_time, get_min_date, organizer_url, formatDateToYYYYMMDD } from '../../common/Helpers';
+import { isEndDateValid, shortPer, apiurl, get_date_time, get_min_date, organizer_url, formatDateToYYYYMMDD } from '../../common/Helpers';
 import {
     Modal,
     Input,
@@ -555,6 +555,10 @@ const Type = ({ title, editid, ticketeditid }) => {
                     return toast.error("All field required");
                 }
             }
+            const check = isEndDateValid(get_min_date(Startdateselect), get_date_time(EventStarttime)[0].Timeview, get_min_date(Enddateselect), get_date_time(EventEndtime)[0].Timeview);
+            if (!check) {
+                return toast.error("Event end date & time must be greater than start date & time");
+            }
             setLoader(true);
             const requestData = {
                 updateid: EditId,
@@ -574,14 +578,20 @@ const Type = ({ title, editid, ticketeditid }) => {
                 tags: tags,
                 visibility: Visibility,
                 event_subtype_id: EventSubtype,
+
                 start_date: startdate,
-                start_time: starttime,
                 start_mindate: get_min_date(Startdateselect),
+                start_time: get_date_time(EventStarttime)[0].Timeview,
+                start_time_min: EventStarttime,
+
                 end_date: Enddate,
-                end_time: Rndtime,
                 end_mindate: get_min_date(Enddateselect),
+                end_time: get_date_time(EventEndtime)[0].Timeview,
+                end_time_min: EventEndtime,
+
                 start_data_min: Startdateselect,
                 end_data_min: Enddateselect,
+
                 is_clock_countdown: IsclockCountdown,
                 is_selling_fast: IsSellingFast,
                 display_start_time: Displaystarttime,
@@ -667,6 +677,10 @@ const Type = ({ title, editid, ticketeditid }) => {
     }
     const HandelSubmit = async () => {
         try {
+            const check = isEndDateValid(get_min_date(Startdateselect), get_date_time(EventStarttime)[0].Timeview, get_min_date(Enddateselect), get_date_time(EventEndtime)[0].Timeview);
+            if (!check) {
+                return toast.error("Event end date & time must be greater than start date & time");
+            }
             var event_type_name = '';
             if (Eventtype == 1) {
                 var event_type_name = 'Offline Event';
@@ -686,8 +700,6 @@ const Type = ({ title, editid, ticketeditid }) => {
                 updateid: 0,
                 isdelete: 0,
                 status: 0,
-                start_mindate: get_min_date(Startdateselect),
-                end_mindate: get_min_date(Enddateselect),
                 displayprice: Displayprice > 0 ? Displayprice : 0,
                 eventtype: Eventtype,
                 event_type_name: event_type_name,
@@ -701,12 +713,17 @@ const Type = ({ title, editid, ticketeditid }) => {
                 tags: tags,
                 visibility: Visibility,
                 event_subtype_id: EventSubtype,
+
                 start_date: startdate,
-                start_time: starttime,
+                start_mindate: get_min_date(Startdateselect),
+                start_time: get_date_time(EventStarttime)[0].Timeview,
+                start_time_min: EventStarttime,
+
                 end_date: Enddate,
-                end_time: Rndtime,
-                start_data_min: Startdateselect,
-                end_data_min: Enddateselect,
+                end_mindate: get_min_date(Enddateselect),
+                end_time: get_date_time(EventEndtime)[0].Timeview,
+                end_time_min: EventEndtime,
+
                 is_clock_countdown: IsclockCountdown,
                 is_selling_fast: IsSellingFast,
                 display_start_time: Displaystarttime,
@@ -810,7 +827,7 @@ const Type = ({ title, editid, ticketeditid }) => {
             text: "Your event is now published",
             icon: "success",
             showCancelButton: false,
-            confirmButtonText: 'Yes',
+            confirmButtonText: 'View My All Events',
         }).then((result) => {
             if (result.isConfirmed) {
                 navigate(organizer_url + 'event/all-event-list');
@@ -1219,7 +1236,6 @@ const Type = ({ title, editid, ticketeditid }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-
                         setName(data.data.name)
                         setEditId(data.data._id)
                         setDisplayname(data.data.display_name)
@@ -1239,12 +1255,20 @@ const Type = ({ title, editid, ticketeditid }) => {
                         setStatename(data.data.state)
                         setPincode(data.data.pincode)
                         setEventSubtype(data.data.event_subtype_id)
-                        setStartdateselect(data.data.start_data_min[0])
-                        setEnddateselect(data.data.end_data_min[0])
+
                         setIsclockCountdown(data.data.is_clock_countdown)
                         setIsSellingFast(data.data.is_selling_fast)
+
+                        setStartdateselect(data.data.start_data_min[0] || new Date())
+                        setEnddateselect(data.data.end_data_min[0] || new Date())
+
+                        
+                        setEventStarttime(data.data.start_time_min[0] || new Date())
+                        setEventEndtime(data.data.end_time_min[0] || new Date())
+
                         setDisplaystarttime(data.data.display_start_time)
                         setDisplayendtime(data.data.display_end_time)
+
                         setEventdesc(data.data.event_desc)
                         setSelectedImage(data.data.thum_image ? data.data.thum_image : null)
                         if (data.data.thum_image) {
@@ -1862,7 +1886,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                             </div>
                                         </Col>
                                         <Col md={12} className="text-center mb-3 mt-4">
-                                            <h2 className="theme-color mb-2 ">Event Description</h2>
+                                            <h2 className="theme-color mb-2 ">Event Description <span className="text-danger">*</span></h2>
                                         </Col>
                                         <div className="col-md-12">
                                             <h4 className="mb-2">About this event</h4>

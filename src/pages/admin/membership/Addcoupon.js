@@ -239,13 +239,13 @@ const Dashboard = ({ title }) => {
             </Modal >
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
-                    <div className="page-titles">
-                        <button type="button" className="page-theme-btn position-right" onClick={() => setAddnewmodal(!Addnewmodal)}><span className="theme-btn-icon"><FiPlus /></span> Add New</button>
-                    </div>
                     <Row className="mt-2">
                         <Col md={12}>
-                            <Card className="py-4">
-                                <Card.Body>
+                            <Card className="">
+                                <Card.Header className="d-flex justify-content-end">
+                                <button type="button" className="btn theme-bg text-white" onClick={() => setAddnewmodal(!Addnewmodal)}><span className="theme-btn-icon"><FiPlus /></span> Add New</button>
+                                </Card.Header>
+                                <Card.Body className="py-4">
                                     <Row className="">
                                         {Loader ? (
                                             <div className="linear-background w-100"> </div>
@@ -263,7 +263,7 @@ const Dashboard = ({ title }) => {
                                                                         <div className="col-md-8 p-2">
                                                                             <p className="mb-0 coupon-name w-100" style={{ fontSize: '16px', fontWeight: '600' }}>{item.name}</p>
                                                                             <p className="mb-0 coupon-point" style={{ fontSize: '14px', fontWeight: '600' }}>{item.point} Points</p>
-                                                                            <div className="action-btn-div float-end mr-3" onClick={() => CheckDelete(item._id)} style={{cursor: 'pointer'}}>
+                                                                            <div className="action-btn-div float-end mr-3" onClick={() => CheckDelete(item._id)} style={{ cursor: 'pointer' }}>
                                                                                 <span className="text-danger" style={{ border: '1px solid red', borderRadius: '20px', padding: '2px 20px', fontSize: '18px' }}><FiTrash2 /></span>
                                                                             </div>
                                                                         </div>

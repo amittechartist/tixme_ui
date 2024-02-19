@@ -1236,6 +1236,7 @@ button.signup-page-button {
 
 .bb2s {
   border-bottom: 2px solid #eee;
+  border: 2px solid #eee;
 }
 
 .blr2s {
@@ -2269,4 +2270,7 @@ span.sidebar-icon {
 .event-page-category-filter-box1 {
   display: inline-block;
   width: 100%;
+}
+.theme-border .css-13cymwt-control {
+  border-color: hsl(0deg 0% 93.33%) !important;
 }
