@@ -1791,6 +1791,7 @@ body {
 
 .row.cart-new-div .aaa {
   margin-left: 5px;
+  margin-top: 5px;
   font-size: 12px;
   font-weight: 100;
   color: #424242;
@@ -1800,6 +1801,7 @@ body {
   font-size: 12px;
   color: #424242;
   margin-left: 5px;
+  margin-top: 5px;
 }
 
 .row.cart-new-div {

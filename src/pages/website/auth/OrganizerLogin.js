@@ -75,7 +75,7 @@ const About = () => {
                         <div className="col-md-6">
                             <form onSubmit={HandelOrganizerLogin}>
                                 <div>
-                                    <h5 className="mb-md-5 mb-2 auth-page-title1" style={{ fontWeight: '600', color: '#000' }}>Do you already have an account? please log in with your email address.</h5>
+                                    {/* <h5 className="mb-md-5 mb-2 auth-page-title1" style={{ fontWeight: '600', color: '#000' }}>Do you already have an account? please log in with your email address.</h5> */}
                                     <div className="form-group">
                                         <p>Email Id<span className="text-danger">*</span></p>
                                         <input className="form-control" type="text" placeholder="Email Id" onChange={(e) => setLoginEmail(e.target.value)}></input>
