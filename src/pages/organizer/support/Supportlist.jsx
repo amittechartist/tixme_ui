@@ -18,6 +18,8 @@ import { useParams } from 'react-router-dom';
 import { FaCircle } from "react-icons/fa6";
 // component
 import ContactDetails from '../../../component/ContactDetails';
+import ContactForm from '../../../component/ContactusFrorm';
+
 const Dashboard = () => {
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal)
@@ -741,7 +743,7 @@ const Dashboard = () => {
                                                     </Col>
                                                     <Col md={4}>
                                                         <div class="input-group mb-3 input-warning-o grey-border">
-                                                            <span class="input-group-text"><img src={Searchicon} alt="" /></span>
+                                                            <span class="input-group-text" ><img src={Searchicon} alt="" /></span>
 
                                                             <input
                                                                 type="text"
@@ -935,6 +937,7 @@ const Dashboard = () => {
                         <div className="col-md-12">
                             <Card className="py-4">
                                 <Card.Body>
+                                    <ContactForm />
                                     <ContactDetails />
                                 </Card.Body>
                             </Card>

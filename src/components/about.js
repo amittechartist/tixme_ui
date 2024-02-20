@@ -29,7 +29,7 @@ const About = () => {
           </h1>
           <div class="banner-child bg-white px-0">
             <div class="d-flex flex-md-row flex-column">
-              <img class="about-img mt-lg-5 mt-4" style={{ paddingLeft: '11px' }} src={aboutUs} alt="" />
+              <img class="about-img mt-lg-5 mt-4" style={{ paddingLeft: '25px' }} src={aboutUs} alt="" />
               <p class="ps-lg-5 ps-4 pe-4 about-p mt-lg-5 mt-4">
                 Welcome to TIXME, where every ticket tells a story! Our mission is
                 to redefine events, making each occasion an unforgettable and

@@ -42,7 +42,7 @@ body {
 }
 
 .banner-event {
-  height: 340px;
+  min-height: 340px;
 }
 
 .rounded-8 {

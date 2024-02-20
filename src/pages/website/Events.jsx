@@ -85,7 +85,7 @@ const Home = () => {
     const [selectedCountry, setSelectedCountry] = useState([]);
     const GetCategoryName = (id) => {
         const category = CategoryList.find(item => item.value === id);
-        return category ? category.label : 'Unknown';
+        return category ? category.label : 'loading...';
     }
 
     const handleCheckboxChange = (id) => {
@@ -310,7 +310,7 @@ const Home = () => {
         // Dateapitype
         // wantPricefilter
 
-    }, [selectedCategories, Eventtype, Ticketstype, FiltersearchQuery, selectedCountry, startdate, enddate, Datetype]);
+    }, [selectedCategories, Eventtype, Ticketstype, FiltersearchQuery, selectedCountry, startdate, enddate, rangestartdate, Datetype]);
     const [mobilefilter, setMobilefilter] = useState(false);
     return (
         <>
@@ -514,7 +514,7 @@ const Home = () => {
                 <div className="event-view-body">
                     <div className="event-page-mergin-currect">
                         <Row className="my-3 my-md-5">
-                            <Col md={3} xl={3} lg={4} className="col-xl-3 col-lg-4 col-md-3 col-12 d-md-inline d-none sticky-column filter-according events-page-filter-box mb-4 mb-md-0" style={{ height: "100%" }}>
+                            <Col md={3} xl={3} lg={4} className="col-xl-3 col-lg-4 col-md-3 col-12 d-md-inline d-none filter-according events-page-filter-box mb-4 mb-md-0" style={{ height: "100%" }}>
                                 <form onSubmit={fetchEvent}>
                                     <div className="row">
                                         <div className="col-md-12">
@@ -753,7 +753,7 @@ const Home = () => {
                                                                         <div className="col-md-7 d-flex align-items-center col-7">
                                                                             <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
                                                                             <div className="d-flex flex-column align-items-start justify-content-start">
-                                                                                <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                                                                                <small className="mb-0 wspace-no" style={{ fontSize: '12px' }}>Originated by</small>
                                                                                 <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
                                                                                     {item.organizer_name}
                                                                                 </p>

@@ -401,12 +401,13 @@ const Dashboard = ({ title }) => {
                                                 <>
                                                     <div className="profile-name px-3 pt-2">
                                                         <h4 className="text-primary mb-0">{name}</h4>
-                                                        <p>{phone_number ? '+' + phone_number : 'No phone number'}</p>
+                                                        {/* <p>{phone_number ? '+' + phone_number : 'No phone number'}</p> */}
+                                                        <p>{email}</p>
                                                     </div>
-                                                    <div className="profile-email px-2 pt-2">
+                                                    {/* <div className="profile-email px-2 pt-2">
                                                         <h4 className="text-muted mb-0">{email}</h4>
                                                         <p>Email</p>
-                                                    </div>
+                                                    </div> */}
                                                     {/* {badge ? (
                                                         <>
                                                             <div className="profile-email px-2 pt-2">
@@ -481,7 +482,7 @@ const Dashboard = ({ title }) => {
 
                                                                     <div className="row mb-2">
                                                                         <div className="col-sm-3 col-5">
-                                                                            <h5 className="f-w-500">Location <span className="pull-end">:</span></h5>
+                                                                            <h5 className="f-w-500">Country of residence <span className="pull-end">:</span></h5>
                                                                         </div>
                                                                         <div className="col-sm-9 col-7"><span>{address && address + ','} {fcountry > 0 ? 'City - ' + fcity > 0 + ',' : ''}  {fcountry > 0 ? 'Country - ' + fcountry > 0 + ',' : ''} {pincode && 'Pincode -' + pincode}</span>
                                                                         </div>

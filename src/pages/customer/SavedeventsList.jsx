@@ -196,13 +196,14 @@ const Dashboard = ({ title }) => {
                                             <Row>
                                                 <Col md={4}>
                                                 <div class="input-group mb-3 input-warning-o">
-                                                        <span class="input-group-text"><img src={Searchicon} alt="" /></span>
+                                                        <span class="input-group-text" style={{height: 38}}><img src={Searchicon} alt="" /></span>
                                                         <input
                                                             type="text"
                                                             className="form-control"
                                                             placeholder="Search events"
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
+                                                            style={{height: 40}}
                                                         />
                                                     </div>
                                                 </Col>

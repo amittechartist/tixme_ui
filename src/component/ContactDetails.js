@@ -6,7 +6,7 @@ const ContactDetails = () => {
     const [tabno, setTabno] = useState(2);
     return (
         <>
-            <div className="address-sec banner-child-address py-5 px-md-0 px-3">
+            <div className="address-sec banner-child-address py-5 px-md-0 px-3 zxc">
                 <div className="d-flex justify-content-center">
                     <div onClick={() => setTabno(2)} className={tabno == 2 ? 'mx-lg-4 mx-2 animate__animated animate__bounce xyss xxx-conta' : 'mx-lg-4 mx-2 animate__animated animate__bounce xxx-conta'}>
                         <p className="sssas">singapore</p>

@@ -120,7 +120,7 @@ const Home = () => {
                             <div className="col-md-7 d-flex align-items-center">
                               <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
                               <div className="d-flex flex-column align-items-start justify-content-start">
-                                <small className="mb-0" style={{ fontSize: '12px' }}>Originated by</small>
+                                <small className="mb-0 wspace-no" style={{ fontSize: '12px' }}>Originated by</small>
                                 <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
                                   By {item.organizer_name}
                                 </p>
