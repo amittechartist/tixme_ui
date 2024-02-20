@@ -62,6 +62,7 @@ const Dashboard = ({ title }) => {
                                                                 <th><strong>Phone</strong></th>
                                                                 <th><strong>Date</strong></th>
                                                                 <th><strong>Subject</strong></th>
+                                                                <th><strong>Type</strong></th>
                                                                 <th><strong>Message</strong></th>
                                                             </tr>
                                                         </thead>
@@ -74,6 +75,7 @@ const Dashboard = ({ title }) => {
                                                                     <td>{item.phone && '+' + item.phone}</td>
                                                                     <td>{item.date}</td>
                                                                     <td>{item.subject}</td>
+                                                                    <td>{item.areyou}</td>
                                                                     <td>{item.message}</td>
                                                                 </tr>
                                                             ))}

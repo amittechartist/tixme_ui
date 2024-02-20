@@ -118,7 +118,13 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        setListitems(data.data);
+                        if(ticket_id){
+                            const filteredEvents = data.data.filter(event =>
+                                event.ticket_id == ticket_id);
+                            setListitems(filteredEvents);
+                        }else{
+                            setListitems(data.data);
+                        }
                         setDataList(data.data);
                         setEventData(data.eventdata);
                     }
@@ -288,7 +294,7 @@ const Dashboard = ({ title }) => {
             </Modal>
 
             <Modal isOpen={modal} toggle={() => setModal(!modal)} centered size={'xl'}>
-                <ModalHeader toggle={!modal}>Order Details</ModalHeader>
+                <ModalHeader toggle={() => setModal(!modal)}>Order Details</ModalHeader>
                 <ModalBody>
                     <Row>
                         {ModalLoader ? (
@@ -452,13 +458,14 @@ const Dashboard = ({ title }) => {
                                                             <select
                                                                 className="form-select"
                                                                 onChange={e => setTickettype(e.target.value)}
+                                                                value={Tickettype || ticket_id}
                                                                 defaultValue=""
                                                             >
                                                                 <option value="">Select Ticket Type</option>
                                                                 {EventData && EventData.allprice.map((item) => (
                                                                     <>
                                                                         {item.isdelete == 0 && (
-                                                                            <option selected={Tickettype == item.id} value={item.id}>{item.name}</option>
+                                                                            <option  value={item.id}>{item.name}</option>
                                                                         )}
                                                                     </>
                                                                 ))}

@@ -31,6 +31,7 @@ const About = () => {
   const [WhatsappNumber, setWhatsappNumber] = useState();
   const [Address1, setAddress1] = useState();
   const [Pincode, setPincode] = useState();
+  const [NLoader, setNLoader] = useState(false);
   const [Terms, setTerms] = useState(false);
   const [Privacy, setPrivacy] = useState(false);
   const [Marketing, setMarketing] = useState(false);
@@ -96,6 +97,17 @@ const About = () => {
       if (!Privacy) {
         return toast.error("Please agree to the privacy policy");
       }
+      if (!Password || !ConfirmPassword) {
+        return toast.error("Required field must not be empty");
+      }
+      if (Password.length > 7) {
+      } else {
+        return toast.error("Password must be at least 8 characters long");
+      }
+      if (Password === ConfirmPassword) {
+      } else {
+        return toast.error("Password and confirm password not match");
+      }
       HandelEmailCheck();
     }
     if (no == 3) {
@@ -121,6 +133,7 @@ const About = () => {
       const requestData = {
         email: Email,
       };
+      setNLoader(true)
       fetch(apiurl + "auth/customer/email-check", {
         method: "POST",
         headers: {
@@ -132,17 +145,21 @@ const About = () => {
         .then((data) => {
           setLoader(false);
           if (data.success == true) {
-            SetSignUpstep(3);
+            // SetSignUpstep(3);
+            HandelCustomersignup();
           } else {
             toast.error(data.message);
+            setNLoader(false)
           }
         })
         .catch((error) => {
           toast.error("Insert error: " + error.message);
           console.error("Insert error:", error);
+          setNLoader(false)
         });
     } catch (error) {
       console.error("Api error:", error);
+      setNLoader(false)
     }
   };
   const HandelCustomersignup = async () => {
@@ -191,17 +208,21 @@ const About = () => {
               duration: 3000,
             });
             navigate(app_url);
+
           } else {
             toast.error(data.message);
           }
+          setNLoader(false)
         })
         .catch((error) => {
           setLoader(false);
           toast.error("Insert error: " + error.message);
           console.error("Insert error:", error);
+          setNLoader(false)
         });
     } catch (error) {
       console.error("Api error:", error);
+      setNLoader(false)
     }
   };
   const handlePhoneChange = (newPhone) => {
@@ -273,68 +294,145 @@ const About = () => {
                   <>
                     {SignUpstep == 2 ? (
                       <>
-                        <div className="form-group">
-                          <p>
-                            First Name <span className="text-danger">*</span>
-                          </p>
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="First Name"
-                            value={Firstname}
-                            onChange={(e) => setFirstname(e.target.value)}
-                          ></input>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <p>
+                                First Name <span className="text-danger">*</span>
+                              </p>
+                              <input
+                                className="form-control"
+                                type="text"
+                                placeholder="First Name"
+                                value={Firstname}
+                                onChange={(e) => setFirstname(e.target.value)}
+                              ></input>
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <p>
+                                Last Name <span className="text-danger">*</span>
+                              </p>
+                              <input
+                                className="form-control"
+                                type="text"
+                                placeholder="Last Name"
+                                value={Lastname}
+                                onChange={(e) => setLastname(e.target.value)}
+                              ></input>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="row">
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <p>
+                                Email Address <span className="text-danger">*</span>
+                              </p>
+                              <input
+                                className="form-control"
+                                type="text"
+                                placeholder="Email ID"
+                                value={Email}
+                                onChange={(e) => setEmail(e.target.value)}
+                              ></input>
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <p>
+                                Confirm Email Address{" "}
+                                <span className="text-danger">*</span>
+                              </p>
+                              <input
+                                className="form-control"
+                                type="text"
+                                placeholder="Confirm Email ID"
+                                value={Confirmemail}
+                                onChange={(e) => setConfirmemail(e.target.value)}
+                              ></input>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="row">
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <p>
+                                Phone number <span className="text-danger">*</span>
+                              </p>
+                              {/* <input className="form-control" type="number" placeholder="Phone number" value={Phonenumber} onChange={handlePhoneChange}></input> */}
+                              <PhoneInput
+                                country={"us"}
+                                className="phone-number-with-code"
+                                enableSearch={true}
+                                placeholder={"Phone number"}
+                                autoFormat={true}
+                                value={Phonenumber}
+                                onChange={handlePhoneChange}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <p>
+                                WhatsApp Number{" "}
+                                <small style={{ color: "darkblue" }}>(Optional)</small>
+                              </p>
+                              <PhoneInput
+                                country={"us"}
+                                className="phone-number-with-code"
+                                enableSearch={true}
+                                placeholder={"WhatsApp Number"}
+                                autoFormat={true}
+                                value={WhatsappNumber}
+                                onChange={setWhatsappNumber}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+
+
+                        <div className="row">
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <p>
+                                Password <span className="text-danger">*</span>
+                              </p>
+                              <input
+                                className="form-control"
+                                type="password"
+                                placeholder="Password"
+                                value={Password}
+                                onChange={(e) => setPassword(e.target.value)}
+                              ></input>
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <p>
+                                Confirm Password <span className="text-danger">*</span>
+                              </p>
+                              <input
+                                className="form-control"
+                                type="password"
+                                placeholder="Confirm Password"
+                                value={ConfirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                              ></input>
+                            </div>
+                          </div>
                         </div>
                         <div className="form-group">
-                          <p>
-                            Last Name <span className="text-danger">*</span>
-                          </p>
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Last Name"
-                            value={Lastname}
-                            onChange={(e) => setLastname(e.target.value)}
-                          ></input>
-                        </div>
-                        <div className="form-group">
-                          <p>
-                            Email Address <span className="text-danger">*</span>
-                          </p>
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Email ID"
-                            value={Email}
-                            onChange={(e) => setEmail(e.target.value)}
-                          ></input>
-                        </div>
-                        <div className="form-group">
-                          <p>
-                            Confirm Email Address{" "}
-                            <span className="text-danger">*</span>
-                          </p>
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Confirm Email ID"
-                            value={Confirmemail}
-                            onChange={(e) => setConfirmemail(e.target.value)}
-                          ></input>
-                        </div>
-                        <div className="form-group">
-                          <p>
-                            Phone number <span className="text-danger">*</span>
-                          </p>
-                          {/* <input className="form-control" type="number" placeholder="Phone number" value={Phonenumber} onChange={handlePhoneChange}></input> */}
-                          <PhoneInput
-                            country={"us"}
-                            className="phone-number-with-code"
-                            enableSearch={true}
-                            placeholder={"Phone number"}
-                            autoFormat={true}
-                            value={Phonenumber}
-                            onChange={handlePhoneChange}
+                          <p>Select Country</p>
+                          <Select
+                            options={countries}
+                            value={selectedCountry}
+                            onChange={setSelectedCountry}
+                            placeholder="Select Country"
                           />
                         </div>
                         <div class="form-check">
@@ -414,7 +512,7 @@ const About = () => {
                       </p>
                       <input
                         className="form-control"
-                        type="tel" 
+                        type="tel"
                         placeholder="WhatsApp Number"
                         value={WhatsappNumber}
                         onChange={(e) => {
@@ -460,13 +558,24 @@ const About = () => {
                       ) : (
                         <>
                           {SignUpstep <= 3 ? (
-                            <button
-                              type="button"
-                              className="signup-page-button  mb-2"
-                              onClick={() => HandelSignupstep(SignUpstep)}
-                            >
-                              Next
-                            </button>
+                            <>
+                              {NLoader ? (
+                                <button
+                                  type="button"
+                                  className="signup-page-button  mb-2"
+                                >
+                                  Please Wait...
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  className="signup-page-button  mb-2"
+                                  onClick={() => HandelSignupstep(SignUpstep)}
+                                >
+                                  Next
+                                </button>
+                              )}
+                            </>
                           ) : (
                             <button
                               type="button"

@@ -11,6 +11,7 @@ const Contact = () => {
     const [email, setemail] = useState();
     const [phone, setphone] = useState();
     const [subject, setsubject] = useState();
+    const [areyou, setareyou] = useState();
     const [message, setmessage] = useState();
     const HandelContactForm = (e) => {
         e.preventDefault();
@@ -29,6 +30,7 @@ const Contact = () => {
                 email: email,
                 phone: phone,
                 subject: subject,
+                areyou: areyou,
                 message: message,
             };
             fetch(apiurl + 'website/contact-store', {
@@ -48,6 +50,7 @@ const Contact = () => {
                         setemail('');
                         setphone('');
                         setsubject('');
+                        setareyou('');
                         setmessage('');
                     } else {
                         toast.error(data.message);
@@ -128,7 +131,7 @@ const Contact = () => {
                         />
                     </div>
                 </div>
-                <div className="col-lg-8">
+                <div className="col-lg-4">
                     <p className="text-primary-color fw-bold mb-3">Subject<span className="text-danger">*</span></p>
                     <div className="d-flex flex-md-row flex-column">
                         <div className="form-check me-3">
@@ -155,6 +158,37 @@ const Contact = () => {
                             />
                             <label className="form-check-label" for="flexCheckDefault2">
                                 Ticket Issue
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-lg-4">
+                    <p className="text-primary-color fw-bold mb-3">Are You ?<span className="text-danger">*</span></p>
+                    <div className="d-flex flex-md-row flex-column">
+                        <div className="form-check me-3">
+                            <input
+                                className="form-check-input  rounded-circle"
+                                type="checkbox"
+                                checked={areyou == "Organizer" ? true : false}
+                                onChange={() => setareyou("Organizer")}
+                                value="Organizer"
+                                id="flexCheckDefault3"
+                            />
+                            <label className="form-check-label" for="flexCheckDefault3">
+                                Organiger
+                            </label>
+                        </div>
+                        <div className="form-check me-3">
+                            <input
+                                className="form-check-input  rounded-circle"
+                                type="checkbox"
+                                checked={areyou == "Customer" ? true : false}
+                                value="Customer"
+                                onChange={() => setareyou("Customer")}
+                                id="flexCheckDefault24"
+                            />
+                            <label className="form-check-label" for="flexCheckDefault24">
+                                Customer
                             </label>
                         </div>
                     </div>

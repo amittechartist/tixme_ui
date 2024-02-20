@@ -164,11 +164,11 @@ const Dashboard = ({ title }) => {
                                                         <span>Manage All Attendee</span>
                                                     </button>
                                                 </Col>
-                                                <Col md={4} xl={4} className="d-flex justify-content-end">
+                                                {/* <Col md={4} xl={4} className="d-flex justify-content-end">
                                                     <button className="theme-btn" onClick={() => { setTicketshow(true); setIsEdit(false); }}>
                                                         <span className="theme-btn-icon"><FiPlus /></span> <span>Add Ticket</span>
                                                     </button>
-                                                </Col>
+                                                </Col> */}
                                             </Row>
                                         </Col>
                                         {Loader ? (
@@ -194,15 +194,15 @@ const Dashboard = ({ title }) => {
                                                                                 <Row className="pt-4">
                                                                                     <Col md={3} className="ticket-sts-box  text-center border-right">
                                                                                         <p>Total Ticket</p>
-                                                                                        <h2>{item.quantity}</h2>
+                                                                                        <h2>{item.quantity * item.groupqty}</h2>
                                                                                     </Col>
                                                                                     <Col md={3} className="ticket-sts-box  text-center  border-right">
                                                                                         <p>Ticket Sold</p>
-                                                                                        <h2>{CountTicketSold(item.id)}</h2>
+                                                                                        <h2>{CountTicketSold(item.id) * item.groupqty}</h2>
                                                                                     </Col>
                                                                                     <Col md={3} className="ticket-sts-box  text-center  border-right">
                                                                                         <p>Ticket Available</p>
-                                                                                        <h2><h2>{parseInt(item.quantity, 10) - parseInt(CountTicketSold(item.id), 10)}</h2></h2>
+                                                                                        <h2><h2>{parseInt(item.quantity, 10) * item.groupqty - parseInt(CountTicketSold(item.id), 10) * item.groupqty}</h2></h2>
                                                                                     </Col>
                                                                                     <Col md={3} className="ticket-sts-box  text-center">
                                                                                         <p>Revenue</p>

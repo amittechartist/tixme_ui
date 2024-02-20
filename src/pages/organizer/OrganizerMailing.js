@@ -19,6 +19,7 @@ const Dashboard = () => {
     // states
     const [EventList, setEventList] = useState([]);
     const [EventListOption, setEventListOption] = useState([]);
+    const [EventPreListOption, setEventPreListOption] = useState([]);
     const [AttendanceListOption, setAttendanceListOption] = useState([]);
     const [AttendanceSelected, setAttendanceSelected] = useState([]);
     const [Eventselected, setEventselected] = useState();
@@ -33,7 +34,7 @@ const Dashboard = () => {
     ]
     const EventPreOption = [
         {
-            options: EventListOption
+            options: EventPreListOption
         }
     ]
     const AttendanceOption = [
@@ -79,11 +80,23 @@ const Dashboard = () => {
                 .then(data => {
                     if (data.success == true) {
                         setEventList(data.data);
-                        const Option = data.data.map(i => ({
-                            value: i._id,
-                            label: i.display_name
+                        
+                        const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+                        const upcomingEvents = data.data.filter(event => event.end_mindate >= today);
+                        const pastEvents = data.data.filter(event => event.end_mindate < today);
+
+                        const upcomingOptions = upcomingEvents.map(event => ({
+                            value: event._id,
+                            label: event.display_name
                         }));
-                        setEventListOption(Option);
+
+                        const pastOptions = pastEvents.map(event => ({
+                            value: event._id,
+                            label: event.display_name
+                        }));
+
+                        setEventListOption(upcomingOptions);
+                        setEventPreListOption(pastOptions);
                     }
                     setLoader(false)
                 })

@@ -26,7 +26,7 @@ import Lottie from "lottie-react";
 import TicketLotte from '../../lotte/ticketanimation.json';
 import '../../common/css/wiz.css';
 import TimezoneSelect from 'react-timezone-select'
-import { isEndDateValid, shortPer, apiurl, get_date_time, get_min_date, organizer_url, formatDateToYYYYMMDD } from '../../common/Helpers';
+import { isTickettimeValid, isEndDateValid, shortPer, apiurl, get_date_time, get_min_date, organizer_url, formatDateToYYYYMMDD } from '../../common/Helpers';
 import {
     Modal,
     Input,
@@ -313,6 +313,22 @@ const Type = ({ title, editid, ticketeditid }) => {
     }
     const HandelEMDTapi = async () => {
         try {
+            const check = isTickettimeValid(
+                get_min_date(Startdateselect),
+                get_date_time(EventStarttime)[0].Timeview,
+                get_min_date(Enddateselect),
+                get_date_time(EventEndtime)[0].Timeview,
+                get_min_date(ESdate),
+                get_date_time(EStime)[0].Timeview,
+            );
+            if(!check){
+                MySwal.fire({
+                    title: "Invalid Date & Time",
+                    text: `${get_date_time(Startdateselect)[0].Dateview} ${get_date_time(EventStarttime)[0].Timeview} TO ${get_date_time(Enddateselect)[0].Dateview} ${get_date_time(EventEndtime)[0].Timeview}`,
+                    icon: "error"
+                });
+                return;
+            }
             const requestData = {
                 startdate: get_date_time(ESdate)[0].Dateview,
                 startmindate: ESdate,
@@ -847,13 +863,14 @@ const Type = ({ title, editid, ticketeditid }) => {
             if (!Ticketname) {
                 return toast.error('Enter ticket name');
             }
-            if (!Quantity) {
-                return toast.error('Enter available ticket quantity');
+            
+            if (!Quantity || Quantity <= 0) {
+                return toast.error('Enter valid available ticket quantity');
             }
-            if (!Price && Tickettype == 1) {
+            if (!Price && Tickettype == 1 || Price <= 0) {
                 return toast.error('Enter ticket price');
             }
-            if (Isgrouptickets && !GroupQty) {
+            if (Isgrouptickets && !GroupQty || GroupQty <= 0) {
                 return toast.error('Enter group quantity');
             }
             if (!SelectedMEDTId && EventSubtype == 2) {
@@ -928,13 +945,19 @@ const Type = ({ title, editid, ticketeditid }) => {
             if (!Ticketname) {
                 return toast.error('Enter ticket name');
             }
-            if (!Quantity) {
-                return toast.error('Enter available ticket quantity');
+            if (!Quantity || Quantity <= 0) {
+                return toast.error('Enter valid available ticket quantity');
             }
             if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
+            if(Price <= 0 && Tickettype == 1){
+                return toast.error('Enter valid ticket price');
+            }
             if (Isgrouptickets && !GroupQty) {
+                return toast.error('Enter group quantity');
+            }
+            if(Isgrouptickets && GroupQty <= 0){
                 return toast.error('Enter group quantity');
             }
             if (!SelectedMEDTId && EventSubtype == 2) {
@@ -1496,7 +1519,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                             <label htmlFor="" className="text-black">Display price<span className="text-danger">*</span></label>
                                             <input type="text" class="form-control input-default" value={Displayprice} onChange={(e) => setDisplayprice(e.target.value)} placeholder="Enter Amount" />
                                         </div>
-                                        <div className="col-md-12 mt-4">
+                                        <div className="col-md-12 mt-4 d-none">
                                             <label htmlFor="">Tags</label>
                                             <p>Improve discoverability of your event by adding tags relevant to subject matter.</p>
                                             <input
@@ -2016,11 +2039,11 @@ const Type = ({ title, editid, ticketeditid }) => {
                         </Col>
                         <Col md={6} className="mb-2">
                             <label htmlFor="" className="text-black">Available ticket quantity</label>
-                            <input type="number" class="form-control input-default" onChange={(e) => setQuantity(e.target.value)} value={Quantity} placeholder="Available ticket quantity" />
+                            <input type="number" min="1" class="form-control input-default" onChange={(e) => setQuantity(e.target.value)} value={Quantity} placeholder="Available ticket quantity" />
                         </Col>
                         <Col md={6} className="mb-2">
                             <label htmlFor="" className="text-black">Ticket price</label>
-                            <Input type="number" disabled={Pricedisable} class="form-control input-default" value={Price} onChange={(e) => setPrice(e.target.value)} placeholder="Ticket Price" />
+                            <Input  type="number" min="1" disabled={Pricedisable} class="form-control input-default" value={Price} onChange={(e) => setPrice(e.target.value)} placeholder="Ticket Price" />
                         </Col>
                         <div className="col-6">
                             <input
@@ -2033,7 +2056,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                             <div>
                                 {Isgrouptickets && (
                                     <>
-                                        <input type="number" class="form-control input-default" onChange={(e) => setGroupQty(e.target.value)} value={GroupQty} placeholder="Enter group quantity" />
+                                        <input  type="number" min="1" class="form-control input-default" onChange={(e) => setGroupQty(e.target.value)} value={GroupQty} placeholder="Enter group quantity" />
                                     </>
                                 )}
                             </div>
