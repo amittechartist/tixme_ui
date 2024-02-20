@@ -72,7 +72,7 @@ import Contact from "./components/contact";
 import About from "./components/about";
 import Policy from "./components/policy";
 import PurchasePolicy from "./components/PurchasePolicy";
-
+import MailQRview from "./components/MailQRview";
 import WebsiteLayout from './layout/website/Layout'
 import XYZ from './pages/website/XYZ';
 import Scaner from './pages/website/Scaner';
@@ -106,6 +106,7 @@ function App() {
           <Route path={app_url + 'auth/admin/login'} element={<AdminLogin title={'Tixme'} />} />
           {/* website */}
           <Route path={app_url} element={<Home />} />
+          <Route path={`${app_url}viewtickets/:ordreid/`} element={<MailQRview />} />
           <Route path={app_url + 'test'} element={<XYZ title={'Tixme'} />} />
           <Route path={`${app_url}event/:id/:name`} element={<Event title={'Tixme'} />} />
           <Route path={app_url + 'terms-and-conditions'} element={<WebsiteLayout> <Terms title={'Terms & conditions'} /> </WebsiteLayout>} />

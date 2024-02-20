@@ -145,7 +145,7 @@ const Dashboard = ({ title }) => {
                         setOrdersavedata(data.data.ordersavedata);
                         setOrderid(id);
                         if (data.data.orderitemlist.length > 0) {
-                            const check = data.data.orderitemlist.every(item => item.scan_status === 1);
+                            const check = data.data.orderitemlist.every(item => item.scan_status === "1");
                             setIsscan(check);
                         } else {
                             setIsscan(false);

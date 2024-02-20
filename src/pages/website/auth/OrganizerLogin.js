@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
 import Footer from '../../../components/footer';
@@ -61,6 +61,9 @@ const About = () => {
             console.error('Api error:', error);
         }
     };
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return (
         <>
             {/* <!-- mobile nav --> */}
@@ -106,7 +109,7 @@ const About = () => {
             </div>
             {/* </div> */}
             <div class="space-height" style={{ height: '300px' }}></div>
-            <Footer/>
+            <Footer />
         </>
     );
 };
