@@ -18,6 +18,8 @@ import { useParams } from 'react-router-dom';
 import { FaCircle } from "react-icons/fa6";
 // component
 import ContactDetails from '../../../component/ContactusFrorm';
+import ContactDetails1 from '../../../component/ContactDetails';
+
 const Dashboard = ({ title }) => {
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal)
@@ -536,9 +538,12 @@ const Dashboard = ({ title }) => {
                             <Card className="py-4">
                                 <Card.Body>
                                     <ContactDetails />
+                                    {/* <div className="h-200"></div> */}
+                        <ContactDetails1 />
                                 </Card.Body>
                             </Card>
                         </div>
+                        
                     </Row>
                 </div >
             </div >

@@ -274,7 +274,7 @@ const Dashboard = ({ title }) => {
                                                             </Col>
                                                             <Col md={6}>
                                                                 <div className="text-end">
-                                                                    <p className="reward-point-count">{userdata.wallet ? userdata.wallet : 0}</p>
+                                                                    <p className="reward-point-count">{userdata.wallet ? userdata.wallet : 0} Points</p>
                                                                 </div>
                                                             </Col>
                                                             {Packloaderxxx ? (

@@ -466,7 +466,7 @@ const Dashboard = ({ title }) => {
                     </button>
                 </ModalHeader>
                 <ModalBody>
-                    <Row>
+                    <Row className="justify-content-center">
                         {ModalLoader ? (
                             <>
                                 <Col md={4}><div className="linear-background w-100"> </div></Col>
@@ -484,20 +484,20 @@ const Dashboard = ({ title }) => {
                                         <h5 className="text-bold">Phone :</h5>
                                         <p>{CustomerData.phone_number}</p>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <h5 className="text-bold">Address :</h5>
                                         <p>{CustomerData.address} {CustomerData.address ? (',' + CustomerData.address) : ''}</p>
-                                    </div>
+                                    </div> */}
                                 </Col>
                                 <Col md={6} xl={2} className="tickets-data-text">
-                                    <div>
+                                    {/* <div>
                                         <h5 className="text-bold">Event Name :</h5>
                                         <p>{OrderData.name ? OrderData.name : '--'}</p>
-                                    </div>
-                                    <div>
+                                    </div> */}
+                                    {/* <div>
                                         <h5 className="text-bold">State :</h5>
                                         <p>{CustomerData.state ? CustomerData.state : '--'}</p>
-                                    </div>
+                                    </div> */}
                                     <div>
                                         <h5 className="text-bold">Country :</h5>
                                         <p>{CustomerData.country ? CustomerData.country : '--'}</p>
@@ -508,10 +508,10 @@ const Dashboard = ({ title }) => {
                                         <h5 className="text-bold">BOOKING ID :</h5>
                                         <p>{Ordersavedata.bookingid}</p>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <h5 className="text-bold">TYPE :</h5>
                                         <p>{Ordersavedata.order_amount && Ordersavedata.order_amount > 0 ? 'Paid' : 'Free'}</p>
-                                    </div>
+                                    </div> */}
                                     <div>
                                         <h5 className="text-bold">Total Ticket :</h5>
                                         <p>{Orderitemlist.length}</p>
@@ -526,7 +526,7 @@ const Dashboard = ({ title }) => {
                                         </div>
                                     ) : ''} */}
                                 </Col>
-                                <Col md={6} xl={4}>
+                                {/* <Col md={6} xl={4}>
                                     <div className="tickets-data-text-last">
                                         <h4 style={{ fontWeight: '700' }}>Tickect Scan Status</h4>
                                         {Isscan ? (
@@ -557,9 +557,10 @@ const Dashboard = ({ title }) => {
                                             ))}
                                         </div>
                                     </div>
-                                </Col>
+                                </Col> */}
                                 <Col md={12}>
-                                    <Row className="pt-2 mt-4" style={{ borderTop: '1px solid #eee' }}>
+                                    <Row className="pt-2 mt-4 justify-content-center" style={{ borderTop: '1px solid #eee' }}>
+                                    <h4 style={{ fontWeight: '700' }}>Tickect Scan Status</h4>
                                         {Orderitemlist.map((item, index) => (
                                             <Col md={3}>
                                                 <div className="ticket-box">
@@ -727,13 +728,14 @@ const Dashboard = ({ title }) => {
                                             <Row>
                                                 <Col md={6} xl={3}>
                                                     <div class="input-group mb-3 input-warning-o">
-                                                        <span class="input-group-text"><img src={Searchicon} alt="" /></span>
+                                                        <span class="input-group-text" style={{height: 38}}><img src={Searchicon} alt="" /></span>
                                                         <input
                                                             type="text"
                                                             className="form-control"
                                                             placeholder="Search"
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
+                                                            style={{height: 40}}
                                                         />
                                                     </div>
                                                 </Col>
@@ -838,7 +840,7 @@ const Dashboard = ({ title }) => {
                                                                                 <div className="organizer-name-sec px-2 py-2">
                                                                                     <div className="d-inline-flex align-items-center border-right event-time-area">
                                                                                         <div className="d-inline-block mr-1">
-                                                                                            <img height={30} width={30} src={Timelogo} alt="" />
+                                                                                            <img style={{width:20}} height={30} width={30} src={Timelogo} alt="" />
                                                                                         </div>
                                                                                         <div className="d-inline-block">
                                                                                             <span className="event-duration d-block">
@@ -874,7 +876,7 @@ const Dashboard = ({ title }) => {
                                                                                 <div className="text-end mr-5 mt-3 mb-3">
                                                                                     <span className="mb-5">
                                                                                         <img src={DateIcon} alt="" />
-                                                                                        <span className="on-img-date-val">{item.eventData[0].start_date}</span>
+                                                                                        <span className="on-img-date-val ml-2">{item.eventData[0].start_date}</span>
                                                                                     </span>
                                                                                 </div>
 
