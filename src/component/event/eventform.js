@@ -555,7 +555,12 @@ const Type = ({ title, editid, ticketeditid }) => {
                     return toast.error("All field required");
                 }
             }
-            const check = isEndDateValid(get_min_date(Startdateselect), get_date_time(EventStarttime)[0].Timeview, get_min_date(Enddateselect), get_date_time(EventEndtime)[0].Timeview);
+            const check = isEndDateValid(
+                get_min_date(Startdateselect),
+                get_date_time(EventStarttime)[0].Timeview,
+                get_min_date(Enddateselect),
+                get_date_time(EventEndtime)[0].Timeview
+            );
             if (!check) {
                 return toast.error("Event end date & time must be greater than start date & time");
             }
@@ -1262,7 +1267,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                         setStartdateselect(data.data.start_data_min[0] || new Date())
                         setEnddateselect(data.data.end_data_min[0] || new Date())
 
-                        
+
                         setEventStarttime(data.data.start_time_min[0] || new Date())
                         setEventEndtime(data.data.end_time_min[0] || new Date())
 

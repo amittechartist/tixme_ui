@@ -59,6 +59,7 @@ const Home = () => {
     const [filtercategory, setFilterCategory] = useState('');
     const [FiltersearchQuery, setFiltersearchQuery] = useState(false);
     const [SearchInput, setSearchInput] = useState('');
+    const [SInput, setSInput] = useState();
     const [alreadyusersearcher, setalreadyusersearcher] = useState(false);
     const [CountryFilter, setCountryFilter] = useState('');
     const [Ticketstype, setTicketstype] = useState('');
@@ -110,7 +111,6 @@ const Home = () => {
             setSelectedCountry([...selectedCountry, id]);
         }
     };
-    console.log("s", selectedCountry);
     const [Onlydatevalue, setOnlydatevalue] = useState();
 
     const fromgetdate = get_date_time(Startdateselect);
@@ -188,7 +188,7 @@ const Home = () => {
                 tickettype: Ticketstype ? Ticketstype : null,
                 dateapitype: Dateapitype ? Dateapitype : null,
                 onlydate: Datetype === "Pick a date" ? startdate : null,
-                display_name: alreadyusersearcher || SearchInput ? SearchInput : searchQuery > 0 ? searchQuery : null,
+                display_name: SearchInput ? SearchInput : searchQuery.length > 0 && SInput.label == 0 ? searchQuery : null,
                 fromdate: Datetype === "Pick between two dates" ? get_min_date(RangeStartdateselect) : null,
                 todate: Datetype === "Pick between two dates" ? get_min_date(Enddateselect) : null,
                 minprice: Minprice ? Minprice : 1,
@@ -212,7 +212,6 @@ const Home = () => {
 
             if (data.success === true) {
                 setEventlist(data.data);
-                console.log("ss", data.data);
             } else {
                 // Handle the case where data.success is not true
                 console.error("Error: ", data.message);
@@ -299,7 +298,8 @@ const Home = () => {
         // }
         if (searchQuery && searchQuery.length > 0) {
             // setFiltersearchQuery(true);
-            setSearchInput(searchQuery);
+            setSInput(searchQuery);
+            // setSearchInput(searchQuery);
         }
     }, []);
 
@@ -331,8 +331,8 @@ const Home = () => {
                                             id="form1"
                                             className="form-control mt-lg-0"
                                             placeholder="Search"
-                                            onChange={(e) => { setSearchInput(e.target.value); setalreadyusersearcher(true); }}
-                                            value={SearchInput}
+                                            onChange={(e) => { setSearchInput(e.target.value); setSInput(''); setalreadyusersearcher(true); }}
+                                            value={SearchInput || SInput}
                                             style={{ height: '40px', border: 'none' }}
                                         />
                                         <button className="dfssfdsfdsf" onClick={() => fetchEvent()} type="button" style={{ background: '#F6F6F6' }}>
@@ -524,8 +524,8 @@ const Home = () => {
                                                     id="form1"
                                                     className="form-control mt-lg-0"
                                                     placeholder="Search"
-                                                    onChange={(e) => { setSearchInput(e.target.value); setalreadyusersearcher(true); }}
-                                                    value={SearchInput}
+                                                    onChange={(e) => { setSearchInput(e.target.value); setSInput(''); setalreadyusersearcher(true); }}
+                                                    value={SearchInput || SInput}
                                                     style={{ height: '40px', border: 'none' }}
                                                 />
                                                 <button className="dfssfdsfdsf" onClick={() => fetchEvent()} type="button" style={{ background: '#F6F6F6' }}>
