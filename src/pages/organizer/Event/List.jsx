@@ -393,8 +393,9 @@ const Dashboard = ({ title }) => {
                                             <Row>
                                                 <Col md={6} xl={2}>
                                                     <div class="input-group mb-3 input-warning-o">
-                                                        <span class="input-group-text"><img src={Searchicon} alt="" /></span>
+                                                        <span class="input-group-text" style={{height: 38}}><img src={Searchicon} alt="" /></span>
                                                         <input
+                                                            style={{height: 40}}
                                                             type="text"
                                                             className="form-control"
                                                             placeholder="Search"
@@ -432,7 +433,7 @@ const Dashboard = ({ title }) => {
                                                 <Col md={4} xl={3}>
                                                     <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
-                                                        <input type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
+                                                        <input style={{height: 40}} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
                                                     </div>
                                                 </Col>
@@ -544,9 +545,9 @@ const Dashboard = ({ title }) => {
                                                                                 <div className="text-end mr-5">
                                                                                     <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/mange-attendee/${item._id}/${item.name}`)}>ATTENDEES</button>
                                                                                 </div>
-                                                                                <div className="text-end mr-5">
+                                                                                {/* <div className="text-end mr-5">
                                                                                     <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/manage-ticket/${item._id}/${item.name}`)}>REPORTS & ANALYTICS</button>
-                                                                                </div>
+                                                                                </div> */}
                                                                             </div>
                                                                         </Col>
                                                                     </Row>

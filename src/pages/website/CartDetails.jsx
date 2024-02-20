@@ -745,10 +745,10 @@ const Home = () => {
                                                                     <div className="row cart-new-div">
                                                                         <div className="col-md-12">
                                                                             <div>
-                                                                                <p className="Ticket-title mb-0">{item.event.display_name}</p>
+                                                                                <p className="Ticket-title col-md-9 mb-0">{item.event.display_name}</p>
                                                                                 <div className="row d-flex align-items-center">
                                                                                     <div className="col-3">
-                                                                                        <div className="d-flex align-items-center">
+                                                                                        <div className="d-flex align-items-center justify-content-center">
                                                                                             <div >
                                                                                                 <img height={20} width={20} src={calendar} alt="" />
                                                                                             </div>
@@ -758,12 +758,12 @@ const Home = () => {
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="col-3">
-                                                                                        <div className="d-flex align-items-center">
+                                                                                        <div className="d-flex align-items-center  justify-content-center">
                                                                                             <div >
                                                                                                 <img height={20} width={20} src={Timelogo} alt="" />
                                                                                             </div>
                                                                                             <div>
-                                                                                                <p className="mb-0 aaa">Event Time</p>
+                                                                                                {/* <p className="mb-0 aaa">Event Time</p> */}
                                                                                                 <p className="mb-0 bbb">{item.event.event_subtype_id == 2 ? item.starttime : item.event.start_time}</p>
                                                                                             </div>
                                                                                         </div>
@@ -777,7 +777,7 @@ const Home = () => {
                                                                                     </div>
                                                                                     <div className="col-md-3 d-md-flex">
                                                                                         <div className="ml-3 text-center">
-                                                                                            <p className="mb-0 price-in-cart-page">Price {item.price > 0 ? currency_symble + ' ' + item.price + '.00' : 'Free'}</p>
+                                                                                            <p className="mb-0 price-in-cart-page">Price: {item.price > 0 ? currency_symble + ' ' + item.price + '.00' : 'Free'}</p>
                                                                                             <div className="">
                                                                                                 <div className="row grediant-border d-flex align-items-center mx-xl-3 mx-0">
                                                                                                     <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.name, localQuantities[item.name] || 0)}>-</span></div>
@@ -924,10 +924,10 @@ const Home = () => {
                                                                         </div>
                                                                         <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">
                                                                             <Row>
-                                                                                <Col md={12} xl={8}>
+                                                                                <Col md={12} xl={7}>
                                                                                     <input className="form-control" readOnly={Iscoupon} type="text" placeholder="Enter coupon code" onChange={(e) => setCouponId(e.target.value)} value={CouponId}></input>
                                                                                 </Col>
-                                                                                <Col md={12} xl={4}>
+                                                                                <Col md={12} xl={5}>
                                                                                     {CouponCheckLoader ? (
                                                                                         <button className="btn btn-primary w-100" type="button">Wait..</button>
                                                                                     ) : (

@@ -275,7 +275,7 @@ const About = () => {
       <div class="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
         <MobileMenu />
         <h1 class="banner-h fw-bold text-white text-uppercase mb-0 pb-0 animate__animated animate__bounce">
-          Sign Up
+          Customer Sign up
         </h1>
         <div
           class="banner-child bg-white px-0"
@@ -284,12 +284,12 @@ const About = () => {
           <div className="row form-area">
             <div className="col-md-6">
               <div>
-                <h3
+                {/* <h3
                   className="mb-md-5 mb-2 auth-page-title1"
                   style={{ fontWeight: "600", color: "#000" }}
                 >
                   Create an customer account
-                </h3>
+                </h3> */}
                 {SignUpstep == 2 || SignUpstep == 1 ? (
                   <>
                     {SignUpstep == 2 ? (
