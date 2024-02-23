@@ -94,7 +94,7 @@ const Dashboard = ({ title }) => {
 
     const Handelprofileupdate = async () => {
         try {
-            if (!ufname || !ulname || !uemail || !uaddress || !upincode) {
+            if (!ufname || !ulname) {
                 return toast.error('Required field must not be empty');
             }
             setLoader(true);
@@ -271,9 +271,9 @@ const Dashboard = ({ title }) => {
                         setfcity(data.data.city);
                         setfstate(data.data.state);
                         setfcountry(data.data.country);
-                        setSelectedCountry({value: data.data.countryvalue, label: data.data.country});
-                        setSelectedState({value: data.data.statevalue, label: data.data.state});
-                        setSelectedCity({value: data.data.cityvalue, label: data.data.city});
+                        setSelectedCountry({ value: data.data.countryvalue, label: data.data.country });
+                        setSelectedState({ value: data.data.statevalue, label: data.data.state });
+                        setSelectedCity({ value: data.data.cityvalue, label: data.data.city });
                         setpincode(data.data.pincode);
                         setpicture(data.data.picture);
                         setbadge(data.data.plan_name);
@@ -568,13 +568,13 @@ const Dashboard = ({ title }) => {
                                                                                 </div>
                                                                                 <div className="col-md-6">
                                                                                     <div className="form-group">
-                                                                                        <p>Address <span className="text-danger">*</span></p>
+                                                                                        <p>Address</p>
                                                                                         <input className="form-control" type="text" placeholder="Address" value={uaddress} onChange={(e) => setuaddress(e.target.value)}></input>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="col-md-6">
                                                                                     <div className="form-group">
-                                                                                        <p>Pincode <span className="text-danger">*</span></p>
+                                                                                        <p>Pincode</p>
                                                                                         <input className="form-control" type="text" placeholder="Pincode" value={upincode} onChange={(e) => setupincode(e.target.value)}></input>
                                                                                     </div>
                                                                                 </div>
@@ -594,13 +594,9 @@ const Dashboard = ({ title }) => {
                                                                                 </div>
                                                                             </div>
                                                                             {Loader ? (
-                                                                                <span>
-                                                                                    <Whitebtn title={'Please wait...'} />
-                                                                                </span>
+                                                                                <button type="button" className=" text-white btn theme-bg">Please wait...</button>
                                                                             ) : (
-                                                                                <span onClick={Handelprofileupdate}>
-                                                                                    <Whitebtn title={'Update'} />
-                                                                                </span>
+                                                                                <button onClick={Handelprofileupdate} type="button" className="text-white btn theme-bg">Update</button>
                                                                             )}
                                                                         </form>
                                                                     </div>
@@ -636,13 +632,9 @@ const Dashboard = ({ title }) => {
                                                                                 </div>
                                                                             </div>
                                                                             {Loader ? (
-                                                                                <span>
-                                                                                    <Whitebtn title={'Please wait...'} />
-                                                                                </span>
+                                                                                <button type="button" className=" text-white btn theme-bg">Please wait...</button>
                                                                             ) : (
-                                                                                <span onClick={Handelchangepassword}>
-                                                                                    <Whitebtn title={'Update password'} />
-                                                                                </span>
+                                                                                <button onClick={Handelchangepassword} type="button" className=" text-white btn theme-bg">Update Password</button>
                                                                             )}
                                                                         </form>
                                                                     </div>
@@ -672,13 +664,9 @@ const Dashboard = ({ title }) => {
                                                                                 </div>
                                                                             </div>
                                                                             {Loader ? (
-                                                                                <span>
-                                                                                    <Whitebtn title={'Please wait...'} />
-                                                                                </span>
+                                                                                <button type="button" className=" text-white btn theme-bg">Please wait...</button>
                                                                             ) : (
-                                                                                <span onClick={Handelchangeemail}>
-                                                                                    <Whitebtn title={'Update email'} />
-                                                                                </span>
+                                                                                <button onClick={Handelchangeemail} type="button" className=" text-white btn theme-bg">Update Email</button>
                                                                             )}
                                                                         </form>
                                                                     </div>

@@ -434,10 +434,12 @@ const Dashboard = ({ title }) => {
                                 <div class="input-group mb-3 input-warning-o">
                                     <input
                                         type="text"
-                                        className="form-control"
-                                        placeholder="Enter Tixme Fee"
+                                        class="form-control input-default"
                                         value={Tixmefee}
                                         onChange={(e) => setTixmefee(e.target.value)}
+                                        onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
+                                        placeholder="Enter Tixme Fee"
+                                        pattern="\d*"
                                     />
                                 </div>
                             </div>
@@ -446,10 +448,12 @@ const Dashboard = ({ title }) => {
                                 <div class="input-group mb-3 input-warning-o">
                                     <input
                                         type="text"
-                                        className="form-control"
-                                        placeholder="Enter Platform Fee"
+                                        class="form-control input-default"
                                         value={Platformfee}
                                         onChange={(e) => setPlatformfee(e.target.value)}
+                                        onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
+                                        placeholder="Enter Platform Fee"
+                                        pattern="\d*"
                                     />
                                 </div>
                             </div>

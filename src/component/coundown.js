@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Newclockeventpage from "../common/image/newclockeventpage.svg";
-const CountdownTimer = ({props}) => {
-    const targetDate = moment(props, 'YYYYMMDD');
+const CountdownTimer = ({date, time}) => {
+    const targetDateTime = moment(`${date} ${time}`, 'YYYYMMDD hh:mm A');
     const [timeLeft, setTimeLeft] = useState({
         days: 0,
         hours: 0,
@@ -14,7 +14,7 @@ const CountdownTimer = ({props}) => {
     useEffect(() => {
         const interval = setInterval(() => {
             const now = moment();
-            const duration = moment.duration(targetDate.diff(now));
+            const duration = moment.duration(targetDateTime.diff(now));
 
             if (duration.asSeconds() <= 0) {
                 clearInterval(interval);
@@ -31,7 +31,7 @@ const CountdownTimer = ({props}) => {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [targetDate]);
+    }, [targetDateTime]);
 
     const renderCountdown = () => {
         if (timeLeft.isPast) {

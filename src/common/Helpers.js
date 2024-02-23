@@ -16,9 +16,10 @@ export const qr_url = 'https://tixme.co/scanner/organizer/tixme-scanner-page';
 
 
 export function get_percentage(per, total) {
-    const TotalTax = Math.round((total * per) / 100);
-    return TotalTax;
+    const TotalTax = ((total * per) / 100).toFixed(2);
+    return TotalTax; // Returns a string with two decimal places
 }
+
 
 export function isEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;

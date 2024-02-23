@@ -48,7 +48,7 @@ const Page = ({ title }) => {
                                                         <p>If you have any questions, please don't hesitate to contact us at <span style={{ color: '#0047ab' }}>support@TIXME.com</span>.</p>
                                                     </div>
                                                     <Col md={12} className="mt-4 text-center">
-                                                        <Link to={customer_url + 'my-order-list'} className="btn theme-bg text-white">Home</Link>
+                                                        <Link to={app_url} className="btn theme-bg text-white">Home</Link>
                                                     </Col>
                                                 </div>
 

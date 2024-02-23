@@ -47,8 +47,8 @@ const Header = ({title}) => {
                 <div className="header-content">
                     <nav className="navbar navbar-expand">
                         <div className="collapse navbar-collapse justify-content-between">
-                            <div className="header-left">
-                                <div class="dashboard_bar mt-4">
+                            <div className="header-left d-flex align-items-end">
+                                <div class="dashboard_bar" style={{lineHeight:'15px'}}>
                                     {title}
                                 </div>
                             </div>

@@ -78,7 +78,7 @@ const About = () => {
       }
     }
     if (no == 2) {
-      if (!Firstname || !Lastname || !Email || !Confirmemail || !Phonenumber) {
+      if (!Firstname || !Lastname || !Email || !Confirmemail || !Phonenumber || !selectedCountry) {
         return toast.error("Required field must not be empty");
       }
       if (!isEmail(Email)) {
@@ -91,9 +91,9 @@ const About = () => {
       } else {
         return toast.error("Email and confirm email must me same");
       }
-      if (!Terms) {
-        return toast.error("Please agree to the terms & conditions");
-      }
+      // if (!Terms) {
+      //   return toast.error("Please agree to the terms & conditions");
+      // }
       if (!Privacy) {
         return toast.error("Please agree to the privacy policy");
       }
@@ -427,7 +427,7 @@ const About = () => {
                           </div>
                         </div>
                         <div className="form-group">
-                          <p>Select Country</p>
+                          <p>Select Country <span className="text-danger">*</span></p>
                           <Select
                             options={countries}
                             value={selectedCountry}
@@ -435,7 +435,7 @@ const About = () => {
                             placeholder="Select Country"
                           />
                         </div>
-                        <div class="form-check">
+                        <div class="form-check d-none">
                           <input
                             type="checkbox"
                             checked={Terms}
@@ -444,7 +444,7 @@ const About = () => {
                             onChange={(e) => setTerms(e.target.checked)}
                           />
                           <label class="form-check-label" for="exampleCheck1">
-                            Agree to Terms & Conditions
+                            Agree to Terms & Conditions <span className="text-danger">*</span>
                           </label>
                         </div>
                         <div class="form-check">
@@ -456,7 +456,7 @@ const About = () => {
                             onChange={(e) => setPrivacy(e.target.checked)}
                           />
                           <label class="form-check-label" for="exampleCheck3">
-                            Agree to Privacy Policy
+                            Agree to Privacy Policy <span className="text-danger">*</span>
                           </label>
                         </div>
                         <div class="form-check">
@@ -525,7 +525,7 @@ const About = () => {
                       ></input>
                     </div>
                     <div className="form-group">
-                      <p>Select Country</p>
+                      <p>Select Country <span className="text-danger">*</span></p>
                       <Select
                         options={countries}
                         value={selectedCountry}
@@ -572,7 +572,7 @@ const About = () => {
                                   className="signup-page-button  mb-2"
                                   onClick={() => HandelSignupstep(SignUpstep)}
                                 >
-                                  Next
+                                  Register
                                 </button>
                               )}
                             </>

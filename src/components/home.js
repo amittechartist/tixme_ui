@@ -375,7 +375,8 @@ const Home = () => {
   const [filtercategory, setFilterCategory] = useState('');
 
   const viewEvent = async (id, name) => {
-    navigate(`${app_url}event/${id}/${name}`)
+    const formattedName = name.replace(/\s+/g, '-');
+    navigate(`${app_url}event/${id}/${formattedName}`)
   }
   const fetchIndiaEvent = async () => {
     try {

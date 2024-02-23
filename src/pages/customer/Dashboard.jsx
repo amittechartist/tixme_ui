@@ -60,6 +60,31 @@ const Dashboard = ({ title }) => {
         return Math.floor(10000 + Math.random() * 90000); // Generates a random 5-digit number
     };
 
+
+    const checkQR = () => {
+        let a;
+        let b;
+        a = localStorage.getItem("qrid");
+        b = localStorage.getItem("qrtype");
+        if (a && b) {
+            fetchOrderData(a, b);
+        }
+        console.log([a, b]);
+    }
+    const removeQrlocaldata = () => {
+        localStorage.removeItem("qrid");
+        localStorage.removeItem("qrtype");
+    }
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            checkQR();
+        }, 2000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
+
     const fetchmyEvent = async () => {
         try {
             setLoader(true)
@@ -136,6 +161,8 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
+                        localStorage.setItem("qrid", id);
+                        localStorage.setItem("qrtype", type);
                         if (type == 2) {
                             const filteredOrderItems = data.data.orderitemlist.filter(item => item.owner_id === data.data.ordersavedata.customer_id);
                             setOrderitemlist(filteredOrderItems);
@@ -256,6 +283,7 @@ const Dashboard = ({ title }) => {
     useEffect(() => {
         fetchmyEvent();
         fetchCategory();
+        removeQrlocaldata();
     }, []);
 
     const [SelectCategoryValue, setSelectCategoryValue] = useState();
@@ -293,17 +321,17 @@ const Dashboard = ({ title }) => {
         });
     };
 
+    const handelQrviewModal = () => {
+        setModal(!modal);
+        removeQrlocaldata();
+    }
     return (
         <>
-            <Modal isOpen={modal} toggle={() => setModal(!modal)} centered size={'xl'}>
-                <ModalHeader toggle={!modal}>Order Details
-                    <button className="close p-0" onClick={() => setModal(!modal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-                        <FaTimes />
-                    </button>
-                </ModalHeader>
+            <Modal isOpen={modal} toggle={() => setModal(() => handelQrviewModal())} centered size={'xl'}>
+                <ModalHeader toggle={() => handelQrviewModal()}></ModalHeader>
                 <ModalBody>
                     <Row className="justify-content-center">
-                        {ModalLoader ? (
+                        {ModalLoader && !localStorage.getItem("qrid") ? (
                             <>
                                 <Col md={4}><div className="linear-background w-100"> </div></Col>
                                 <Col md={4}><div className="linear-background w-100"> </div></Col>
@@ -311,6 +339,9 @@ const Dashboard = ({ title }) => {
                             </>
                         ) : (
                             <>
+                                <Col md={12} className="text-center">
+                                    <h5 className="modal-title mb-3">Order Details</h5>
+                                </Col>
                                 <Col md={6} xl={2} className="tickets-data-text">
                                     <div>
                                         <h5 className="text-bold">Email :</h5>
@@ -394,64 +425,64 @@ const Dashboard = ({ title }) => {
                                         </div>
                                     </div>
                                 </Col> */}
-                                    <Col md={12}>
-                                        <Row className="pt-2 mt-4 justify-content-center" style={{ borderTop: '1px solid #eee' }}>
-                                        <h4 style={{ fontWeight: '700' }}>Tickect Scan Status</h4>
-                                            {Orderitemlist.map((item, index) => (
-                                                <Col md={6} lg={4} xl={3}>
-                                                    <div className="ticket-box">
-                                                        <div className="ticket-qr text-center">
-                                                            {item.is_transfer == 1 ? (
-                                                                <>
-                                                                    <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
-                                                                    <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                    <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
-                                                                    <p className="mb-0 mt-4" style={{ fontWeight: 600, color: '#000' }}>Transferred to</p>
-                                                                    <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> {item.owner_email}</span>
-                                                                </>
-                                                            ) : (
-                                                                <div className="text-center">
-                                                                    {item.scan_status == 0 ? (
-                                                                        <>
-                                                                            <div className="transfer_box" style={{ position: 'relative' }}>
-                                                                                <input
-                                                                                    type="checkbox"
-                                                                                    checked={checkedItemIds.includes(item._id)}
-                                                                                    onChange={() => handleCheckboxChange(item._id)}
-                                                                                    style={{ position: 'absolute', top: '10px', left: '10px' }}
-                                                                                />
-                                                                                <QRCode className="dashqrbig" value={JSON.stringify({ id: item._id, time: 1, index: index })} />
-                                                                                <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                                <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
-                                                                                <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
-                                                                                <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
-                                                                            </div>
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
+                                <Col md={12}>
+                                    <Row className="pt-2 mt-4 justify-content-center text-center" style={{ borderTop: '1px solid #eee' }}>
+                                        <h5 className="modal-title my-2">Tickect Scan Status</h5>
+                                        {Orderitemlist.map((item, index) => (
+                                            <Col md={6} lg={4} xl={3}>
+                                                <div className="ticket-box">
+                                                    <div className="ticket-qr text-center">
+                                                        {item.is_transfer == 1 ? (
+                                                            <>
+                                                                <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
+                                                                <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
+                                                                <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                <p className="mb-0 mt-4" style={{ fontWeight: 600, color: '#000' }}>Transferred to</p>
+                                                                <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> {item.owner_email}</span>
+                                                            </>
+                                                        ) : (
+                                                            <div className="text-center">
+                                                                {item.scan_status == 0 ? (
+                                                                    <>
+                                                                        <div className="transfer_box" style={{ position: 'relative' }}>
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                checked={checkedItemIds.includes(item._id)}
+                                                                                onChange={() => handleCheckboxChange(item._id)}
+                                                                                style={{ position: 'absolute', top: '10px', left: '10px' }}
+                                                                            />
+                                                                            <QRCode className="dashqrbig" value={JSON.stringify({ id: item._id, time: 1, index: index })} />
                                                                             <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
                                                                             <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                             <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
-                                                                            <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> Success</span>
-                                                                        </>
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                        </div>
+                                                                            <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
+                                                                        </div>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <img src={QRsuccess} className="qr-scanner-success dashqrbig" alt="" />
+                                                                        <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
+                                                                        <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                        <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
+                                                                        <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> Success</span>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
+                                                </div>
+                                            </Col>
+                                        ))}
+                                        {checkedItemIds.length > 0 ? (
+                                            <>
+                                                <Col md={12}></Col>
+                                                <Col md={3}>
+                                                    <button type="button" onClick={() => { setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button>
                                                 </Col>
-                                            ))}
-                                            {checkedItemIds.length > 0 ? (
-                                                <>
-                                                    <Col md={12}></Col>
-                                                    <Col md={3}>
-                                                        <button type="button" onClick={() => { setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button>
-                                                    </Col>
-                                                </>
-                                            ) : ''}
-                                        </Row>
-                                    </Col>
+                                            </>
+                                        ) : ''}
+                                    </Row>
+                                </Col>
                             </>
                         )}
                     </Row>
@@ -466,43 +497,43 @@ const Dashboard = ({ title }) => {
                 </ModalHeader>
                 <ModalBody>
                     <Row>
-                        {ModalLoader ? (
+                        {/* {ModalLoader ? (
                             <>
                                 <Col md={6}><div className="linear-background w-100"> </div></Col>
                                 <Col md={6}><div className="linear-background w-100"> </div></Col>
                             </>
-                        ) : (
-                            <>
-                                <Col md={6}>
-                                    <h3 style={{ fontWeight: '600', color: '#0047AB' }} className="mb-4">Transfer Ticket</h3>
-                                    <div class="input-group input-warning-o">
-                                        <input type="text" class="form-control px-2 py-3 mb-3" onChange={(e) => setEmailid(e.target.value)} value={Emailid} placeholder="Email Id" />
-                                    </div>
-                                    <div>
-                                        <h5 className="text-bold">Total Ticket :</h5>
-                                        <p>{checkedItemIds.length}</p>
-                                    </div>
-                                    {TransferLoader ? (
-                                        <button disabled className="mb-0 mr-5 btn btn-dark list-Ticket-mng-1" type="button">Please wait...</button>
-                                    ) : (
-                                        <>
-                                            {checkedItemIds.length > 0 ? (
-                                                <div className="mr-5 pt-5">
-                                                    <button onClick={() => HandelTransferTicket()} className="mb-0 mr-5  btn btn-success list-Ticket-mng-1" type="button">Transfer Ticket</button>
-                                                </div>
-                                            ) : (
-                                                <div className="mr-5 pt-5">
-                                                    <button disabled className="mb-0 mr-5 btn btn-dark list-Ticket-mng-1" type="button">No Ticket Found</button>
-                                                </div>
-                                            )}
-                                        </>
-                                    )}
-                                </Col>
-                                <Col md={6}>
-                                    <img className="TranferImg-css" src={TranferImg}></img>
-                                </Col>
-                            </>
-                        )}
+                        ) : ( */}
+                        <>
+                            <Col md={6}>
+                                <h3 style={{ fontWeight: '600', color: '#0047AB' }} className="mb-4">Transfer Ticket</h3>
+                                <div class="input-group input-warning-o">
+                                    <input type="text" class="form-control px-2 py-3 mb-3" onChange={(e) => setEmailid(e.target.value)} value={Emailid} placeholder="Email Id" />
+                                </div>
+                                <div>
+                                    <h5 className="text-bold">Total Ticket :</h5>
+                                    <p>{checkedItemIds.length}</p>
+                                </div>
+                                {TransferLoader ? (
+                                    <button disabled className="mb-0 mr-5 btn btn-dark list-Ticket-mng-1" type="button">Please wait...</button>
+                                ) : (
+                                    <>
+                                        {checkedItemIds.length > 0 ? (
+                                            <div className="mr-5 pt-5">
+                                                <button onClick={() => HandelTransferTicket()} className="mb-0 mr-5  btn btn-success list-Ticket-mng-1" type="button">Transfer Ticket</button>
+                                            </div>
+                                        ) : (
+                                            <div className="mr-5 pt-5">
+                                                <button disabled className="mb-0 mr-5 btn btn-dark list-Ticket-mng-1" type="button">No Ticket Found</button>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </Col>
+                            <Col md={6}>
+                                <img className="TranferImg-css" src={TranferImg}></img>
+                            </Col>
+                        </>
+                        {/* )} */}
                     </Row>
                 </ModalBody>
             </Modal>
@@ -532,30 +563,33 @@ const Dashboard = ({ title }) => {
                                                                 <div className="event_list_box">
                                                                     <Row>
                                                                         <Col md={4}>
-                                                                            <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} className="list-thum-img" alt="" />
+                                                                            <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} className="list-thum-img" height={'200px'} alt="" />
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div className="ml-3 ml-md-0">
                                                                                 <div>
-                                                                                    <span className="list-event-name">{item.eventData[0].name}</span>
-                                                                                    <p className="list-event-desc mb-0">{shortPer(item.eventData[0].event_desc, 100)}</p>
+                                                                                    
+                                                                                    <Link to={`${app_url}event/${item.eventData[0]._id}/${item.eventData[0].name}`}>
+                                                                                        <span className="list-event-name">{shortPer(item.eventData[0].display_name, 35)}</span>
+                                                                                    </Link>
+                                                                                    <p className="list-event-desc mb-0">{shortPer(item.eventData[0].event_desc, 35)}</p>
                                                                                 </div>
                                                                                 <div className="list-event-location mb-xl-3 mb-1">
-                                                                                    <div className="d-flex align-items-center text-center location-name">
+                                                                                    <div className="d-flex align-items-center text-left location-name">
                                                                                         <img
                                                                                             height={30}
                                                                                             width={30}
                                                                                             src={LocationIcon}
                                                                                             alt=""
                                                                                         />{" "}
-                                                                                        <span>{item.eventData[0].location}</span>
+                                                                                        <span>{item.eventData[0].displayaddress || item.eventData[0].location}</span>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="desc_data">
                                                                                     <div className="organizer-name-sec px-2 py-2">
                                                                                         <div className="d-inline-flex align-items-center border-right event-time-area">
                                                                                             <div className="d-inline-block mr-1">
-                                                                                                <img style={{width:20}} height={30} width={30} src={Timelogo} alt="" />
+                                                                                                <img style={{ width: 20 }} height={30} width={30} src={Timelogo} alt="" />
                                                                                             </div>
                                                                                             <div className="d-inline-block">
                                                                                                 <span className="event-duration d-block">

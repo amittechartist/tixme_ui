@@ -101,7 +101,7 @@ const Dashboard = ({ title }) => {
     const [FormLoader, setFormLoader] = useState(false);
     const [EventData, setEventData] = useState();
     const [EventMainidData, setEventMainidData] = useState();
-    console.log("sss",EventMainidData);
+    console.log("sss", EventMainidData);
     const fetchEventData = async () => {
         setFormLoader(true)
         try {
@@ -207,8 +207,8 @@ const Dashboard = ({ title }) => {
             if (!Message) {
                 return toast.error('Type your Message');
             }
-            if(EventData){
-                if(!TicketTypevalue){
+            if (EventData) {
+                if (!TicketTypevalue) {
                     return toast.error('Select request ticket type');
                 }
             }
@@ -387,7 +387,7 @@ const Dashboard = ({ title }) => {
                                                     <Col md={4}>
                                                         <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                             <span class="input-group-text search-box-icon-1 br-n" ><FiClock /></span>
-                                                            <input type="text" class="form-control  blr-n" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range"  />
+                                                            <input type="text" class="form-control  blr-n" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                             <span class="input-group-text search-box-icon-1  bl-n" ><FiChevronDown /></span>
                                                         </div>
                                                     </Col>
@@ -486,17 +486,17 @@ const Dashboard = ({ title }) => {
                                                         </div>
                                                         {EventData ? (
                                                             <div className="form-group">
-                                                            <p className="mb-2">Request Ticket Type</p>
-                                                            <Select
-                                                                isClearable={false}
-                                                                options={TicketTypeOption}
-                                                                className='react-select'
-                                                                classNamePrefix='select'
-                                                                placeholder='Choose Type'
-                                                                onChange={selectTicketType}
-                                                                value={TicketType}
-                                                            />
-                                                        </div>
+                                                                <p className="mb-2">Request Ticket Type</p>
+                                                                <Select
+                                                                    isClearable={false}
+                                                                    options={TicketTypeOption}
+                                                                    className='react-select'
+                                                                    classNamePrefix='select'
+                                                                    placeholder='Choose Type'
+                                                                    onChange={selectTicketType}
+                                                                    value={TicketType}
+                                                                />
+                                                            </div>
                                                         ) : ''}
                                                         <div className="form-group">
                                                             <p className="mb-2">Priority Status</p>
@@ -519,8 +519,8 @@ const Dashboard = ({ title }) => {
                                                                 <button className="btn btn-primary w-100" type="button">Please wait...</button>
                                                             ) : (
                                                                 <>
-                                                                {EventData ? (<button className="btn btn-dark mb-2 w-100" onClick={() => setEventData(null)} type="button">Cancel</button>) : ''}
-                                                                <button className="btn btn-primary  mb-2 w-100" onClick={StoreNewTicket} type="button">Submit</button>
+                                                                    {EventData ? (<button className="btn btn-dark mb-2 w-100" onClick={() => setEventData(null)} type="button">Cancel</button>) : ''}
+                                                                    <button className="btn btn-primary  mb-2 w-100" onClick={StoreNewTicket} type="button">Submit</button>
                                                                 </>
                                                             )}
                                                         </div>
@@ -535,15 +535,15 @@ const Dashboard = ({ title }) => {
                     </Row >
                     <Row className="justify-content-center">
                         <div className="col-md-12">
-                            <Card className="py-4">
+                            <Card className="py-2">
                                 <Card.Body>
                                     <ContactDetails />
                                     {/* <div className="h-200"></div> */}
-                        <ContactDetails1 />
+                                    <ContactDetails1 />
                                 </Card.Body>
                             </Card>
                         </div>
-                        
+
                     </Row>
                 </div >
             </div >

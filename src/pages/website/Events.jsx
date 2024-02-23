@@ -59,7 +59,7 @@ const Home = () => {
     const [filtercategory, setFilterCategory] = useState('');
     const [FiltersearchQuery, setFiltersearchQuery] = useState(false);
     const [SearchInput, setSearchInput] = useState('');
-    const [SInput, setSInput] = useState();
+    const [SInput, setSInput] = useState(true);
     const [alreadyusersearcher, setalreadyusersearcher] = useState(false);
     const [CountryFilter, setCountryFilter] = useState('');
     const [Ticketstype, setTicketstype] = useState('');
@@ -78,7 +78,7 @@ const Home = () => {
     const [India, setIndia] = useState();
     const [Usa, setUsa] = useState();
     const [Isany, setIsany] = useState(false);
-
+    const [renderSecond, setrenderSecond] = useState(false);
     const [showAll, setShowAll] = useState(false);
     const visibleItems = Listitems;
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -133,7 +133,8 @@ const Home = () => {
     }
 
     const viewEvent = async (id, name) => {
-        navigate(`${app_url}event/${id}/${name}`)
+        const formattedName = name.replace(/\s+/g, '-');
+        navigate(`${app_url}event/${id}/${formattedName}`)
     }
     const fetchCategory = async () => {
         try {
@@ -170,7 +171,6 @@ const Home = () => {
         }
     ]
     const fetchEvent = async (e) => {
-        console.log("sd");
         if (e) e.preventDefault();
         try {
             if (Minprice && Maxprice) {
@@ -188,7 +188,7 @@ const Home = () => {
                 tickettype: Ticketstype ? Ticketstype : null,
                 dateapitype: Dateapitype ? Dateapitype : null,
                 onlydate: Datetype === "Pick a date" ? startdate : null,
-                display_name: SearchInput ? SearchInput : searchQuery.length > 0 && SInput.label == 0 ? searchQuery : null,
+                display_name: SearchInput ? SearchInput : searchQuery && SInput ? searchQuery : null,
                 fromdate: Datetype === "Pick between two dates" ? get_min_date(RangeStartdateselect) : null,
                 todate: Datetype === "Pick between two dates" ? get_min_date(Enddateselect) : null,
                 minprice: Minprice ? Minprice : 1,
@@ -212,6 +212,10 @@ const Home = () => {
 
             if (data.success === true) {
                 setEventlist(data.data);
+                setrenderSecond(true);
+                if(renderSecond){
+                    navigate(app_url + 'events');
+                }
             } else {
                 // Handle the case where data.success is not true
                 console.error("Error: ", data.message);
@@ -298,7 +302,7 @@ const Home = () => {
         // }
         if (searchQuery && searchQuery.length > 0) {
             // setFiltersearchQuery(true);
-            setSInput(searchQuery);
+            setSInput(true);
             // setSearchInput(searchQuery);
         }
     }, []);
@@ -331,8 +335,8 @@ const Home = () => {
                                             id="form1"
                                             className="form-control mt-lg-0"
                                             placeholder="Search"
-                                            onChange={(e) => { setSearchInput(e.target.value); setSInput(''); setalreadyusersearcher(true); }}
-                                            value={SearchInput || SInput}
+                                            onChange={(e) => { setSearchInput(e.target.value); setSInput(false); setalreadyusersearcher(true); }}
+                                            value={SearchInput ? SearchInput : SInput ? searchQuery : ''}
                                             style={{ height: '40px', border: 'none' }}
                                         />
                                         <button className="dfssfdsfdsf" onClick={() => fetchEvent()} type="button" style={{ background: '#F6F6F6' }}>
@@ -524,8 +528,8 @@ const Home = () => {
                                                     id="form1"
                                                     className="form-control mt-lg-0"
                                                     placeholder="Search"
-                                                    onChange={(e) => { setSearchInput(e.target.value); setSInput(''); setalreadyusersearcher(true); }}
-                                                    value={SearchInput || SInput}
+                                                    onChange={(e) => { setSearchInput(e.target.value); setSInput(false); setalreadyusersearcher(true); }}
+                                                    value={SearchInput ? SearchInput : SInput ? searchQuery : ''}
                                                     style={{ height: '40px', border: 'none' }}
                                                 />
                                                 <button className="dfssfdsfdsf" onClick={() => fetchEvent()} type="button" style={{ background: '#F6F6F6' }}>

@@ -16,6 +16,7 @@ const Dashboard = () => {
     const organizerid = localStorage.getItem('organizerid');
     // Loader
     const [Loader, setLoader] = useState(false);
+    const [CustomerLoader, setCustomerLoader] = useState(false);
     // states
     const [EventList, setEventList] = useState([]);
     const [EventListOption, setEventListOption] = useState([]);
@@ -26,7 +27,8 @@ const Dashboard = () => {
     const [EventPreselected, setEventPreselected] = useState();
     const [ticketOptions, setTicketOptions] = useState([]);
     const [Ticketselected, setTicketselected] = useState();
-
+    const [Customerselected, setCustomerselected] = useState();
+    console.log("c",AttendanceSelected);
     const EventOption = [
         {
             options: EventListOption
@@ -34,7 +36,8 @@ const Dashboard = () => {
     ]
     const EventPreOption = [
         {
-            options: EventPreListOption
+            options: EventListOption
+            // EventPreListOption
         }
     ]
     const AttendanceOption = [
@@ -48,12 +51,20 @@ const Dashboard = () => {
         }
     ]
 
+    const handleAttendanceChange = (selectedOptions) => {
+        if (selectedOptions.some(option => option.value === 'selectAll')) {
+            setAttendanceSelected(AttendanceListOption.slice(1));
+        } else {
+            setAttendanceSelected(selectedOptions);
+        }
+    };
+    
     const handleEventChange = () => {
         const newTicketOptions = [];
         if (EventPreselected) {
             EventPreselected.forEach(selectedEvent => {
                 const selectedEventData = EventList.find(event => event._id === selectedEvent.value);
-                if (selectedEventData) {
+                if (selectedEventData && selectedEventData.allprice) {
                     const filteredTicketOptions = selectedEventData.allprice
                         .filter(ticket => ticket.isdelete === 0)
                         .map(ticket => ({ value: ticket.id, label: ticket.name }));
@@ -80,20 +91,24 @@ const Dashboard = () => {
                 .then(data => {
                     if (data.success == true) {
                         setEventList(data.data);
-                        
+
                         const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
                         const upcomingEvents = data.data.filter(event => event.end_mindate >= today);
                         const pastEvents = data.data.filter(event => event.end_mindate < today);
-
-                        const upcomingOptions = upcomingEvents.map(event => ({
-                            value: event._id,
-                            label: event.display_name
-                        }));
-
-                        const pastOptions = pastEvents.map(event => ({
-                            value: event._id,
-                            label: event.display_name
-                        }));
+                        const upcomingOptions = [
+                            { value: 'selectAll', label: 'Select All' },
+                            ...upcomingEvents.map(customer => ({
+                                value: customer._id,
+                                label: customer.display_name
+                            }))
+                        ];
+                        const pastOptions = [
+                            { value: 'selectAll', label: 'Select All' },
+                            ...pastEvents.map(customer => ({
+                                value: customer._id,
+                                label: customer.display_name
+                            }))
+                        ];
 
                         setEventListOption(upcomingOptions);
                         setEventPreListOption(pastOptions);
@@ -109,6 +124,49 @@ const Dashboard = () => {
             setLoader(false)
         }
     }
+    const GetCustomerList = async () => {
+        try {
+            setCustomerLoader(true)
+            const requestData = {
+                orgid: organizerid,
+                tickettype: Ticketselected,
+            };
+            fetch(apiurl + 'event/get-customerlist-for-mail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        const uniqueCustomers = data.data.filter((customer, index, self) =>
+                            index === self.findIndex((t) => (
+                                t.customer_email === customer.customer_email
+                            ))
+                        );
+                        const CustomerOptions = [
+                            { value: 'selectAll', label: 'Select All' },
+                            ...uniqueCustomers.map(customer => ({
+                                value: customer.customer_email,
+                                label: customer.customer_email
+                            }))
+                        ];
+                        
+                        setAttendanceListOption(CustomerOptions);
+                    }
+                    setCustomerLoader(false)
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                    setCustomerLoader(false)
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+            setCustomerLoader(false)
+        }
+    }
 
     useEffect(() => {
         getMyEvents();
@@ -117,6 +175,11 @@ const Dashboard = () => {
         handleEventChange();
         setTicketselected("");
     }, [EventPreselected]);
+    useEffect(() => {
+        GetCustomerList();
+        setAttendanceSelected("");
+    }, [Ticketselected]);
+
     return (
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
@@ -199,8 +262,9 @@ const Dashboard = () => {
                                                                         isClearable={false}
                                                                         options={AttendanceOption}
                                                                         className='react-select'
+                                                                        isMulti
                                                                         classNamePrefix='select'
-                                                                        onChange={setAttendanceSelected}
+                                                                        onChange={handleAttendanceChange}
                                                                         value={AttendanceSelected}
                                                                     />
                                                                 </div>

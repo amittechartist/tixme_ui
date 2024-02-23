@@ -63,7 +63,7 @@
         padding: 9px 17px 3px 17px;
         font-size: 14px;
     }
-
+   
     .header-right .header-profile img {
         width: 25px;
         height: 25px;
@@ -125,6 +125,14 @@
 
 @media (min-width: 992px) and (max-width: 1150px) {
     .font-nav {
+        font-size: 9px !important;
+    }
+    img.organiger-logo {
+        height: auto;
+        width: 40px;
+    }
+    .button.Unfollow-btn-1 {
+        padding: 3px 5px !important;
         font-size: 9px !important;
     }
     .home_logo {

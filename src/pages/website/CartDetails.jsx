@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Timelogo from "../../common/icon/time 1.svg";
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import { FaTimes } from 'react-icons/fa';
+import Nocart from '../../component/Nocart';
 import toast from "react-hot-toast";
 import Button from 'react-bootstrap/Button';
 import Footer from '../../components/footer';
@@ -15,7 +15,6 @@ import CartBG from '../../common/image/Cart BG.svg'
 import calendar from "../../assets/calendar.svg";
 import TopIcon from "../../assets/new/top.png"
 import arrow from "../../assets/arrow.svg";
-import hourglassIcon from "./eventpageicon/hourglass.png";
 import { apiurl, app_url, isEmail, get_percentage } from "../../common/Helpers";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -64,7 +63,7 @@ const Home = () => {
         setCouponId('');
         setCouponData('')
         setDiscountAmount('');
-        setSubtotal(allItemsTotalPrice);
+        setSubtotal(Subtotal);
     }
     const HandelCouponCheck = async () => {
         try {
@@ -101,15 +100,15 @@ const Home = () => {
                         toast.success("Coupon applied");
                         setCouponData(data.data);
                         setCustomerCouponData(data.customer_coupon);
-                        const checkCartamount = parseInt(allItemsTotalPrice, 10);
-                        const checkCouponamount = parseInt(data.data.discount, 10);
+                        const checkCartamount = Subtotal;
+                        const checkCouponamount = parseInt(data.data.discount).toFixed(2);
                         if (checkCartamount > checkCouponamount) {
                             setDiscountAmount(checkCouponamount);
                             const CountSubtotal = checkCartamount - checkCouponamount;
-                            setSubtotal(CountSubtotal);
+                            setSubtotal(CountSubtotal.toFixed(2));
                         } else if (checkCartamount <= checkCouponamount) {
                             setDiscountAmount(checkCartamount);
-                            setSubtotal(0);
+                            setSubtotal(0.00);
                         }
                         setIscoupon(true);
                     } else {
@@ -217,7 +216,7 @@ const Home = () => {
                         if (data.data) {
                             const totalTax = data.data.reduce((accumulator, item) => {
                                 return accumulator + (item.taxamount || 0);
-                            }, 0);  
+                            }, 0);
                             setTotaltaxamount(totalTax);
                         }
                     }
@@ -401,7 +400,7 @@ const Home = () => {
                 cartItem.name === item.name ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
             );
             setCartItems(updatedCart);
-        }else{
+        } else {
             toast.error("Cannot add more than the available quantity");
         }
         // Update local quantity state
@@ -427,33 +426,34 @@ const Home = () => {
         setIsFirstRender(true);
     };
     const calculateTotalPrice = () => {
-        if(EventCartId){
+        if (EventCartId) {
             getTaxes();
         }
         if (!cartItems || cartItems.length === 0) {
-            setAllItemsTotalPrice(0);
-            setEventTotalPrice(0);
+            setAllItemsTotalPrice(0.00);
+            setEventTotalPrice(0.00);
             return;
         }
         let total = cartItems.reduce((accumulator, currentItem) => {
             return accumulator + currentItem.price * currentItem.quantity;
         }, 0);
 
+        total = total.toFixed(2);
         let TotalTax = 0;
         if (totaltaxamount > 0) {
-            TotalTax = Math.round((total * totaltaxamount) / 100);
+            TotalTax = ((Number(total) * Number(totaltaxamount)) / 100).toFixed(2);
         }
         if (rewardPoints) {
             const discountAmount = rewardPoints;
-            const subtotal = total + TotalTax - discountAmount;
-            const roundedSubtotal = Math.round(subtotal);
+            const subtotal = parseFloat(total + TotalTax - discountAmount).toFixed(2);
+            const roundedSubtotal = parseFloat(subtotal.toFixed(2));
             setAllItemsTotalPrice(total);
             setDiscountAmount(discountAmount);
             setSubtotal(roundedSubtotal);
         } else {
             setAllItemsTotalPrice(total);
             setDiscountAmount(0);
-            setSubtotal(total + TotalTax);
+            setSubtotal(parseFloat(Number(total) + Number(TotalTax)).toFixed(2));
         }
         console.log("sss");
     };
@@ -745,7 +745,7 @@ const Home = () => {
                                                                     <div className="row cart-new-div">
                                                                         <div className="col-md-12">
                                                                             <div>
-                                                                                <p className="Ticket-title col-md-9 mb-0">{item.event.display_name}</p>
+                                                                                <Link to={`${app_url}event/${item.event._id}/${item.event.name}`}><p className="Ticket-title col-md-9 mb-0">{item.event.display_name}</p></Link>
                                                                                 <div className="row d-flex align-items-center">
                                                                                     <div className="col-3">
                                                                                         <div className="d-flex align-items-center justify-content-center">
@@ -804,7 +804,7 @@ const Home = () => {
                                                                             <div className="right-box-con in-event-page-cart-sec">
                                                                                 <Row>
                                                                                     <Col md={12}>
-                                                                                        <p className="Ticket-title mb-0">{item.event.display_name}</p>
+                                                                                        <Link to={`${app_url}event/${item.event._id}/${item.event.name}`}><p className="Ticket-title col-md-9 mb-0">{item.event.display_name}</p></Link>
                                                                                         <p className="mb-0">
                                                                                             <span><img height={20} width={20} src={Timelogo} alt="" /></span>Event Time - {item.event.start_time}
                                                                                         </p>
@@ -847,7 +847,7 @@ const Home = () => {
                                                                             <h5 className="cart-amount-small-title">Subtotal</h5>
                                                                         </div>
                                                                         <div className="my-2 text-end  col-6">
-                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}.00</h5>
+                                                                            <h5 className="cart-amount-small-amount">{currency_symble} {allItemsTotalPrice}</h5>
                                                                         </div>
                                                                         {/* {Iswallet ? (
                                                                 <>
@@ -894,7 +894,7 @@ const Home = () => {
                                                                                                     <h5 className="cart-amount-small-title">{item.name}</h5>
                                                                                                 </div>
                                                                                                 <div className="col-md-6 col-6 my-2 text-end">
-                                                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)}.00</h5>
+                                                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)} </h5>
                                                                                                 </div>
                                                                                             </>
                                                                                         ))}
@@ -909,7 +909,7 @@ const Home = () => {
                                                                                     <h5 className="cart-amount-small-title">Discount</h5>
                                                                                 </div>
                                                                                 <div className="my-2 text-end  col-6">
-                                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}.00</h5>
+                                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {DiscountAmount}</h5>
                                                                                 </div>
                                                                             </>
                                                                         ) : ''}
@@ -920,7 +920,7 @@ const Home = () => {
                                                                             <h3 className="cart-amount-small-title theme-color font-600">Total</h3>
                                                                         </div>
                                                                         <div className="col-6 text-end">
-                                                                            <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}.00</h3>
+                                                                            <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}</h3>
                                                                         </div>
                                                                         <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">
                                                                             <Row>
@@ -944,19 +944,9 @@ const Home = () => {
                                                                         </Col>
                                                                         <Col md={12}>
                                                                             {ApiLoader ? (
-                                                                                <Button className='signup-page-btn  w-100 mt-2 theme-bg'>Please wait...</Button>
+                                                                                <Button className='signup-page-btn  w-100 mt-3 theme-bg'>Please wait...</Button>
                                                                             ) : (
-                                                                                <>
-                                                                                    <div className="mt-3 paynow-btn-box">
-                                                                                        <span >
-                                                                                            <button onClick={() => saveCartToLocalStorage()} type="button" className="btn btn-primary w-100 mt-2 theme-bg" >Pay now</button>
-                                                                                        </span>
-                                                                                    </div>
-                                                                                    {/* {IsCountryName ? (
-                                                                        ): (
-                                                                                <button type = "button" className = "btn btn-dark w-100">Select country</button>
-                                                                        )} */}
-                                                                                </>
+                                                                                <button onClick={() => saveCartToLocalStorage()} type="button" className="signup-page-btn  w-100 mt-3 theme-bg" >Pay now</button>
                                                                             )}
                                                                         </Col>
                                                                     </Row>
@@ -970,11 +960,7 @@ const Home = () => {
                                     ) : (
                                         <Row>
                                             <Col md={12}>
-                                                <Card>
-                                                    <Card.Body>
-                                                        <h2 className="text-danger " style={{ fontWeight: '600' }}>Your cart is empty !</h2>
-                                                    </Card.Body>
-                                                </Card>
+                                                <Nocart />
                                             </Col>
                                         </Row>
                                     )}

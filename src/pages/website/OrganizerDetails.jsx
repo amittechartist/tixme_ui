@@ -22,7 +22,8 @@ const Home = () => {
   const [eventlist, seteventlist] = useState([]);
   const navigate = useNavigate();
   const viewEvent = async (id, name) => {
-    navigate(`${app_url}event/${id}/${name}`)
+    const formattedName = name.replace(/\s+/g, '-');
+    navigate(`${app_url}event/${id}/${formattedName}`)
   }
 
   const getdata = async () => {
@@ -73,6 +74,11 @@ const Home = () => {
               {Loader ? '' : (<OrganizerProfile props={profiledata} />)}
             </div>
           ) : ''}
+          {screenWidth > 900 ? (
+            <div className="col-md-3">
+              {Loader ? '' : (<OrganizerProfile props={profiledata} />)}
+            </div>
+          ) : ''}
           <div className="col-md-9">
             {Loader ? (
               <>
@@ -102,8 +108,8 @@ const Home = () => {
                 {eventlist.length > 0 ? (
                   <Row className="event-box-mobile">
                     {eventlist.map((item, index) => (
-                      <div className="col-xl-4 col-md-4 col-12 cursor-pointer" onClick={() => viewEvent(item._id, item.name)}>
-                        <div className="bg-white rounded-10 shadow-bottom pb-3" style={{ height: '100%' }}>
+                      <div className="col-xl-4 col-lg-6 col-md-6 col-12 mb-3">
+                        <div className="bg-white rounded-10 shadow-bottom pb-3 cursor-pointer overflow-hidden" onClick={() => viewEvent(item._id, item.name)} style={{ height: '100%' }}>
                           <div style={{ position: 'relative' }}>
                             <span className="event-category-img">{item.category_name}</span>
                             <img className="event-card-img" src={item.thum_image ? item.thum_image : Noimg} alt="" />
@@ -117,28 +123,28 @@ const Home = () => {
                             </div>
                           </div>
                           <div className="row px-2 mt-2">
-                            <div className="col-md-7 d-flex align-items-center">
+                            <div className="col-md-7 d-flex align-items-center col-7">
                               <img className="card-icon-logo me-2" src={item.organizer_logo ? item.organizer_logo : Nouserphoto} alt="" />
                               <div className="d-flex flex-column align-items-start justify-content-start">
                                 <small className="mb-0 wspace-no" style={{ fontSize: '12px' }}>Originated by</small>
                                 <p className="text-primary-color fw-bold mb-0 mt-n1 event-text-org-name">
-                                  By {item.organizer_name}
+                                  {item.organizer_name}
                                 </p>
                               </div>
                             </div>
-                            <div className="col-md-5">
-                              <div className="bg-fade rounded pl-5 event-cart-price-box">
+                            <div className="col-md-5  col-5">
+                              <div className="bg-fade rounded text-center event-cart-price-box">
+                                <span className="text-primary-color fw-bold event-cart-display-price">{item.isfreeticket == 1 ? 'FREE' : item.countrysymbol + item.displayprice + '.00'}</span>
                                 <p className="small fw-bold mb-0 pb-0">Onwards</p>
-                                <span className="text-primary-color fw-bold event-cart-display-price">{item.countrysymbol} {item.displayprice}</span>
                               </div>
                             </div>
                           </div>
                           <div className="row mt-1">
                             <div className="col-md-12">
-                              <div className="d-flex align-items-center justify-content-start my-2">
+                              <div className="d-flex align-items-center justify-content-start my-2 mx-2">
                                 <img className="card-icon me-1" src={location} alt="" />
-                                <p className="text-primary-color fw-bold mb-0 event-cart-location ml-2">
-                                  {item.location}
+                                <p className="text-primary-color fw-bold mb-0 event-cart-location">
+                                  {item.city ? item.city + ',' : ''} {item.countryname ? item.countryname : ''}
                                 </p>
                               </div>
                             </div>
@@ -158,11 +164,6 @@ const Home = () => {
               </>
             )}
           </div>
-          {screenWidth > 900 ? (
-            <div className="col-md-3">
-              {Loader ? '' : (<OrganizerProfile props={profiledata} />)}
-            </div>
-          ) : ''}
         </div>
       </div>
       <Footer />

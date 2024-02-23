@@ -120,7 +120,7 @@ const Page = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        
+
                     }
                 })
                 .catch(error => {
@@ -130,7 +130,7 @@ const Page = ({ title }) => {
             console.error('Api error:', error);
         }
     }
-    
+
     useEffect(() => {
         checkPayment();
     }, []);
@@ -146,19 +146,22 @@ const Page = ({ title }) => {
                                     <Row>
                                         {pendingLoader ? (
                                             <>
-                                                <p className="text-warning payment-page-title">Payment processing</p>
-                                                <Lottie className="py-3" animationData={PendingLotte} style={lottewidth} />
+                                                <Col md={12} className="text-center">
+                                                    <p className="text-warning payment-page-title">Payment Failed !</p>
+                                                    <Lottie className="py-3" animationData={PendingLotte} style={lottewidth} />
+                                                </Col>
                                                 <Col md={12} className="mt-4">
-                                                    <span>
-                                                        <Link to={customer_url + 'my-order-list'}>
-                                                            <Whitebtn title={'View Order'} />
-                                                        </Link>
-                                                    </span>
-                                                    <span>
-                                                        <Link to={app_url}>
-                                                            <Whitebtn title={'Home'} />
-                                                        </Link>
-                                                    </span>
+                                                    <div className="row">
+                                                        <div className="col-md-12 text-center">
+                                                            <p className="mb-0">Your transaction has failed.</p>
+                                                            <p className="mb-0">Please try again or contact support if the problem persists.</p>
+                                                            <p>If you have any questions, please don't hesitate to contact us at <span style={{ color: '#0047ab' }}>support@TIXME.com</span>.</p>
+                                                        </div>
+                                                        <Col md={12} className="mt-4 text-center">
+                                                            <Link to={app_url} className="btn theme-bg text-white">Home</Link>
+                                                        </Col>
+                                                    </div>
+
                                                 </Col>
                                             </>
                                         ) : (

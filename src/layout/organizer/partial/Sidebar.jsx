@@ -1,6 +1,5 @@
 import React from 'react';
 import DashboardIcon from '../../../common/icon/dashboardicon.svg';
-import EventIcon from '../../../common/icon/event 1.svg';
 import ticketIcon from '../../../common/icon/ticket 1.svg';
 import walletIcon from '../../../common/icon/wallet 1.svg';
 import scannerIcon from '../../../common/icon/scanner 1.svg';
@@ -11,7 +10,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FiMail } from "react-icons/fi";
 import { organizer_url, app_url } from '../../../common/Helpers';
 const Sidebar = () => {
-    const navigate = useNavigate();
     function d() {
         const mainWrapperView = document.getElementById('main-wrapper view');
         const xyx = document.getElementsByClassName('hamburger');

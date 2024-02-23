@@ -90,7 +90,7 @@ const Component = ({ title }) => {
                         />
                         <label className="form-check-label" for="flexCheckDefault">
                             I agree with the{" "}
-                            <span className="text-primary-color">privacy statement</span>
+                            <span className="text-primary-color">privacy statement</span> <span className="text-danger">*</span>
                         </label>
                     </div>
                     {UpdatesLoader ? (

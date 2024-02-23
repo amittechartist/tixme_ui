@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
+// COMPONENT
 import Footer from '../../components/footer';
 import HeaderMenu from '../../components/headermenu';
 import OrganizerProfile from '../../component/organizer/organizerprofile';
-import { FaTimes } from 'react-icons/fa';
 import MobileMenu from '../../components/mobilemenu';
+import CoundownDiv from '../../component/coundown';
+
+import moment from 'moment';
+import { FaTimes } from 'react-icons/fa';
 import { apiurl, onlyDayMonth, shortPer, app_url, getDayName, getDay, getMonthName } from "../../common/Helpers";
 import { useNavigate, Link } from "react-router-dom";
 import Nouserphoto from '../../common/image/nouser.png';
@@ -14,15 +18,12 @@ import { FaWhatsapp } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import CoundownDiv from '../../component/coundown';
 import Noimg from "../../common/image/noimg.jpg";
 import calendar from "../../assets/calendar.svg";
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import ShareIcon from "../../common/icon/share.svg";
 import WhiteShareIcon from "../../common/icon/whiteshear.svg";
 import EventImg from "../../common/event1.png";
-import FlagIcon from "../../common/icon/flag.svg";
 import Flip from "react-reveal/Flip";
 import Fade from "react-reveal/Fade";
 import Slide from "react-reveal/Slide";
@@ -31,9 +32,9 @@ import locationIconevent from "./eventpageicon/Location (8).svg";
 import hourglassIcon from "./eventpageicon/hourglass.svg";
 import timeIcon from "./eventpageicon/clock.svg";
 import dataIcon from "./eventpageicon/date 2.svg";
-import mapIcon from "./eventpageicon/map (2).svg";
 import { FaRegHeart } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa6";
+import { Helmet } from 'react-helmet';
 const Home = () => {
   const navigate = useNavigate();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -79,7 +80,7 @@ const Home = () => {
     }
   }, [Eventdata]); // Run this effect only once
 
-
+  console.log(position);
   const CopyUrlhandel = async () => {
     await navigator.clipboard.writeText(currentUrl);
     toast.success("Copied");
@@ -193,7 +194,8 @@ const Home = () => {
     }
   }
   const viewEvent = async (id, name) => {
-    navigate(`${app_url}event/${id}/${name}`)
+    const formattedName = name.replace(/\s+/g, '-');
+    navigate(`${app_url}event/${id}/${formattedName}`)
     try {
       setApiloader(true)
       setIsMap(false);
@@ -365,7 +367,7 @@ const Home = () => {
   const [allItemsTotalPrice, setAllItemsTotalPrice] = useState(0);
   const [eventTotalPrice, setEventTotalPrice] = useState(0);
   const [localQuantities, setLocalQuantities] = useState({});
-  
+
   const eventId = id; // Assuming Eventdata has _id property
 
   useEffect(() => {
@@ -585,15 +587,31 @@ const Home = () => {
     localStorage.removeItem('cart');
     localStorage.removeItem('cart_insert_id');
   }
+  // ticket type date asc
+  const compareDatesAndTimes = (a, b) => {
+    const dateTimeA = moment(`${a.date} ${a.time}`, 'DD MMM YYYY hh:mm A');
+    const dateTimeB = moment(`${b.date} ${b.time}`, 'DD MMM YYYY hh:mm A');
+    return dateTimeA - dateTimeB; // For descending order
+  };
+
   return (
     <>
+      {!Apiloader && (
+        <Helmet>
+          <title>{Eventdata.display_name}</title>
+          <meta name="description" content={Eventdata.event_desc} />
+          {/* {Eventdata.thum_image && (
+            <>
+              <meta property="og:image" content={Eventdata.thum_image} />
+              <meta name="twitter:image" content={Eventdata.thum_image} />
+            </>
+          )} */}
+        </Helmet>
+      )}
       {" "}
       <div className="content-area">
         <Modal isOpen={newmodal} toggle={() => setNewModal(!newmodal)} centered>
-          <ModalHeader toggle={!newmodal}>Share this event
-            <button className="close p-0" onClick={() => setNewModal(!newmodal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-              <FaTimes />
-            </button>
+          <ModalHeader toggle={() => setNewModal(!newmodal)}>Share this event
           </ModalHeader>
           <ModalBody>
             <div>
@@ -630,7 +648,7 @@ const Home = () => {
               {screenWidth > 900 ? (
                 <div className="py-2 singel-event-page-head-box">
                   <div className="organizer-name-sec px-2 py-2">
-                    <div className="d-inline-flex align-items-center border-right event-time-area py-2">
+                    <div className="d-inline-flex align-items-center border-right event-time-area px-2">
                       <div className="d-inline-block mr-1">
                         <img height={30} width={'auto'} src={dataIcon} alt="" />
                       </div>
@@ -649,7 +667,7 @@ const Home = () => {
                     </div>
                     <div className={`d-inline-flex align-items-center ${Eventdata.eventtype == 2 && 'border-right'} event-time-area px-2`}>
                       <div className="d-inline-block mr-1">
-                        <img height={30} width={'auto'} className="ml-2" src={hourglassIcon} alt="" />
+                        <img height={30} width={'auto'} src={hourglassIcon} alt="" />
                       </div>
                       <div className="d-inline-block">
                         <span className="event-duration d-block">Event Duration</span>
@@ -724,7 +742,7 @@ const Home = () => {
                           </div>
                           <div className="d-inline-block">
                             <span className="event-duration d-block eventpage-location-name">
-                              {Eventdata.location}
+                              {Eventdata.displayaddress || Eventdata.location}
                             </span>
                             <span onClick={openGoogleMaps} className="event-time d-block cursor-pointer py-0  text-white">Get direction</span>
                           </div>
@@ -811,6 +829,7 @@ const Home = () => {
                       {/* <div className="desc-sec">
                       <span className="sec-title">Map xxx</span>
                     </div> */}
+
                       {Eventdata.eventtype == 2 && (
                         <div className="event-page-menu-div">
                           <GoogleMap
@@ -854,8 +873,8 @@ const Home = () => {
                     </div>
                   </div>
                   <div className="col-12 col-md-5 col-lg-4 col-xl-4">
-                    {Eventdata.start_mindate && Eventdata.is_clock_countdown ? (
-                      <CoundownDiv props={Eventdata.start_mindate} />
+                    {Eventdata.start_mindate && Eventdata.is_clock_countdown && Eventdata.start_time ? (
+                      <CoundownDiv date={Eventdata.start_mindate} time={Eventdata.start_time} />
                     ) : ''}
                     <div className="start-in-box eventpage-box-style-event-view mb-5 my-5 event-page-ticket" style={{ position: 'relative' }}>
                       <div className={`right-box-title`}>
@@ -875,7 +894,7 @@ const Home = () => {
                           <div className="row">
                             {Eventdata.allprice ? (
                               <>
-                                {Eventdata.event_dates.map((items, index) => (
+                                {Eventdata.event_dates.sort(compareDatesAndTimes).map((items, index) => (
                                   <>
                                     {items.is_delete === 0 && (
                                       <>
@@ -1006,7 +1025,7 @@ const Home = () => {
                 </Row>
               </Container>
             </div>
-            <div className="event-category-section mb-5 in-event-page">
+            <div className="event-category-section mb-5 in-event-page mt-5">
               <Container fluid className="">
                 {OrganizerEventlist.length > 0 && (
                   <Row className="mt-2">
@@ -1069,8 +1088,7 @@ const Home = () => {
                   </Row>
                 )}
                 <Row className="event-box-mobile">
-
-                  <Col md={12}>
+                  <Col md={12} className="mt-4">
                     <h2 className="desc-sec theme-color">Other events you may like</h2>
                   </Col>
                   {Eventlist.map((item, index) => (

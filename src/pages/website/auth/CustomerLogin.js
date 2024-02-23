@@ -166,11 +166,11 @@ const About = () => {
                                         )}
                                     </div>
                                 </form>
-                                <div className="border-bottom py-2"></div>
-                                <div className="text-center">
+                                <div className="border-bottom py-2  d-none"></div>
+                                <div className="text-center  d-none">
                                     <p className="reset-password-link text-center pt-3">Login with</p>
                                 </div>
-                                <div className="text-center">
+                                <div className="text-center d-none">
                                     <Row>
                                         <Col md={12}>
                                             <button className="login-with-btn mx-1" onClick={handleGoogleLogin}><img src={GoogleLogo}></img></button>

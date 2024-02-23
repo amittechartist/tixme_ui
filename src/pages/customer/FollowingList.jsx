@@ -133,14 +133,14 @@ const Dashboard = ({ title }) => {
                                             <Row>
                                                 <Col md={6}>
                                                     <div class="input-group mb-3 input-warning-o">
-                                                        <span class="input-group-text" style={{height: 38}}><img src={Searchicon} alt="" /></span>
+                                                        <span class="input-group-text" style={{ height: 38 }}><img src={Searchicon} alt="" /></span>
                                                         <input
                                                             type="text"
                                                             className="form-control"
                                                             placeholder="Search Organizer"
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
-                                                            style={{height: 40}}
+                                                            style={{ height: 40 }}
                                                         />
                                                     </div>
                                                 </Col>
@@ -158,16 +158,18 @@ const Dashboard = ({ title }) => {
                                                                     Listitems.map((item, index) => (
                                                                         <Col md={3}>
                                                                             <div className="my-follower-account-box text-center">
-                                                                                <img
+                                                                                <Link to={`${app_url}organizer-profile/${item.orderData[0]._id}/${item.orderData[0].first_name}`}><img
                                                                                     height={70}
                                                                                     width={70}
                                                                                     src={item.orderData[0].profile_picture ? item.orderData[0].profile_picture : Nouserphoto}
                                                                                     alt=""
                                                                                     className="organiger-logo mb-2"
                                                                                 />
-                                                                                {/* <p className="org-name">{item.organizername}</p> */}
-                                                                                <Link to={`${customer_url}organizer-events/${item.organizerid}`}><p className="org-name">{item.orderData[0].name}</p></Link>
-                                                                                <p className="org-event-count">{item.eventDataCount} Events</p>
+                                                                                    {/* <p className="org-name">{item.organizername}</p> */}
+                                                                                    <p className="org-name">{item.orderData[0].name}</p>
+                                                                                    <p className="org-event-count">{item.eventDataCount} Events</p>
+                                                                                </Link>
+
                                                                                 <button onClick={() => CheckDelete(item.organizerid)} type="button" class="Unfollow-btn-1">Unfollow</button>
                                                                             </div>
                                                                         </Col>

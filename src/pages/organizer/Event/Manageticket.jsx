@@ -31,6 +31,8 @@ const Dashboard = ({ title }) => {
     const [TicketEndtdate, setTicketEndtdate] = useState(new Date());
     const [EditApiLoader, setEditApiLoader] = useState(false);
     const [IsEdit, setIsEdit] = useState(false);
+    const [IsSellingFast, setIsSellingFast] = useState(false);
+    const [IsSoldOut, setIsSoldOut] = useState(false);
     const fetchAllTicket = async () => {
         try {
             setLoader(true);
@@ -136,6 +138,68 @@ const Dashboard = ({ title }) => {
     const EditEvent = async (id, name, ticketid) => {
         navigate(`${organizer_url}event/edit-event/${id}/${name}/${ticketid}`);
     }
+    const handleIsSellingFast = (ticketid, value) => {
+        try {
+            const requestData = {
+                updateid: id,
+                ticketid: ticketid,
+                status: value
+            };
+            fetch(apiurl + 'event/update-ticket-sellingfast', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        toast.success(data.message);
+                    } else {
+                        toast.error(data.message);
+                    }
+                    fetchAllTicket();
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                });
+
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+    };
+    const handleIsSoldOut = (ticketid, value) => {
+        try {
+            const requestData = {
+                updateid: id,
+                ticketid: ticketid,
+                status: value
+            };
+            fetch(apiurl + 'event/update-ticket-soldout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        toast.success(data.message);
+                    } else {
+                        toast.error(data.message);
+                    }
+                    fetchAllTicket();
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                });
+
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+    };
     return (
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
@@ -180,9 +244,9 @@ const Dashboard = ({ title }) => {
                                                         {Listitems.map((item, index) => (
                                                             <Col md={12} className="event_list_box_main in-ticket-list-1">
                                                                 <button onClick={() => navigate(`${organizer_url}event/mange-attendee/${Eventdata._id}/${Eventdata.name}/${item.id}`)} className="list-active-ticket-btn" type="button">Attendee  <img src={ArrowPng} className="arraw-svg ml-3" alt="" /></button>
-                                                                <div className="event_list_box">
+                                                                <div className="event_list_box p-0">
                                                                     <Row>
-                                                                        <Col md={4}>
+                                                                        <Col md={2}>
                                                                             <div className="text-center">
                                                                                 <span className="ticket-list-name">{item.name}</span> <span className="cursor-pointre list-event-edit-btn" onClick={() => EditEvent(Eventdata._id, Eventdata.name, item.id)}><img src={EditPng} alt="" /></span>
                                                                                 <p className="ticket-list-price_title mb-0">Price</p>
@@ -220,6 +284,16 @@ const Dashboard = ({ title }) => {
                                                                                 </Row>
                                                                             </div>
                                                                         </Col>
+                                                                        <Col md={2} className="d-flex align-items-center">
+                                                                            <div className="">
+                                                                                <div class="input-group mb-3">
+                                                                                    <input id={`sellingfirst${index}`} checked={item.isselling} onChange={(event) => handleIsSellingFast(item.id, event.target.checked)} type="checkbox" class="form-check-input" /><label className="mx-2" for={`sellingfirst${index}`}>Is Selling Fast</label>
+                                                                                </div>
+                                                                                <div class="input-group mb-3">
+                                                                                    <input id={`soldout${index}`} checked={item.issoldout} onChange={(event) => handleIsSoldOut(item.id, event.target.checked)} type="checkbox" class="form-check-input" /><label className="mx-2" for={`soldout${index}`}>Is Sold Out</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </Col>
                                                                     </Row>
                                                                 </div>
                                                             </Col>
@@ -237,131 +311,6 @@ const Dashboard = ({ title }) => {
                     </Row>
                 </div>
             </div >
-            <Modal isOpen={Ticketshow} toggle={() => setTicketshow(!Ticketshow)} className='modal-dialog-centered modal-lg'>
-                <ModalHeader className='bg-transparent'>Manage Ticket
-                    <button className="close p-0" onClick={() => setTicketshow(!Ticketshow)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-                        <FaTimes />
-                    </button>
-                </ModalHeader>
-                <ModalBody className=''>
-                    {EditApiLoader ? (
-                        <div className="linear-background w-100"> </div>
-                    ) : (
-                        <>
-                            {/* <Row>
-                                <Col md={12} className="justify-content-center d-flex">
-                                    <div className="tab-button-box">
-                                        <span onClick={() => { setTickettype(1); setPricedisable(false); }} className={Tickettype === 1 ? "tab-button-active" : ""}>Paid</span>
-                                        <span onClick={() => { setTickettype(2); setPricedisable(true); setPrice(''); }} className={Tickettype === 2 ? "tab-button-active" : ""}>Free</span>
-                                    </div>
-                                </Col>
-                                <Col md={12} className="mb-2 mt-4">
-                                    <label htmlFor="" className="text-black">Ticket name</label>
-                                    <input type="text" class="form-control input-default" onChange={(e) => setTicketname(e.target.value)} value={Ticketname} placeholder="Ticket name" />
-                                </Col>
-                                <Col md={12} className="mb-2">
-                                    <label htmlFor="" className="text-black">Ticket short description</label>
-                                    <textarea type="text" class="form-control input-default" onChange={(e) => setTicketdesc(e.target.value)} placeholder="Ticket short description" >{Ticketdesc}</textarea>
-                                </Col>
-                                <Col md={6} className="mb-2">
-                                    <label htmlFor="" className="text-black">Available ticket quantity</label>
-                                    <input type="number" class="form-control input-default" onChange={(e) => setQuantity(e.target.value)} value={Quantity} placeholder="Available ticket quantity" />
-                                </Col>
-                                <Col md={6} className="mb-2">
-                                    <label htmlFor="" className="text-black">Ticket Price</label>
-                                    <Input type="number" disabled={Pricedisable} class="form-control input-default" value={Price} onChange={(e) => setPrice(e.target.value)} placeholder="Ticket Price" />
-                                </Col>
-                                <div className="col-6">
-                                    <input
-                                        type="checkbox"
-                                        id={`checkbox-groupticket`}
-                                        checked={Isgrouptickets}
-                                        onChange={(event) => setIsgrouptickets(event.target.checked)}
-                                    />
-                                    <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-groupticket`}>Create a group tickets ?</label>
-                                    <div>
-                                        {Isgrouptickets && (
-                                            <>
-                                                <input type="number" class="form-control input-default" onChange={(e) => setGroupQty(e.target.value)} value={GroupQty} placeholder="Enter group quantity" />
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="col-12">
-                                    <div className="row">
-                                        {EventSubtype == 2 && (
-                                            <>
-                                                <Col md={6} className="mb-2 mt-1">
-                                                    <label htmlFor="" className="text-black">Event start in date</label>
-                                                    <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                                        <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                                        <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={get_date_time(TicketEventdata)[0].Dateview} />
-                                                        <div className="date-style-picker">
-                                                            <Flatpickr
-                                                                value={TicketStartdate}
-                                                                data-enable-time
-                                                                id='date-picker'
-                                                                className='form-control'
-                                                                onChange={date => setTicketEventdata(date)}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </Col>
-                                                <Col md={6} className="mb-2 mt-1">
-                                                    <label htmlFor="" className="text-black">Event start in time</label>
-                                                    <div class="input-group mb-3 input-warning-o">
-                                                        <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                                        <input type="text" class="form-control date-border-redius-input  bg-white" placeholder="" readOnly value={get_date_time(TicketEventdata)[0].Timeview} />
-                                                    </div>
-                                                </Col>
-                                                <Col md={12} className="mb-2"></Col>
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="col-12">
-                                    <p className="mb-0">Ticket Scan Start From</p>
-                                </div>
-                                <Col md={6} className="mb-2 mt-1">
-                                    <label htmlFor="" className="text-black">Date</label>
-                                    <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                        <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                        <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={get_date_time(TicketStartdate)[0].Dateview} />
-                                        <div className="date-style-picker">
-                                            <Flatpickr
-                                                value={TicketStartdate}
-                                                data-enable-time
-                                                id='date-picker'
-                                                className='form-control'
-                                                onChange={date => setTicketStartdate(date)}
-                                            />
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col md={6} className="mb-2 mt-1">
-                                    <label htmlFor="" className="text-black">Time</label>
-                                    <div class="input-group mb-3 input-warning-o">
-                                        <span class="input-group-text"><img src={TimeIcon} alt="" /></span>
-                                        <input type="text" class="form-control date-border-redius-input  bg-white" placeholder="" readOnly value={get_date_time(TicketStartdate)[0].Timeview} />
-                                    </div>
-                                </Col>
-                                <Col md={12} className="mb-2"></Col>
-                                <Col md={12} className="text-center">
-                                    {EditId && (
-                                        <>
-                                            {Loader ? (
-                                                <button type="button" className="text-white btn theme-bg w-100 ">Please wait...</button>
-                                            ) : (
-                                                <button type="button" onClick={() => handelCreateTicket(EditId)} className=" w-100 text-white btn theme-bg">Add ticket</button>
-                                            )}
-                                        </>
-                                    )}
-                                </Col>
-                            </Row> */}
-                        </>
-                    )}
-                </ModalBody >
-            </Modal >
         </>
     )
 }

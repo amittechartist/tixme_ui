@@ -263,90 +263,92 @@ const Dashboard = ({ title }) => {
                                 <Card.Body>
                                     <Row>
                                         <Col md={12}>
-                                            <div className="reward-ui-box p-4">
-                                                <Row>
-                                                    {loader || Packloader ? (
-                                                        <div className="linear-background w-100"> </div>
-                                                    ) : (
-                                                        <>
-                                                            <Col md={6}>
-                                                                <img src={picture ? picture : Nouserphoto} height={50} width={50} alt="" /> <span className="rewrd-user-name1">Hi, <span style={{ textTransform: 'capitalize' }}>{name}</span></span>
-                                                            </Col>
-                                                            <Col md={6}>
-                                                                <div className="text-end">
-                                                                    <p className="reward-point-count">{userdata.wallet ? userdata.wallet : 0} Points</p>
-                                                                </div>
-                                                            </Col>
-                                                            {Packloaderxxx ? (
-                                                                <></>
-                                                            ) : (
-                                                                <>
-                                                                    <Col md={12} className="pb-3">
-                                                                        <Row style={{ borderBottom: '1px solid #000' }}>
-                                                                            <Col md={4} xl={4} sm={4} className="text-center">
-                                                                                <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
-                                                                                    <p className="rewarx-box-c-title  text-capitalize">Your status</p>
-                                                                                    <p className="rewarx-box-c-sts"><span>{currentPackage.name ? currentPackage.name + ' Tier' : ''}</span></p>
-                                                                                </div>
-                                                                            </Col>
-                                                                            <Col md={4} xl={4} sm={4} className="text-center">
-                                                                                <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
-                                                                                    <p className="rewarx-box-c-title text-capitalize">Points to reach {nextTarget.name}</p>
-                                                                                    <p className="rewarx-box-c-sts">{nextTarget.pointsToNextTarget}</p>
-                                                                                </div>
-                                                                            </Col>
-                                                                            <Col md={4} className="text-center">
-                                                                                <div>
-                                                                                    <p className="rewarx-box-c-title  text-capitalize">Next Tier</p>
-                                                                                    <p className="rewarx-box-c-sts  text-capitalize">{nextTarget.name} Tier</p>
-                                                                                </div>
-                                                                            </Col>
-                                                                        </Row>
-                                                                    </Col>
-
-
-                                                                    <Col md={6}>
-                                                                        <p className="Booking-progress-towards  text-capitalize">Booking progress towards  <span>{nextTarget.name} Tier</span></p>
-                                                                    </Col>
-                                                                    <Col md={6} className="text-end">
-                                                                        <p className="Booking-progress-towards  text-capitalize"><span>{nextTarget.purchaseAmount}</span> Points for {nextTarget.name} Tier</p>
-                                                                    </Col>
-                                                                </>
-                                                            )}
-                                                            {Packloader ? '' : (
-                                                                <Col md={12} className="mt-4">
-                                                                    <div className="reward-box" style={{ position: 'relative' }}>
-                                                                        {Packloaderxxx ? '' : (
-                                                                            <span className="reward_star" style={{ left: Percentage }}>
-                                                                                <img src={aboutUs} height={50} width={50} alt="" />
-                                                                                <p className="reward_star_text" style={{ fontSize: '18px' }}>{currentPackage.name ? currentPackage.name + ' Tier' : 'Next ' + nextTarget.name}</p>
-                                                                            </span>
-                                                                        )}
-
-                                                                        {/* fetch scal data     */}
-                                                                        {Packagelist.map((item, index) => (
-                                                                            item.name === "Gold" && (
-                                                                                <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
-                                                                                    <img src={Gold} alt="" />
-                                                                                    <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Gold Tier</p>
-                                                                                </span>
-                                                                            )
-                                                                            ||
-                                                                            item.name === "Platinum" && (
-                                                                                <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
-                                                                                    <img src={Prem} alt="" />
-                                                                                    <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Platinum Tier</p>
-                                                                                </span>
-                                                                            )
-                                                                        ))}
-
-                                                                        <img src={RewardBg} style={{ height: '100%', width: '100%', objectFit: 'contain' }} alt="" />
+                                            <div className="xyu">
+                                                <div className="reward-ui-box p-4">
+                                                    <Row>
+                                                        {loader || Packloader ? (
+                                                            <div className="linear-background w-100"> </div>
+                                                        ) : (
+                                                            <>
+                                                                <Col md={6}>
+                                                                    <img src={picture ? picture : Nouserphoto} height={50} width={50} alt="" /> <span className="rewrd-user-name1">Hi, <span style={{ textTransform: 'capitalize' }}>{name}</span></span>
+                                                                </Col>
+                                                                <Col md={6}>
+                                                                    <div className="text-end">
+                                                                        <p className="reward-point-count">{userdata.wallet ? userdata.wallet : 0} Points</p>
                                                                     </div>
                                                                 </Col>
-                                                            )}
-                                                        </>
-                                                    )}
-                                                </Row>
+                                                                {Packloaderxxx ? (
+                                                                    <></>
+                                                                ) : (
+                                                                    <>
+                                                                        <Col md={12} className="pb-3">
+                                                                            <Row style={{ borderBottom: '1px solid #000' }}>
+                                                                                <Col md={4} xl={4} sm={4} className="text-center">
+                                                                                    <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
+                                                                                        <p className="rewarx-box-c-title  text-capitalize">Your status</p>
+                                                                                        <p className="rewarx-box-c-sts"><span>{currentPackage.name ? currentPackage.name + ' Tier' : ''}</span></p>
+                                                                                    </div>
+                                                                                </Col>
+                                                                                <Col md={4} xl={4} sm={4} className="text-center">
+                                                                                    <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
+                                                                                        <p className="rewarx-box-c-title text-capitalize">Points to reach {nextTarget.name}</p>
+                                                                                        <p className="rewarx-box-c-sts">{nextTarget.pointsToNextTarget}</p>
+                                                                                    </div>
+                                                                                </Col>
+                                                                                <Col md={4} className="text-center">
+                                                                                    <div>
+                                                                                        <p className="rewarx-box-c-title  text-capitalize">Next Tier</p>
+                                                                                        <p className="rewarx-box-c-sts  text-capitalize">{nextTarget.name} Tier</p>
+                                                                                    </div>
+                                                                                </Col>
+                                                                            </Row>
+                                                                        </Col>
+
+
+                                                                        <Col md={6}>
+                                                                            <p className="Booking-progress-towards  text-capitalize">Booking progress towards  <span>{nextTarget.name} Tier</span></p>
+                                                                        </Col>
+                                                                        <Col md={6} className="text-end">
+                                                                            <p className="Booking-progress-towards  text-capitalize"><span>{nextTarget.purchaseAmount}</span> Points for {nextTarget.name} Tier</p>
+                                                                        </Col>
+                                                                    </>
+                                                                )}
+                                                                {Packloader ? '' : (
+                                                                    <Col md={12} className="mt-4">
+                                                                        <div className="reward-box" style={{ position: 'relative' }}>
+                                                                            {Packloaderxxx ? '' : (
+                                                                                <span className="reward_star" style={{ left: Percentage }}>
+                                                                                    <img src={aboutUs} height={50} width={50} alt="" />
+                                                                                    <p className="reward_star_text" style={{ fontSize: '13px' }}>{currentPackage.name ? currentPackage.name + ' Tier' : 'Next ' + nextTarget.name}</p>
+                                                                                </span>
+                                                                            )}
+
+                                                                            {/* fetch scal data     */}
+                                                                            {Packagelist.map((item, index) => (
+                                                                                item.name === "Gold" && (
+                                                                                    <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
+                                                                                        <img src={Gold} alt="" />
+                                                                                        <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Gold Tier</p>
+                                                                                    </span>
+                                                                                )
+                                                                                ||
+                                                                                item.name === "Platinum" && (
+                                                                                    <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 12}%` }}>
+                                                                                        <img src={Prem} alt="" />
+                                                                                        <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Platinum Tier</p>
+                                                                                    </span>
+                                                                                )
+                                                                            ))}
+
+                                                                            <img src={RewardBg} style={{ height: '100%', width: '100%', objectFit: 'contain' }} alt="" />
+                                                                        </div>
+                                                                    </Col>
+                                                                )}
+                                                            </>
+                                                        )}
+                                                    </Row>
+                                                </div>
                                             </div>
                                         </Col>
                                         <Col md={12} className="mt-5">
@@ -359,7 +361,7 @@ const Dashboard = ({ title }) => {
                                                     </Col>
                                                     <Col md={12} className="mt-4">
                                                         <div className="navigation-box">
-                                                            <ul className="d-flex flex-row">
+                                                            <ul className="d-flex" style={{ paddingLeft: '0px !important' }}>
                                                                 <li className={getItemClass('new')} onClick={() => setCouponstate('new')}>New Coupon</li>
                                                                 <li className={getItemClass('old')} onClick={() => setCouponstate('old')}>My redeem coupon</li>
                                                             </ul>
@@ -394,7 +396,7 @@ const Dashboard = ({ title }) => {
                                                                                             <div className="col-7 d-flex align-items-center justify-content-center box-2">
                                                                                                 <div className="text-center">
                                                                                                     <p className="title-3">{item.name}</p>
-                                                                                                    <p onClick={() => CheckRedeem(item._id)} className="title-4">Redeem</p>
+                                                                                                    <p onClick={() => CheckRedeem(item._id)} className="title-4 p-1">Redeem</p>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>

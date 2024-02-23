@@ -327,7 +327,9 @@ const Dashboard = ({ title }) => {
     }
     const fetchOrderData = async (id, type) => {
         try {
-            setModalLoader(true);
+            if(!modal){
+                setModalLoader(true);
+            }
             setShowQr(false);
             const requestData = {
                 id: id
@@ -342,6 +344,8 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
+                        localStorage.setItem("qrid", id);
+                        localStorage.setItem("qrtype", type);
                         if (type == 2) {
                             const filteredItems = data.data.orderitemlist.filter(item => item.owner_id === data.data.ordersavedata.customer_id);
                             setOrderitemlist(filteredItems);
@@ -349,7 +353,7 @@ const Dashboard = ({ title }) => {
                             setOrderitemlist(data.data.orderitemlist);
                         }
                         setOrdersavedata(data.data.ordersavedata);
-                        console.log("sp",data.data.orderitemlist.length)
+                        console.log("sp", data.data.orderitemlist.length)
                         if (data.data.orderitemlist.length > 0) {
                             const check = data.data.orderitemlist.every(item => item.scan_status === "1");
                             setIsscan(check);
@@ -370,12 +374,37 @@ const Dashboard = ({ title }) => {
             setModalLoader(false);
         }
     }
+    const checkQR = () => {
+        let a;
+        let b;
+        a = localStorage.getItem("qrid");
+        b = localStorage.getItem("qrtype");
+        if (a && b) {
+            fetchOrderData(a, b);
+        }
+        console.log([a,b]);
+    }
+    const removeQrlocaldata = () => {
+        localStorage.removeItem("qrid");
+        localStorage.removeItem("qrtype");
+    }
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            checkQR();
+        }, 2000);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
+
     useEffect(() => {
         if (!Beartoken) {
             return navigate(app_url)
         }
         fetchmyEvent();
         fetchCategory();
+        removeQrlocaldata();
     }, []);
 
     const [SelectCategoryValue, setSelectCategoryValue] = useState();
@@ -457,17 +486,18 @@ const Dashboard = ({ title }) => {
             setTransferLoader(false);
         }
     }
+    const handelQrviewModal = () => {
+        setModal(!modal);
+        removeQrlocaldata();
+    }
     return (
         <>
-            <Modal isOpen={modal} toggle={() => setModal(!modal)} centered size={'xl'}>
-                <ModalHeader toggle={!modal}>Order Details
-                    <button className="close p-0" onClick={() => setModal(!modal)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-                        <FaTimes />
-                    </button>
+            <Modal isOpen={modal} toggle={() => handelQrviewModal()} centered size={'xl'}>
+                <ModalHeader toggle={() => handelQrviewModal()}>Order Details
                 </ModalHeader>
                 <ModalBody>
                     <Row className="justify-content-center">
-                        {ModalLoader ? (
+                        {ModalLoader && !localStorage.getItem("qrid") ? (
                             <>
                                 <Col md={4}><div className="linear-background w-100"> </div></Col>
                                 <Col md={4}><div className="linear-background w-100"> </div></Col>
@@ -560,7 +590,7 @@ const Dashboard = ({ title }) => {
                                 </Col> */}
                                 <Col md={12}>
                                     <Row className="pt-2 mt-4 justify-content-center" style={{ borderTop: '1px solid #eee' }}>
-                                    <h4 style={{ fontWeight: '700' }}>Tickect Scan Status</h4>
+                                        <h4 style={{ fontWeight: '700' }}>Tickect Scan Status</h4>
                                         {Orderitemlist.map((item, index) => (
                                             <Col md={3}>
                                                 <div className="ticket-box">
@@ -728,14 +758,14 @@ const Dashboard = ({ title }) => {
                                             <Row>
                                                 <Col md={6} xl={3}>
                                                     <div class="input-group mb-3 input-warning-o">
-                                                        <span class="input-group-text" style={{height: 38}}><img src={Searchicon} alt="" /></span>
+                                                        <span class="input-group-text" style={{ height: 38 }}><img src={Searchicon} alt="" /></span>
                                                         <input
                                                             type="text"
                                                             className="form-control"
                                                             placeholder="Search"
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
-                                                            style={{height: 40}}
+                                                            style={{ height: 40 }}
                                                         />
                                                     </div>
                                                 </Col>
@@ -817,30 +847,30 @@ const Dashboard = ({ title }) => {
                                                                     <Row>
                                                                         <Col md={4}>
                                                                             <div className="dash-list-banner-1">
-                                                                                <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} className="list-thum-img" alt="" />
+                                                                                <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg}  height={'200px'} className="list-thum-img" alt="" />
                                                                             </div>
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div>
-                                                                                <Link to={`${app_url}event/${item.eventData[0]._id}/${item.eventData[0].name}`}><span className="list-event-name">{item.eventData[0].name}</span></Link>
-                                                                                <p className="list-event-desc mb-0">{shortPer(item.eventData[0].event_desc, 100)}</p>
+                                                                                <Link to={`${app_url}event/${item.eventData[0]._id}/${item.eventData[0].name}`}><span className="list-event-name">{shortPer(item.eventData[0].display_name,35)}</span></Link>
+                                                                                <p className="list-event-desc mb-0">{shortPer(item.eventData[0].event_desc, 35)}</p>
                                                                             </div>
                                                                             <div className="list-event-location mb-xl-3 mb-1">
-                                                                                <div className="d-flex align-items-center text-center location-name">
+                                                                                <div className="d-flex align-items-center location-name">
                                                                                     <img
                                                                                         height={30}
                                                                                         width={30}
                                                                                         src={LocationIcon}
                                                                                         alt=""
                                                                                     />{" "}
-                                                                                    <span>{item.eventData[0].location}</span>
+                                                                                    <span>{item.eventData[0].displayaddress || item.eventData[0].location}</span>
                                                                                 </div>
                                                                             </div>
                                                                             <div className="desc_data">
                                                                                 <div className="organizer-name-sec px-2 py-2">
                                                                                     <div className="d-inline-flex align-items-center border-right event-time-area">
                                                                                         <div className="d-inline-block mr-1">
-                                                                                            <img style={{width:20}} height={30} width={30} src={Timelogo} alt="" />
+                                                                                            <img style={{ width: 20 }} height={30} width={30} src={Timelogo} alt="" />
                                                                                         </div>
                                                                                         <div className="d-inline-block">
                                                                                             <span className="event-duration d-block">

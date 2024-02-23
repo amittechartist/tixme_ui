@@ -75,6 +75,7 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [EventEndtime, setEventEndtime] = useState(new Date());
     const [IsclockCountdown, setIsclockCountdown] = useState(false);
     const [IsSellingFast, setIsSellingFast] = useState(false);
+    const [IsSoldOut, setIsSoldOut] = useState(false);
     const [Isgrouptickets, setIsgrouptickets] = useState(false);
     const [Displaystarttime, setDisplaystarttime] = useState(false);
     const [EditApiloader, setEditApiloader] = useState(false);
@@ -82,6 +83,7 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [Eventdesc, setEventdesc] = useState();
     const [categoryList, setcategoryList] = useState([{ value: "", label: "Category" }]);
     const [countryList, setcountryList] = useState([{ value: "", label: "Country" }]);
+    const [ListedCountry, setListedCountry] = useState([]);
     const [currencyList, setcurrencyList] = useState([{ value: "", label: "Currency" }]);
     const [MeDTOptionList, setMeDTOptionList] = useState([]);
     const [EventtypecategoryList, setEventtypecategoryList] = useState([{ value: "", label: "Type" }]);
@@ -321,7 +323,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                 get_min_date(ESdate),
                 get_date_time(EStime)[0].Timeview,
             );
-            if(!check){
+            if (!check) {
                 MySwal.fire({
                     title: "Invalid Date & Time",
                     text: `${get_date_time(Startdateselect)[0].Dateview} ${get_date_time(EventStarttime)[0].Timeview} TO ${get_date_time(Enddateselect)[0].Dateview} ${get_date_time(EventEndtime)[0].Timeview}`,
@@ -467,7 +469,10 @@ const Type = ({ title, editid, ticketeditid }) => {
         }
     }
     const handleIsSellingFast = (event) => {
-        setIsSellingFast(event.target.checked); // Update state based on checkbox checked status
+        setIsSellingFast(event.target.checked);
+    };
+    const handleIsSoldOut = (event) => {
+        setIsSoldOut(event.target.checked);
     };
     const handleIsclockCountdown = (event) => {
         setIsclockCountdown(event.target.checked); // Update state based on checkbox checked status
@@ -567,7 +572,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                 return toast.error("All field required");
             }
             if (Eventtype == 2) {
-                if (!Location || !Country) {
+                if (!Location || !Country || !displayaddress) {
                     return toast.error("All field required");
                 }
             }
@@ -579,6 +584,9 @@ const Type = ({ title, editid, ticketeditid }) => {
             );
             if (!check) {
                 return toast.error("Event end date & time must be greater than start date & time");
+            }
+            if (!eventjoinurl && Eventtype == 1) {
+                return toast.error("Enter Meeting Link");
             }
             setLoader(true);
             const requestData = {
@@ -615,6 +623,7 @@ const Type = ({ title, editid, ticketeditid }) => {
 
                 is_clock_countdown: IsclockCountdown,
                 is_selling_fast: IsSellingFast,
+                is_soldout: IsSoldOut,
                 display_start_time: Displaystarttime,
                 display_end_time: Displayendtime,
                 countryname: Countryname,
@@ -627,6 +636,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                 city: Eventtype == 2 ? Cityname : null,
                 state: Eventtype == 2 ? Statename : null,
                 pincode: Eventtype == 2 ? Pincode : null,
+                displayaddress: Eventtype == 2 ? displayaddress : null,
                 eventjoinurl: Eventtype == 1 ? eventjoinurl : null,
             };
             fetch(apiurl + 'event/update', {
@@ -704,17 +714,20 @@ const Type = ({ title, editid, ticketeditid }) => {
             }
             var event_type_name = '';
             if (Eventtype == 1) {
-                var event_type_name = 'Offline Event';
-            } else {
                 var event_type_name = 'Online Event';
+            } else {
+                var event_type_name = 'Offline Event';
             }
             if (!Name || !Displayname || !Category || !Currency || !selectedTimezone) {
                 return toast.error("All field required");
             }
             if (Eventtype == 2) {
-                if (!Location || !Country) {
+                if (!Location || !Country || !displayaddress) {
                     return toast.error("All field required");
                 }
+            }
+            if (!eventjoinurl && Eventtype == 1) {
+                return toast.error("Enter Meeting Link");
             }
             setLoader(true);
             const requestData = {
@@ -747,6 +760,7 @@ const Type = ({ title, editid, ticketeditid }) => {
 
                 is_clock_countdown: IsclockCountdown,
                 is_selling_fast: IsSellingFast,
+                is_soldout: IsSoldOut,
                 display_start_time: Displaystarttime,
                 display_end_time: Displayendtime,
                 organizer_id: organizerid,
@@ -754,13 +768,15 @@ const Type = ({ title, editid, ticketeditid }) => {
                 currencycode: CurrencyId,
                 countrysymbol: Currencyname,
                 timezone: selectedTimezone,
+                
+                lat: Eventtype == 2 ? LocationLat : null,
                 lat: Eventtype == 2 ? LocationLat : null,
                 Lag: Eventtype == 2 ? LocationLag : null,
                 location: Eventtype == 2 ? Location : null,
                 city: Eventtype == 2 ? Cityname : null,
                 state: Eventtype == 2 ? Statename : null,
                 pincode: Eventtype == 2 ? Pincode : null,
-                pincode: Eventtype == 2 ? Pincode : null,
+                displayaddress: Eventtype == 2 ? displayaddress : null,
                 eventjoinurl: Eventtype == 1 ? eventjoinurl : null,
             };
             fetch(apiurl + 'event/create', {
@@ -863,14 +879,20 @@ const Type = ({ title, editid, ticketeditid }) => {
             if (!Ticketname) {
                 return toast.error('Enter ticket name');
             }
-            
+
             if (!Quantity || Quantity <= 0) {
                 return toast.error('Enter valid available ticket quantity');
             }
-            if (!Price && Tickettype == 1 || Price <= 0) {
+            if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
-            if (Isgrouptickets && !GroupQty || GroupQty <= 0) {
+            if (Price <= 0 && Tickettype == 1) {
+                return toast.error('Enter valid ticket price');
+            }
+            if (Isgrouptickets && !GroupQty) {
+                return toast.error('Enter group quantity');
+            }
+            if (Isgrouptickets && GroupQty <= 0) {
                 return toast.error('Enter group quantity');
             }
             if (!SelectedMEDTId && EventSubtype == 2) {
@@ -951,13 +973,13 @@ const Type = ({ title, editid, ticketeditid }) => {
             if (!Price && Tickettype == 1) {
                 return toast.error('Enter ticket price');
             }
-            if(Price <= 0 && Tickettype == 1){
+            if (Price <= 0 && Tickettype == 1) {
                 return toast.error('Enter valid ticket price');
             }
             if (Isgrouptickets && !GroupQty) {
                 return toast.error('Enter group quantity');
             }
-            if(Isgrouptickets && GroupQty <= 0){
+            if (Isgrouptickets && GroupQty <= 0) {
                 return toast.error('Enter group quantity');
             }
             if (!SelectedMEDTId && EventSubtype == 2) {
@@ -1159,7 +1181,8 @@ const Type = ({ title, editid, ticketeditid }) => {
                             label: item.symbol
                         }));
                         setcountryList(countryOption);
-                        setcurrencyList(currencyOption)
+                        setcurrencyList(currencyOption);
+                        setListedCountry(data.data);
                     }
                 })
                 .catch(error => {
@@ -1217,7 +1240,6 @@ const Type = ({ title, editid, ticketeditid }) => {
             options: MeDTOptionList
         }
     ]
-    console.log("ss", MeDTOption);
     const selectCategory = (selectedValue) => {
         setCategory(selectedValue);
         setCategoryId(selectedValue.value);
@@ -1232,6 +1254,11 @@ const Type = ({ title, editid, ticketeditid }) => {
         setCountry(selectedValue);
         setCountryId(selectedValue.value);
         setCountryname(selectedValue.label);
+        const getSymboldata = ListedCountry.find(ticket => ticket.name === selectedValue.value);
+        if (getSymboldata) {
+            setCurrencyId(getSymboldata.currency);
+            setCurrencyname(getSymboldata.symbol);
+        }
     };
     const selectMeDTOption = (selectedValue) => {
         setSelectedMEDT(selectedValue);
@@ -1282,10 +1309,14 @@ const Type = ({ title, editid, ticketeditid }) => {
                         setCityname(data.data.city)
                         setStatename(data.data.state)
                         setPincode(data.data.pincode)
+                        setLocationLat(data.data.lat);
+                        setLocationLag(data.data.Lag);
+                        setdisplayaddress(data.data.displayaddress);
                         setEventSubtype(data.data.event_subtype_id)
 
                         setIsclockCountdown(data.data.is_clock_countdown)
                         setIsSellingFast(data.data.is_selling_fast)
+                        setIsSoldOut(data.data.IsSoldOut)
 
                         setStartdateselect(data.data.start_data_min[0] || new Date())
                         setEnddateselect(data.data.end_data_min[0] || new Date())
@@ -1504,7 +1535,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                                 value={Category}
                                             />
                                         </div>
-                                        <div className="col-md-3 mt-4">
+                                        {/* <div className="col-md-3 mt-4">
                                             <label htmlFor="" className="text-black">Select Currency<span className="text-danger">*</span></label>
                                             <Select
                                                 isClearable={false}
@@ -1514,10 +1545,26 @@ const Type = ({ title, editid, ticketeditid }) => {
                                                 onChange={selectCurrency}
                                                 value={Currency}
                                             />
-                                        </div>
+                                        </div> */}
                                         <div className="col-md-3 mt-4">
                                             <label htmlFor="" className="text-black">Display price<span className="text-danger">*</span></label>
-                                            <input type="text" class="form-control input-default" value={Displayprice} onChange={(e) => setDisplayprice(e.target.value)} placeholder="Enter Amount" />
+                                            <input
+                                                type="text"
+                                                class="form-control input-default"
+                                                value={Displayprice}
+                                                onChange={(e) => setDisplayprice(e.target.value)}
+                                                onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
+                                                placeholder="Enter Amount"
+                                                pattern="\d*"
+                                            />
+                                        </div>
+                                        <div className="col-md-3 mt-4">
+                                            <div class="input-group mb-3">
+                                                <input id="sellingfirst" checked={IsSellingFast} onChange={handleIsSellingFast} type="checkbox" class="form-check-input" /><label className="mx-2" for="sellingfirst">Show Selling Fast</label>
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <input id="soldout" checked={IsSoldOut} onChange={handleIsSoldOut} type="checkbox" class="form-check-input" /><label className="mx-2" for="soldout">Show Sold Out</label>
+                                            </div>
                                         </div>
                                         <div className="col-md-12 mt-4 d-none">
                                             <label htmlFor="">Tags</label>
@@ -1621,7 +1668,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                             </div>
                                         </>) : (<>
                                             <div className="col-12 col-md-8 mt-4">
-                                                <label htmlFor="" className="text-black">Online Meeting URL</label>
+                                                <label htmlFor="" className="text-black">Online Meeting URL <span className="text-danger">*</span></label>
                                                 <input type="text" class="form-control input-default" value={eventjoinurl} onChange={(e) => seteventjoinurl(e.target.value)} placeholder="Enter Online Meeting URL" />
                                             </div>
                                         </>)}
@@ -2039,11 +2086,28 @@ const Type = ({ title, editid, ticketeditid }) => {
                         </Col>
                         <Col md={6} className="mb-2">
                             <label htmlFor="" className="text-black">Available ticket quantity</label>
-                            <input type="number" min="1" class="form-control input-default" onChange={(e) => setQuantity(e.target.value)} value={Quantity} placeholder="Available ticket quantity" />
+                            <input
+                                type="text"
+                                class="form-control input-default"
+                                value={Quantity}
+                                onChange={(e) => setQuantity(e.target.value)}
+                                onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
+                                placeholder="Available ticket quantity"
+                                pattern="\d*"
+                            />
                         </Col>
                         <Col md={6} className="mb-2">
                             <label htmlFor="" className="text-black">Ticket price</label>
-                            <Input  type="number" min="1" disabled={Pricedisable} class="form-control input-default" value={Price} onChange={(e) => setPrice(e.target.value)} placeholder="Ticket Price" />
+                            <input
+                                type="text"
+                                class="form-control input-default"
+                                value={Price}
+                                disabled={Pricedisable}
+                                onChange={(e) => setPrice(e.target.value)}
+                                onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
+                                placeholder="Enter Ticket price"
+                                pattern="\d*"
+                            />
                         </Col>
                         <div className="col-6">
                             <input
@@ -2056,7 +2120,15 @@ const Type = ({ title, editid, ticketeditid }) => {
                             <div>
                                 {Isgrouptickets && (
                                     <>
-                                        <input  type="number" min="1" class="form-control input-default" onChange={(e) => setGroupQty(e.target.value)} value={GroupQty} placeholder="Enter group quantity" />
+                                        <input
+                                            type="text"
+                                            class="form-control input-default"
+                                            value={GroupQty}
+                                            onChange={(e) => setGroupQty(e.target.value)}
+                                            onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
+                                            placeholder="Enter group quantity"
+                                            pattern="\d*"
+                                        />
                                     </>
                                 )}
                             </div>

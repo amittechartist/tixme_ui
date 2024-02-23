@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { apiurl, app_url } from "../../common/Helpers";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { FaTicket } from "react-icons/fa6";
 const Dashboard = ({ title }) => {
     const organizerid = localStorage.getItem('organizerid');
     const navigate = useNavigate();
@@ -149,15 +149,9 @@ const Dashboard = ({ title }) => {
             <div className="content-body" style={{ background: '#F1F1F1' }}>
 
                 <div className="container-fluid">
-                    <div className="page-titles">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item">{title}</li>
-                        </ol>
-                        <span>Welcome Back, TIXME</span>
-                    </div>
                     <Row>
                         {Apiloader ? (
-                            <div className="linear-background w-100" style={{height: '200px'}}> </div>
+                            <div className="linear-background w-100" style={{ height: '200px' }}> </div>
                         ) : (
                             <>
 
@@ -202,19 +196,13 @@ const Dashboard = ({ title }) => {
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="media align-items-center">
-                                                <span class="me-4">
-                                                    <svg class="primary-icon" width="51" height="52" viewBox="0 0 51 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M25.5 43C34.8888 43 42.5 35.3888 42.5 26C42.5 16.6112 34.8888 9 25.5 9C16.1112 9 8.5 16.6112 8.5 26C8.5 35.3888 16.1112 43 25.5 43ZM25.5 51.5C39.5833 51.5 51 40.0833 51 26C51 11.9167 39.5833 0.5 25.5 0.5C11.4167 0.5 0 11.9167 0 26C0 40.0833 11.4167 51.5 25.5 51.5Z" fill="white" fill-opacity="0.18"></path>
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M33.9997 1.95836C31.2809 0.997147 28.4073 0.5 25.4997 0.5V8.86605C28.5687 8.86605 31.5815 9.6904 34.223 11.253C36.8645 12.8155 39.0379 15.0589 40.5159 17.7486C41.9939 20.4384 42.7223 23.4757 42.625 26.5433C42.5277 29.6108 41.6082 32.5959 39.9627 35.1866C38.3172 37.7772 36.006 39.8783 33.2707 41.2703C30.5355 42.6623 27.4766 43.294 24.4136 43.0995C21.3507 42.905 18.3963 41.8913 15.8591 40.1645C13.3219 38.4376 11.2952 36.061 9.99062 33.283L2.41797 36.8391C3.65388 39.4709 5.32535 41.8607 7.35106 43.9131C8.50759 45.0848 9.77958 46.1466 11.1519 47.0806C14.9279 49.6506 19.3249 51.1592 23.8834 51.4487C28.4418 51.7382 32.9943 50.798 37.0652 48.7264C41.136 46.6548 44.5756 43.5277 47.0246 39.6721C49.4736 35.8165 50.842 31.3739 50.9868 26.8085C51.1317 22.2432 50.0476 17.7228 47.8479 13.7197C45.6482 9.71663 42.4137 6.37787 38.4824 4.05236C37.0536 3.2072 35.5519 2.50715 33.9997 1.95836Z" fill="var(--primary)"></path>
-                                                    </svg>
+                                                <span class="me-4 dash-box-icon">
+                                                    <FaTicket/>
                                                 </span>
                                                 <div class="media-body ms-1">
                                                     <p class="mb-2">Total ticket sold</p>
                                                     <div class="d-flex align-items-center">
                                                         <h3 class="mb-0 me-3 text-black font-w600">{Totalticket}</h3>
-                                                        <svg width="29" height="15" viewBox="0 0 29 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M0 15L14.5 -1.27353e-06L29 15" fill="var(--primary)"></path>
-                                                        </svg>
                                                     </div>
                                                 </div>
                                             </div>

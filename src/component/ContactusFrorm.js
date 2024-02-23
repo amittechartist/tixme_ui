@@ -70,8 +70,8 @@ const Contact = () => {
         setphone(newPhone);
     };
     return (
-        <form className="px-lg-5 px-4 py-4" onSubmit={HandelContactForm}>
-            <div className="row">
+        <form className="px-lg-5 px-2 py-2" onSubmit={HandelContactForm}>
+            <div className="row contact-us-form p-2">
                 <div className="col-lg-4">
                     <div className="mb-3">
                         <label for="exampleInputEmail1" className="form-label">
@@ -208,7 +208,7 @@ const Contact = () => {
                     </div>
                 </div>
             </div>
-            <div className="mt-md-3 mt-2">
+            <div className="mt-md-3 mt-2 d-flex justify-content-center">
                 {Loader ? (
                     <button className="GetLatestUpdateButton">
                         <div className="left">
@@ -221,7 +221,7 @@ const Contact = () => {
                 ) : (
                     <button type="submit" className="GetLatestUpdateButton">
                         <div className="left px-0 px-md-4">
-                            <small className="ms-2">Get In Touch</small>
+                            <small className="ms-2">Get in Touch!</small>
                         </div>
                         <div className="right">
                             <img style={{ width: "18px" }} src={arrow} alt="" />

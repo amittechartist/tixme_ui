@@ -29,7 +29,7 @@ const Locationbtn = ({ prorps }) => {
     const HandelOrganizersignup = async (e) => {
         e.preventDefault();
         try {
-            if (!Firstname || !Lastname || !Email || !Confirmemail || !Phonenumber) {
+            if (!Firstname || !Lastname || !Email || !Confirmemail || !Phonenumber || !Message) {
                 return toast.error('Required field must not be empty');
             }
             if (!isEmail(Email)) {
@@ -191,7 +191,7 @@ const Locationbtn = ({ prorps }) => {
                                 </div>
                             </Col>
                             <div className="form-group">
-                                <p>Message</p>
+                                <p>Message <span className="text-danger">*</span></p>
                                 <textarea class="form-control" rows="3" value={Message} onChange={(e) => setMessage(e.target.value)}></textarea>
                             </div>
                             <Col md={12}>

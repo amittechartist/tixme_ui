@@ -940,24 +940,22 @@ button.Unfollow-btn-1 {
   background: #0047ab;
   border: 2px solid #0047ab;
   border-radius: 7px;
-  padding: 3px 20px;
+  padding: 3px 15px;
   font-weight: 600;
   color: #ffffff;
 }
 
 .reward-ui-box {
-  background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 13px, transparent 13px) 0% 0%/15px 15px no-repeat,
-    radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 13px, transparent 13px) 100% 0%/15px 15px no-repeat,
-    radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 13px, transparent 13px) 0% 100%/15px 15px no-repeat,
-    radial-gradient(circle at 0 0, #ffffff 0, #ffffff 13px, transparent 13px) 100% 100%/15px 15px no-repeat,
-    linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 4px) calc(100% - 30px) no-repeat,
-    linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 30px) calc(100% - 4px) no-repeat,
-    linear-gradient(#0047ab 48%, #ffffff 100%);
-  border-radius: 15px;
-  padding: 15px 4px;
-  box-sizing: border-box;
+  background: linear-gradient(white, #fff) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box;
+  padding-top: 40px;
+  border-radius: 15px 15px 0px 0px ;
+  border: 1px solid transparent;
 }
-
+.contact-us-form {
+  background: linear-gradient(white, #fff) padding-box, linear-gradient(to bottom, #0047AB, #fff) border-box;
+  border-radius: 15px 15px 0px 0px ;
+  border: 1px solid transparent;
+}
 p.rewarx-box-c-title {
   color: #000;
   font-weight: 400;
@@ -1252,6 +1250,8 @@ button.signup-page-button {
   position: absolute;
   font-size: 36px;
   top: -12px;
+  width: 91px;
+  text-align: center;
 }
 
 .reward_star_grew {
@@ -2177,7 +2177,7 @@ span.selling-f-box {
     width: 300px;
 }
 .faq-page-space{
-  height: 475px;
+  height: 600px;
 }
 .scroll-top-box {
   height: 40px;
@@ -2275,4 +2275,12 @@ span.sidebar-icon {
 }
 .theme-border .css-13cymwt-control {
   border-color: hsl(0deg 0% 93.33%) !important;
+}
+img.organiger-logo {
+  height: auto;
+  width: 60px;
+}
+.dash-box-icon {
+  font-size: 47px;
+  color: #222fb9;
 }

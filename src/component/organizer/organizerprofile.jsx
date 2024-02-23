@@ -97,7 +97,7 @@ const Type = ({ props }) => {
     <div className="organised-by-box eventpage-box-style-event-view">
       <div className="organizer-name-sec">
         <div className="row d-flex align-items-end">
-          <div className="col-8 d-flex align-items-end">
+          <div className="col-12 col-md-7  d-flex align-items-end">
             <div className="d-inline-block mr-3">
               <img
                 height={70}
@@ -108,11 +108,11 @@ const Type = ({ props }) => {
               />
             </div>
             <div className="d-inline-block">
-              <span className="organizer-by d-block">Organised by</span>
+              <span className="organizer-by d-block">Organised</span>
               <Link to={`${app_url}organizer-profile/${Organizerdata._id}/${Organizerdata.first_name}`}><span className="organizer-name d-block">By {Organizerdata.first_name}</span></Link>
             </div>
           </div>
-          <div className="col-4 text-end">
+          <div className="col-6 col-md-5 text-end">
             {FollowApi ? (
               <button type="button" className="follow-btn">wait...</button>
             ) : (
@@ -160,7 +160,7 @@ const Type = ({ props }) => {
             ) : (
               <>
                 <div className="row align-items-center d-flex">
-                  <div className="col-12">
+                  <div className="col-12 text-end">
                     <p className="followers-title">Followers</p>
                     <p className="followers-count">{Organizerdata.followers ? Organizerdata.followers : 0}</p>
                   </div>
