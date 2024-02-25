@@ -944,9 +944,9 @@ const Home = () => {
                                                                         </Col>
                                                                         <Col md={12}>
                                                                             {ApiLoader ? (
-                                                                                <Button className='signup-page-btn  w-100 mt-3 theme-bg'>Please wait...</Button>
+                                                                                <Button className='w-100 mt-3 btn theme-bg text-white'>Please wait...</Button>
                                                                             ) : (
-                                                                                <button onClick={() => saveCartToLocalStorage()} type="button" className="signup-page-btn  w-100 mt-3 theme-bg" >Pay now</button>
+                                                                                <button onClick={() => saveCartToLocalStorage()} type="button" className="w-100 mt-3 btn theme-bg text-white" >Pay now</button>
                                                                             )}
                                                                         </Col>
                                                                     </Row>

@@ -8,6 +8,12 @@ import MenuIcon from '../../../common/icon/Menu sidebar.svg';
 import peopleIcon from '../../../common/icon/people 1.svg';
 import supportIcon from '../../../common/icon/support.svg';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaTicketAlt } from 'react-icons/fa';
+import { FaUserFriends } from 'react-icons/fa';
+import { FaBookmark } from 'react-icons/fa';
+import { FaHeadset } from 'react-icons/fa';
+import { FaHome } from 'react-icons/fa';
+import { FaAward } from 'react-icons/fa';
 import { organizer_url, app_url, customer_url } from '../../../common/Helpers';
 const Sidebar = () => {
     function d() {
@@ -33,32 +39,32 @@ const Sidebar = () => {
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
                         <li onClick={() => d()}><Link to={customer_url + 'dashboard'} className="ai-icon" aria-expanded="false">
-                            <img src={DashboardIcon} alt="Your Logo" />
+                            <span className='sidebar-icon'><FaHome /></span>
                             <span className="nav-text">Dashboard</span>
                         </Link>
                         </li>
-                        <li onClick={() => d()}><Link to={customer_url+ 'my-order-list'} className="ai-icon" aria-expanded="false">
-                            <img src={supportIcon} alt="Your Logo" />
+                        <li onClick={() => d()}><Link to={customer_url + 'my-order-list'} className="ai-icon" aria-expanded="false">
+                            <span className='sidebar-icon'><FaTicketAlt /></span>
                             <span className="nav-text">My tickets</span>
                         </Link>
                         </li>
-                        <li onClick={() => d()}><Link to={customer_url+ 'my-rewards'} className="ai-icon" aria-expanded="false">
-                            <img src={supportIcon} alt="Your Logo" />
+                        <li onClick={() => d()}><Link to={customer_url + 'my-rewards'} className="ai-icon" aria-expanded="false">
+                            <span className='sidebar-icon'><FaAward /></span>
                             <span className="nav-text">My Rewards</span>
                         </Link>
                         </li>
-                        <li onClick={() => d()}><Link to={customer_url+ 'following'} className="ai-icon" aria-expanded="false">
-                            <img src={supportIcon} alt="Your Logo" />
+                        <li onClick={() => d()}><Link to={customer_url + 'following'} className="ai-icon" aria-expanded="false">
+                            <span className='sidebar-icon'><FaUserFriends /></span>
                             <span className="nav-text">My Following</span>
                         </Link>
                         </li>
-                        <li onClick={() => d()}><Link to={customer_url+ 'savedevents'} className="ai-icon" aria-expanded="false">
-                            <img src={supportIcon} alt="Your Logo" />
+                        <li onClick={() => d()}><Link to={customer_url + 'savedevents'} className="ai-icon" aria-expanded="false">
+                            <span className='sidebar-icon'><FaBookmark /></span>
                             <span className="nav-text">Saved Events</span>
                         </Link>
                         </li>
-                        <li onClick={() => d()}><Link to={customer_url+ 'support-tickets'} className="ai-icon" aria-expanded="false">
-                            <img src={supportIcon} alt="Your Logo" />
+                        <li onClick={() => d()}><Link to={customer_url + 'support-tickets'} className="ai-icon" aria-expanded="false">
+                            <span className='sidebar-icon'><FaHeadset /></span>
                             <span className="nav-text">Support</span>
                         </Link>
                         </li>

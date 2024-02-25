@@ -456,6 +456,7 @@ const Dashboard = ({ title }) => {
                                                                             <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
                                                                             <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
                                                                             <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
+                                                                            {/* <button type="button" onClick={() => { handleCheckboxChange(item._id); setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button> */}
                                                                         </div>
                                                                     </>
                                                                 ) : (
@@ -489,11 +490,8 @@ const Dashboard = ({ title }) => {
                 </ModalBody>
             </Modal>
             <Modal isOpen={modalTT} toggle={() => setModalTT(!modalTT)} centered size={'lg'}>
-                <ModalHeader toggle={!modalTT}>
+                <ModalHeader toggle={() => setModalTT(!modalTT)}>
                     Transfer Ticket
-                    <button className="close p-0" onClick={() => setModalTT(!modalTT)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-                        <FaTimes />
-                    </button>
                 </ModalHeader>
                 <ModalBody>
                     <Row>
@@ -563,7 +561,7 @@ const Dashboard = ({ title }) => {
                                                                 <div className="event_list_box">
                                                                     <Row>
                                                                         <Col md={4}>
-                                                                            <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} className="list-thum-img" height={'200px'} alt="" />
+                                                                            <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} height={'200px'} width={'100%'}  alt="" />
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div className="ml-3 ml-md-0">
@@ -626,7 +624,7 @@ const Dashboard = ({ title }) => {
                                                                                 <div className="text-end mr-5 mt-3 mb-3">
                                                                                     <span className="mb-5">
                                                                                         <img src={DateIcon} alt="" />
-                                                                                        <span className="on-img-date-val ml-2">{item.eventData[0].start_date}</span>
+                                                                                        <span className="on-img-date-val ml-2">{item.start_date}</span>
                                                                                     </span>
                                                                                 </div>
                                                                                 {/* <div className="text-end mr-5 pt-4">

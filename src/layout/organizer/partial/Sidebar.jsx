@@ -8,7 +8,11 @@ import peopleIcon from '../../../common/icon/people 1.svg';
 import supportIcon from '../../../common/icon/support.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiMail } from "react-icons/fi";
+import { FaBarcode } from 'react-icons/fa';
 import { organizer_url, app_url } from '../../../common/Helpers';
+import { FaHeadset } from 'react-icons/fa';
+import { FaTicketAlt } from 'react-icons/fa';
+import { FaHome } from 'react-icons/fa';
 const Sidebar = () => {
     function d() {
         const mainWrapperView = document.getElementById('main-wrapper view');
@@ -26,13 +30,13 @@ const Sidebar = () => {
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
                         <li onClick={() => d()}><Link to={organizer_url + 'dashboard'} className="ai-icon" aria-expanded="false">
-                            <img src={DashboardIcon} alt="Your Logo" />
+                        <span className='sidebar-icon'><FaHome /></span>
                             <span className="nav-text">Dashboard</span>
                         </Link>
                         </li>
                         <li onClick={() => d()}>
                             <Link to={organizer_url + 'event/all-event-list'} className="ai-icon" aria-expanded="false">
-                                <img src={ticketIcon} alt="Your Logo" />
+                            <span className='sidebar-icon'><FaTicketAlt /></span>
                                 <span className="nav-text">Event Management</span>
                             </Link>
                         </li>
@@ -59,7 +63,7 @@ const Sidebar = () => {
                         </Link>
                         </li> */}
                         <li onClick={() => d()}><Link to={organizer_url + 'tixme-scanner'} className="ai-icon" aria-expanded="false">
-                            <img src={scannerIcon} alt="Your Logo" />
+                            <span className='sidebar-icon'><FaBarcode /></span>
                             <span className="nav-text">Tixme Scanner</span>
                         </Link>
                         </li>
@@ -80,7 +84,7 @@ const Sidebar = () => {
                         </Link>
                         </li>
                         <li><Link to={organizer_url+ 'support-tickets'} className="ai-icon" aria-expanded="false">
-                            <img src={supportIcon} alt="Your Logo" />
+                        <span className='sidebar-icon'><FaHeadset /></span>
                             <span className="nav-text">Support</span>
                         </Link>
                         </li>

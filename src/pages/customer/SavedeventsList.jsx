@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
+import ArrowDown from '../../assets/arrowdrop.svg'
 import Card from 'react-bootstrap/Card';
 import Norecord from '../../component/Norecordui';
 import Searchicon from '../../common/icon/searchicon.png';
@@ -26,6 +27,8 @@ const Dashboard = ({ title }) => {
     const [CategoryList, setCategoryList] = useState([]);
     const [Listitems, setListitems] = useState([]);
     const [allEvents, setallEvents] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [Isany, setIsany] = useState(false);
     const MySwal = withReactContent(Swal);
     function CheckDelete(eventid) {
         MySwal.fire({
@@ -42,6 +45,23 @@ const Dashboard = ({ title }) => {
             }
         })
     }
+    const GetCategoryName = (id) => {
+        const category = CategoryList.find(item => item._id === id);
+        return category ? category.name : '';
+    }
+    const handleCategoryChange = (id) => {
+        if (id == 'any') {
+            setSelectedCategories([]);
+            setIsany(!Isany);
+        } else {
+            if (selectedCategories.includes(id)) {
+                setSelectedCategories(selectedCategories.filter((categoryId) => categoryId !== id));
+            } else {
+                setSelectedCategories([...selectedCategories, id]);
+            }
+            setIsany(false);
+        }
+    };
     const deleteData = async (eventid) => {
         try {
             setLoader(true)
@@ -84,15 +104,15 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        const transformedCategories = data.data.map(category => ({
-                            value: category._id,
-                            label: category.name
-                        }));
-                        const allOption = { value: 'all', label: 'All' };
-                        transformedCategories.unshift(allOption);
+                        // const transformedCategories = data.data.map(category => ({
+                        //     value: category._id,
+                        //     label: category.name
+                        // }));
+                        // const allOption = { value: 'all', label: 'All' };
+                        // transformedCategories.unshift(allOption);
 
                         // Update CategoryList state
-                        setCategoryList(transformedCategories);
+                        setCategoryList(data.data);
                     } else {
 
                     }
@@ -170,7 +190,8 @@ const Dashboard = ({ title }) => {
         if (selectedValue && selectedValue.value !== 'all') {
             // Filter events based on the selected category
             const filteredEvents = allEvents.filter(event =>
-                event.category && event.category === selectedValue.value);
+                event.category && selectedCategories.includes(event.category.toString())
+            )
             setListitems(filteredEvents);
         } else {
             // If 'All' is selected or no category is selected, show all events
@@ -192,23 +213,23 @@ const Dashboard = ({ title }) => {
                             <Card className="py-4  grey-bg">
                                 <Card.Body>
                                     <Row className="justify-content-center">
-                                        <Col md={12}  style={{ position: 'relative', zIndex: '2' }}>
+                                        <Col md={12} style={{ position: 'relative', zIndex: '2' }}>
                                             <Row>
                                                 <Col md={4}>
-                                                <div class="input-group mb-3 input-warning-o">
-                                                        <span class="input-group-text" style={{height: 38}}><img src={Searchicon} alt="" /></span>
+                                                    <div class="input-group mb-3 input-warning-o">
+                                                        <span class="input-group-text" style={{ height: 38 }}><img src={Searchicon} alt="" /></span>
                                                         <input
                                                             type="text"
                                                             className="form-control"
                                                             placeholder="Search events"
                                                             value={searchTerm}
                                                             onChange={handleSearchChange}
-                                                            style={{height: 40}}
+                                                            style={{ height: 40 }}
                                                         />
                                                     </div>
                                                 </Col>
                                                 <Col md={4} className='react-select-h mb-3'>
-                                                <Select
+                                                    {/* <Select
                                                         isClearable={false}
                                                         options={CategoryOption}
                                                         className='react-select'
@@ -216,7 +237,49 @@ const Dashboard = ({ title }) => {
                                                         placeholder='Select Category'
                                                         onChange={HandelselectCategory}
                                                         value={SelectCategoryValue}
-                                                    />
+                                                    /> */}
+                                                    <div class="dropdown dropdown-category">
+                                                        <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            {selectedCategories.length > 0 ? (
+                                                                <>
+                                                                    {selectedCategories.map((item, index) => (
+                                                                        <span onClick={() => handleCategoryChange(item)}>{GetCategoryName(item)}</span>
+                                                                    ))}
+                                                                </>
+                                                            ) : (
+                                                                <p className="mb-0 theme-color">Select Category</p>
+                                                            )}
+                                                            <img src={ArrowDown} alt="" />
+                                                        </div>
+                                                        <ul class="dropdown-menu category-box-new-for-dashboard">
+                                                            <li>
+                                                                <div className="dropdown-item">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        id={`checkbox-any`}
+                                                                        name={'any'}
+                                                                        checked={Isany}
+                                                                        onChange={() => handleCategoryChange('any')}
+                                                                    />
+                                                                    <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-any`}>Any</label>
+                                                                </div>
+                                                            </li>
+                                                            {CategoryList.map((item) => (
+                                                                <li>
+                                                                    <div key={item._id} className="dropdown-item">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            id={`checkbox-${item._id}`}
+                                                                            name={item._id}
+                                                                            checked={selectedCategories.includes(item._id)}
+                                                                            onChange={() => handleCategoryChange(item._id)}
+                                                                        />
+                                                                        <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
+                                                                    </div>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
                                                 </Col>
                                             </Row>
                                         </Col>
@@ -237,7 +300,7 @@ const Dashboard = ({ title }) => {
                                                                                 <div className="event_list_box">
                                                                                     <Row>
                                                                                         <Col md={5}>
-                                                                                            <img src={item.thum_image}  className="list-thum-img" alt="" />
+                                                                                            <img src={item.thum_image} className="list-thum-img" alt="" />
                                                                                         </Col>
                                                                                         <Col md={4} className="list-data pt-3">
                                                                                             <div className="mb-4">
@@ -289,13 +352,13 @@ const Dashboard = ({ title }) => {
                                                                                         </Col>
                                                                                         <Col md={3} className="py-3">
                                                                                             <div>
-                                                                                            <div className="text-end mr-5 mb-5 cursor-pointer">
+                                                                                                <div className="text-end mr-5 mb-5 cursor-pointer">
                                                                                                     <img onClick={() => CheckDelete(item._id)} src={Savesvg} className="" height={'30px'} width={'30px'} alt="" />
                                                                                                 </div>
                                                                                                 <div className="text-end mr-5 mt-5">
                                                                                                     <span className="list-event-category-img">{item.category_name}</span>
                                                                                                 </div>
-                                                                                                
+
                                                                                                 <div className="text-end mr-5 mt-3 mb-3">
                                                                                                     <span className="mb-5">
                                                                                                         <img src={DateIcon} alt="" />
@@ -313,7 +376,7 @@ const Dashboard = ({ title }) => {
                                                             </div>
                                                         </>
                                                     ) : (
-                                                        <Norecord/>
+                                                        <Norecord />
                                                     )}
                                                 </>
                                             )}

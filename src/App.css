@@ -2284,3 +2284,23 @@ img.organiger-logo {
   font-size: 47px;
   color: #222fb9;
 }
+.dropdown-category .dropdown-toggle::after {
+  display: none !important;
+}
+.dropdown-category {
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+.dropdown-category .event-page-category-filter-box1 {
+  display: grid;
+}
+.newdatefilter span.input-group-text img {
+  height: auto;
+  width: 21px;
+}
+.newdatefilter .form-control {
+  border-color: rgb(255 255 255 / 0%) !important;
+}
+.newdatefilter span.input-group-text {
+  border: 1px solid rgb(185 184 184 / 0%) !important;
+}
