@@ -495,8 +495,6 @@ const Home = () => {
     setIsFirstRender(true);
   };
 
-
-
   const removeFromCart = (Id, quantity) => {
     const updatedCart = cartItems.map((cartItem) =>
       cartItem.id === Id ? { ...cartItem, quantity: cartItem.quantity > 0 ? cartItem.quantity - 1 : 0 } : cartItem

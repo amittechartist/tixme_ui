@@ -80,8 +80,13 @@ const Footer = () => {
           </div>
         </div>
       </footer>
+      <div className="copyright-wrapper position-relative">
+
+        <div className="left"></div>
       <div className="copyright text-center py-2">
         <small className="text-white"> © 2023. All Rights Reserved by TIXME.</small>
+      </div>
+        <div className="right"></div>
       </div>
     </>
   );
