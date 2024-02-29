@@ -10,9 +10,9 @@ const Dashboard = ({ title }) => {
     const navigate = useNavigate();
     const [Eventlist, setEventlist] = useState([]);
     const [Apiloader, setApiloader] = useState([]);
-    const [Totalevent, setTotalevent] = useState();
-    const [Totalincome, setTotalincome] = useState();
-    const [Totalticket, setTotalticket] = useState();
+    const [Totalevent, setTotalevent] = useState(0);
+    const [Totalincome, setTotalincome] = useState(0);
+    const [Totalticket, setTotalticket] = useState(0);
 
     // Highcharts.chart('openinterest', {
 
@@ -117,9 +117,9 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        setTotalevent(data.totalevent)
-                        setTotalincome(data.orderincome)
-                        setTotalticket(data.totalticket)
+                        setTotalevent(data.totalevents)
+                        setTotalincome(data.totalincome)
+                        setTotalticket(data.totalticketsold)
                     } else {
 
                     }

@@ -118,7 +118,7 @@ const Dashboard = ({ title }) => {
     }
     const toggleHobby = (id) => {
         const updatedHobbies = [...selectedHobbies];
-    
+
         if (updatedHobbies.includes(id)) {
             // Hobby is already selected, remove it
             const index = updatedHobbies.indexOf(id);
@@ -131,7 +131,7 @@ const Dashboard = ({ title }) => {
         setSelectedHobbies(updatedHobbies);
     };
     useEffect(() => {
-        
+
         fetchData();
         fetchHobby();
     }, []);
@@ -200,9 +200,9 @@ const Dashboard = ({ title }) => {
 
                                                         <div className="tab-content pt-5">
                                                             <div id="about-me" className="tab-pane active show">
-                                                                
+
                                                                 <div className="profile-personal-info">
-                                                                    
+
                                                                     <div className="row mb-2">
                                                                         <div className="col-sm-3 col-5">
                                                                             <h5 className="f-w-500">Name <span className="pull-end">:</span>
@@ -231,14 +231,19 @@ const Dashboard = ({ title }) => {
                                                                             <h5 className="f-w-500">Whatsapp no <span className="pull-end">:</span>
                                                                             </h5>
                                                                         </div>
-                                                                        <div className="col-sm-9 col-7"><span>{whatsapp_number ? '+ ' + whatsapp_number : 'Not found'}</span>
+                                                                        <div className="col-sm-9 col-7"><span>{whatsapp_number ? '+' + whatsapp_number : 'Not found'}</span>
                                                                         </div>
                                                                     </div>
                                                                     <div className="row mb-2">
                                                                         <div className="col-sm-3 col-5">
                                                                             <h5 className="f-w-500">Location <span className="pull-end">:</span></h5>
                                                                         </div>
-                                                                        <div className="col-sm-9 col-7"><span>{address && address + ','} {country && 'City - ' + city.length > 0 + ','}  {country && 'Country - ' + country.length > 0 + ','}{pincode && 'Pincode -' + pincode}</span>
+                                                                        <div className="col-sm-9 col-7"><span>
+                                                                            {address && address + ','}
+                                                                            {city && 'city - ' + city + ','}
+                                                                            {country && 'Country - ' + country + ','}
+                                                                            {pincode && 'Pincode -' + pincode}
+                                                                        </span>
                                                                         </div>
                                                                     </div>
                                                                 </div>

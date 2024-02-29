@@ -478,6 +478,7 @@ const Home = () => {
                 totalamount: Subtotal > 0 ? Subtotal : 0,
                 carttotalamount: allItemsTotalPrice > 0 ? allItemsTotalPrice : 0,
                 cartitem: cartItems,
+                eventid: localStorage.getItem('inside_cart_id'),
                 gatway_name: Subtotal > 0 ? pgatway_name : "Free",
                 location: country_name,
                 discountamount: DiscountAmount > 0 ? DiscountAmount : 0,
@@ -591,32 +592,32 @@ const Home = () => {
                                     <Row>
                                         <Col md={6}>
                                             <div className="form-group">
-                                                <p>First Name</p>
+                                                <p>First Name <span className="text-danger">*</span></p>
                                                 <input className="form-control" type="text" placeholder="First Name" onChange={(e) => setLoginFname(e.target.value)} value={LoginFname}></input>
                                             </div>
                                         </Col>
                                         <Col md={6}>
                                             <div className="form-group">
-                                                <p>Last Name</p>
+                                                <p>Last Name <span className="text-danger">*</span></p>
                                                 <input className="form-control" type="text" placeholder="Last Name" onChange={(e) => setLoginLname(e.target.value)} value={LoginLname}></input>
                                             </div>
                                         </Col>
                                         <Col md={6}>
                                             <div className="form-group">
-                                                <p>Email Address</p>
+                                                <p>Email Address <span className="text-danger">*</span></p>
                                                 <input className="form-control" type="text" placeholder="Email Address" onChange={(e) => setGLoginEmail(e.target.value)} value={GLoginEmail}></input>
                                             </div>
                                         </Col>
                                         <Col md={6}>
                                             <div className="form-group">
-                                                <p>Confirm Email Address</p>
+                                                <p>Confirm Email Address <span className="text-danger">*</span></p>
                                                 <input className="form-control" type="text" placeholder="Confirm Email Address" onChange={(e) => setGConfirmLoginEmail(e.target.value)} value={GConfirmLoginEmail}></input>
                                             </div>
                                         </Col>
 
                                         <Col md={12}>
                                             <div className="form-group">
-                                                <p>Phone number</p>
+                                                <p>Phone number <span className="text-danger">*</span></p>
                                                 <PhoneInput
                                                     country={"us"}
                                                     className="phone-number-with-code"

@@ -4,6 +4,7 @@ import facebook from "./assets/facebook.svg";
 import instagram from "./assets/instagram.svg";
 import whatsapp from "./assets/whatsapp.svg";
 import youtube from "./assets/youtube.svg";
+import linkedin from "./assets/linkedin.svg";
 import support from "./assets/support.svg";
 import { app_url } from "../common/Helpers";
 import { Link } from "react-router-dom";
@@ -27,10 +28,10 @@ const Footer = () => {
               </p>
               <div className="d-flex footer-logo-box1">
                 <span>
-                  <img className="social-icon me-4" src={facebook} alt="" />
-                  <img className="social-icon me-4" src={instagram} alt="" />
-                  <img className="social-icon me-4" src={whatsapp} alt="" />
-                  <img className="social-icon me-4" src={youtube} alt="" />
+                  <a href="https://www.facebook.com/profile.php?id=61556603844279" target="_blank"><img className="social-icon me-4" src={facebook} alt="" /></a>
+                  <a href="https://www.instagram.com/tixme.co" target="_blank"><img className="social-icon me-4" src={instagram} alt="" /></a>
+                  <a href="https://www.linkedin.com/company/tixme-co" target="_blank"><img className="social-icon me-4" height={'auto'} width={'29px'} src={linkedin} alt="" /></a>
+                  {/* <img className="social-icon me-4" src={youtube} alt="" /> */}
                 </span>
               </div>
             </div>

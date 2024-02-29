@@ -3,7 +3,7 @@ import Searchicon from '../../../common/icon/searchicon.png';
 import { Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import toast from 'react-hot-toast';
-import EditPng from '../../../common/icon/Edit.png';
+import EditPng from '../../../common/icon/editorg.svg';
 import ArrowPng from "../../../common/icon/Arrow.svg";
 import Norecord from '../../../component/Norecordui';
 import { FaTimes } from 'react-icons/fa';
@@ -180,7 +180,7 @@ const Dashboard = ({ title }) => {
                                                                         <Col md={4}>
                                                                             <div className="text-center">
                                                                                 <span className="ticket-list-name">{item.name}</span> 
-                                                                                <span className="d-none cursor-pointre list-event-edit-btn" onClick={() => EditEvent(Eventdata._id, Eventdata.name, item.id)}><img src={EditPng} alt="" /></span>
+                                                                                <span className="d-none cursor-pointre list-event-edit-btn" onClick={() => EditEvent(Eventdata._id, Eventdata.name, item.id)}><img src={EditPng} alt="" /><span className="theme-color">Edit</span></span>
                                                                                 <p className="ticket-list-price_title mb-0">Price</p>
                                                                                 <p className="ticket-list-price_value">{item.ticket_type == 1 ? Eventdata.countrysymbol + ' ' + item.price : 'Free'}</p>
                                                                             </div>

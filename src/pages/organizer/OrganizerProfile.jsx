@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row } from "react-bootstrap";
-import { useParams } from 'react-router-dom';
-import Card from 'react-bootstrap/Card';
+import { Col, Row } from "react-bootstrap";
 import { apiurl, admin_url, isEmail, app_url } from '../../common/Helpers';
-import Whitebtn from '../../component/Whitestarbtn';
-import PhoneInput from 'react-phone-input-2';
 import Nouserphoto from '../../common/image/nouser.png';
+import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Country, State, City } from "country-state-city";
 const Dashboard = ({ title }) => {
     const navigate = useNavigate();
     const [Loader, setLoader] = useState(false);
@@ -33,6 +31,7 @@ const Dashboard = ({ title }) => {
     const [Bankname, setBankname] = useState();
     const [Holdername, setHoldername] = useState();
     const [Swift, setSwift] = useState();
+    const [BankCountry, setBankCountry] = useState();
 
     const [ufname, setufname] = useState();
     const [ulname, setulname] = useState();
@@ -55,6 +54,17 @@ const Dashboard = ({ title }) => {
 
     const [Hobby, setHobby] = useState([]);
     const [selectedHobbies, setSelectedHobbies] = useState([]);
+
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [countries, setCountries] = useState([]);
+    useEffect(() => {
+        setCountries(
+            Country.getAllCountries().map(({ isoCode, name }) => ({
+                value: isoCode,
+                label: name,
+            }))
+        );
+    }, []);
 
     const fetchData = async () => {
         try {
@@ -86,7 +96,11 @@ const Dashboard = ({ title }) => {
                         setBankname(data.data.bankname);
                         setHoldername(data.data.holdername);
                         setSwift(data.data.swiftcode);
-
+                        setBankCountry(data.data.bank_country_label);
+                        setSelectedCountry({
+                            value: data.data.bank_country_value,
+                            label: data.data.bank_country_label,
+                        })
                         setuBankaccount(data.data.bankaccount);
                         setuConfirmBankaccount(data.data.bankaccount);
                         setuBankname(data.data.bankname);
@@ -151,9 +165,10 @@ const Dashboard = ({ title }) => {
             console.error('Api error:', error);
         }
     }
-    const Handelprofileupdate = async () => {
+    const Handelprofileupdate = async (e) => {
+        e.preventDefault();
         try {
-            if (!ufname || !ulname || !uemail || !uBankaccount || !uBankname || !uConfirmBankaccount || !uHoldername || !uSwift) {
+            if (!ufname || !ulname || !uemail || !uBankaccount || !uBankname || !uConfirmBankaccount || !uHoldername || !uSwift || !selectedCountry) {
                 return toast.error('Required field must not be empty');
             }
             if (uBankaccount == uConfirmBankaccount) {
@@ -170,6 +185,8 @@ const Dashboard = ({ title }) => {
                 bankname: uBankname,
                 holdername: uHoldername,
                 swiftcode: uSwift,
+                bank_country_value: selectedCountry.value,
+                bank_country_label: selectedCountry.label,
                 profile_picture: Dpname
             }
             fetch(apiurl + 'website/update-organizer-details', {
@@ -300,11 +317,6 @@ const Dashboard = ({ title }) => {
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
-                    <div className="page-titles">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item">{title}</li>
-                        </ol>
-                    </div>
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="profile card card-body px-3 pt-3 pb-0">
@@ -382,13 +394,9 @@ const Dashboard = ({ title }) => {
                                                                                 </div>
                                                                             </div>
                                                                             {Loader ? (
-                                                                                <span>
-                                                                                    <Whitebtn title={'Please wait...'} />
-                                                                                </span>
+                                                                                <button type="button" className=" text-white btn theme-bg">Please wait...</button>
                                                                             ) : (
-                                                                                <span onClick={Handelchangeemail}>
-                                                                                    <Whitebtn title={'Update email'} />
-                                                                                </span>
+                                                                                <button onClick={Handelchangeemail} type="button" className="text-white btn theme-bg">Update Email</button>
                                                                             )}
                                                                         </form>
                                                                     </div>
@@ -453,6 +461,14 @@ const Dashboard = ({ title }) => {
                                                                         <div className="col-sm-9 col-7"><span>{Swift}</span>
                                                                         </div>
                                                                     </div>
+                                                                    <div className="row mb-2">
+                                                                        <div className="col-sm-3 col-5">
+                                                                            <h5 className="f-w-500">Bank Country<span className="pull-end">:</span>
+                                                                            </h5>
+                                                                        </div>
+                                                                        <div className="col-sm-9 col-7"><span>{BankCountry}</span>
+                                                                        </div>
+                                                                    </div>
 
                                                                 </div>
                                                             </div>
@@ -460,7 +476,7 @@ const Dashboard = ({ title }) => {
                                                                 <div className="pt-3">
                                                                     <div className="settings-form">
                                                                         <h4 className="text-primary">Account Setting</h4>
-                                                                        <form>
+                                                                        <form onSubmit={Handelprofileupdate}>
                                                                             <div className="row">
                                                                                 <div className="col-md-6">
                                                                                     <div className="form-group">
@@ -524,15 +540,22 @@ const Dashboard = ({ title }) => {
                                                                                         <input className="form-control" type="text" placeholder="SWIFT code" value={uSwift} onChange={(e) => setuSwift(e.target.value)}></input>
                                                                                     </div>
                                                                                 </div>
+                                                                                <div className="col-md-6">
+                                                                                    <div className="form-group">
+                                                                                        <p>Bank Country <span className="text-danger">*</span></p>
+                                                                                        <Select
+                                                                                            options={countries}
+                                                                                            value={selectedCountry}
+                                                                                            onChange={setSelectedCountry}
+                                                                                            placeholder="Select Bank Country"
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                             {Loader ? (
-                                                                                <span>
-                                                                                    <Whitebtn title={'Please wait...'} />
-                                                                                </span>
+                                                                                <button type="button" className=" text-white btn theme-bg">Please wait...</button>
                                                                             ) : (
-                                                                                <span onClick={Handelprofileupdate}>
-                                                                                    <Whitebtn title={'Update'} />
-                                                                                </span>
+                                                                                <button type="submit" className="text-white btn theme-bg">Update</button>
                                                                             )}
                                                                         </form>
                                                                     </div>
@@ -568,13 +591,9 @@ const Dashboard = ({ title }) => {
                                                                                 </div>
                                                                             </div>
                                                                             {Loader ? (
-                                                                                <span>
-                                                                                    <Whitebtn title={'Please wait...'} />
-                                                                                </span>
+                                                                                <button type="button" className=" text-white btn theme-bg">Please wait...</button>
                                                                             ) : (
-                                                                                <span onClick={Handelchangepassword}>
-                                                                                    <Whitebtn title={'Update password'} />
-                                                                                </span>
+                                                                                <button onClick={Handelchangepassword} type="button" className="text-white btn theme-bg">Update Password</button>
                                                                             )}
                                                                         </form>
                                                                     </div>

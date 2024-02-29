@@ -768,7 +768,7 @@ img.list-thum-img {
 
 .list-event-edit-btn img {
   height: auto;
-  width: 50px;
+  width: 30px;
 }
 
 .list-event-location {
@@ -894,19 +894,19 @@ img.list-thum-img {
 .in-ticket-list-1 .ticket-list-name {
   color: #0047ab;
   font-weight: 600;
-  font-size: 21px;
-  margin-right: 10px;
-  margin-bottom: 17px;
+  font-size: 14px;
+  margin-right: 0px;
+  margin-bottom: 10px;
   display: inline-block;
 }
 
 .in-ticket-list-1 .ticket-list-price_title {
   font-weight: 600;
-  font-size: 18px;
+  font-size: 12px;
 }
 
 .in-ticket-list-1 .ticket-list-price_value {
-  font-size: 21px;
+  font-size: 12px;
   font-weight: 600;
   color: #0047ab;
 }
@@ -2303,4 +2303,14 @@ img.organiger-logo {
 }
 .newdatefilter span.input-group-text {
   border: 1px solid rgb(185 184 184 / 0%) !important;
+}
+.ticket-sts-box p {
+  font-size: 11px;
+}
+.ticket-sts-box h2 {
+  font-size: 25px;
+}
+.editbtn-mng-tic img {
+  height: auto;
+  width: 23px !important;
 }

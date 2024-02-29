@@ -109,8 +109,8 @@ const Sidebar = () => {
                                             <Link className='text-black' to={`${admin_url}customers/${item._id}/${item.name}`}>{item.name}</Link>
                                         </li>
                                     ))}
-                                    {/* <li>
-                                    <Link className='text-black' to={admin_url + 'all-customers'}>No Membership</Link></li> */}
+                                    <li>
+                                    <Link className='text-black' to={admin_url + 'all-customers'}>No Membership</Link></li>
                                 </ul>
                             )}
                         </li>

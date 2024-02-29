@@ -172,7 +172,7 @@ const Dashboard = ({ title }) => {
                                                                         </button>
                                                                         <div class="dropdown-menu">
                                                                             <Link to={`${admin_url}organizer-details/${item._id}/${item.name}`} class="dropdown-item">View</Link>
-                                                                            <Link onClick={() => ActiveOrganizer(item._id)} class="dropdown-item">Active</Link>
+                                                                            <Link onClick={() => ActiveOrganizer(item._id)} class="dropdown-item">{item.issignupcomplete === 0 ? 'Active' : 'Resend Link'}</Link>
                                                                         </div>
                                                                     </div>
                                                                 </td>

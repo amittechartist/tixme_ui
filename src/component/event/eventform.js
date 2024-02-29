@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import '../../common/css/autocompletestyle.css';
+import moment from 'moment';
 import GroupIcon from '../../common/icon/Group.svg';
 import OnlineIcon from '../../common/icon/Host Online.svg';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
@@ -102,6 +103,8 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [displayaddress, setdisplayaddress] = useState();
     const [Quantity, setQuantity] = useState();
     const [TicketUid, setTicketUid] = useState();
+    const [Ticketisselling, setTicketisselling] = useState(false);
+    const [Ticketissoldout, setTicketissoldout] = useState(false);
     const [TicketStartdate, setTicketStartdate] = useState(new Date());
     const [TicketEndtdate, setTicketEndtdate] = useState(new Date());
     const [TicketEventdata, setTicketEventdata] = useState(new Date());
@@ -134,6 +137,11 @@ const Type = ({ title, editid, ticketeditid }) => {
         width: '100%',
         height: '200px'
     }
+    const compareDatesAndTimes = (a, b) => {
+        const dateTimeA = moment(`${a.startdate} ${a.starttime}`, 'DD MMM YYYY hh:mm A');
+        const dateTimeB = moment(`${b.startdate} ${b.starttime}`, 'DD MMM YYYY hh:mm A');
+        return dateTimeA - dateTimeB; // For descending order
+    };
     const handleSelect = async (selectedLocation) => {
         const results = await geocodeByAddress(selectedLocation);
         const latLng = await getLatLng(results[0]);
@@ -423,6 +431,8 @@ const Type = ({ title, editid, ticketeditid }) => {
             setTicketdesc(getticketdata.description);
             setQuantity(getticketdata.quantity);
             setPrice(getticketdata.price);
+            setTicketisselling(getticketdata.isselling ? true : false);
+            setTicketissoldout(getticketdata.issoldout ? true : false);
             setIsgrouptickets(getticketdata.groupqty > 1 ? true : false);
             setGroupQty(getticketdata.groupqty);
             setTicketStartdate(getticketdata.scan_min_datetime[0]);
@@ -768,7 +778,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                 currencycode: CurrencyId,
                 countrysymbol: Currencyname,
                 timezone: selectedTimezone,
-                
+
                 lat: Eventtype == 2 ? LocationLat : null,
                 lat: Eventtype == 2 ? LocationLat : null,
                 Lag: Eventtype == 2 ? LocationLag : null,
@@ -926,6 +936,8 @@ const Type = ({ title, editid, ticketeditid }) => {
                 scan_min_datetime: TicketStartdate,
                 event_min_datetime: EventSubtype == 2 ? TicketEventdata : Startdateselect,
                 price: Price,
+                isselling: Ticketisselling,
+                issoldout: Ticketissoldout,
                 groupqty: Isgrouptickets ? GroupQty : 1,
             };
             fetch(apiurl + 'event/create/event-ticket', {
@@ -1014,6 +1026,8 @@ const Type = ({ title, editid, ticketeditid }) => {
                 scan_min_datetime: TicketStartdate,
                 event_min_datetime: EventSubtype == 2 ? TicketEventdata : Startdateselect,
                 price: Price,
+                isselling: Ticketisselling,
+                issoldout: Ticketissoldout,
                 groupqty: Isgrouptickets ? GroupQty : 1,
             };
             fetch(apiurl + 'event/edit/event-ticket', {
@@ -2023,7 +2037,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    {TicketList.map((item, index) => (
+                                                                    {TicketList.sort(compareDatesAndTimes).map((item, index) => (
                                                                         <>
                                                                             {item.isdelete == 0 && (
                                                                                 <tr className="text-center">
@@ -2131,6 +2145,16 @@ const Type = ({ title, editid, ticketeditid }) => {
                                         />
                                     </>
                                 )}
+                            </div>
+                        </div>
+                        <div className="col-6 d-flex align-items-center">
+                            <div className="">
+                                <div class="input-group mb-3 d-flex align-items-center">
+                                    <input id={`sellingfirst`} checked={Ticketisselling} onChange={(event) => setTicketisselling(event.target.checked)} type="checkbox" class="form-check-input" /><label className="mx-2 mb-0" style={{ fontSize: '15px' }} for={`sellingfirst`}>Is Selling Fast</label>
+                                </div>
+                                <div class="input-group mb-3  d-flex align-items-center">
+                                    <input id={`soldout`} checked={Ticketissoldout} onChange={(event) => setTicketissoldout(event.target.checked)} type="checkbox" class="form-check-input" /><label className="mx-2  mb-0" style={{ fontSize: '15px' }} for={`soldout`}>Is Sold Out</label>
+                                </div>
                             </div>
                         </div>
                         <div className="col-12">

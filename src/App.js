@@ -62,6 +62,7 @@ import OrganizerFpassword from './pages/website/auth/Organizerfpassword';
 import CustomerSignup from './pages/website/auth/CustomerSignup';
 import OrganizerLogin from './pages/website/auth/OrganizerLogin';
 import AdminLogin from './pages/website/auth/AdminLogin';
+import OrganizerSign from './pages/website/auth/OrganizerSign';
 import LoginSignup from './pages/website/auth/LoginSignup';
 // website
 
@@ -104,6 +105,8 @@ function App() {
           <Route path={app_url + 'auth/organizer/login'} element={<OrganizerLogin title={'Tixme'} />} />
           <Route path={app_url + 'auth/organizer/forgot-password'} element={<OrganizerFpassword title={'Tixme'} />} />
           <Route path={app_url + 'auth/admin/login'} element={<AdminLogin title={'Tixme'} />} />
+          <Route path={`${app_url}registration/:orgid/`} element={<OrganizerSign title={'Tixme'} />} />
+          
           {/* website */}
           <Route path={app_url} element={<Home />} />
           <Route path={`${app_url}viewtickets/:ordreid/`} element={<MailQRview />} />

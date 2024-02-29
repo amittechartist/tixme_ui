@@ -7,6 +7,7 @@ import Whitebtn from '../../component/Whitestarbtn';
 import { admin_url, app_url, apiurl, qr_url, organizer_url } from '../../common/Helpers';
 import { Link, useNavigate } from 'react-router-dom';
 const Dashboard = ({ title }) => {
+    const OrganizerId = localStorage.getItem('organizerid');
     const [openQrcode, setopenQrcode] = useState(false);
     const [scanLocation, setScanLocation] = useState('');
     const intervalRef = useRef(null); // Ref to hold the interval
@@ -14,7 +15,7 @@ const Dashboard = ({ title }) => {
     const openscanner = () => {
         // setopenQrcode(true)
         // navigate(organizer_url + 'tixme-scanner-page')
-        window.location.href = qr_url;
+        window.location.href = qr_url  + OrganizerId;
     }
     const lottewidth = {
         width: 'auto',

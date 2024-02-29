@@ -13,6 +13,7 @@ import { Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import { useParams } from 'react-router-dom';
 import { FiClock, FiChevronDown } from "react-icons/fi";
+import { FaFilePdf, FaFileExcel } from 'react-icons/fa';
 import QRCode from 'react-qr-code';
 import { FaRegCreditCard } from "react-icons/fa";
 import Searchicon from '../../../common/icon/searchicon.png';
@@ -24,7 +25,9 @@ import { FaCircleMinus } from "react-icons/fa6";
 import { FaChevronDown } from "react-icons/fa6";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
-
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+const ExcelJS = require("exceljs");
 const Dashboard = ({ title }) => {
     const { id, name, ticket_id } = useParams();
     const [Loader, setLoader] = useState(false);
@@ -49,12 +52,21 @@ const Dashboard = ({ title }) => {
     const [valueStartdate, setvalueStartdate] = useState();
     const [valueEndtdate, setvalueEndtdate] = useState();
     const [EventData, setEventData] = useState();
+    const [OrderItemslist, setOrderItemslist] = useState([]);
     const handelStartdatechange = (date) => {
         setStartdate(date);
         const get_start_date = get_date_time(date);
         setviewStartdate(get_start_date[0].Dateview);
         setvalueStartdate(get_min_date(date));
     }
+    const products = [{
+        "id": "test",
+        "title": "test",
+        "brand": "test",
+        "category": "test",
+        "price": "test",
+        "rating": "test",
+    }]
     const handelEnddatechange = (date) => {
         setEndtdate(date);
         const get_end_date = get_date_time(date);
@@ -118,15 +130,17 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        if(ticket_id){
+                        if (ticket_id) {
                             const filteredEvents = data.data.filter(event =>
-                                event.ticket_id == ticket_id);
+                                event.ordersevent.some(orderEvent => orderEvent.ticket_id == ticket_id)
+                            );
                             setListitems(filteredEvents);
-                        }else{
+                        } else {
                             setListitems(data.data);
                         }
                         setDataList(data.data);
                         setEventData(data.eventdata);
+                        setOrderItemslist(data.orderitems);
                     }
                     setLoader(false);
                 })
@@ -148,9 +162,9 @@ const Dashboard = ({ title }) => {
         } else {
             setLoader(true);
             const filteredData = dataList.filter(item => {
-                if (status === 'pending') return item.status == 0;
-                if (status === 'succeeded') return item.status == 1;
-                if (status === 'declined') return item.status == 2;
+                if (status === 'pending') return item.payment_status == 0;
+                if (status === 'succeeded') return item.payment_status == 1;
+                if (status === 'declined') return item.payment_status == 2;
             });
             setListitems(filteredData);
             setLoader(false);
@@ -166,7 +180,7 @@ const Dashboard = ({ title }) => {
             const requestData = {
                 id: id
             };
-            fetch(apiurl + 'order/get-order-items', {
+            fetch(apiurl + 'order/organization/get-order-items', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Set the Content-Type header to JSON
@@ -176,7 +190,7 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        setOrdersavedata(data.data.ordersavedata);
+                        // setOrdersavedata(data.data.ordersavedata);
                         setOrderitemlist(data.data.orderitemlist);
                         if (data.data.orderitemlist.length > 0) {
                             const check = data.data.orderitemlist.every(item => item.scan_status === 1);
@@ -201,7 +215,7 @@ const Dashboard = ({ title }) => {
     useEffect(() => {
         fetchOrders();
         setTickettype(ticket_id);
-    }, [ticket_id]);    
+    }, [ticket_id]);
     console.log(ticket_id);
     useEffect(() => {
         handleVisibilityChange();
@@ -215,9 +229,9 @@ const Dashboard = ({ title }) => {
         // Now filter the events based on the search term across multiple fields
         if (value) {
             const filteredEvents = dataList.filter(event =>
-                event.bookingid.toLowerCase().includes(value.toLowerCase()) ||
-                event.order_amount.toString().toLowerCase().includes(value.toLowerCase()) ||
-                event.customer_name.toLowerCase().includes(value.toLowerCase()));
+                event._id.toLowerCase().includes(value.toLowerCase()) ||
+                event.amount.toString().toLowerCase().includes(value.toLowerCase()) ||
+                event.name.toLowerCase().includes(value.toLowerCase()));
             setListitems(filteredEvents);
         } else {
             // If the search dataList is empty, reset to show all events
@@ -239,13 +253,131 @@ const Dashboard = ({ title }) => {
         // }
         if (Tickettype) {
             const filteredEvents = dataList.filter(event =>
-                event.ticket_id == Tickettype);
+                event.ordersevent.some(orderEvent => orderEvent.ticket_id == Tickettype)
+            );
             setListitems(filteredEvents);
+
         } else {
             setListitems(dataList);
         }
     };
 
+
+    const exportExcelFile = () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet("My Sheet");
+
+
+        sheet.getRow(1).font = {
+            name: 'Calibri',
+            family: 4,
+            size: 16,
+            bold: true,
+        };
+
+        sheet.columns = [
+            {
+                header: "Sl No",
+                key: "id",
+                width: 10,
+            },
+            { header: "Customer Name", key: "CustomerName", width: 32 },
+            { header: "Customer Email", key: "CustomerEmail", width: 32 },
+            { header: "Booking ID", key: "Bookingid", width: 32 },
+            { header: "Ticket Name", key: "NumberofTickets", width: 32 },
+            { header: "Is Scan", key: "Status", width: 32 },
+            { header: "Date", key: "Creationdate", width: 40 },
+        ];
+
+        const filteredOrderItemslist = OrderItemslist.filter(item => {
+            if (Tickettype || ticket_id) {
+                return item.ticket_id === ticket_id || item.ticket_type === Tickettype;
+            }
+            return true;
+        });
+
+        const promise = Promise.all(
+            filteredOrderItemslist?.map(async (product, index) => {
+                const rowNumber = index + 1;
+                sheet.addRow({
+                    id: rowNumber,
+                    CustomerName: product?.owner_name,
+                    CustomerEmail: product?.owner_email,
+                    Bookingid: product?._id,
+                    NumberofTickets: product?.ticket_name,
+                    Status: product?.scan_status == "1" ? 'Yes' : 'No',
+                    Creationdate: product?.date + '  ' + product?.time,
+                });
+            })
+        );
+
+        promise.then(() => {
+            const priceCol = sheet.getColumn(5);
+
+            // iterate over all current cells in this column
+            priceCol.eachCell((cell) => {
+                const cellValue = sheet.getCell(cell?.address).value;
+                // add a condition to set styling
+                if (cellValue > 50 && cellValue < 1000) {
+                    sheet.getCell(cell?.address).fill = {
+                        type: "pattern",
+                        pattern: "solid",
+                        fgColor: { argb: "FF0000" },
+                    };
+                }
+            });
+
+            workbook.xlsx.writeBuffer().then(function (data) {
+                const blob = new Blob([data], {
+                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                });
+                const url = window.URL.createObjectURL(blob);
+                const anchor = document.createElement("a");
+                anchor.href = url;
+                anchor.download = "download.xlsx";
+                anchor.click();
+                window.URL.revokeObjectURL(url);
+            });
+        });
+    };
+
+    const exportPdf = () => {
+        const doc = new jsPDF();
+
+        const tableColumn = [
+            "Sl No",
+            "Customer Name",
+            "Customer Email",
+            "Booking ID",
+            "Ticket Name",
+            "Is Scan",
+            "Date",
+        ]; // Define your table headers
+        const filteredOrderItemslist = OrderItemslist.filter(item => {
+            if (Tickettype || ticket_id) {
+                return item.ticket_id === ticket_id || item.ticket_type === Tickettype;
+            }
+            return true;
+        });
+        const tableRows = filteredOrderItemslist.map((item, index) => [
+            index + 1,
+            item.owner_name,
+            item.owner_email,
+            item._id,
+            item.ticket_name,
+            item.scan_status === "1" ? "Yes" : "No",
+            `${item.date} ${item.time}`,
+        ]);
+
+        // Add the header and table data to the PDF
+        doc.autoTable(tableColumn, tableRows, { startY: 20 });
+
+        // Add a title to the PDF
+        doc.text(`Order Items List`, 14, 15);
+
+        // Save the PDF
+        doc.save("order-items-list.pdf");
+    };
 
     return (
         <>
@@ -294,9 +426,9 @@ const Dashboard = ({ title }) => {
             </Modal>
 
             <Modal isOpen={modal} toggle={() => setModal(!modal)} centered size={'xl'}>
-                <ModalHeader toggle={() => setModal(!modal)}>Order Details</ModalHeader>
+                <ModalHeader toggle={() => setModal(!modal)}></ModalHeader>
                 <ModalBody>
-                    <Row>
+                    <Row className="justify-content-center">
                         {ModalLoader ? (
                             <>
                                 <Col md={4}><div className="linear-background w-100"> </div></Col>
@@ -305,6 +437,9 @@ const Dashboard = ({ title }) => {
                             </>
                         ) : (
                             <>
+                                <Col md={12} className="text-center">
+                                    <h5 className="modal-title mb-3">Order Details</h5>
+                                </Col>
                                 <Col md={3} className="tickets-data-text">
                                     <div>
                                         <h5 className="text-bold">Email :</h5>
@@ -315,20 +450,6 @@ const Dashboard = ({ title }) => {
                                         <p>{CustomerData.phone_number}</p>
                                     </div>
                                     <div>
-                                        <h5 className="text-bold">Address :</h5>
-                                        <p>{CustomerData.address} {CustomerData.address ? (',' + CustomerData.address) : ''}</p>
-                                    </div>
-                                </Col>
-                                <Col md={2} className="tickets-data-text">
-                                    <div>
-                                        <h5 className="text-bold">City :</h5>
-                                        <p>{CustomerData.city ? CustomerData.city : '--'}</p>
-                                    </div>
-                                    <div>
-                                        <h5 className="text-bold">State :</h5>
-                                        <p>{CustomerData.state ? CustomerData.state : '--'}</p>
-                                    </div>
-                                    <div>
                                         <h5 className="text-bold">Country :</h5>
                                         <p>{CustomerData.country ? CustomerData.country : '--'}</p>
                                     </div>
@@ -336,27 +457,18 @@ const Dashboard = ({ title }) => {
                                 <Col md={3} className="tickets-data-text">
                                     <div>
                                         <h5 className="text-bold">BOOKING ID :</h5>
-                                        <p>{Ordersavedata.bookingid}</p>
+                                        <p>{OrderData._id}</p>
                                     </div>
                                     <div>
                                         <h5 className="text-bold">TYPE :</h5>
-                                        <p>{Ordersavedata.order_amount && Ordersavedata.order_amount > 0 ? 'Paid' : 'Free'}</p>
+                                        <p>{OrderData.amount && Number(OrderData.amount) > 0 ? 'Paid' : 'Free'}</p>
                                     </div>
                                     <div>
                                         <h5 className="text-bold">total Ticket :</h5>
                                         <p>{Orderitemlist.length}</p>
                                     </div>
-                                    {Orderitemlist.length > 0 ? (
-                                        <div>
-                                            {ShowQr ? (
-                                                <button className="btn btn-success list-Ticket-mng-1" onClick={() => setShowQr(!ShowQr)} type="button">Hide All Scanners</button>
-                                            ) : (
-                                                <button className="btn btn-success list-Ticket-mng-1" onClick={() => setShowQr(!ShowQr)} type="button">View All Scanners</button>
-                                            )}
-                                        </div>
-                                    ) : ''}
                                 </Col>
-                                <Col md={4}>
+                                {/* <Col md={4}>
                                     <div className="tickets-data-text-last">
                                         <h4 style={{ fontWeight: '700' }}>Tickect Scan Status</h4>
                                         {Isscan ? (
@@ -365,50 +477,50 @@ const Dashboard = ({ title }) => {
                                             <span class="badge-theme-warning badge-theme"><FaClock /> Pending</span>
                                         )}
                                     </div>
-                                </Col>
-                                {ShowQr ? (
-                                    <Col md={12}>
-                                        <Row className="pt-2 mt-4" style={{ borderTop: '1px solid #eee' }}>
-                                            {Orderitemlist.map((item, index) => (
-                                                <Col md={3}>
-                                                    <div className="ticket-box">
-                                                        <div className="ticket-qr text-center">
-                                                            {item.is_transfer == 1 ? (
-                                                                <>
-                                                                    <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
-                                                                    <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                    <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
-                                                                    <p className="mb-0 mt-4" style={{ fontWeight: 600, color: '#000' }}>Transferred to</p>
-                                                                    <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> {item.owner_email}</span>
-                                                                </>
-                                                            ) : (
-                                                                <div className="text-center">
-                                                                    {item.scan_status == 0 ? (
-                                                                        <>
-                                                                            <QRCode style={{ height: "auto", width: "150px" }} value={JSON.stringify({ id: item._id, time: generateRandomNumber(), index: index })} />
-                                                                            <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                            <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
-                                                                            <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
-                                                                            <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
-                                                                        </>
-                                                                    ) : (
-                                                                        <>
-                                                                            <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
-                                                                            <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
-                                                                            <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
-                                                                            <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
-                                                                            <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> Success</span>
-                                                                        </>
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                        </div>
+                                </Col> */}
+                                <Col md={12}>
+                                    <Row className="pt-2 mt-4 justify-content-center text-center" style={{ borderTop: '1px solid #eee' }}>
+                                        <h5 className="modal-title my-2">Tickect Scan Status</h5>
+                                        {Orderitemlist.map((item, index) => (
+                                            <Col md={3}>
+                                                <div className="ticket-box">
+                                                    <div className="ticket-qr text-center">
+                                                        {item.is_transfer == 1 ? (
+                                                            <>
+                                                                <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                                <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
+                                                                <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                <p className="mb-0 mt-4" style={{ fontWeight: 600, color: '#000' }}>Transferred to</p>
+                                                                <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> {item.owner_email}</span>
+                                                            </>
+                                                        ) : (
+                                                            <div className="text-center">
+                                                                {item.scan_status == 0 ? (
+                                                                    <>
+                                                                        <QRCode style={{ height: "auto", width: "150px" }} value={JSON.stringify({ id: item._id, time: generateRandomNumber(), index: index })} />
+                                                                        <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
+                                                                        <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                        <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
+                                                                        <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <img style={{ height: "auto", width: "150px" }} src={QRsuccess} className="qr-scanner-success" alt="" />
+                                                                        <p className="mb-0 mt-1" style={{ fontSize: '12px', fontWeight: 400, color: '#000', textTransform: 'capitalize' }}>{item._id}</p>
+                                                                        <p className="mb-0 mt-3" style={{ fontWeight: 500, color: '#000', textTransform: 'capitalize' }}><span style={{ textTransform: 'capitalize' }}>{item.ticket_name}</span> Ticket : {index + 1}</p>
+                                                                        <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
+                                                                        <span class="mt-0 badge-theme-success badge-theme mt-3 mb-3 d-block w-100"><FaCircleCheck /> Success</span>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                </Col>
-                                            ))}
-                                        </Row>
-                                    </Col>
-                                ) : ''}
+                                                </div>
+                                            </Col>
+                                        ))}
+                                    </Row>
+                                </Col>
+
                             </>
                         )}
                     </Row>
@@ -465,7 +577,7 @@ const Dashboard = ({ title }) => {
                                                                 {EventData && EventData.allprice.map((item) => (
                                                                     <>
                                                                         {item.isdelete == 0 && (
-                                                                            <option  value={item.id}>{item.name}</option>
+                                                                            <option value={item.id}>{item.name}</option>
                                                                         )}
                                                                     </>
                                                                 ))}
@@ -473,7 +585,7 @@ const Dashboard = ({ title }) => {
                                                         </div>
                                                     )}
                                                 </Col>
-                                                <Col md={6}>
+                                                <Col md={4}>
                                                     <div class="input-group mb-3 input-warning-o">
                                                         <span class="input-group-text"><img src={Searchicon} alt="" /></span>
                                                         <input
@@ -484,6 +596,12 @@ const Dashboard = ({ title }) => {
                                                             onChange={handleSearchChange}
                                                         />
                                                     </div>
+                                                </Col>
+                                                <Col md={1}>
+                                                    <buttom onClick={exportPdf} type="button" class="text-white btn theme-bg w-100"><FaFilePdf /></buttom>
+                                                </Col>
+                                                <Col md={1}>
+                                                    <buttom onClick={exportExcelFile} type="button" class="text-white btn theme-bg w-100"><FaFileExcel /></buttom>
                                                 </Col>
                                             </Row>
                                         </Col>
@@ -497,10 +615,12 @@ const Dashboard = ({ title }) => {
                                                             <thead>
                                                                 <tr>
                                                                     <th className="text-center" key={1}>Customer Name</th>
+                                                                    <th className="text-center" key={1}>Membership</th>
                                                                     <th className="text-center" key={1}>Booking ID</th>
+                                                                    <th className="text-center" key={1}>Number of Tickets</th>
                                                                     <th className="text-center" key={1}>Status</th>
                                                                     <th className="text-center" key={1}>Amount</th>
-                                                                    <th className="text-center" key={1}>TYPE</th>
+                                                                    <th className="text-center" key={1}>Applied Coupon</th>
                                                                     <th className="text-center" key={1}>Creation date</th>
                                                                 </tr>
                                                             </thead>
@@ -509,38 +629,40 @@ const Dashboard = ({ title }) => {
                                                                     <tr>
                                                                         <td>
 
-                                                                            {item.customer_name}
-
-                                                                        </td>
-                                                                        <td>{shortPer(item.bookingid, 20)}</td>
-                                                                        <td>
-                                                                            {item.status == 0 ? (
-                                                                                <><span class="badge-theme-warning badge-theme"><FaClock /> Pending</span></>
-                                                                            ) : ''}
-
-                                                                            {item.status == 1 ? (
-                                                                                <><span class="badge-theme-success badge-theme"><FaCircleCheck /> Success</span></>
-                                                                            ) : ''}
-
-                                                                            {item.status == 2 ? (
-                                                                                <><span class="badge-theme-danger badge-theme"><FaCircleMinus /> Declined</span></>
-                                                                            ) : ''}
+                                                                            {item.name}
 
                                                                         </td>
                                                                         <td>
-                                                                            {item.order_amount && item.order_amount > 0 ? (
-                                                                                <>{item.currency} {item.order_amount}</>
+                                                                            {item.userdetails.length > 0 && item.userdetails[0].login_type === "Guest" ? (
+                                                                                <h5><span class="badge badge-info  text-uppercase">Guest</span></h5>
+                                                                            ) : (
+                                                                                <h5><span class="badge badge-warning text-uppercase">{item.userdetails[0].plan_name}</span></h5>
+                                                                            )}
+                                                                        </td>
+                                                                        <td>{shortPer(item._id, 20)}</td>
+                                                                        <td>{item.orderitems && item.orderitems.length}</td>
+                                                                        <td>
+                                                                            {item.payment_status == 0 ? (
+                                                                                <><span class="badge-theme-warning badge-theme"> Pending</span></> //<FaClock />
+                                                                            ) : ''}
+
+                                                                            {item.payment_status == 1 ? (
+                                                                                <><span class="badge-theme-success badge-theme"> Success</span></> //<FaCircleCheck />
+                                                                            ) : ''}
+
+                                                                            {item.payment_status == 2 ? (
+                                                                                <><span class="badge-theme-danger badge-theme"> Declined</span></> //<FaCircleMinus />
+                                                                            ) : ''}
+
+                                                                        </td>
+                                                                        <td>
+                                                                            {Number(item.amount) && Number(item.amount) > 0 ? (
+                                                                                <>{EventData && EventData.countrysymbol} {item.amount}</>
                                                                             ) : (
                                                                                 'Free'
                                                                             )}
                                                                         </td>
-                                                                        <td>
-                                                                            {item.order_amount && item.order_amount > 0 ? (
-                                                                                'Paid'
-                                                                            ) : (
-                                                                                'Free'
-                                                                            )}
-                                                                        </td>
+                                                                        <td>{item.couponid ? (<><span class="badge-theme-success badge-theme">Yes</span></>) : (<span class="badge-theme-danger badge-theme">No</span>)}</td>
                                                                         <td>{item.date} {item.time} <span onClick={() => { setModal(!modal); fetchOrderData(item._id) }} className="order-view-btn"><FaChevronDown /></span></td>
                                                                     </tr>
                                                                 ))}

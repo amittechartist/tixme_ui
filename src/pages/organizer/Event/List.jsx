@@ -18,7 +18,7 @@ import Timelogo from "../../../common/icon/time 1.svg";
 import withReactContent from 'sweetalert2-react-content';
 import LocationIcon from "../../../common/icon/location.svg";
 import Eimage from "../../../common/image/eimage.png";
-import EditPng from '../../../common/icon/Edit.png';
+import EditPng from '../../../common/icon/editorg.svg';
 import DateIcon from "../../../common/icon/date 2.svg";
 import ArrowPng from "../../../common/icon/Arrow.svg";
 import { apiurl, imgurl, admin_url, organizer_url, shortPer, onlyDayMonth, get_date_time, get_min_date } from '../../../common/Helpers';
@@ -54,6 +54,7 @@ const Dashboard = ({ title }) => {
     const [valueEndtdate, setvalueEndtdate] = useState();
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [Isany, setIsany] = useState(false);
+    const [Datetype, setDatetype] = useState();
     const handleCategoryChange = (id) => {
         if (id == 'all') {
             setSelectedCategories([]);
@@ -67,6 +68,16 @@ const Dashboard = ({ title }) => {
             setIsany(false);
         }
     };
+    const handelDateselectchange = (value) => {
+        if (value && value.length > 0) {
+            setDatetype(value);
+            // setDaterange(!Daterange);
+        }
+    };
+    const GetCategoryName = (id) => {
+        const category = CategoryList.find(item => item._id === id);
+        return category ? category.name : '';
+    }
     useEffect(() => {
         if (selectedCategories.length > 0 && allEvents.length > 0) {
             const filteredEvents = allEvents.filter(event =>
@@ -84,6 +95,19 @@ const Dashboard = ({ title }) => {
         setviewStartdate(get_start_date[0].Dateview);
         setvalueStartdate(get_min_date(date));
     }
+    const handelDaterange = (date) => {
+        if (date[0] && date[1]) {
+            setStartdate(date[0]);
+            const get_start_date = get_date_time(date[0]);
+            setviewStartdate(get_start_date[0].Dateview);
+            setvalueStartdate(get_min_date(date[0]));
+
+            setEndtdate(date[1]);
+            const get_end_date = get_date_time(date[1]);
+            setviewEndtdate(get_end_date[0].Dateview);
+            setvalueEndtdate(get_min_date(date[1]));
+        }
+    }
     const handelEnddatechange = (date) => {
         setEndtdate(date);
         const get_end_date = get_date_time(date);
@@ -99,6 +123,7 @@ const Dashboard = ({ title }) => {
         setvalueEndtdate('');
         setListitems(allEvents);
         setDaterange(!Daterange);
+        setDatetype('');
     }
     const HandelDatefilter = () => {
         if (!valueStartdate) {
@@ -109,21 +134,48 @@ const Dashboard = ({ title }) => {
         }
         handleDateRangeChange(valueStartdate, valueEndtdate);
     }
-    const handleDateRangeChange = (startDate, endDate) => {
-        if (startDate && endDate) {
-            const filteredEvents = allEvents.filter(event => {
-                const eventStart = event.start_mindate;
-                const eventEnd = event.end_mindate;
-
-                // Check if the event's date range is within the given date range
-                return eventStart >= startDate && eventEnd <= endDate;
-            });
-            setListitems(filteredEvents);
+    const handleDateRangeChange = (e) => {
+        e.preventDefault();
+        if (Datetype && Datetype == 'Pick between two dates') {
+            if (valueStartdate && valueEndtdate) {
+                const filteredEvents = allEvents.filter(event => {
+                    const eventStart = event.start_date_min;
+                    const eventEnd = event.start_date_min;
+                    return eventStart >= valueStartdate && eventEnd <= valueEndtdate;
+                });
+                setListitems(filteredEvents);
+                setDaterange(!Daterange);
+            } else {
+                setListitems(allEvents);
+                return toast.error('Start and end date is required');
+            }
         } else {
-            // If either startDate or endDate is missing, reset to show all events
-            setListitems(allEvents);
+            if (valueStartdate) {
+                const filteredEvents = allEvents.filter(event => {
+                    const eventStart = event.start_date_min;
+                    return eventStart == valueStartdate;
+                });
+                setListitems(filteredEvents);
+                setDaterange(!Daterange);
+            } else {
+                setListitems(allEvents);
+                return toast.error('Date is required');
+            }
         }
-        setDaterange(!Daterange);
+        // if (startDate && endDate) {
+        //     const filteredEvents = allEvents.filter(event => {
+        //         const eventStart = event.start_mindate;
+        //         const eventEnd = event.end_mindate;
+
+        //         // Check if the event's date range is within the given date range
+        //         return eventStart >= startDate && eventEnd <= endDate;
+        //     });
+        //     setListitems(filteredEvents);
+        // } else {
+        //     // If either startDate or endDate is missing, reset to show all events
+        //     setListitems(allEvents);
+        // }
+        // setDaterange(!Daterange);
     };
 
     function CheckDelete(id) {
@@ -258,15 +310,16 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        const transformedCategories = data.data.map(category => ({
-                            value: category._id,
-                            label: category.name
-                        }));
-                        const allOption = { value: 'all', label: 'All' };
-                        transformedCategories.unshift(allOption);
+                        setCategoryList(data.data);
+                        // const transformedCategories = data.data.map(category => ({
+                        //     value: category._id,
+                        //     label: category.name
+                        // }));
+                        // const allOption = { value: 'all', label: 'All' };
+                        // transformedCategories.unshift(allOption);
 
-                        // Update CategoryList state
-                        setCategoryList(transformedCategories);
+
+                        // setCategoryList(transformedCategories);
                     } else {
 
                     }
@@ -340,46 +393,66 @@ const Dashboard = ({ title }) => {
     return (
         <>
             <Modal isOpen={Daterange} toggle={() => setDaterange(!Daterange)} centered>
-                <ModalHeader toggle={!Daterange}>Select date</ModalHeader>
+                <ModalHeader toggle={() => setDaterange(!Daterange)}>Select date</ModalHeader>
                 <ModalBody>
-                    <Row>
-                        <Col md={6} className="mb-2 mt-0">
-                            <label htmlFor="" className="text-black">Start Date</label>
-                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate} />
-                                <div className="date-style-picker">
-                                    <Flatpickr
-                                        value={Startdate}
-                                        id='date-picker'
-                                        className='form-control'
-                                        onChange={date => handelStartdatechange(date)}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6} className="mb-2 mt-0">
-                            <label htmlFor="" className="text-black">End Date</label>
-                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewEndtdate} />
-                                <div className="date-style-picker">
-                                    <Flatpickr
-                                        value={Endtdate}
-                                        id='date-picker'
-                                        className='form-control'
-                                        onChange={date => handelEnddatechange(date)}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6}>
-                            <button onClick={HandelDatefilter} className="mb-0 mr-5  btn btn-success list-Ticket-mng-1 w-100" type="button">Filter</button>
-                        </Col>
-                        <Col md={6}>
-                            <button onClick={HandelDatefilterreset} className="mb-0 mr-5  btn btn-dark list-Ticket-mng-1 w-100" type="button">Reset</button>
-                        </Col>
-                    </Row>
+                    <form onSubmit={handleDateRangeChange}>
+                        <Row className="d-flex justify-content-center">
+                            <Col md={6}>
+                                <select
+                                    className="form-select category me-4"
+                                    aria-label="Default select example"
+                                    value={Datetype}
+                                    onChange={(event) => { handelDateselectchange(event.target.value) }}
+                                    style={{ paddingTop: '8px', height: '40px', color: '#0047ab' }}
+                                >
+                                    <option value='Pick a date'>Date Picker</option>
+                                    <option value='Pick between two dates'>Date Range Picker</option>
+                                </select>
+                            </Col>
+                            {Datetype && Datetype == 'Pick between two dates' ? (
+
+                                <Col md={6} className="mb-2 mt-0">
+                                    <div class="input-group mb-3 input-warning-o newdatefilter" style={{ position: 'relative' }}>
+                                        <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                        <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate && viewEndtdate && (viewStartdate + '-' + viewEndtdate)} />
+                                        <div className="date-style-picker">
+                                            <Flatpickr
+                                                id='date-picker'
+                                                options={{ mode: "range" }}
+                                                className='form-control'
+                                                onChange={date => handelDaterange(date)}
+                                            />
+                                        </div>
+                                    </div>
+                                </Col>
+                            ) : (
+                                <>
+                                    <Col md={6} className="mb-2 mt-0">
+                                        <div class="input-group mb-3 input-warning-o newdatefilter" style={{ position: 'relative' }}>
+                                            <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                            <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate} />
+                                            <div className="date-style-picker">
+                                                <Flatpickr
+                                                    value={Startdate}
+                                                    id='date-picker'
+                                                    className='form-control'
+                                                    onChange={date => handelStartdatechange(date)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </Col>
+                                </>
+                            )}
+                        </Row>
+                        <Row>
+                            <Col md={6}>
+                                <button className="mb-0 mr-5  btn theme-bg text-white list-Ticket-mng-1 w-100" type="submit">Filter</button>
+                            </Col>
+                            <Col md={6}>
+                                <button onClick={HandelDatefilterreset} className="mb-0 mr-5  btn btn-dark list-Ticket-mng-1 w-100" type="button">Reset</button>
+                            </Col>
+                        </Row>
+                    </form>
                 </ModalBody>
             </Modal>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
@@ -393,9 +466,9 @@ const Dashboard = ({ title }) => {
                                             <Row>
                                                 <Col md={6} xl={2}>
                                                     <div class="input-group mb-3 input-warning-o">
-                                                        <span class="input-group-text" style={{height: 38}}><img src={Searchicon} alt="" /></span>
+                                                        <span class="input-group-text" style={{ height: 38 }}><img src={Searchicon} alt="" /></span>
                                                         <input
-                                                            style={{height: 40}}
+                                                            style={{ height: 40 }}
                                                             type="text"
                                                             className="form-control"
                                                             placeholder="Search"
@@ -405,36 +478,58 @@ const Dashboard = ({ title }) => {
                                                     </div>
                                                 </Col>
                                                 <Col md={6} xl={3} className="react-select-h mb-3 dash-select-box">
-                                                    <div style={{ position: 'relative' }}>
-                                                        <div className="event-page-category-filter-box" onClick={() => setCatDropdownopen(!CatDropdownopen)}>
-                                                            <p className="mb-0 theme-color">Select Category</p>
+                                                    <div class="dropdown dropdown-category">
+                                                        <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            {selectedCategories.length > 0 ? (
+                                                                <>
+                                                                    {selectedCategories.map((item, index) => (
+                                                                        <span onClick={() => handleCategoryChange(item)}>{GetCategoryName(item)}</span>
+                                                                    ))}
+                                                                </>
+                                                            ) : (
+                                                                <p className="mb-0 theme-color">Select Category</p>
+                                                            )}
                                                             <img src={ArrowDown} alt="" />
                                                         </div>
-                                                        {CatDropdownopen && (
-                                                            <div className="category-box-new-for-dashboard">
-                                                                <div>
-                                                                    {CategoryList.map((item) => (
-                                                                        <div key={item.value}>
-                                                                            <input
-                                                                                type="checkbox"
-                                                                                id={`checkbox-${item.value}`}
-                                                                                name={item.label}
-                                                                                checked={selectedCategories.includes(item.value)}
-                                                                                onChange={() => handleCategoryChange(item.value)}
-                                                                            />
-                                                                            <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item.value}`}>{item.label}</label>
-                                                                        </div>
-                                                                    ))}
+                                                        <ul class="dropdown-menu category-box-new-for-dashboard">
+                                                            <li>
+                                                                <div className="dropdown-item">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        id={`checkbox-any`}
+                                                                        name={'any'}
+                                                                        checked={Isany}
+                                                                        onChange={() => handleCategoryChange('any')}
+                                                                    />
+                                                                    <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-any`}>Any</label>
                                                                 </div>
-                                                            </div>
-                                                        )}
+                                                            </li>
+                                                            {CategoryList.map((item) => (
+                                                                <li>
+                                                                    <div key={item._id} className="dropdown-item">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            id={`checkbox-${item._id}`}
+                                                                            name={item._id}
+                                                                            checked={selectedCategories.includes(item._id)}
+                                                                            onChange={() => handleCategoryChange(item._id)}
+                                                                        />
+                                                                        <label style={{ marginLeft: '10px' }} htmlFor={`checkbox-${item._id}`}>{item.name}</label>
+                                                                    </div>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
                                                     </div>
                                                 </Col>
                                                 <Col md={4} xl={3}>
-                                                    <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
+                                                    {/* <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
-                                                        <input style={{height: 40}} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
+                                                        <input style={{ height: 40 }} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
+                                                    </div> */}
+                                                    <div className="event-page-category-filter-box event-page-category-filter-box1" onClick={() => setDaterange(true)}>
+                                                        <p className="mb-0 theme-color">Date Filter</p>
+                                                        <img src={ArrowDown} alt="" />
                                                     </div>
                                                 </Col>
                                                 <Col md={4} xl={2} className="react-select-h mb-3">
@@ -474,7 +569,7 @@ const Dashboard = ({ title }) => {
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div>
-                                                                                <span className="list-event-name text-capitalize">{shortPer(item.name, 30)}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} src={EditPng} alt="" /></span>
+                                                                                <span className="list-event-name text-capitalize">{shortPer(item.name, 30)}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} height={'auto'} width={'30px'} src={EditPng} alt=""  /><span className="theme-color">Edit</span></span>
                                                                                 <p className="list-event-desc mb-0">{shortPer(item.event_desc, 30)}</p>
                                                                             </div>
                                                                             <div className="my-2">
@@ -517,18 +612,18 @@ const Dashboard = ({ title }) => {
                                                                                     <>
                                                                                         <div className="">
                                                                                             {/* list-ticket-count */}
-                                                                                            <p className="mb-0 list-Total-Ticket">Total Ticket
-                                                                                            <span className="list-Ticket-amount">
-                                                                                                {item.eventData
-                                                                                                    .filter(price => price.status === "1") // Filter items where isdelete == 0
-                                                                                                    .reduce((total, price) => total + parseInt(price.quantity, 10), 0)}
-                                                                                                /
-                                                                                                {item.allprice
-                                                                                                    .filter(price => price.isdelete === 0) // Filter items where isdelete == 0
-                                                                                                    .reduce((total, price) => total + parseInt(price.quantity, 10), 0)}
-                                                                                            </span> <span className="list-Ticket-sold">SOLD</span>
+                                                                                            <p className="mb-0 list-Total-Ticket">Total Ticket{" "}
+                                                                                                <span className="list-Ticket-amount">
+                                                                                                    {item.eventData
+                                                                                                        .filter(price => price.status === "1") // Filter items where isdelete == 0
+                                                                                                        .reduce((total, price) => total + (Number(price.quantity) * Number(price.ticket_group_qty)), 0)}
+                                                                                                    /
+                                                                                                    {item.allprice
+                                                                                                        .filter(price => price.isdelete === 0) // Filter items where isdelete == 0
+                                                                                                        .reduce((total, price) => total + (Number(price.quantity) * Number(price.groupqty)), 0)}
+                                                                                                </span> <span className="list-Ticket-sold">SOLD</span>
                                                                                             </p>
-                                                                                            
+
                                                                                         </div>
                                                                                     </>
                                                                                 ) : ''}
