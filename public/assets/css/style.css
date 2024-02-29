@@ -12418,7 +12418,8 @@ body {
   overflow-x: hidden;
   height: 100%;
   position: relative;
-  max-width: 100%;
+  margin: 0 auto !important;
+  max-width: 1600px;
   font-size: 1rem;
 }
 

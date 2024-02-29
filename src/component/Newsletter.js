@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { apiurl, isEmail } from '../common/Helpers';
 import arrow from "../assets/arrow.svg";
+import newsMan from "../common/newsletter.svg";
 import toast from "react-hot-toast";
 const Component = ({ title }) => {
     const [UpdatesLoader, setUpdatesLoader] = useState(false);
@@ -55,8 +56,9 @@ const Component = ({ title }) => {
 
     return (
         <div className="newsletter-sec pb-4 position-relative mt-3 mt-md-0">
+        <div className="newsletter-sec-bg">
             <form onSubmit={HandelUpdatesForm}>
-                <div className="position-absolute md-absolute news-form">
+                <div className="md-absolute news-form">
                     <h5 className="fw-bold text-primary-color mb-0 pt-2 animate__animated animate__bounce">
                         Stay in the loop & receive event updates!
                     </h5>
@@ -115,6 +117,8 @@ const Component = ({ title }) => {
 
                 </div>
             </form>
+            <img className="newsMan" src={newsMan} alt="newsMan" />
+        </div>
         </div>
     )
 }
