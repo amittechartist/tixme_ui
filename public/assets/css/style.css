@@ -52173,11 +52173,33 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   .banner-child-cust{
     margin-top: -180px !important;
   }
+  .order-list .cust-field{
+    margin-bottom: 5px;
+  }
 }
 
 @media (max-width: 576px) {
   .banner-child-cust{
     margin-top: -170px !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .header-content-customer .whiteblueicontitle{
+    font-size: 16px;
+  }
+  .header-content-customer .notification_dropdown{
+    flex: 2;
+    justify-content: flex-end;
+  }
+  .header-content-customer .header-profile{
+    flex: 5;
+  }
+  .reward_star_gold{
+    left: 38% !important;
+  }
+  .reward_star_platinum{
+    left: 80% !important;
   }
 }
 

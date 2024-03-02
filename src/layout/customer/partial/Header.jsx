@@ -44,7 +44,7 @@ const Header = ({title}) => {
         <>
             <div className="header">
                 <span className="user_type_btn user_type_btn_position">Customer</span>
-                <div className="header-content">
+                <div className="header-content header-content-customer">
                     <nav className="navbar navbar-expand">
                         <div className="collapse navbar-collapse justify-content-between">
                             <div className="header-left d-flex align-items-end">

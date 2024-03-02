@@ -783,7 +783,7 @@ const Dashboard = ({ title }) => {
                 </ModalBody>
             </Modal>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
-                <div className="container-fluid">
+                <div className="container-fluid order-list">
                     <Row className="justify-content-center">
                         <Col md={12}>
                             <Card className="py-4 grey-bg">
@@ -804,7 +804,7 @@ const Dashboard = ({ title }) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md={6} xl={3}>
+                                                <Col md={6} xl={3} className="cust-field">
                                                     <div class="dropdown dropdown-category">
                                                         <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                             {selectedCategories.length > 0 ? (
@@ -848,7 +848,7 @@ const Dashboard = ({ title }) => {
                                                         </ul>
                                                     </div>
                                                 </Col>
-                                                <Col md={6} xl={3}>
+                                                <Col md={6} xl={3}  className="cust-field">
                                                     {/* <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
                                                         <input style={{ cursor: 'pointer' }} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
@@ -873,7 +873,7 @@ const Dashboard = ({ title }) => {
                                                         <img src={ArrowDown} alt="" />
                                                     </div>
                                                 </Col>
-                                                <Col md={6} xl={3}>
+                                                <Col md={6} xl={3}  className="cust-field">
                                                     <button className="w-100 theme-btn" onClick={() => navigate(app_url + 'events')}>
                                                         <span className="theme-btn-icon"><FiPlus /></span> <span>Buy Tickets</span>
                                                     </button>

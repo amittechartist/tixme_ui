@@ -327,14 +327,14 @@ const Dashboard = ({ title }) => {
                                                                             {/* fetch scal data     */}
                                                                             {Packagelist.map((item, index) => (
                                                                                 item.name === "Gold" && (
-                                                                                    <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
+                                                                                    <span className="reward_star reward_star_gold" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
                                                                                         <img src={Gold} alt="" />
                                                                                         <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Gold Tier</p>
                                                                                     </span>
                                                                                 )
                                                                                 ||
                                                                                 item.name === "Platinum" && (
-                                                                                    <span className="reward_star" style={{ left: `${parseInt(item.percentage) - 12}%` }}>
+                                                                                    <span className="reward_star reward_star_platinum" style={{ left: `${parseInt(item.percentage) - 12}%` }}>
                                                                                         <img src={Prem} alt="" />
                                                                                         <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Platinum Tier</p>
                                                                                     </span>
