@@ -13,6 +13,8 @@ const Dashboard = ({ title }) => {
     const [Totalevent, setTotalevent] = useState(0);
     const [Totalincome, setTotalincome] = useState(0);
     const [Totalticket, setTotalticket] = useState(0);
+    const [GraphTotalTicket, setGraphTotalTicket] = useState(Array(12).fill(0));
+    const [Revenuebymonth, setRevenuebymonth] = useState(Array(12).fill(0));
 
     // Highcharts.chart('openinterest', {
 
@@ -21,7 +23,7 @@ const Dashboard = ({ title }) => {
             type: 'column'
         },
         title: {
-            text: 'Monthly Ticket Sales and Revenue for 2023',
+            text: 'Monthly Ticket Sales and Revenue for 2024',
             align: 'left'
         },
         subtitle: {
@@ -42,7 +44,7 @@ const Dashboard = ({ title }) => {
             }
         }, {
             title: {
-                text: 'Revenue (USD)'
+                text: 'Revenue'
             },
             opposite: true
         }],
@@ -57,14 +59,11 @@ const Dashboard = ({ title }) => {
         },
         series: [{
             name: 'Tickets Booked',
-            data: [1200, 1100, 1500, 1400, 1300, 1600, 1700, 1800, 1900, 2000, 2100, 2200] // Replace with your data
+            data: GraphTotalTicket // Replace with your data
         }, {
             name: 'Revenue',
             yAxis: 1,
-            data: [12000, 11000, 15000, 14000, 13000, 16000, 17000, 18000, 19000, 20000, 21000, 22000], // Replace with your data
-            tooltip: {
-                valuePrefix: '$'
-            }
+            data: Revenuebymonth, // Replace with your data
         }]
     };
 
@@ -120,6 +119,8 @@ const Dashboard = ({ title }) => {
                         setTotalevent(data.totalevents)
                         setTotalincome(data.totalincome)
                         setTotalticket(data.totalticketsold)
+                        setGraphTotalTicket(data.graphTicketsold);
+                        setRevenuebymonth(data.revenuebymonth)
                     } else {
 
                     }
