@@ -222,7 +222,10 @@ const About = () => {
                 <h1 class="banner-h fw-bold text-white text-uppercase mb-0 pb-0 animate__animated animate__bounce">
                     Login / Sign up
                 </h1>
-                <div class="banner-child bg-white px-0" style={{ border: '1px solid #eee' }}>
+            </div>
+            <div class="banner-child banner-child-cust bg-white px-0" style={{ border: '1px solid #eee',
+    marginTop: '-265px',
+    position: 'relative' }}>
                     <div className='row p-5 py-5 d-flex justify-content-center'>
                         <div className="col-12 col-md-5 col-lg-5 mt-5">
                             <div className="GetCustomerButtonBox">
@@ -276,9 +279,8 @@ const About = () => {
                         </div>
                     </div>
                 </div>
-            </div>
             {/* </div> */}
-            <div class="space-height" style={{ height: '400px' }}></div>
+            {/* <div class="space-height" style={{ height: '400px' }}></div> */}
             <Footer />
         </>
     );
