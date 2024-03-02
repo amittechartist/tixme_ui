@@ -22,6 +22,7 @@ import Addcoupon from './pages/admin/membership/Addcoupon';
 import AdminCustomerProfile from './pages/admin/CustomerProfile';
 import AdminOrganizerProfile from './pages/admin/OrganizerProfile';
 import AdminPayoutrequest from './pages/admin/payout/list';
+import AdminMailing from './pages/admin/AdminMailing';
 import Taxadd from './pages/admin/payout/taxadd';
 import AdminLayout from './layout/admin/Layout'
 // Customer
@@ -185,6 +186,7 @@ function App() {
           <Route path={`${admin_url}view-support-ticket/:id`} element={<AdminLayout title={'Mange Tickets'}> <AdminTicketView /> </AdminLayout>} />
           <Route path={`${admin_url}event/view-event/:id/:name`} element={<AdminLayout> <EventView title={'Event details'} /> </AdminLayout>} />
           <Route path={admin_url + 'addcoupon'} element={<AdminLayout title={'Add Coupon'}> <Addcoupon /> </AdminLayout>} />
+          <Route path={admin_url + 'mailing'} element={<AdminLayout title={'Mailing By Invitation'}> <AdminMailing /> </AdminLayout>} />
         </Routes>
       </BrowserRouter>
     </>

@@ -1,12 +1,4 @@
 import React from 'react';
-import DashboardIcon from '../../../common/icon/dashboardicon.svg';
-import EventIcon from '../../../common/icon/event 1.svg';
-import ticketIcon from '../../../common/icon/ticket 1.svg';
-import walletIcon from '../../../common/icon/wallet 1.svg';
-import scannerIcon from '../../../common/icon/scanner 1.svg';
-import MenuIcon from '../../../common/icon/Menu sidebar.svg';
-import peopleIcon from '../../../common/icon/people 1.svg';
-import supportIcon from '../../../common/icon/support.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaTicketAlt } from 'react-icons/fa';
 import { FaUserFriends } from 'react-icons/fa';

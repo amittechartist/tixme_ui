@@ -29,7 +29,11 @@ const Dashboard = () => {
     const [EventListOption, setEventListOption] = useState([]);
     const [EventPreListOption, setEventPreListOption] = useState([]);
     const [AttendanceListOption, setAttendanceListOption] = useState([]);
+    const [OrganizersOption, setOrganizersOption] = useState([]);
+    const [SelectedOrg, setSelectedOrg] = useState([]);
     const [AttendanceSelected, setAttendanceSelected] = useState([]);
+    const [Membershiplist, setMembershiplist] = useState([]);
+    const [selectedMemberplan, setselectedMemberplan] = useState([]);
     const [Eventselected, setEventselected] = useState();
     const [EventPreselected, setEventPreselected] = useState();
     const [ticketOptions, setTicketOptions] = useState([]);
@@ -55,12 +59,18 @@ const Dashboard = () => {
             options: AttendanceListOption
         }
     ]
-    const TicketTypeOption = [
+    const Customerbyorg = [
         {
-            options: ticketOptions
+            options: OrganizersOption
         }
     ]
-
+    const selectMemebership = (id) => {
+        if (selectedMemberplan.includes(id)) {
+            setselectedMemberplan(selectedMemberplan.filter((categoryId) => categoryId !== id));
+        } else {
+            setselectedMemberplan([...selectedMemberplan, id]);
+        }
+    }
     const HandelSelectPreEvents = (selectedOptions) => {
         if (selectedOptions.some(option => option.value === 'selectAll')) {
             setEventPreselected(EventListOption.slice(1));
@@ -75,11 +85,11 @@ const Dashboard = () => {
             setTicketselected(selectedOptions);
         }
     };
-    const handleAttendanceChange = (selectedOptions) => {
+    const HandelOrgSelect = (selectedOptions) => {
         if (selectedOptions.some(option => option.value === 'selectAll')) {
-            setAttendanceSelected(AttendanceListOption.slice(1));
+            setSelectedOrg(OrganizersOption.slice(1));
         } else {
-            setAttendanceSelected(selectedOptions);
+            setSelectedOrg(selectedOptions);
         }
     };
     useEffect(() => {
@@ -107,11 +117,67 @@ const Dashboard = () => {
         }
         setTicketOptions(newTicketOptions);
     };
+    const getMembershiip = async () => {
+        try {
+            fetch(apiurl + 'admin/package-plan-list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        setMembershiplist(data.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+
+    }
+    const getOrganizerlist = async () => {
+        try {
+            const requestData = {
+                isactive: 1,
+            };
+            fetch(apiurl + 'admin/get-organizer-list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        const orglistOptions = [
+                            { value: 'selectAll', label: 'Select All' },
+                            ...data.data.map(customer => ({
+                                value: customer._id,
+                                label: customer.name
+                            }))
+                        ];
+                        setOrganizersOption(orglistOptions);
+                    }
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+
+    }
+
     const getMyEvents = async () => {
         try {
             setLoader(true)
             const requestData = {
-                id: organizerid,
+                id: "65d0478a88772f6ffce352a5",
             };
             fetch(apiurl + 'event/list', {
                 method: 'POST',
@@ -129,7 +195,6 @@ const Dashboard = () => {
                         const upcomingEvents = data.data.filter(event => event.end_mindate >= today);
                         const pastEvents = data.data.filter(event => event.end_mindate < today);
                         const upcomingOptions = [
-                            { value: 'selectAll', label: 'Select All' },
                             ...upcomingEvents.map(customer => ({
                                 value: customer._id,
                                 label: customer.display_name
@@ -188,110 +253,24 @@ const Dashboard = () => {
             setApiloader(false);
         }
     }
-    const GetCustomerList = async () => {
-        try {
-            setCustomerLoader(true)
-            const requestData = {
-                orgid: organizerid,
-                tickettype: Ticketselected,
-            };
-            fetch(apiurl + 'event/get-customerlist-for-mail', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                },
-                body: JSON.stringify(requestData),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success == true) {
-                        const uniqueCustomers = data.data.filter((customer, index, self) =>
-                            index === self.findIndex((t) => (
-                                t.customer_email === customer.customer_email
-                            ))
-                        );
-                        const CustomerOptions = [
-                            { value: 'selectAll', label: 'Select All' },
-                            ...uniqueCustomers.map(customer => ({
-                                value: customer.customer_email,
-                                label: customer.customer_email
-                            }))
-                        ];
 
-                        setAttendanceListOption(CustomerOptions);
-                    }
-                    setCustomerLoader(false)
-                })
-                .catch(error => {
-                    console.error('Insert error:', error);
-                    setCustomerLoader(false)
-                });
-        } catch (error) {
-            console.error('Api error:', error);
-            setCustomerLoader(false)
-        }
-    }
-    const GetAllCustomerList = async () => {
-        try {
-            setALlCustomerLoader(true)
-            const requestData = {
-                orgid: organizerid,
-            };
-            fetch(apiurl + 'event/get-all-customerlist-for-mail', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                },
-                body: JSON.stringify(requestData),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success == true) {
-                        const uniqueCustomers = data.data.filter((customer, index, self) =>
-                            index === self.findIndex((t) => (
-                                t.customer_email === customer.customer_email
-                            ))
-                        );
-                        const CustomerOptions = [
-                            { value: 'selectAll', label: 'Select All' },
-                            ...uniqueCustomers.map(customer => ({
-                                value: customer.customer_email,
-                                label: customer.customer_email
-                            }))
-                        ];
-
-                        setAttendanceSelected(CustomerOptions.slice(1));
-                        setAttendanceListOption(CustomerOptions);
-                        setisAllcustomer(true);
-                    }
-                    setALlCustomerLoader(false)
-                })
-                .catch(error => {
-                    console.error('Insert error:', error);
-                    setALlCustomerLoader(false)
-                });
-        } catch (error) {
-            console.error('Api error:', error);
-            setALlCustomerLoader(false)
-        }
-    }
     const handelSendmail = async () => {
         try {
-            if (!AttendanceSelected) {
-                return toast.error("No user are selected");
-            }
             if (!Eventselected) {
-                return toast.error("Select your event");
+                return toast.error("No event selected");
+            }
+            if (!selectedMemberplan && !SelectedOrg) {
+                return toast.error("No user selected");
             }
             setSendmailLoader(true);
             const requestData = {
-                orgid: organizerid,
-                eventid: Eventselected.value,
-                userlist: AttendanceSelected,
+                membershipid: selectedMemberplan,
+                organizersid: SelectedOrg,
                 message: Messge,
-                usertype: "Organizer",
+                usertype: "Admin",
+                eventid: Eventselected.value,
             };
-            fetch(apiurl + 'event/organizer-eventmail-send', {
+            fetch(apiurl + 'event/admin-eventmail-send', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Set the Content-Type header to JSON
@@ -359,22 +338,25 @@ const Dashboard = () => {
         setEventData("");
         setMessge("");
         setisAllcustomer(false);
+        setselectedMemberplan([]);
+        setSelectedOrg([]);
     }
     const removeAllcustomer = () => {
         setAttendanceSelected("");
         setAttendanceListOption([]);
         setisAllcustomer(false);
     }
-    
+
     useEffect(() => {
         getMyEvents();
+        getMembershiip();
+        getOrganizerlist();
     }, []);
     useEffect(() => {
         handleEventChange();
         setTicketselected("");
     }, [EventPreselected]);
     useEffect(() => {
-        GetCustomerList();
         setAttendanceSelected("");
     }, [Ticketselected]);
 
@@ -479,102 +461,60 @@ const Dashboard = () => {
                                                 <Card.Body>
                                                     <Card.Title className="border-bottom pb-2">Attendance</Card.Title>
                                                     <Card.Text>
-                                                        <div className="mail-body-org">
-                                                            <div className="d-flex justify-content-end">
-                                                                {isAllcustomer ? (
-                                                                    <button type="button" className="GetLatestUpdateButton" onClick={() => removeAllcustomer()}>
-                                                                        <div className="left px-0 px-md-4">
-                                                                            <small className="ms-2">Select Events Attendance</small>
+                                                        <div className="row">
+                                                            {Membershiplist.length > 0 && (
+                                                                <>
+                                                                    <div className="col-12 col-md-12">
+                                                                        Select Membership Attendance
+                                                                    </div>
+                                                                    {Membershiplist.map((item) => (
+                                                                        <div className="col-12 col-md-4">
+                                                                            <button onClick={() => selectMemebership(item._id)} type="button" class={`btn ${selectedMemberplan.includes(item._id) ? 'theme-bg text-white' : 'btn-outline-secondary'} text-capitalize w-100`}>{item.name}</button>
                                                                         </div>
-                                                                        <div className="right">
-                                                                            <img style={{ width: "18px" }} src={arrow} alt="" />
-                                                                        </div>
-                                                                    </button>
-                                                                ) : (
-                                                                    <button type="button" className="GetLatestUpdateButton" onClick={() => GetAllCustomerList()}>
-                                                                        <div className="left px-0 px-md-4">
-                                                                            <small className="ms-2">Select All Attendance</small>
-                                                                        </div>
-                                                                        <div className="right">
-                                                                            <img style={{ width: "18px" }} src={arrow} alt="" />
-                                                                        </div>
-                                                                    </button>
-                                                                )}
+                                                                    ))}
+                                                                </>
+                                                            )}
+                                                            <div className="col-12 mt-3">
+                                                                <div className="form-group">
+                                                                    <p>Select Attendance By Organizers</p>
+                                                                    <Select
+                                                                        isClearable={false}
+                                                                        options={Customerbyorg}
+                                                                        isMulti
+                                                                        className='react-select'
+                                                                        classNamePrefix='select'
+                                                                        onChange={HandelOrgSelect}
+                                                                        value={SelectedOrg}
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                {ALlCustomerLoader ? (
-                                                                    <div className="linear-background w-100" style={{ height: '250px' }}> </div>
+                                                        </div>
+                                                        <div>
+                                                            <div className="row">
+                                                                {SendmailLoader ? (
+                                                                    <div className="col-md-12 col-xl-6">
+                                                                        <button type="button" className="GetLatestUpdateButton">
+                                                                            <div className="left px-0 px-md-4">
+                                                                                <small className="ms-2">Please Wait...</small>
+                                                                            </div>
+                                                                            <div className="right">
+                                                                                <img style={{ width: "18px" }} src={arrow} alt="" />
+                                                                            </div>
+                                                                        </button>
+                                                                    </div>
                                                                 ) : (
                                                                     <>
-                                                                        {!isAllcustomer && (
-                                                                            <>
-                                                                                <div className="form-group">
-                                                                                    <p>My Previous Events</p>
-                                                                                    <Select
-                                                                                        isClearable={false}
-                                                                                        options={EventPreOption}
-                                                                                        isMulti
-                                                                                        className='react-select'
-                                                                                        classNamePrefix='select'
-                                                                                        onChange={HandelSelectPreEvents}
-                                                                                        value={EventPreselected}
-                                                                                    />
+                                                                        <div className="col-md-12 col-xl-6">
+                                                                            <button type="button" className="GetLatestUpdateButton" onClick={() => handelSendmail()}>
+                                                                                <div className="left px-0 px-md-4">
+                                                                                    <small className="ms-2">Send Mail</small>
                                                                                 </div>
-                                                                                <div className="form-group">
-                                                                                    <p>Event Ticket Type</p>
-                                                                                    <Select
-                                                                                        isClearable={false}
-                                                                                        options={TicketTypeOption}
-                                                                                        isMulti
-                                                                                        className='react-select'
-                                                                                        classNamePrefix='select'
-                                                                                        onChange={HandelSelectTicketType}
-                                                                                        value={Ticketselected}
-                                                                                    />
+                                                                                <div className="right">
+                                                                                    <img style={{ width: "18px" }} src={arrow} alt="" />
                                                                                 </div>
-                                                                            </>
-                                                                        )}
-                                                                        <div className="form-group">
-                                                                            <p>My Event Attendance</p>
-                                                                            <Select
-                                                                                isClearable={false}
-                                                                                options={AttendanceOption}
-                                                                                className='react-select'
-                                                                                isMulti
-                                                                                classNamePrefix='select'
-                                                                                onChange={handleAttendanceChange}
-                                                                                value={AttendanceSelected}
-                                                                            />
+                                                                            </button>
                                                                         </div>
-                                                                    </>
-                                                                )}
-
-                                                                <div>
-                                                                    <div className="row">
-                                                                        {SendmailLoader ? (
-                                                                            <div className="col-md-12 col-xl-6">
-                                                                                <button type="button" className="GetLatestUpdateButton">
-                                                                                    <div className="left px-0 px-md-4">
-                                                                                        <small className="ms-2">Please Wait...</small>
-                                                                                    </div>
-                                                                                    <div className="right">
-                                                                                        <img style={{ width: "18px" }} src={arrow} alt="" />
-                                                                                    </div>
-                                                                                </button>
-                                                                            </div>
-                                                                        ) : (
-                                                                            <>
-                                                                                <div className="col-md-12 col-xl-6">
-                                                                                    <button type="button" className="GetLatestUpdateButton" onClick={() => handelSendmail()}>
-                                                                                        <div className="left px-0 px-md-4">
-                                                                                            <small className="ms-2">Send Mail</small>
-                                                                                        </div>
-                                                                                        <div className="right">
-                                                                                            <img style={{ width: "18px" }} src={arrow} alt="" />
-                                                                                        </div>
-                                                                                    </button>
-                                                                                </div>
-                                                                                {/* <div className="col-md-12  col-xl-6">
+                                                                        {/* <div className="col-md-12  col-xl-6">
                                                                                     <button type="button" className="GetLatestUpdateButton">
                                                                                         <div className="left px-0 px-md-4">
                                                                                             <small className="ms-2">Schedule Mail</small>
@@ -584,10 +524,8 @@ const Dashboard = () => {
                                                                                         </div>
                                                                                     </button>
                                                                                 </div> */}
-                                                                            </>
-                                                                        )}
-                                                                    </div>
-                                                                </div>
+                                                                    </>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </Card.Text>
