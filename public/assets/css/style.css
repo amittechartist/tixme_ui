@@ -52163,5 +52163,23 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   color: #fff;
 }
 
+@media (max-width: 991px) {
+  .banner-child-cust{
+    margin-top: -330px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .banner-child-cust{
+    margin-top: -180px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .banner-child-cust{
+    margin-top: -170px !important;
+  }
+}
+
 /*# sourceMappingURL=style.css.map */
 
