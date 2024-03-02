@@ -783,7 +783,7 @@ input:focus {
   }
 
   .newsletter-sec {
-    height: 376px;
+    height: auto;
     width: 90vw;
     margin: auto;
     background-color: #d9e4f3;
@@ -798,6 +798,7 @@ input:focus {
 
   .newsletter-sec .newsletter-sec-bg form {
     border: none;
+    padding: 0;
   }
 
   .newsletter-sec .newsletter-sec-bg .newsMan {
@@ -897,6 +898,8 @@ input:focus {
   .banner-child-address {
     margin: 3rem 3rem;
   }
+
+  
 
   .space-sec {
     padding: 0rem 2rem;
