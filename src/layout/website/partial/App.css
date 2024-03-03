@@ -1402,7 +1402,7 @@ p.cursor-pointer.my-location-btn {
 }
 .eventpage-location-name {
     font-size: 14px;
-    width: 350px;
+    max-width: 350px;
 }
 .date_filter {
     background: transparent !important;
