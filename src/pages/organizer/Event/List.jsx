@@ -455,7 +455,7 @@ const Dashboard = ({ title }) => {
                     </form>
                 </ModalBody>
             </Modal>
-            <div className="content-body" style={{ background: '#F1F1F1' }}>
+            <div className="content-body org-event-list" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
                     <Row className="justify-content-center">
                         <Col md={12}>
@@ -521,7 +521,7 @@ const Dashboard = ({ title }) => {
                                                         </ul>
                                                     </div>
                                                 </Col>
-                                                <Col md={4} xl={3}>
+                                                <Col md={4} xl={3} className="cust-field-dashboard">
                                                     {/* <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
                                                         <input style={{ height: 40 }} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
@@ -543,7 +543,7 @@ const Dashboard = ({ title }) => {
                                                     />
                                                 </Col>
 
-                                                <Col md={4} xl={2}>
+                                                <Col md={4} xl={2} style={{marginBottom:20}}>
                                                     <button className="w-100 theme-btn" onClick={() => navigate(organizer_url + 'event/add-event')}>
                                                         <span className="theme-btn-icon"><FiPlus /></span> <span>Add event</span>
                                                     </button>

@@ -808,7 +808,7 @@ const Dashboard = ({ title }) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md={6} xl={3} className="cust-field">
+                                                <Col md={6} xl={3} className="cust-field-dashboard">
                                                     <div class="dropdown dropdown-category">
                                                         <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                             {selectedCategories.length > 0 ? (

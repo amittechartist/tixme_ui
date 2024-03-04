@@ -277,9 +277,13 @@ const About = () => {
         <h1 class="banner-h fw-bold text-white text-uppercase mb-0 pb-0 animate__animated animate__bounce">
           Customer Sign up
         </h1>
-        <div
-          class="banner-child bg-white px-0"
-          style={{ border: "1px solid #eee" }}
+        
+      </div>
+      {/* </div> */}
+      <div
+          class="banner-child banner-child-login bg-white px-0"
+          style={{ border: "1px solid #eee",marginTop: '-265px',
+          position: 'relative' }}
         >
           <div className="row form-area">
             <div className="col-md-6">
@@ -712,9 +716,6 @@ const About = () => {
             )}
           </div>
         </div>
-      </div>
-      {/* </div> */}
-      <div class="space-height" style={{ height: "650px" }}></div>
       <Footer />
     </>
   );
