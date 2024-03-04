@@ -52165,6 +52165,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 
 @media (max-width: 991px) {
   .banner-child-cust,
+  .banner-child-login,
   .faq-content-area .banner-child{
     margin-top: -330px !important;
   }
@@ -52177,16 +52178,22 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 
 @media (max-width: 767px) {
   .banner-child-cust,
+  .banner-child-login,
   .faq-content-area .banner-child {
     margin-top: -180px !important;
   }
-  .order-list .cust-field{
+  .cust-field-dashboard{
     margin-bottom: 5px;
+  }
+
+  .event_list_box .list-data{
+    padding: 30px;
   }
 }
 
 @media (max-width: 576px) {
   .banner-child-cust,
+  .banner-child-login,
   .faq-content-area .banner-child{
     margin-top: -170px !important;
   }
@@ -52194,6 +52201,16 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   .banner-event{
     min-height: auto !important;
     padding-bottom: 20px;
+  }
+
+  .org-event-list .dash-list-banner-1{
+    height: auto;
+    width: auto;
+  }
+
+  .org-event-list .mob-style{
+    display: block !important;
+    padding-left: 20px;
   }
 }
 
