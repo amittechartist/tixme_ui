@@ -327,7 +327,7 @@ const Dashboard = ({ title }) => {
     }
     return (
         <>
-            <Modal isOpen={modal} toggle={() => setModal(() => handelQrviewModal())} centered size={'xl'}>
+            <Modal isOpen={modal} toggle={() => setModal(() => handelQrviewModal())} centered size={'xl'} onClosed={() => removeQrlocaldata()}>
                 <ModalHeader toggle={() => handelQrviewModal()}></ModalHeader>
                 <ModalBody>
                     <Row className="justify-content-center">

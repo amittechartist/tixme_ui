@@ -37,6 +37,7 @@ const Dashboard = () => {
     const [Customerselected, setCustomerselected] = useState();
     const [EventData, setEventData] = useState();
     const [Messge, setMessge] = useState();
+    const [Myfollwers, selMyfollwers] = useState(false);
 
 
     const EventOption = [
@@ -46,7 +47,7 @@ const Dashboard = () => {
     ]
     const EventPreOption = [
         {
-            options: EventListOption
+            options: EventPreListOption
             // EventPreListOption
         }
     ]
@@ -277,7 +278,7 @@ const Dashboard = () => {
     }
     const handelSendmail = async () => {
         try {
-            if (!AttendanceSelected) {
+            if (!AttendanceSelected && !Myfollwers) {
                 return toast.error("No user are selected");
             }
             if (!Eventselected) {
@@ -289,6 +290,7 @@ const Dashboard = () => {
                 eventid: Eventselected.value,
                 userlist: AttendanceSelected,
                 message: Messge,
+                myfollwers: Myfollwers,
                 usertype: "Organizer",
             };
             fetch(apiurl + 'event/organizer-eventmail-send', {
@@ -365,7 +367,7 @@ const Dashboard = () => {
         setAttendanceListOption([]);
         setisAllcustomer(false);
     }
-    
+
     useEffect(() => {
         getMyEvents();
     }, []);
@@ -482,23 +484,27 @@ const Dashboard = () => {
                                                         <div className="mail-body-org">
                                                             <div className="d-flex justify-content-end">
                                                                 {isAllcustomer ? (
-                                                                    <button type="button" className="GetLatestUpdateButton" onClick={() => removeAllcustomer()}>
-                                                                        <div className="left px-0 px-md-4">
-                                                                            <small className="ms-2">Select Events Attendance</small>
-                                                                        </div>
-                                                                        <div className="right">
-                                                                            <img style={{ width: "18px" }} src={arrow} alt="" />
-                                                                        </div>
-                                                                    </button>
+                                                                    <>
+                                                                        <button type="button" className="GetLatestUpdateButton" onClick={() => removeAllcustomer()}>
+                                                                            <div className="left px-0 px-md-4">
+                                                                                <small className="ms-2">Select Events Attendance</small>
+                                                                            </div>
+                                                                            <div className="right">
+                                                                                <img style={{ width: "18px" }} src={arrow} alt="" />
+                                                                            </div>
+                                                                        </button>
+                                                                    </>
                                                                 ) : (
-                                                                    <button type="button" className="GetLatestUpdateButton" onClick={() => GetAllCustomerList()}>
-                                                                        <div className="left px-0 px-md-4">
-                                                                            <small className="ms-2">Select All Attendance</small>
-                                                                        </div>
-                                                                        <div className="right">
-                                                                            <img style={{ width: "18px" }} src={arrow} alt="" />
-                                                                        </div>
-                                                                    </button>
+                                                                    <>
+                                                                        <button type="button" className="GetLatestUpdateButton" onClick={() => GetAllCustomerList()}>
+                                                                            <div className="left px-0 px-md-4">
+                                                                                <small className="ms-2">Select All Attendance</small>
+                                                                            </div>
+                                                                            <div className="right">
+                                                                                <img style={{ width: "18px" }} src={arrow} alt="" />
+                                                                            </div>
+                                                                        </button>
+                                                                    </>
                                                                 )}
                                                             </div>
                                                             <div>
@@ -546,9 +552,15 @@ const Dashboard = () => {
                                                                                 value={AttendanceSelected}
                                                                             />
                                                                         </div>
+                                                                        {!isAllcustomer &&
+                                                                            (
+                                                                                <div className="my-2">
+                                                                                    <button onClick={() => selMyfollwers(!Myfollwers)} type="button" class={`btn ${Myfollwers ? 'theme-bg text-white' : 'btn-outline-secondary'} text-capitalize w-100`}>Select My Follwers</button>
+                                                                                </div>
+                                                                            )
+                                                                        }
                                                                     </>
                                                                 )}
-
                                                                 <div>
                                                                     <div className="row">
                                                                         {SendmailLoader ? (

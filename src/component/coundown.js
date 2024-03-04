@@ -15,7 +15,7 @@ const CountdownTimer = ({date, time}) => {
         const interval = setInterval(() => {
             const now = moment();
             const duration = moment.duration(targetDateTime.diff(now));
-
+            console.log("dsd",date);
             if (duration.asSeconds() <= 0) {
                 clearInterval(interval);
                 setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isPast: true });

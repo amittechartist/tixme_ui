@@ -379,12 +379,6 @@ const Dashboard = ({ title }) => {
                                                                         <>
                                                                             {CouponList.map((item, index) => (
                                                                                 <Col md={4}>
-                                                                                    {/* <div className="tickret-show-box">
-                                                                                        <img src={Ticketimg} alt="" className="ticketimg-bg" />
-                                                                                        <p className="mb-0" style={{ fontSize: '16px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.name}</p>
-                                                                                        <p className="">Points amount {item.point}</p>
-                                                                                        <button onClick={() => CheckRedeem(item._id)} className="redem-btn">Redeem</button>
-                                                                                    </div> */}
                                                                                     <div className="coupon-ticket-box mx-xl-4 mx-1">
                                                                                         <div className="row">
                                                                                             <div className="col-5 d-flex align-items-center justify-content-center box-1">
@@ -420,15 +414,7 @@ const Dashboard = ({ title }) => {
                                                                             {
                                                                                 MyCouponList.map((item, index) => (
                                                                                     <Col md={4}>
-                                                                                        {/* <div className="tickret-show-box">
-                                                                                            <img src={Ticketimg} alt="" className="ticketimg-bg" />
-                                                                                            <p className="mb-0" style={{ fontSize: '16px', fontWeight: '600', color: '#000', textTransform: 'uppercase' }}>{item.coupondata[0].name}</p>
-                                                                                            <p className="">Points amount {item.coupondata[0].point}</p>
-                                                                                            <span className="token-no-span">{item.tokenno}</span>
-                                                                                            {item.isvalid == 0 ? (<button type="button" onClick={() => HandelCopyTxt(item.tokenno)} className="redem-copy-btn"><FiCopy /> Copy</button>) : (<button type="button" disabled className="btn btn-dark">Expired</button>)}
-
-                                                                                        </div> */}
-                                                                                        <div className="coupon-ticket-box">
+                                                                                        <div className="coupon-ticket-box  mx-xl-4 mx-1">
                                                                                             <div className="row">
                                                                                                 <div className="col-5 d-flex align-items-center justify-content-center box-1">
                                                                                                     <div className="text-center">

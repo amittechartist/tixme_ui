@@ -2314,3 +2314,10 @@ img.organiger-logo {
   height: auto;
   width: 23px !important;
 }
+.metismenu li .ai-icon{
+  display: inline-flex !important;
+  align-items: center !important;
+}
+.active-date-filter{
+  color: #000 !important;
+}

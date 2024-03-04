@@ -58,6 +58,7 @@ const Dashboard = ({ title }) => {
     const [valueEndtdate, setvalueEndtdate] = useState();
     const [Isany, setIsany] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [isDatefilter, setisDatefilter] = useState(false);
     const [Datetype, setDatetype] = useState();
 
     const handelStartdatechange = (date) => {
@@ -173,6 +174,7 @@ const Dashboard = ({ title }) => {
         setListitems(allEvents);
         setDaterange(!Daterange);
         setDatetype('');
+        setisDatefilter(false);
     }
     // const HandelDatefilter = () => {
     //     if (!valueStartdate) {
@@ -191,9 +193,10 @@ const Dashboard = ({ title }) => {
     };
     const handleDateRangeChange = (e) => {
         e.preventDefault();
+        setisDatefilter(true);
         if (Datetype && Datetype == 'Pick between two dates') {
             if (valueStartdate && valueEndtdate) {
-                console.log(valueStartdate,valueEndtdate);
+                console.log(valueStartdate, valueEndtdate);
                 const filteredEvents = allEvents.filter(event => {
                     const eventStart = event.start_date_min;
                     const eventEnd = event.start_date_min;
@@ -218,6 +221,7 @@ const Dashboard = ({ title }) => {
                 return toast.error('Date is required');
             }
         }
+        console.log(isDatefilter);
         // if (startDate && endDate) {
         //     const filteredEvents = allEvents.filter(event => {
         //         const eventStart = event.eventData[0].start_mindate;
@@ -508,7 +512,7 @@ const Dashboard = ({ title }) => {
     }
     return (
         <>
-            <Modal isOpen={modal} toggle={() => setModal(() => handelQrviewModal())} centered size={'xl'}>
+            <Modal isOpen={modal} toggle={() => setModal(() => handelQrviewModal())} centered size={'xl'} onClosed={() => removeQrlocaldata()}>
                 <ModalHeader toggle={() => handelQrviewModal()}></ModalHeader>
                 <ModalBody>
                     <Row className="justify-content-center">
@@ -848,7 +852,7 @@ const Dashboard = ({ title }) => {
                                                         </ul>
                                                     </div>
                                                 </Col>
-                                                <Col md={6} xl={3}  className="cust-field">
+                                                <Col md={6} xl={3} className="cust-field">
                                                     {/* <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
                                                         <input style={{ cursor: 'pointer' }} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
@@ -869,11 +873,17 @@ const Dashboard = ({ title }) => {
                                                         <img className="select-arrow-custome" src={ArrowDown} alt="" />
                                                     </div> */}
                                                     <div className="event-page-category-filter-box event-page-category-filter-box1" onClick={() => setDaterange(true)}>
-                                                        <p className="mb-0 theme-color">Date Filter</p>
+                                                        <p className={`mb-0 theme-color ${isDatefilter && 'active-date-filter'}`}>
+                                                            {isDatefilter ? (
+                                                                <>
+                                                                    {Datetype == 'Pick between two dates' ? viewStartdate + '-' + viewEndtdate : viewStartdate}
+                                                                </>
+                                                            ) : 'Date Filter'}
+                                                        </p>
                                                         <img src={ArrowDown} alt="" />
                                                     </div>
                                                 </Col>
-                                                <Col md={6} xl={3}  className="cust-field">
+                                                <Col md={6} xl={3} className="cust-field">
                                                     <button className="w-100 theme-btn" onClick={() => navigate(app_url + 'events')}>
                                                         <span className="theme-btn-icon"><FiPlus /></span> <span>Buy Tickets</span>
                                                     </button>

@@ -578,7 +578,7 @@ const Type = ({ title, editid, ticketeditid }) => {
             } else {
                 var event_type_name = 'Offline Event';
             }
-            if (!Name || !Displayname || !Category || !Currency || !selectedTimezone) {
+            if (!Name || !Displayname || !Category || !selectedTimezone) {
                 return toast.error("All field required");
             }
             if (Eventtype == 2) {
@@ -728,7 +728,7 @@ const Type = ({ title, editid, ticketeditid }) => {
             } else {
                 var event_type_name = 'Offline Event';
             }
-            if (!Name || !Displayname || !Category || !Currency || !selectedTimezone) {
+            if (!Name || !Displayname || !Category || !selectedTimezone) {
                 return toast.error("All field required");
             }
             if (Eventtype == 2) {

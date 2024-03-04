@@ -30,10 +30,11 @@ const Sidebar = () => {
             <div className="deznav">
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
-                        <li onClick={() => d()}><Link to={customer_url + 'dashboard'} className="ai-icon" aria-expanded="false">
-                            <span className='sidebar-icon'><FaHome /></span>
-                            <span className="nav-text">Dashboard</span>
-                        </Link>
+                        <li onClick={() => d()}>
+                            <Link to={customer_url + 'dashboard'} className="ai-icon" aria-expanded="false">
+                                <span className='sidebar-icon'><FaHome /></span>
+                                <span className="nav-text">Dashboard</span>
+                            </Link>
                         </li>
                         <li onClick={() => d()}><Link to={customer_url + 'my-order-list'} className="ai-icon" aria-expanded="false">
                             <span className='sidebar-icon'><FaTicketAlt /></span>
