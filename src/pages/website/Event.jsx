@@ -693,7 +693,7 @@ const Home = () => {
                 </div>
               ) : (
                 <>
-                  <div className="row px-3 py-3">
+                  <div className="row px-3 py-3 cust-event-css">
                     <div className="col-6 d-flex align-items-center justify-content-start">
                       <div>
                         <div className="d-inline-flex align-items-center event-time-area py-2">

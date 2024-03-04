@@ -52164,20 +52164,60 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 }
 
 @media (max-width: 991px) {
-  .banner-child-cust{
+  .banner-child-cust,
+  .faq-content-area .banner-child{
     margin-top: -330px !important;
+  }
+
+  .banner-event{
+    min-height: auto !important;
+    padding-bottom: 20px;
   }
 }
 
 @media (max-width: 767px) {
-  .banner-child-cust{
+  .banner-child-cust,
+  .faq-content-area .banner-child {
     margin-top: -180px !important;
+  }
+  .order-list .cust-field{
+    margin-bottom: 5px;
   }
 }
 
 @media (max-width: 576px) {
-  .banner-child-cust{
+  .banner-child-cust,
+  .faq-content-area .banner-child{
     margin-top: -170px !important;
+  }
+
+  .banner-event{
+    min-height: auto !important;
+    padding-bottom: 20px;
+  }
+}
+
+@media (max-width: 440px) {
+  .header-content-customer .whiteblueicontitle{
+    font-size: 16px;
+  }
+  .header-content-customer .notification_dropdown{
+    flex: 2;
+    justify-content: flex-end;
+  }
+  .header-content-customer .header-profile{
+    flex: 5;
+  }
+  .reward_star_gold{
+    left: 38% !important;
+  }
+  .reward_star_platinum{
+    left: 80% !important;
+  }
+
+  .banner-event .cust-event-css{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
 

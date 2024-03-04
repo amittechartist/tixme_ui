@@ -17,7 +17,10 @@ const Faqs = () => {
           <h1 className="banner-h text-white text-uppercase fw-bold pb-0 animate__animated animate__bounce">
             FAQ’s
           </h1>
-          <div className="banner-child bg-white p-3">
+        </div>
+        <div className="banner-child bg-white p-3" style={{
+    marginTop: '-265px',
+    position: 'relative' }}>
             <Accordion defaultActiveKey="0" className=" mx-4 my-5">
               <Accordion.Item eventKey="0" className="faq-acc-item">
                 <Accordion.Header>How can I purchase tickets?</Accordion.Header>
@@ -93,8 +96,6 @@ const Faqs = () => {
               </Accordion.Item>
             </Accordion>
           </div>
-        </div>
-        <div className="faq-page-space"></div>
       </div>
       <Footer />
     </>
