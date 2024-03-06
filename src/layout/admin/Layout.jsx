@@ -3,6 +3,7 @@ import Header from './partial/Header';
 import Sidebar from './partial/Sidebar';
 import Footer from './partial/Footer';
 import Logo from '../../common/logo.svg';
+import './adminstyle.css';
 import { Link } from "react-router-dom";
 import { app_url } from "../../common/Helpers";
 const Layout = ({ children, title }) => {

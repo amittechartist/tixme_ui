@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import { apiurl, admin_url } from '../../../common/Helpers';
@@ -7,6 +7,8 @@ import Swal from 'sweetalert2'
 import toast from "react-hot-toast";
 import withReactContent from 'sweetalert2-react-content'
 import { FiEye } from "react-icons/fi";
+import Select from 'react-select'
+import { Country } from 'country-state-city';
 import {
     Modal,
     Input,
@@ -22,6 +24,16 @@ const Dashboard = ({ title }) => {
     const [Listitems, setListitems] = useState([]);
     const [orgMessage, setorgMessage] = useState("");
     const [intervalId, setIntervalId] = useState(null);
+
+    const [Listitemsfilter, setListitemsfilter] = useState([]);
+
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [countries, setCountries] = useState([]);
+    const selectedCountryRef = useRef(selectedCountry);
+    useEffect(() => {
+        setCountries(Country.getAllCountries().map(({ isoCode, name }) => ({ value: isoCode, label: name })));
+    }, []);
+
     const fetchList = async () => {
         try {
             const requestData = {
@@ -37,8 +49,18 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        setLoader(false);
-                        setListitems(data.data);
+                        const currentSelectedCountry = selectedCountryRef.current;
+                        console.log("dsd", currentSelectedCountry);
+                        let Filterlist = data.data;
+                        if (currentSelectedCountry && currentSelectedCountry.label) {
+                            Filterlist = Filterlist.filter(item =>
+                                item.countryname === currentSelectedCountry.label
+                            );
+                        }
+                        console.log("Total Organizer", Filterlist.length);
+                        setListitems(Filterlist);
+                        setListitemsfilter(data.data);
+                        setLoader(false)
                     } else {
                         setLoader(false);
                     }
@@ -51,6 +73,15 @@ const Dashboard = ({ title }) => {
             console.error('Api error:', error);
         }
     }
+    const HandelCountrychange = (value) => {
+        setSelectedCountry(value);
+        if (value) {
+            const Filterlist = Listitemsfilter.filter(item => item.countryname === value.label);
+            setListitems(Filterlist);
+        } else {
+            setListitems(Listitemsfilter);
+        }
+    };
     const ActiveOrganizer = async (id) => {
         try {
             const requestData = {
@@ -102,16 +133,20 @@ const Dashboard = ({ title }) => {
     }
     useEffect(() => {
         fetchList();
+    }, []);
+    useEffect(() => {
         const interval = setInterval(() => {
             fetchList();
         }, 3000);
-
-        // Save the interval ID so it can be cleared later
         setIntervalId(interval);
-
-        // Clear the interval when the component unmounts
         return () => clearInterval(interval);
     }, []);
+    useEffect(() => {
+        selectedCountryRef.current = selectedCountry;
+    }, [selectedCountry]);
+    const emptyData = () => {
+        setSelectedCountry([]);
+    }
     return (
         <>
             <Modal isOpen={MessageModal} toggle={() => setMessageModal(!MessageModal)} centered>
@@ -132,6 +167,24 @@ const Dashboard = ({ title }) => {
                         <Col md={12}>
                             <Card className="py-4">
                                 <Card.Body>
+                                    <div className="row">
+                                        <div className="col-7">
+                                            <h5 className="text-capitalize mb-0">Active Organizers</h5>
+                                        </div>
+                                        <div className="col-3 d-flex justify-content-end">
+                                            <Select
+                                                options={countries}
+                                                value={selectedCountry}
+                                                className="w-100"
+                                                onChange={HandelCountrychange}
+                                                placeholder="Select Country"
+                                            />
+                                        </div>
+                                        <div className="col-2 d-flex justify-content-end">
+                                            <button type="button" onClick={() => emptyData()} className="btn btn-dark w-100">Reset</button>
+                                        </div>
+                                    </div>
+                                    <hr></hr>
                                     <Row className="justify-content-center">
                                         <Col md={12}>
                                             <div class="table-responsive">

@@ -6,6 +6,22 @@ import Logo from '../../common/logo.svg';
 import { Link, useLocation } from "react-router-dom";
 import { app_url } from "../../common/Helpers";
 const Layout = ({ children, title  }) => {
+    useEffect(() => {
+        // Create the script element
+        const script = document.createElement('script');
+        script.src = '//js-na1.hs-scripts.com/45446390.js';
+        script.async = true;
+        script.defer = true;
+        script.id = 'hs-script-loader';
+
+        // Append the script to the document body
+        document.body.appendChild(script);
+
+        // Remove the script when the component unmounts
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
     const [name, setname] = useState('');
     const location = useLocation(); 
     function d() {

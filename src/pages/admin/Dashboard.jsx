@@ -2,17 +2,14 @@ import React, { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { apiurl, app_url } from "../../common/Helpers";
+import { FaDollarSign, FaCalendarAlt, FaTicketAlt, FaUsers } from 'react-icons/fa';
 const Dashboard = ({ title }) => {
-    const [Apiloader, setApiloader] = useState([]);
-    const [Eventlist, setEventlist] = useState([]);
-    const [Organizerlist, setOrganizerlist] = useState([]);
-    const [Country, setCountry] = useState([]);
-    const [Totalcustomer, setTotalcustomer] = useState(0);
-    const [pendingOrganizer, setpendingOrganizer] = useState(0);
+    const [Apiloader, setApiloader] = useState(false);
+    const [fetchdata, setFetchdata] = useState([]);
     const fetchEvent = async () => {
         try {
             setApiloader(true)
-            fetch(apiurl + 'admin/analytics-data', {
+            fetch(apiurl + 'admin/dashboard-analytics-data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Set the Content-Type header to JSON
@@ -21,11 +18,7 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        setOrganizerlist(data.data)
-                        setEventlist(data.event)
-                        setTotalcustomer(data.totalcustomer);
-                        const Events = data.data;
-                        setpendingOrganizer(Events.filter(organizer => organizer.isactive === 0).length);
+                        setFetchdata(data.data)
                     }
                     setApiloader(false)
                 })
@@ -38,53 +31,91 @@ const Dashboard = ({ title }) => {
             setApiloader(false)
         }
     }
-    const countActiveOrganizers = (name) => {
-        const filteredOrganizers = Organizerlist.filter(organizer => organizer.isactive === 1 && organizer.countryname === name);
-        return filteredOrganizers.length;
-    };
-    const countActiveEvent = (name) => {
-        const filteredEvent = Organizerlist.filter(item => item.isdelete === 0 && item.countryname === name);
-        return filteredEvent.length;
-    };
-    const fetchCountry = async () => {
-        try {
-            fetch(apiurl + 'admin/country-list', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success == true) {
-                        setCountry(data.data)
-                    }
-                })
-                .catch(error => {
-                    console.error('error:', error);
-
-                });
-        } catch (error) {
-            console.error('Api error:', error);
-        }
-    }
     useEffect(() => {
         fetchEvent();
-        fetchCountry();
     }, []);
     return (
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
-
                 <div className="container-fluid">
-                    <div className="page-titles">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item">{title}</li>
-                        </ol>
-                        <span>Welcome Back, TIXME</span>
-                    </div>
                     <Row>
-                        {Country.map((item, index) => (
+                        <div className="col-md-6 col-lg-6 col-xl-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="media align-items-center">
+                                        <div>
+                                            <div class="media align-items-center">
+                                                <span class="me-2 dash-icon">
+                                                    <FaDollarSign />
+                                                </span>
+                                                <div class="media-body ms-1">
+                                                    <p class="mb-1 text-capitalize">TOTAL REVENUE</p>
+                                                    <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.totalRevenue : 0}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6 col-lg-6 col-xl-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="media align-items-center">
+                                        <div>
+                                            <div class="media align-items-center">
+                                                <span class="me-2 dash-icon">
+                                                    <FaCalendarAlt />
+                                                </span>
+                                                <div class="media-body ms-1">
+                                                    <p class="mb-1 text-capitalize">TOTAL EVENTS HOSTED</p>
+                                                    <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.TotalEventHosted : 0}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6 col-lg-6 col-xl-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="media align-items-center">
+                                        <div>
+                                            <div class="media align-items-center">
+                                                <span class="me-2 dash-icon">
+                                                    <FaTicketAlt />
+                                                </span>
+                                                <div class="media-body ms-1">
+                                                    <p class="mb-1 text-capitalize">TOTAL TICKETS SOLD</p>
+                                                    <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.TotalTicketSold : 0}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6 col-lg-6 col-xl-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="media align-items-center">
+                                        <div>
+                                            <div class="media align-items-center">
+                                                <span class="me-2 dash-icon">
+                                                    <FaUsers />
+                                                </span>
+                                                <div class="media-body ms-1">
+                                                    <p class="mb-1 text-capitalize">TOTAL USERS</p>
+                                                    <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.TotalUser : 0}</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* {Country.map((item, index) => (
                             <div class="col-xl-4">
                                 <div class="card">
                                     <div class="card-body">
@@ -167,7 +198,7 @@ const Dashboard = ({ title }) => {
                                 </div>
                             </div>
                         </div>
-                        ))}
+                        ))} */}
                     </Row>
                 </div>
             </div>

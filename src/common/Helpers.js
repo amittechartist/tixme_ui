@@ -1,16 +1,17 @@
 import React from 'react';
+import moment from 'moment';
 export const app_url = '/tixme_ui/';
 export const admin_url = app_url + 'admin/';
 export const organizer_url = app_url + 'organizer/';
 export const customer_url = app_url + 'customer/';
 
-export const apiurl = 'http://localhost:5001/api/v1/';
-export const imgurl = 'http://localhost:5001/uploads/';
-export const qr_url = 'http://localhost:3001/scanner/organizer/tixme-scanner-page/';
+// export const apiurl = 'http://localhost:5001/api/v1/';
+// export const imgurl = 'http://localhost:5001/uploads/';
+// export const qr_url = 'http://localhost:3001/scanner/organizer/tixme-scanner-page/';
 
-// export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
-// export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
-// export const qr_url = 'https://tixme.co/scanner/organizer/tixme-scanner-page';
+export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
+export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
+export const qr_url = 'https://tixme.co/scanner/organizer/tixme-scanner-page';
 
 
 
@@ -97,23 +98,36 @@ export const getMonthName = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'long' });
 };
+// export const isEndDateValid = (startDate, startTime, endDate, endTime) => {
+//     const formattedStartDate = `${startDate.slice(0, 4)}-${startDate.slice(4, 6)}-${startDate.slice(6)}`;
+//     const formattedEndDate = `${endDate.slice(0, 4)}-${endDate.slice(4, 6)}-${endDate.slice(6)}`;
+
+//     const startDateTime = new Date(`${formattedStartDate} ${startTime}`);
+//     const endDateTime = new Date(`${formattedEndDate} ${endTime}`);
+
+//     return endDateTime > startDateTime;
+// }
 export const isEndDateValid = (startDate, startTime, endDate, endTime) => {
-    const formattedStartDate = `${startDate.slice(0, 4)}-${startDate.slice(4, 6)}-${startDate.slice(6)}`;
-    const formattedEndDate = `${endDate.slice(0, 4)}-${endDate.slice(4, 6)}-${endDate.slice(6)}`;
+    const startDateTime = moment(`${startDate} ${startTime}`, 'YYYYMMDD HH:mm A');
+    const endDateTime = moment(`${endDate} ${endTime}`, 'YYYYMMDD HH:mm A');
 
-    const startDateTime = new Date(`${formattedStartDate} ${startTime}`);
-    const endDateTime = new Date(`${formattedEndDate} ${endTime}`);
+    return endDateTime.isAfter(startDateTime);
+};
+// export const isTickettimeValid = (startDate, startTime, endDate, endTime, ticketDate, ticketTime) => {
+//     const formattedStartDate = `${startDate.slice(0, 4)}-${startDate.slice(4, 6)}-${startDate.slice(6)}`;
+//     const formattedEndDate = `${endDate.slice(0, 4)}-${endDate.slice(4, 6)}-${endDate.slice(6)}`;
+//     const formattedTicketDate = `${ticketDate.slice(0, 4)}-${ticketDate.slice(4, 6)}-${ticketDate.slice(6)}`;
 
-    return endDateTime > startDateTime;
-}
+//     const startDateTime = new Date(`${formattedStartDate} ${startTime}`);
+//     const endDateTime = new Date(`${formattedEndDate} ${endTime}`);
+//     const ticketDateTime = new Date(`${formattedTicketDate} ${ticketTime}`);
+
+//     return (ticketDateTime >= startDateTime) && (ticketDateTime <= endDateTime);
+// }
 export const isTickettimeValid = (startDate, startTime, endDate, endTime, ticketDate, ticketTime) => {
-    const formattedStartDate = `${startDate.slice(0, 4)}-${startDate.slice(4, 6)}-${startDate.slice(6)}`;
-    const formattedEndDate = `${endDate.slice(0, 4)}-${endDate.slice(4, 6)}-${endDate.slice(6)}`;
-    const formattedTicketDate = `${ticketDate.slice(0, 4)}-${ticketDate.slice(4, 6)}-${ticketDate.slice(6)}`;
+    const startDateTime = moment(`${startDate} ${startTime}`, 'YYYYMMDD HH:mm A');
+    const endDateTime = moment(`${endDate} ${endTime}`, 'YYYYMMDD HH:mm A');
+    const ticketDateTime = moment(`${ticketDate} ${ticketTime}`, 'YYYYMMDD HH:mm A');
 
-    const startDateTime = new Date(`${formattedStartDate} ${startTime}`);
-    const endDateTime = new Date(`${formattedEndDate} ${endTime}`);
-    const ticketDateTime = new Date(`${formattedTicketDate} ${ticketTime}`);
-
-    return (ticketDateTime >= startDateTime) && (ticketDateTime <= endDateTime);
-}
+    return ticketDateTime.isBetween(startDateTime, endDateTime, undefined, '[]');
+};

@@ -3,6 +3,7 @@ import './common/css/Common.css';
 import './AppResponsive.css';
 // Admin
 import AdminDashboard from './pages/admin/Dashboard';
+import AdminCountryDashboard from './pages/admin/AdminCountryDashboard';
 import AddCategory from './pages/admin/category/AddCategory';
 import AllCategory from './pages/admin/category/AllCategory';
 import AllCustomers from './pages/admin/customers/AllCustomers';
@@ -163,6 +164,7 @@ function App() {
           <Route path={organizer_url + 'mailing'} element={<OrganizerLayout title={'Mailing By Invitation'}> <OrganizerMailing /> </OrganizerLayout>} />
           {/* Admin */}
           <Route path={admin_url + 'dashboard'} element={<AdminLayout title={'Admin Dashboard'}> <AdminDashboard /> </AdminLayout>} />
+          <Route path={admin_url + 'countrydashboard/:name'} element={<AdminLayout title={'Dashboard'}> <AdminCountryDashboard /> </AdminLayout>} />
           <Route path={admin_url + 'add-category'} element={<AdminLayout title={'Add Category'}> <AddCategory /> </AdminLayout>} />
           <Route path={admin_url + 'all-category'} element={<AdminLayout title={'All Category'}> <AllCategory /> </AdminLayout>} />
           <Route path={admin_url + 'add-event-type'} element={<AdminLayout title={'Add Event Type'}> <AddEventtype /> </AdminLayout>} />
@@ -173,7 +175,7 @@ function App() {
           <Route path={`${admin_url}event/edit-event/:id/:name`} element={<AdminLayout title={'Edit event'}> <EditEvent /> </AdminLayout>} />
           <Route path={admin_url + 'all-customers'} element={<AdminLayout title={'All Customers'}> <AllCustomers /> </AdminLayout>} />
           <Route path={`${admin_url}customers/:id/:name`} element={<AdminLayout title={'Customers'}> <AllCustomers /> </AdminLayout>} />
-          <Route path={`${admin_url}user-details/:id/:name`} element={<AdminLayout title={'Customers'}> <AdminCustomerProfile /> </AdminLayout>} />
+          <Route path={`${admin_url}user-details`} element={<AdminLayout title={'Customers'}> <AdminCustomerProfile /> </AdminLayout>} />
           <Route path={`${admin_url}organizer-details/:id/:name`} element={<AdminLayout title={'Organizer'}> <AdminOrganizerProfile /> </AdminLayout>} />
           <Route path={`${admin_url}payout-request/:id/:name`} element={<AdminLayout title={'Payout request'}> <AdminPayoutrequest /> </AdminLayout>} />
           <Route path={admin_url + 'active-organizer'} element={<AdminLayout title={'Active Organizer'}> <ActiveOrganizer /> </AdminLayout>} />

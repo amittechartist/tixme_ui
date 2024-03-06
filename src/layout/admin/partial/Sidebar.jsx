@@ -10,6 +10,7 @@ import { MdEvent } from 'react-icons/md';
 import { FaUserCheck } from 'react-icons/fa';
 
 import { FaHome, FaListAlt, FaUserClock, FaCalendarAlt, FaMoneyCheckAlt } from 'react-icons/fa';
+import { FiFlag } from "react-icons/fi";
 import { MdAddCircleOutline, MdCardMembership, MdMailOutline, MdContactMail, MdExitToApp } from 'react-icons/md';
 const Sidebar = () => {
     const [Listitems, setListitems] = useState([]);
@@ -86,6 +87,19 @@ const Sidebar = () => {
         localStorage.removeItem('adminauth');
         navigate(app_url);
     }
+    const [openDropdown, setOpenDropdown] = useState(null);
+    const handleDropdown = (dropdownId) => {
+        if (openDropdown === dropdownId) {
+            // If the clicked dropdown is already open, close it
+            setOpenDropdown(null);
+        } else {
+            // Open the clicked dropdown
+            setOpenDropdown(dropdownId);
+        }
+    };
+    const HandelCountry = (name) => {
+        localStorage.setItem('fcountry', name);
+    }
     return (
         <>
             <div className="deznav">
@@ -96,10 +110,28 @@ const Sidebar = () => {
                             <span className="nav-text">Dashboard</span>
                         </Link>
                         </li>
+                        {Countrylist && Countrylist.map((item, index) => (
+                            <li onClick={() => { d(); handleDropdown("country-" + index); }} key={index}>
+                                <Link to={admin_url + 'countrydashboard/' + item.name} class="has-arrow ai-icon" aria-expanded="false">
+                                    <span className='sidebar-icon'><FiFlag /></span>
+                                    <span class="nav-text text-capitalize">{item.name}</span>
+                                </Link>
+                                {openDropdown === "country-" + index && (
+                                    <ul aria-expanded="false">
+                                        <li>
+                                            <Link className='text-black text-capitalize' >Ticket Managment</Link>
+                                        </li>
+                                        <li>
+                                            <Link className='text-black text-capitalize'>Events Managment</Link>
+                                        </li>
+                                    </ul>
+                                )}
+                            </li>
+                        ))}
                         <li onClick={() => { d(); setCustomerDropdown(!CustomerDropdown) }}>
                             <a href="javascript:void(0);" class="has-arrow ai-icon" aria-expanded="false">
                                 <span className='sidebar-icon'><FaUsers /></span>
-                                <span class="nav-text">Customers</span>
+                                <span class="nav-text">User Managment</span>
                             </a>
                             {CustomerDropdown && (
                                 <ul aria-expanded="false">
@@ -113,33 +145,37 @@ const Sidebar = () => {
                                 </ul>
                             )}
                         </li>
+                        <li onClick={() => { d(); handleDropdown("organizer-menu"); }}>
+                            <Link class="has-arrow ai-icon" aria-expanded="false">
+                                <span className='sidebar-icon'><FaUserClock /></span>
+                                <span class="nav-text text-capitalize">Organizers</span>
+                            </Link>
+                            {openDropdown === "organizer-menu" && (
+                                <ul aria-expanded="false">
+                                    <li>
+                                        <Link to={admin_url + 'active-organizer'} className='text-black text-capitalize' >Active Organizer</Link>
+                                    </li>
+                                    <li>
+                                        <Link to={admin_url + 'pending-organizer'} className='text-black text-capitalize'>Pending Organizer</Link>
+                                    </li>
+                                </ul>
+                            )}
+                        </li>
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'all-category'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><FaListAlt  /></span>
+                                <span className='sidebar-icon'><FaListAlt /></span>
                                 <span className="nav-text">Category</span>
                             </Link>
                         </li>
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'all-event-type'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdEvent  /></span>
+                                <span className='sidebar-icon'><MdEvent /></span>
                                 <span className="nav-text">Event Type</span>
                             </Link>
                         </li>
                         <li onClick={() => d()}>
-                            <Link to={admin_url + 'active-organizer'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><FaUserCheck  /></span>
-                                <span className="nav-text">Active Organizer</span>
-                            </Link>
-                        </li>
-                        <li onClick={() => d()}>
-                            <Link to={admin_url + 'pending-organizer'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><FaUserClock  /></span>
-                                <span className="nav-text">Pending Organizer</span>
-                            </Link>
-                        </li>
-                        <li onClick={() => d()}>
                             <Link to={admin_url + 'all-events-list'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><FaCalendarAlt  /></span>
+                                <span className='sidebar-icon'><FaCalendarAlt /></span>
                                 <span className="nav-text">All Event</span>
                             </Link>
                         </li>
@@ -157,7 +193,7 @@ const Sidebar = () => {
                         </li > */}
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'addcoupon'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdAddCircleOutline  /></span>
+                                <span className='sidebar-icon'><MdAddCircleOutline /></span>
                                 <span className="nav-text">Add Coupon</span>
                             </Link>
                         </li>
@@ -169,7 +205,7 @@ const Sidebar = () => {
                         </li> */}
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'membership'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdCardMembership  /></span>
+                                <span className='sidebar-icon'><MdCardMembership /></span>
                                 <span className="nav-text">Membership</span>
                             </Link>
                         </li>
@@ -181,7 +217,7 @@ const Sidebar = () => {
                         </li > */}
                         <li onClick={() => d()} className="d-none">
                             <a href="javascript:void(0);" class="has-arrow ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><FaMoneyCheckAlt  /></span>
+                                <span className='sidebar-icon'><FaMoneyCheckAlt /></span>
                                 <span class="nav-text">Payout request</span>
                             </a>
                             <ul aria-expanded="false">
@@ -193,19 +229,19 @@ const Sidebar = () => {
                         </li>
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'newsletter'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdMailOutline  /></span>
+                                <span className='sidebar-icon'><MdMailOutline /></span>
                                 <span className="nav-text">Newsletter</span>
                             </Link>
                         </li>
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'contact-us'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdContactMail  /></span>
+                                <span className='sidebar-icon'><MdContactMail /></span>
                                 <span className="nav-text">Contact Us</span>
                             </Link>
                         </li >
                         <li onClick={() => d()}>
                             <a onClick={() => Logout()} className="ai-icon cursor-pointer" aria-expanded="false">
-                                <span className='sidebar-icon'><MdExitToApp  /></span>
+                                <span className='sidebar-icon'><MdExitToApp /></span>
                                 <span className="nav-text">Logout</span>
                             </a>
                         </li >

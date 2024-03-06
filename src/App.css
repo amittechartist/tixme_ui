@@ -2189,7 +2189,7 @@ span.selling-f-box {
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 54px;
+  bottom: 90px;
   right: 25px;
   border-radius: 50%;
   cursor: pointer;
@@ -2320,4 +2320,8 @@ img.organiger-logo {
 }
 .active-date-filter{
   color: #000 !important;
+}
+.dash-icon {
+    color: #0a4eaf;
+    font-size: 35px;
 }
