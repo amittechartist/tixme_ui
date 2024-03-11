@@ -47,6 +47,7 @@ const About = () => {
                     if (data.success == true) {
                         localStorage.setItem('userauth', data.token);
                         localStorage.setItem('username', data.username);
+                        localStorage.setItem('customerid', data.id);
                         localStorage.setItem('user_role', 1);
                         toast.success('Login successful', {
                             duration: 3000,

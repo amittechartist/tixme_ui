@@ -40,8 +40,8 @@ const Type = ({ title, editid, ticketeditid }) => {
     // modal states
     const [EventsdateModal, setEventsdateModal] = useState(false);
     // Multiple event date and time states
-    const [ESdate, setESdate] = useState(new Date());
-    const [EStime, setEStime] = useState(new Date());
+    const [ESdate, setESdate] = useState(moment());
+    const [EStime, setEStime] = useState(moment());
     const [EMDupid, setEMDupid] = useState();
     const [ListEDM, setListEDM] = useState([]);
     // Loader
@@ -70,10 +70,10 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [LocationLag, setLocationLag] = useState('');
     const [eventjoinurl, seteventjoinurl] = useState('');
     const [EventSubtype, setEventSubtype] = useState(1);
-    const [Startdateselect, setStartdateselect] = useState(new Date());
-    const [Enddateselect, setEnddateselect] = useState(new Date());
-    const [EventStarttime, setEventStarttime] = useState(new Date());
-    const [EventEndtime, setEventEndtime] = useState(new Date());
+    const [Startdateselect, setStartdateselect] = useState(moment());
+    const [Enddateselect, setEnddateselect] = useState(moment());
+    const [EventStarttime, setEventStarttime] = useState(moment());
+    const [EventEndtime, setEventEndtime] = useState(moment());
     const [IsclockCountdown, setIsclockCountdown] = useState(false);
     const [IsSellingFast, setIsSellingFast] = useState(false);
     const [IsSoldOut, setIsSoldOut] = useState(false);
@@ -105,9 +105,9 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [TicketUid, setTicketUid] = useState();
     const [Ticketisselling, setTicketisselling] = useState(false);
     const [Ticketissoldout, setTicketissoldout] = useState(false);
-    const [TicketStartdate, setTicketStartdate] = useState(new Date());
-    const [TicketEndtdate, setTicketEndtdate] = useState(new Date());
-    const [TicketEventdata, setTicketEventdata] = useState(new Date());
+    const [TicketStartdate, setTicketStartdate] = useState(moment());
+    const [TicketEndtdate, setTicketEndtdate] = useState(moment());
+    const [TicketEventdata, setTicketEventdata] = useState(moment());
     const [Price, setPrice] = useState();
     const [Tax, setTax] = useState();
     const [Pricedisable, setPricedisable] = useState(false);
@@ -728,6 +728,13 @@ const Type = ({ title, editid, ticketeditid }) => {
             } else {
                 var event_type_name = 'Offline Event';
             }
+            console.log("Name", Name);
+            console.log("Displayname", Displayname);
+            console.log("Category", Category);
+            console.log("selectedTimezone", selectedTimezone);
+            console.log("Location", Location);
+            console.log("Country", Country);
+            console.log("displayaddress", displayaddress);
             if (!Name || !Displayname || !Category || !selectedTimezone) {
                 return toast.error("All field required");
             }
@@ -1332,12 +1339,12 @@ const Type = ({ title, editid, ticketeditid }) => {
                         setIsSellingFast(data.data.is_selling_fast)
                         setIsSoldOut(data.data.IsSoldOut)
 
-                        setStartdateselect(data.data.start_data_min[0] || new Date())
-                        setEnddateselect(data.data.end_data_min[0] || new Date())
+                        setStartdateselect(data.data.start_data_min[0] || moment())
+                        setEnddateselect(data.data.end_data_min[0] || moment())
 
 
-                        setEventStarttime(data.data.start_time_min[0] || new Date())
-                        setEventEndtime(data.data.end_time_min[0] || new Date())
+                        setEventStarttime(data.data.start_time_min[0] || moment())
+                        setEventEndtime(data.data.end_time_min[0] || moment())
 
                         setDisplaystarttime(data.data.display_start_time)
                         setDisplayendtime(data.data.display_end_time)
