@@ -346,9 +346,9 @@ const Home = () => {
                                 </div>
                                 <div className="col-md-12 mt-3">
                                     <p className="mb-0 theme-color">Country</p>
-                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("Singapore")} className={selectedCountry.length > 0 ? selectedCountry.includes("Singapore") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n ggg' : country_params == "Singapore" && 'tag-active hobby-box copy-n'}>Singapore</a>
-                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("India")} className={selectedCountry.length > 0 ? selectedCountry.includes("India") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n ggg' : country_params == "India" && 'tag-active hobby-box copy-n'}>India</a>
-                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("United states")} className={selectedCountry.length > 0 ? selectedCountry.includes("United states") ? 'tag-active hobby-box copy-n ggg' : 'hobby-box copy-n' : country_params == "United states" && 'tag-active hobby-box copy-n'}>United states</a>
+                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("Singapore")} className={selectedCountry.length > 0 ? selectedCountry.includes("Singapore") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n ggg' : country_params == "Singapore" ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
+                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("India")} className={selectedCountry.length > 0 ? selectedCountry.includes("India") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n ggg' : country_params == "India" ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>India</a>
+                                    <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("United states")} className={selectedCountry.length > 0 ? selectedCountry.includes("United states") ? 'tag-active hobby-box copy-n ggg' : 'hobby-box copy-n' : country_params == "United states" ? 'tag-active hobby-box copy-n'  : 'hobby-box copy-n'}>United states</a>
                                 </div>
                                 <div className="col-md-12 mt-3">
 
@@ -539,7 +539,8 @@ const Home = () => {
                                         </div>
                                         <div className="col-md-12 mt-3">
                                             <p className="mb-0 theme-color">Country</p>
-                                            <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("Singapore")} className={selectedCountry.length > 0 ? selectedCountry.includes("Singapore") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n' : country_params == "Singapore" ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
+                                            <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("Singapore")} 
+                                            className={selectedCountry.length > 0 ? selectedCountry.includes("Singapore") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n' : country_params == "Singapore" ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>Singapore</a>
                                             <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("India")} className={selectedCountry.length > 0 ? selectedCountry.includes("India") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n' : country_params == "India" ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>India</a>
                                             <a style={{ fontSize: '13px' }} onClick={() => handleCountrychange("United states")} className={selectedCountry.length > 0 ? selectedCountry.includes("United states") ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n' : country_params == "United states" ? 'tag-active hobby-box copy-n' : 'hobby-box copy-n'}>United states</a>
                                         </div>

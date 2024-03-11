@@ -52189,6 +52189,15 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   .event_list_box .list-data{
     padding: 30px;
   }
+
+  .row.evnt-page-save-shear-box div{
+    justify-content: flex-start !important;
+    padding-left: 18px;
+  }
+
+  .date-event-cust{
+    margin-left: -3px;
+  }
 }
 
 @media (max-width: 576px) {
