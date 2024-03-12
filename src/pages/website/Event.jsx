@@ -696,7 +696,7 @@ const Home = () => {
                   <div className="row px-3 py-3 cust-event-css">
                     <div className="col-6 d-flex align-items-center justify-content-start">
                       <div>
-                        <div className="d-inline-flex align-items-center event-time-area py-2">
+                        <div className="d-inline-flex align-items-center event-time-area py-2 date-event-cust">
                           <div className="d-inline-block mr-1">
                             <img height={30} width={'auto'} src={dataIcon} alt="" />
                           </div>
