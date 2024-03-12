@@ -107,7 +107,7 @@ const Component = ({ title }) => {
                     ) : (
                         <button type="submit" className="GetLatestUpdateButton">
                             <div className="left">
-                                <small className="ms-2 me-2">Get TIXED!</small>
+                                <small className="ms-2 me-2 get-tixed">Get TIXED!</small>
                             </div>
                             <div className="right">
                                 <img style={{ width: "18px" }} src={arrow} alt="" />
