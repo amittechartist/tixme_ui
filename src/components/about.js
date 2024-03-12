@@ -20,14 +20,16 @@ const About = () => {
   return (
     <>
       {/* <!-- mobile nav --> */}
-      <div className="content-area">
+      <div className="content-area about-content-area">
         <HeaderMenu />
         <div class="mx-lg-4 my-lg-3 banner bg-primary-color rounded-8 position-relative">
           <MobileMenu />
           <h1 class="banner-h fw-bold text-white text-uppercase mb-0 pb-0 animate__animated animate__bounce">
             About us
           </h1>
-          <div class="banner-child bg-white px-0">
+        </div>
+        <div class="banner-child bg-white px-0" style={{marginTop: '-265px',
+          position: 'relative' }}>
             <div class="d-flex flex-md-row flex-column">
               <img class="about-img mt-lg-5 mt-4" style={{ paddingLeft: '25px' }} src={aboutUs} alt="" />
               <p class="ps-lg-5 ps-4 pe-4 about-p mt-lg-5 mt-4">
@@ -76,9 +78,8 @@ const About = () => {
               to be extraordinary!Seize the moment, secure your ticket!
             </p>
           </div>
-        </div>
         {/* </div> */}
-        <div class="space-height about-space-height"></div>
+        {/* <div class="space-height about-space-height"></div> */}
         <div class=" sponser-sec banner-child py-5 ">
           <div class="row w-100 m-auto">
             <div class="col-lg-4 text-lg-center text-start">

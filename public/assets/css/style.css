@@ -52166,7 +52166,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 @media (max-width: 991px) {
   .banner-child-cust,
   .banner-child-login,
-  .faq-content-area .banner-child{
+  .faq-content-area .banner-child,
+  .about-content-area .banner-child{
     margin-top: -330px !important;
   }
 
@@ -52179,7 +52180,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 @media (max-width: 767px) {
   .banner-child-cust,
   .banner-child-login,
-  .faq-content-area .banner-child {
+  .faq-content-area .banner-child,
+  .about-content-area .banner-child {
     margin-top: -180px !important;
   }
   .cust-field-dashboard{
@@ -52198,12 +52200,17 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   .date-event-cust{
     margin-left: -3px;
   }
+
+  span.cart-price {
+    font-size: 16px !important;
+  }
 }
 
 @media (max-width: 576px) {
   .banner-child-cust,
   .banner-child-login,
-  .faq-content-area .banner-child{
+  .faq-content-area .banner-child,
+  .about-content-area .banner-child{
     margin-top: -170px !important;
   }
 
@@ -52220,6 +52227,19 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   .org-event-list .mob-style{
     display: block !important;
     padding-left: 20px;
+  }
+
+  .count-sec{
+    background-size: 100% 100% !important;
+  }
+
+  .get-tixed{
+    font-size: 14px !important;
+  }
+  
+  p.sssas{
+    font-size: 12px !important;
+    margin-top: 2px !important;
   }
 }
 

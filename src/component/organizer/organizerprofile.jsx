@@ -97,7 +97,7 @@ const Type = ({ props }) => {
     <div className="organised-by-box eventpage-box-style-event-view">
       <div className="organizer-name-sec">
         <div className="row d-flex align-items-end">
-          <div className="col-12 col-md-7  d-flex align-items-end">
+          <div className="col-6 col-md-7  d-flex align-items-end">
             <div className="d-inline-block mr-3">
               <img
                 height={70}
@@ -132,7 +132,7 @@ const Type = ({ props }) => {
       <div className="border-botton-devider my-2"></div>
       <div className="right-box-con">
         <div className="row">
-          <div className="col-12 col-lg-8 col-xl-8">
+          <div className="col-8 col-lg-8 col-xl-8">
             <div className="align-items-center py-2">
               <div className="d-inline-block mr-1">
                 <img height={30} width={30} src={LocationIcon} alt="" />
@@ -154,7 +154,7 @@ const Type = ({ props }) => {
               </div>
             </div>
           </div>
-          <div className="col-12 col-lg-4 col-xl-4">
+          <div className="col-4 col-lg-4 col-xl-4">
             {Followtypeloader ? (
               <div className="linear-background w-100"> </div>
             ) : (
