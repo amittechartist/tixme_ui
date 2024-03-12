@@ -112,8 +112,8 @@ const Sidebar = () => {
                         </li>
                         {Countrylist && Countrylist.map((item, index) => (
                             <li onClick={() => { d(); handleDropdown("country-" + index); }} key={index}>
-                                <Link to={admin_url + 'countrydashboard/' + item.name} class="has-arrow ai-icon" aria-expanded="false">
-                                    <span className='sidebar-icon'><FiFlag /></span>
+                                <Link to={admin_url + 'countrydashboard/' + item.name} class="ai-icon" aria-expanded="false">
+                                    <span className='sidebar-icon'><FaHome /></span>
                                     <span class="nav-text text-capitalize">{item.name}</span>
                                 </Link>
                                 {openDropdown === "country-" + index && (

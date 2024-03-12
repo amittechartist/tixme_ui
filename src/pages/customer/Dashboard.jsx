@@ -309,7 +309,7 @@ const Dashboard = ({ title }) => {
     const [checkedItemIds, setCheckedItemIds] = useState([]);
 
     // Handle checkbox change
-    const handleCheckboxChange = (id) => {
+    const handleCheckboxChange = (id,) => {
         setCheckedItemIds(prevIds => {
             if (prevIds.includes(id)) {
                 // Remove id from the array if it's already included
@@ -324,6 +324,11 @@ const Dashboard = ({ title }) => {
     const handelQrviewModal = () => {
         setModal(!modal);
         removeQrlocaldata();
+    }
+    const HandelTransfer = () => {
+        setModal(!modal);
+        setModalTT(!modalTT);
+        setModalLoader(false);
     }
     return (
         <>
@@ -457,6 +462,7 @@ const Dashboard = ({ title }) => {
                                                                             <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
                                                                             <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
                                                                             {/* <button type="button" onClick={() => { handleCheckboxChange(item._id); setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button> */}
+                                                                            <button type="button" onClick={() => { checkedItemIds.length > 0 ? HandelTransfer() : toast.error("No Ticket selected"); }} className="w-100 btn btn-success">Transfer</button>
                                                                         </div>
                                                                     </>
                                                                 ) : (
@@ -474,14 +480,14 @@ const Dashboard = ({ title }) => {
                                                 </div>
                                             </Col>
                                         ))}
-                                        {checkedItemIds.length > 0 ? (
+                                        {/* {checkedItemIds.length > 0 ? (
                                             <>
                                                 <Col md={12}></Col>
                                                 <Col md={3}>
                                                     <button type="button" onClick={() => { setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button>
                                                 </Col>
                                             </>
-                                        ) : ''}
+                                        ) : ''} */}
                                     </Row>
                                 </Col>
                             </>
@@ -561,12 +567,12 @@ const Dashboard = ({ title }) => {
                                                                 <div className="event_list_box">
                                                                     <Row>
                                                                         <Col md={4}>
-                                                                            <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} height={'200px'} width={'100%'}  alt="" />
+                                                                            <img src={item.eventData[0].thum_image ? item.eventData[0].thum_image : Noimg} height={'200px'} width={'100%'} alt="" />
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div className="ml-3 ml-md-0">
                                                                                 <div>
-                                                                                    
+
                                                                                     <Link to={`${app_url}event/${item.eventData[0]._id}/${item.eventData[0].name}`}>
                                                                                         <span className="list-event-name">{shortPer(item.eventData[0].display_name, 35)}</span>
                                                                                     </Link>

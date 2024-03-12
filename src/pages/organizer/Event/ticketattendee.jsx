@@ -6,6 +6,7 @@ import {
     ModalHeader
 } from 'reactstrap';
 import DateIcon from "../../../common/icon/date 2.svg";
+import ArrowDown from '../../../assets/arrowdrop.svg'
 import Norecord from '../../../component/Norecordui';
 import QRsuccess from '../../../common/icon/qr-code-pay.png';
 import toast from 'react-hot-toast';
@@ -53,6 +54,8 @@ const Dashboard = ({ title }) => {
     const [valueEndtdate, setvalueEndtdate] = useState();
     const [EventData, setEventData] = useState();
     const [OrderItemslist, setOrderItemslist] = useState([]);
+    const [isDatefilter, setisDatefilter] = useState(false);
+    const [Datetype, setDatetype] = useState();
     const handelStartdatechange = (date) => {
         setStartdate(date);
         const get_start_date = get_date_time(date);
@@ -75,13 +78,42 @@ const Dashboard = ({ title }) => {
     }
 
     const [Daterange, setDaterange] = useState(false);
+    // const HandelDatefilterreset = () => {
+    //     setviewStartdate('');
+    //     setviewEndtdate('');
+    //     setvalueStartdate('');
+    //     setvalueEndtdate('');
+    //     setListitems(dataList);
+    //     setDaterange(!Daterange);
+    // }
+    const handelDaterange = (date) => {
+        if (date[0] && date[1]) {
+            setStartdate(date[0]);
+            const get_start_date = get_date_time(date[0]);
+            setviewStartdate(get_start_date[0].Dateview);
+            setvalueStartdate(get_min_date(date[0]));
+
+            setEndtdate(date[1]);
+            const get_end_date = get_date_time(date[1]);
+            setviewEndtdate(get_end_date[0].Dateview);
+            setvalueEndtdate(get_min_date(date[1]));
+        }
+    }
+    const handelDateselectchange = (value) => {
+        if (value && value.length > 0) {
+            setDatetype(value);
+            // setDaterange(!Daterange);
+        }
+    };
     const HandelDatefilterreset = () => {
         setviewStartdate('');
+        setisDatefilter(false);
         setviewEndtdate('');
         setvalueStartdate('');
         setvalueEndtdate('');
         setListitems(dataList);
         setDaterange(!Daterange);
+        setDatetype('');
     }
     const HandelDatefilter = () => {
         if (!valueStartdate) {
@@ -92,20 +124,53 @@ const Dashboard = ({ title }) => {
         }
         handleDateRangeChange(valueStartdate, valueEndtdate);
     }
-    const handleDateRangeChange = (startDate, endDate) => {
-        if (startDate && endDate) {
-            const filteredEvents = dataList.filter(event => {
-                const eventDate = event.mindate; // Date of the event
+    const handleDateRangeChange = (e) => {
+        // if (startDate && endDate) {
+        //     const filteredEvents = dataList.filter(event => {
+        //         const eventDate = event.mindate; // Date of the event
 
-                // Check if the event's date is within the given date range
-                return eventDate >= startDate && eventDate <= endDate;
-            });
-            setListitems(filteredEvents);
+        //         // Check if the event's date is within the given date range
+        //         return eventDate >= startDate && eventDate <= endDate;
+        //     });
+        //     setListitems(filteredEvents);
+        // } else {
+        //     // If either startDate or endDate is missing, reset to show all events
+        //     setListitems(dataList);
+        // }
+        // setDaterange(!Daterange);
+        e.preventDefault();
+        setisDatefilter(true);
+        if (Datetype && Datetype == 'Pick between two dates') {
+            if (valueStartdate && valueEndtdate) {
+                console.log([dataList]);
+                const filteredEvents = dataList.filter(event => {
+                    const eventStart = event.mindate;
+                    const eventEnd = event.mindate;
+                    return eventStart >= valueStartdate && eventEnd <= valueEndtdate;
+                });
+                setListitems(filteredEvents);
+                setDaterange(!Daterange);
+            } else {
+                setListitems(dataList);
+                return toast.error('Start and end date is required');
+            }
         } else {
-            // If either startDate or endDate is missing, reset to show all events
-            setListitems(dataList);
+            if (valueStartdate) {
+                console.log("op", valueStartdate);
+                const filteredEvents = dataList.filter(event => {
+                    const eventStart = event.mindate;
+                    console.log(eventStart);
+                    return eventStart == valueStartdate;
+                });
+                console.log([dataList]);
+                console.log("dsds", filteredEvents);
+                setListitems(filteredEvents);
+                setDaterange(!Daterange);
+            } else {
+                setListitems(dataList);
+                return toast.error('Date is required');
+            }
         }
-        setDaterange(!Daterange);
     };
 
 
@@ -283,7 +348,8 @@ const Dashboard = ({ title }) => {
             },
             { header: "Customer Name", key: "CustomerName", width: 32 },
             { header: "Customer Email", key: "CustomerEmail", width: 32 },
-            { header: "Booking ID", key: "Bookingid", width: 32 },
+            { header: "Booking Id", key: "BookingID", width: 32 },
+            { header: "QR Code ID", key: "QRCodeID", width: 32 },
             { header: "Ticket Name", key: "NumberofTickets", width: 32 },
             { header: "Is Scan", key: "Status", width: 32 },
             { header: "Date", key: "Creationdate", width: 40 },
@@ -303,7 +369,8 @@ const Dashboard = ({ title }) => {
                     id: rowNumber,
                     CustomerName: product?.owner_name,
                     CustomerEmail: product?.owner_email,
-                    Bookingid: product?._id,
+                    BookingID: product?.order_id,
+                    QRCodeID: product?._id,
                     NumberofTickets: product?.ticket_name,
                     Status: product?.scan_status == "1" ? 'Yes' : 'No',
                     Creationdate: product?.date + '  ' + product?.time,
@@ -349,6 +416,7 @@ const Dashboard = ({ title }) => {
             "Customer Name",
             "Customer Email",
             "Booking ID",
+            "QR Code ID",
             "Ticket Name",
             "Is Scan",
             "Date",
@@ -363,6 +431,7 @@ const Dashboard = ({ title }) => {
             index + 1,
             item.owner_name,
             item.owner_email,
+            item.order_id,
             item._id,
             item.ticket_name,
             item.scan_status === "1" ? "Yes" : "No",
@@ -382,46 +451,66 @@ const Dashboard = ({ title }) => {
     return (
         <>
             <Modal isOpen={Daterange} toggle={() => setDaterange(!Daterange)} centered>
-                <ModalHeader toggle={!Daterange}>Select date</ModalHeader>
+                <ModalHeader toggle={() => setDaterange(!Daterange)}>Select date</ModalHeader>
                 <ModalBody>
-                    <Row>
-                        <Col md={6} className="mb-2 mt-0">
-                            <label htmlFor="" className="text-black">Start Date</label>
-                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate} />
-                                <div className="date-style-picker">
-                                    <Flatpickr
-                                        value={Startdate}
-                                        id='date-picker'
-                                        className='form-control'
-                                        onChange={date => handelStartdatechange(date)}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6} className="mb-2 mt-0">
-                            <label htmlFor="" className="text-black">End Date</label>
-                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewEndtdate} />
-                                <div className="date-style-picker">
-                                    <Flatpickr
-                                        value={Endtdate}
-                                        id='date-picker'
-                                        className='form-control'
-                                        onChange={date => handelEnddatechange(date)}
-                                    />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6}>
-                            <button onClick={HandelDatefilter} className="mb-0 mr-5  btn btn-success list-Ticket-mng-1 w-100" type="button">Filter</button>
-                        </Col>
-                        <Col md={6}>
-                            <button onClick={HandelDatefilterreset} className="mb-0 mr-5  btn btn-dark list-Ticket-mng-1 w-100" type="button">Reset</button>
-                        </Col>
-                    </Row>
+                    <form onSubmit={handleDateRangeChange}>
+                        <Row className="d-flex justify-content-center">
+                            <Col md={6}>
+                                <select
+                                    className="form-select category me-4"
+                                    aria-label="Default select example"
+                                    value={Datetype}
+                                    onChange={(event) => { handelDateselectchange(event.target.value) }}
+                                    style={{ paddingTop: '8px', height: '40px', color: '#0047ab' }}
+                                >
+                                    <option value='Pick a date'>Date Picker</option>
+                                    <option value='Pick between two dates'>Date Range Picker</option>
+                                </select>
+                            </Col>
+                            {Datetype && Datetype == 'Pick between two dates' ? (
+
+                                <Col md={6} className="mb-2 mt-0">
+                                    <div class="input-group mb-3 input-warning-o newdatefilter" style={{ position: 'relative' }}>
+                                        <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                        <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate && viewEndtdate && (viewStartdate + '-' + viewEndtdate)} />
+                                        <div className="date-style-picker">
+                                            <Flatpickr
+                                                id='date-picker'
+                                                options={{ mode: "range" }}
+                                                className='form-control'
+                                                onChange={date => handelDaterange(date)}
+                                            />
+                                        </div>
+                                    </div>
+                                </Col>
+                            ) : (
+                                <>
+                                    <Col md={6} className="mb-2 mt-0">
+                                        <div class="input-group mb-3 input-warning-o newdatefilter" style={{ position: 'relative' }}>
+                                            <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                            <input type="text" class="pl-5 form-control date-border-redius date-border-redius-input date_filter" placeholder="Select date" readOnly value={viewStartdate} />
+                                            <div className="date-style-picker">
+                                                <Flatpickr
+                                                    value={Startdate}
+                                                    id='date-picker'
+                                                    className='form-control'
+                                                    onChange={date => handelStartdatechange(date)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </Col>
+                                </>
+                            )}
+                        </Row>
+                        <Row>
+                            <Col md={6}>
+                                <button className="mb-0 mr-5  btn theme-bg text-white list-Ticket-mng-1 w-100" type="submit">Filter</button>
+                            </Col>
+                            <Col md={6}>
+                                <button onClick={HandelDatefilterreset} className="mb-0 mr-5  btn btn-dark list-Ticket-mng-1 w-100" type="button">Reset</button>
+                            </Col>
+                        </Row>
+                    </form>
                 </ModalBody>
             </Modal>
 
@@ -557,10 +646,20 @@ const Dashboard = ({ title }) => {
                                         <Col md={12} className="py-3">
                                             <Row>
                                                 <Col md={3}>
-                                                    <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
+                                                    {/* <div class="input-group mb-3 input-warning-o" onClick={() => setDaterange(!Daterange)}>
                                                         <span class="input-group-text search-box-icon-1"><FiClock /></span>
                                                         <input type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
+                                                    </div> */}
+                                                    <div className="event-page-category-filter-box event-page-category-filter-box1" onClick={() => setDaterange(true)}>
+                                                        <p className={`mb-0 theme-color ${isDatefilter && 'active-date-filter'}`}>
+                                                            {isDatefilter ? (
+                                                                <>
+                                                                    {Datetype == 'Pick between two dates' ? viewStartdate + '-' + viewEndtdate : viewStartdate}
+                                                                </>
+                                                            ) : 'Date Filter'}
+                                                        </p>
+                                                        <img src={ArrowDown} alt="" />
                                                     </div>
                                                 </Col>
 
@@ -574,7 +673,7 @@ const Dashboard = ({ title }) => {
                                                                 defaultValue=""
                                                             >
                                                                 <option value="">Select Ticket Type</option>
-                                                                {EventData && EventData.allprice.map((item) => (
+                                                                {EventData && EventData.allprice && EventData.allprice.map((item) => (
                                                                     <>
                                                                         {item.isdelete == 0 && (
                                                                             <option value={item.id}>{item.name}</option>

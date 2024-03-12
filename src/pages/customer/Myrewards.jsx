@@ -40,17 +40,21 @@ const Dashboard = ({ title }) => {
 
 
     const [Packagelist, setPackagelist] = useState([]);
-
-
+    const [Maximulpoint, setMaximulpoint] = useState();
+    console.log("max", Maximulpoint);
+    const Customerid = localStorage.getItem('customerid');
     const fetchData = async () => {
         try {
             setLoader(true);
+            const requestData = {
+                id: Customerid,
+            };
             fetch(apiurl + 'website/get-user-details', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                    'Authorization': `Bearer ${Beartoken}`, // Set the Content-Type header to JSON
-                }
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
             })
                 .then(response => response.json())
                 .then(data => {
@@ -172,6 +176,10 @@ const Dashboard = ({ title }) => {
                 .then(data => {
                     if (data.success == true) {
                         setPackagelist(data.data);
+                        const highestPurchaseAmount = data.data.reduce((max, item) => {
+                            return Math.max(max, parseInt(item.purchase_amount, 10));
+                        }, 0);
+                        setMaximulpoint(highestPurchaseAmount);
                     } else {
 
                     }
@@ -293,13 +301,13 @@ const Dashboard = ({ title }) => {
                                                                                 <Col md={4} xl={4} sm={4} className="text-center">
                                                                                     <div className="border-right" style={{ borderColor: '#000', borderWidth: '1px' }}>
                                                                                         <p className="rewarx-box-c-title text-capitalize">Points to reach {nextTarget.name}</p>
-                                                                                        <p className="rewarx-box-c-sts">{nextTarget.pointsToNextTarget}</p>
+                                                                                        <p className="rewarx-box-c-sts">{nextTarget.pointsToNextTarget || 'Completed'}</p>
                                                                                     </div>
                                                                                 </Col>
                                                                                 <Col md={4} className="text-center">
                                                                                     <div>
                                                                                         <p className="rewarx-box-c-title  text-capitalize">Next Tier</p>
-                                                                                        <p className="rewarx-box-c-sts  text-capitalize">{nextTarget.name} Tier</p>
+                                                                                        <p className="rewarx-box-c-sts  text-capitalize">{nextTarget.name ? nextTarget.name + 'Tier' : ''} </p>
                                                                                     </div>
                                                                                 </Col>
                                                                             </Row>
@@ -307,10 +315,10 @@ const Dashboard = ({ title }) => {
 
 
                                                                         <Col md={6}>
-                                                                            <p className="Booking-progress-towards  text-capitalize">Booking progress towards  <span>{nextTarget.name} Tier</span></p>
+                                                                            {nextTarget.name && (<p className="Booking-progress-towards  text-capitalize">Booking progress towards  <span>{nextTarget.name} Tier</span></p>)}
                                                                         </Col>
                                                                         <Col md={6} className="text-end">
-                                                                            <p className="Booking-progress-towards  text-capitalize"><span>{nextTarget.purchaseAmount}</span> Points for {nextTarget.name} Tier</p>
+                                                                            {nextTarget.name && (<p className="Booking-progress-towards  text-capitalize"><span>{nextTarget.purchaseAmount}</span> Points for {nextTarget.name} Tier</p>)}
                                                                         </Col>
                                                                     </>
                                                                 )}
@@ -318,29 +326,29 @@ const Dashboard = ({ title }) => {
                                                                     <Col md={12} className="mt-4">
                                                                         <div className="reward-box" style={{ position: 'relative' }}>
                                                                             {Packloaderxxx ? '' : (
-                                                                                <span className="reward_star" style={{ left: Percentage }}>
+                                                                                <span className="reward_star" style={{ left: Percentage <= Maximulpoint ? Percentage : '90%' }}>
                                                                                     <img src={aboutUs} height={50} width={50} alt="" />
-                                                                                    <p className="reward_star_text" style={{ fontSize: '13px' }}>{currentPackage.name ? currentPackage.name + ' Tier' : 'Next ' + nextTarget.name}</p>
+                                                                                    <p className="reward_star_text" style={{ fontSize: '13px' }}>{currentPackage && currentPackage.name ? currentPackage.name + ' Tier' : 'Next ' + nextTarget.name}</p>
                                                                                 </span>
                                                                             )}
 
                                                                             {/* fetch scal data     */}
                                                                             {Packagelist.map((item, index) => (
-                                                                                item.name === "Gold" && (
+                                                                                item.name === "Gold" && Number(currentPackage && currentPackage.purchaseAmount ? currentPackage.purchaseAmount : 0) < Number(item.purchase_amount) && (
                                                                                     <span className="reward_star reward_star_gold" style={{ left: `${parseInt(item.percentage) - 7}%` }}>
                                                                                         <img src={Gold} alt="" />
                                                                                         <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Gold Tier</p>
                                                                                     </span>
                                                                                 )
                                                                                 ||
-                                                                                item.name === "Platinum" && (
+                                                                                item.name === "Platinum" && Number(currentPackage && currentPackage.purchaseAmount ? currentPackage.purchaseAmount : 0) < Number(item.purchase_amount)  && (
                                                                                     <span className="reward_star reward_star_platinum" style={{ left: `${parseInt(item.percentage) - 12}%` }}>
                                                                                         <img src={Prem} alt="" />
                                                                                         <p className="reward_star_text" style={{ fontSize: '13px', textAlign: 'center' }}>Platinum Tier</p>
                                                                                     </span>
                                                                                 )
-                                                                            ))}
 
+                                                                            ))}
                                                                             <img src={RewardBg} style={{ height: '100%', width: '100%', objectFit: 'contain' }} alt="" />
                                                                         </div>
                                                                     </Col>

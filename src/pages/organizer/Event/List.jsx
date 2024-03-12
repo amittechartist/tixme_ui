@@ -54,6 +54,7 @@ const Dashboard = ({ title }) => {
     const [valueEndtdate, setvalueEndtdate] = useState();
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [Isany, setIsany] = useState(false);
+    const [isDatefilter, setisDatefilter] = useState(false);
     const [Datetype, setDatetype] = useState();
     const handleCategoryChange = (id) => {
         if (id == 'all') {
@@ -118,6 +119,7 @@ const Dashboard = ({ title }) => {
     const [Daterange, setDaterange] = useState(false);
     const HandelDatefilterreset = () => {
         setviewStartdate('');
+        setisDatefilter(false);
         setviewEndtdate('');
         setvalueStartdate('');
         setvalueEndtdate('');
@@ -136,11 +138,13 @@ const Dashboard = ({ title }) => {
     }
     const handleDateRangeChange = (e) => {
         e.preventDefault();
+        setisDatefilter(true);
         if (Datetype && Datetype == 'Pick between two dates') {
             if (valueStartdate && valueEndtdate) {
+                console.log([allEvents]);
                 const filteredEvents = allEvents.filter(event => {
-                    const eventStart = event.start_date_min;
-                    const eventEnd = event.start_date_min;
+                    const eventStart = event.start_mindate;
+                    const eventEnd = event.end_mindate;
                     return eventStart >= valueStartdate && eventEnd <= valueEndtdate;
                 });
                 setListitems(filteredEvents);
@@ -151,10 +155,14 @@ const Dashboard = ({ title }) => {
             }
         } else {
             if (valueStartdate) {
+                console.log("op",valueStartdate);
                 const filteredEvents = allEvents.filter(event => {
-                    const eventStart = event.start_date_min;
+                    const eventStart = event.start_mindate;
+                    console.log(eventStart);
                     return eventStart == valueStartdate;
                 });
+                console.log([allEvents]);
+                console.log("dsds",filteredEvents);
                 setListitems(filteredEvents);
                 setDaterange(!Daterange);
             } else {
@@ -162,6 +170,33 @@ const Dashboard = ({ title }) => {
                 return toast.error('Date is required');
             }
         }
+        // e.preventDefault();
+        // if (Datetype && Datetype == 'Pick between two dates') {
+        //     if (valueStartdate && valueEndtdate) {
+        //         const filteredEvents = allEvents.filter(event => {
+        //             const eventStart = event.start_date_min;
+        //             const eventEnd = event.start_date_min;
+        //             return eventStart >= valueStartdate && eventEnd <= valueEndtdate;
+        //         });
+        //         setListitems(filteredEvents);
+        //         setDaterange(!Daterange);
+        //     } else {
+        //         setListitems(allEvents);
+        //         return toast.error('Start and end date is required');
+        //     }
+        // } else {
+        //     if (valueStartdate) {
+        //         const filteredEvents = allEvents.filter(event => {
+        //             const eventStart = event.start_date_min;
+        //             return eventStart == valueStartdate;
+        //         });
+        //         setListitems(filteredEvents);
+        //         setDaterange(!Daterange);
+        //     } else {
+        //         setListitems(allEvents);
+        //         return toast.error('Date is required');
+        //     }
+        // }
         // if (startDate && endDate) {
         //     const filteredEvents = allEvents.filter(event => {
         //         const eventStart = event.start_mindate;
@@ -477,9 +512,9 @@ const Dashboard = ({ title }) => {
                                                         />
                                                     </div>
                                                 </Col>
-                                                <Col md={6} xl={3} className="react-select-h mb-3 dash-select-box">
+                                                <Col md={6} xl={3} className="cust-field-dashboard">
                                                     <div class="dropdown dropdown-category">
-                                                        <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{ paddingRight: '30px' }}>
                                                             {selectedCategories.length > 0 ? (
                                                                 <>
                                                                     {selectedCategories.map((item, index) => (
@@ -527,8 +562,18 @@ const Dashboard = ({ title }) => {
                                                         <input style={{ height: 40 }} type="text" class="form-control" value={viewStartdate && viewEndtdate ? viewStartdate + '-' + viewEndtdate : ''} placeholder="Date range" />
                                                         <span class="input-group-text search-box-icon-1"><FiChevronDown /></span>
                                                     </div> */}
-                                                    <div className="event-page-category-filter-box event-page-category-filter-box1" onClick={() => setDaterange(true)}>
+                                                    {/* <div className="event-page-category-filter-box event-page-category-filter-box1" onClick={() => setDaterange(true)}>
                                                         <p className="mb-0 theme-color">Date Filter</p>
+                                                        <img src={ArrowDown} alt="" />
+                                                    </div> */}
+                                                    <div className="event-page-category-filter-box event-page-category-filter-box1" onClick={() => setDaterange(true)}>
+                                                        <p className={`mb-0 theme-color ${isDatefilter && 'active-date-filter'}`}>
+                                                            {isDatefilter ? (
+                                                                <>
+                                                                    {Datetype == 'Pick between two dates' ? viewStartdate + '-' + viewEndtdate : viewStartdate}
+                                                                </>
+                                                            ) : 'Date Filter'}
+                                                        </p>
                                                         <img src={ArrowDown} alt="" />
                                                     </div>
                                                 </Col>
@@ -543,7 +588,7 @@ const Dashboard = ({ title }) => {
                                                     />
                                                 </Col>
 
-                                                <Col md={4} xl={2} style={{marginBottom:20}}>
+                                                <Col md={4} xl={2} style={{ marginBottom: 20 }}>
                                                     <button className="w-100 theme-btn" onClick={() => navigate(organizer_url + 'event/add-event')}>
                                                         <span className="theme-btn-icon"><FiPlus /></span> <span>Add event</span>
                                                     </button>
@@ -569,7 +614,7 @@ const Dashboard = ({ title }) => {
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div>
-                                                                                <span className="list-event-name text-capitalize">{shortPer(item.name, 30)}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} height={'auto'} width={'30px'} src={EditPng} alt=""  /><span className="theme-color">Edit</span></span>
+                                                                                <span className="list-event-name text-capitalize">{shortPer(item.name, 30)}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} height={'auto'} width={'30px'} src={EditPng} alt="" /><span className="theme-color">Edit</span></span>
                                                                                 <p className="list-event-desc mb-0">{shortPer(item.event_desc, 30)}</p>
                                                                             </div>
                                                                             <div className="my-2">

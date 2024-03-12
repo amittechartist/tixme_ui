@@ -21,7 +21,7 @@ const Contact = () => {
         <div className="banner-child banner-child-cust bg-white p-3"  style={{ border: '1px solid #eee',
     marginTop: '-265px',
     position: 'relative' }}>
-            <div className="contact-sec m-2" style={{ backgroundSize: 'cover' }}>
+            <div className="m-2">
               <ContactUsform />
             </div>
           </div>

@@ -98,7 +98,7 @@ const Dashboard = ({ title }) => {
     }, []);
     const HandelCreateCoupon = async () => {
         try {
-            if (!name || !point || !discount || !CurrencyId) {
+            if (!name || !point || !discount) {
                 return toast.error('All field is required');
             }
             setBtnLoader(true);
@@ -106,7 +106,7 @@ const Dashboard = ({ title }) => {
                 name: name,
                 point: point,
                 discount: discount,
-                currency: CurrencyId
+                // currency: CurrencyId
             };
             fetch(apiurl + 'admin/coupon-insert', {
                 method: 'POST',
@@ -193,7 +193,7 @@ const Dashboard = ({ title }) => {
     return (
         <>
             <Modal isOpen={Addnewmodal} toggle={() => setAddnewmodal(!Addnewmodal)} className='modal-dialog-centered'>
-                <ModalHeader className='bg-transparent'>Add New Coupon</ModalHeader>
+                <ModalHeader toggle={() => setAddnewmodal(!Addnewmodal)} className='bg-transparent'>Add New Coupon</ModalHeader>
                 <ModalBody className=''>
                     {Loader ? (
                         <div className="linear-background w-100"> </div>
@@ -207,7 +207,7 @@ const Dashboard = ({ title }) => {
                                 <label htmlFor="" className="text-black">Point</label>
                                 <input type="number" class="form-control input-default" placeholder="Enter point amount" value={point} onChange={(e) => setpoint(e.target.value)} />
                             </div>
-                            <div className="col-md-4">
+                            {/* <div className="col-md-4">
                                 <label htmlFor="" className="text-black">Select Currency</label>
                                 <Select
                                     isClearable={false}
@@ -217,8 +217,8 @@ const Dashboard = ({ title }) => {
                                     onChange={selectCurrency}
                                     value={Currency}
                                 />
-                            </div>
-                            <div className="col-md-8">
+                            </div> */}
+                            <div className="col-md-12">
                                 <label htmlFor="" className="text-black">Discount amount</label>
                                 <input type="number" class="form-control input-default" placeholder="Enter point amount" value={discount} onChange={(e) => setdiscount(e.target.value)} />
                             </div>

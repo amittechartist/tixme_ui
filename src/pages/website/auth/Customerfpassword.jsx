@@ -110,12 +110,12 @@ const About = () => {
             if (Password.length > 7) {
 
             } else {
-                return toast.error('Password must be at least 8 characters long');
+                return toast.error('New password must be at least 8 characters long');
             }
             if (Password === ConfirmPassword) {
 
             } else {
-                return toast.error('Password and confirm password not match');
+                return toast.error('New password and confirm New password not match');
             }
             setLoader(true);
             const requestData = {
@@ -198,12 +198,12 @@ const About = () => {
                                     {Newpassloader ? (
                                         <>
                                             <div className="form-group">
-                                                <p>Password <span className="text-danger">*</span></p>
-                                                <input className="form-control" type="password" placeholder="Password" value={Password} onChange={(e) => setPassword(e.target.value)}></input>
+                                                <p>New Password <span className="text-danger">*</span></p>
+                                                <input className="form-control" type="password" placeholder="New Password" value={Password} onChange={(e) => setPassword(e.target.value)}></input>
                                             </div>
                                             <div className="form-group">
-                                                <p>Confirm Password <span className="text-danger">*</span></p>
-                                                <input className="form-control" type="password" placeholder="Confirm Password" value={ConfirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}></input>
+                                                <p>Confirm New Password <span className="text-danger">*</span></p>
+                                                <input className="form-control" type="password" placeholder="Confirm New Password" value={ConfirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}></input>
                                             </div>
                                         </>
                                     ) : (

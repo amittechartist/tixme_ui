@@ -15,7 +15,8 @@ const About = () => {
     const [Username, setUsername] = useState();
     const [LoginPassword, setLoginPassword] = useState();
 
-    const HandelLogin = async () => {
+    const HandelLogin = async (e) => {
+        e.preventDefault();
         try {
             if (!Username) {
                 return toast.error('Username is required');
@@ -72,32 +73,32 @@ const About = () => {
                 <div class="banner-child bg-white px-0" style={{ border: '1px solid #eee' }}>
                     <div className='row form-area'>
                         <div className="col-md-6">
-                            <div>
-                                <div className="form-group">
-                                    <p>Username</p>
-                                    <input className="form-control" type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)}></input>
+                            <form onSubmit={HandelLogin}>
+                                <div>
+                                    <div className="form-group">
+                                        <p>Username</p>
+                                        <input className="form-control" type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)}></input>
+                                    </div>
+                                    <div className="form-group">
+                                        <p>Password</p>
+                                        <input className="form-control" type="password" placeholder="Password" onChange={(e) => setLoginPassword(e.target.value)}></input>
+                                    </div>
+
+                                    <div className='button-area mt-4'>
+
+                                        {Loader ? (
+                                            <button type='button' className="signup-page-button">Please wait...</button>
+                                        ) : (
+                                            <button type='submit' className="signup-page-button">Login</button>
+                                        )}
+
+                                    </div>
                                 </div>
-                                <div className="form-group">
-                                    <p>Password</p>
-                                    <input className="form-control" type="password" placeholder="Password" onChange={(e) => setLoginPassword(e.target.value)}></input>
-                                </div>
-                                
-                                <div className='button-area mt-4'>
-
-                                    {Loader ? (
-                                        <button type='button' className="signup-page-button">Please wait...</button>
-                                    ) : (
-                                        <button type='button' className="signup-page-button" onClick={() => HandelLogin()}>Login</button>
-                                    )}
-
-                                </div>
-
-
-                            </div>
+                            </form>
                         </div>
                         <div className="col-md-6">
                             <div className="text-center">
-                            <img className="no-result-img admin-login-img" src={SignupImg} />
+                                <img className="no-result-img admin-login-img" src={SignupImg} />
                             </div>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ import NoRecord from '../../component/Noeventsdui'
 import ArrowDown from '../../assets/arrowdrop.svg'
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import moment from 'moment';
 import Container from "react-bootstrap/Container";
 import calendar from "../../assets/calendar.svg";
 import location from "../../assets/location (5) 1.svg";
@@ -67,9 +68,9 @@ const Home = () => {
     const [Eventtype, setEventtype] = useState('');
     const [Minprice, setMinprice] = useState('');
     const [Maxprice, setMaxprice] = useState('');
-    const [Startdateselect, setStartdateselect] = useState(new Date());
-    const [RangeStartdateselect, setRangeStartdateselect] = useState(new Date());
-    const [Enddateselect, setEnddateselect] = useState(new Date());
+    const [Startdateselect, setStartdateselect] = useState(moment());
+    const [RangeStartdateselect, setRangeStartdateselect] = useState(moment());
+    const [Enddateselect, setEnddateselect] = useState(moment());
     const [values, setValues] = useState([0]);
     const [Datevalue, setDatevalue] = useState();
     const [PriceFilter, setPriceFilter] = useState();
@@ -83,6 +84,8 @@ const Home = () => {
     const visibleItems = Listitems;
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState([]);
+    const [FStartdate, setFStartdate] = useState(moment());
+    const [FEndtdate, setFEndtdate] = useState(moment());
     const GetCategoryName = (id) => {
         const category = CategoryList.find(item => item.value === id);
         return category ? category.label : 'loading...';
@@ -115,7 +118,9 @@ const Home = () => {
 
     const fromgetdate = get_date_time(Startdateselect);
     const endgetdate = get_date_time(Enddateselect);
-    const rangeendgetdate = get_date_time(RangeStartdateselect);
+    const filer_start_date = FStartdate && get_date_time(FStartdate);
+    const filer_end_date = FEndtdate && get_date_time(FEndtdate);
+    console.log([FStartdate, FEndtdate]);
     const STEP = 1;
     const MIN = 0;
     const MAX = 100;
@@ -125,11 +130,25 @@ const Home = () => {
     if (fromgetdate) {
         startdate = fromgetdate[0].Dateview;
     }
-    if (rangeendgetdate) {
-        rangestartdate = rangeendgetdate[0].Dateview;
+    const handelDaterange = (date) => {
+        if (date[0] && date[1]) {
+            setFStartdate(date[0]);
+            setRangeStartdateselect(date[0]);
+            setEnddateselect(date[1]);
+            // const get_start_date = get_date_time(date[0]);
+            // setviewStartdate(get_start_date[0].Dateview);
+            // setvalueStartdate(get_min_date(date[0]));
+            setFEndtdate(date[1]);
+            // const get_end_date = get_date_time(date[1]);
+            // setviewEndtdate(get_end_date[0].Dateview);
+            // setvalueEndtdate(get_min_date(date[1]));
+        }
     }
-    if (endgetdate) {
-        enddate = endgetdate[0].Dateview;
+    if (filer_start_date) {
+        rangestartdate = filer_start_date[0].Dateview;
+    }
+    if (filer_end_date) {
+        enddate = filer_end_date[0].Dateview;
     }
 
     const viewEvent = async (id, name) => {
@@ -213,7 +232,7 @@ const Home = () => {
             if (data.success === true) {
                 setEventlist(data.data);
                 setrenderSecond(true);
-                if(renderSecond){
+                if (renderSecond) {
                     navigate(app_url + 'events');
                 }
             } else {
@@ -435,58 +454,31 @@ const Home = () => {
                                     </div>
                                 </Col>
                                 {Datetype && (
-                                    <div className="col-md-12 mt-4">
-                                        {Datetype == "Pick a date" ? (
-                                            <>
-                                                <div class="input-group input-warning-o" style={{ position: 'relative' }}>
-                                                    <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                                    <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={startdate} />
-                                                    <div className="date-style-picker">
+                                    <>
+                                        <div className="col-md-12 mt-4">
+                                            <div class="input-group input-warning-o" style={{ position: 'relative' }}>
+                                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                                <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={Datetype == "Pick between two dates" ? rangestartdate + ' - ' + enddate : startdate} />
+                                                <div className="date-style-picker">
+                                                    {Datetype == "Pick a date" && (
                                                         <Flatpickr
-                                                            value={Startdateselect}
-                                                            id='date-picker'
+                                                            id='date-picker-singel'
                                                             className='form-control'
                                                             onChange={date => setStartdateselect(date)}
                                                         />
-                                                    </div>
+                                                    )}
+                                                    {Datetype == "Pick between two dates" && (
+                                                        <Flatpickr
+                                                            id='date-picker'
+                                                            options={{ mode: "range" }}
+                                                            className='form-control'
+                                                            onChange={date => handelDaterange(date)}
+                                                        />
+                                                    )}
                                                 </div>
-                                            </>
-                                        ) : ''}
-                                        {Datetype == "Pick between two dates" ? (
-                                            <>
-                                                <Col md={12} xs={12}>
-                                                    <p className="mb-1">Start Date</p>
-                                                    <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                                        <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                                        <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={rangestartdate} />
-                                                        <div className="date-style-picker">
-                                                            <Flatpickr
-                                                                value={RangeStartdateselect}
-                                                                id='date-picker'
-                                                                className='form-control'
-                                                                onChange={date => setRangeStartdateselect(date)}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </Col>
-                                                <Col md={12} xs={12}>
-                                                    <p className="mb-1">End Date</p>
-                                                    <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                                        <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                                        <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={enddate} />
-                                                        <div className="date-style-picker">
-                                                            <Flatpickr
-                                                                value={Enddateselect}
-                                                                id='date-picker'
-                                                                className='form-control'
-                                                                onChange={date => setEnddateselect(date)}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </Col>
-                                            </>
-                                        ) : ''}
-                                    </div>
+                                            </div>
+                                        </div>
+                                    </>
                                 )}
                                 <Col md={12} xs={12} className="mt-3">
                                     <p className="mb-0 theme-color">Price Range</p>
@@ -633,58 +625,31 @@ const Home = () => {
                                             </div>
                                         </Col>
                                         {Datetype && (
-                                            <div className="col-md-12 mt-4">
-                                                {Datetype == "Pick a date" ? (
-                                                    <>
-                                                        <div class="input-group input-warning-o" style={{ position: 'relative' }}>
-                                                            <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                                            <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={startdate} />
-                                                            <div className="date-style-picker">
+                                            <>
+                                                <div className="col-md-12 mt-4">
+                                                    <div class="input-group input-warning-o" style={{ position: 'relative' }}>
+                                                        <span class="input-group-text"><img src={DateIcon} alt="" /></span>
+                                                        <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={Datetype == "Pick between two dates" ? rangestartdate + ' - ' + enddate : startdate} />
+                                                        <div className="date-style-picker">
+                                                            {Datetype == "Pick a date" && (
                                                                 <Flatpickr
-                                                                    value={Startdateselect}
-                                                                    id='date-picker'
+                                                                    id='date-picker-singel'
                                                                     className='form-control'
                                                                     onChange={date => setStartdateselect(date)}
                                                                 />
-                                                            </div>
+                                                            )}
+                                                            {Datetype == "Pick between two dates" && (
+                                                                <Flatpickr
+                                                                    id='date-picker'
+                                                                    options={{ mode: "range" }}
+                                                                    className='form-control'
+                                                                    onChange={date => handelDaterange(date)}
+                                                                />
+                                                            )}
                                                         </div>
-                                                    </>
-                                                ) : ''}
-                                                {Datetype == "Pick between two dates" ? (
-                                                    <>
-                                                        <Col md={12} xs={12}>
-                                                            <p className="mb-1">Start Date</p>
-                                                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                                                <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={rangestartdate} />
-                                                                <div className="date-style-picker">
-                                                                    <Flatpickr
-                                                                        value={RangeStartdateselect}
-                                                                        id='date-picker'
-                                                                        className='form-control'
-                                                                        onChange={date => setRangeStartdateselect(date)}
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </Col>
-                                                        <Col md={12} xs={12}>
-                                                            <p className="mb-1">End Date</p>
-                                                            <div class="input-group mb-3 input-warning-o" style={{ position: 'relative' }}>
-                                                                <span class="input-group-text"><img src={DateIcon} alt="" /></span>
-                                                                <input type="text" class="form-control date-border-redius date-border-redius-input bg-white" placeholder="" readOnly value={enddate} />
-                                                                <div className="date-style-picker">
-                                                                    <Flatpickr
-                                                                        value={Enddateselect}
-                                                                        id='date-picker'
-                                                                        className='form-control'
-                                                                        onChange={date => setEnddateselect(date)}
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </Col>
-                                                    </>
-                                                ) : ''}
-                                            </div>
+                                                    </div>
+                                                </div>
+                                            </>
                                         )}
                                         <Col md={12} xs={12} className="mt-3">
                                             <p className="mb-0 theme-color">Price Range</p>

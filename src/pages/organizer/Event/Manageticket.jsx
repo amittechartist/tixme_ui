@@ -200,6 +200,13 @@ const Dashboard = ({ title }) => {
             console.error('Api error:', error);
         }
     };
+    const totalAvailableTickets = Listitems.reduce((total, item) => {
+        return total + (parseInt(item.quantity, 10) * item.groupqty - parseInt(CountTicketSold(item.id), 10) * item.groupqty);
+    }, 0);
+    
+    const totalRevenue = Listitems.reduce((total, item) => {
+        return total + ((item.price && CountTicketSold(item.id)) ? parseInt(item.price, 10) * parseInt(CountTicketSold(item.id), 10) : 0);
+    }, 0);
     return (
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
@@ -242,61 +249,93 @@ const Dashboard = ({ title }) => {
                                                 {Listitems.length > 0 ? (
                                                     <>
                                                         {Listitems.map((item, index) => (
-                                                            <Col md={12} className="event_list_box_main in-ticket-list-1 p-0">
-                                                                <button onClick={() => navigate(`${organizer_url}event/mange-attendee/${Eventdata._id}/${Eventdata.name}/${item.id}`)} className="list-active-ticket-btn" type="button">Attendee  <img src={ArrowPng} className="arraw-svg ml-3" alt="" /></button>
-                                                                <div className="event_list_box p-0">
-                                                                    <Row>
-                                                                        <Col md={2} className="d-flex align-items-center justify-content-center">
-                                                                            <div className="text-center pl-1">
-                                                                                <span className="ticket-list-name">{item.name}</span> <span className="cursor-pointre list-event-edit-btn editbtn-mng-tic" onClick={() => EditEvent(Eventdata._id, Eventdata.name, item.id)}><img src={EditPng} alt="" /></span>
-                                                                                <p className="ticket-list-price_title mb-0">Price</p>
-                                                                                <p className="ticket-list-price_value">{item.ticket_type == 1 ? Eventdata.countrysymbol + ' ' + item.price : 'Free'}</p>
+                                                            <>
+                                                                {index == 0 && (
+                                                                    <Col md={12} className="event_list_box_main in-ticket-list-1 p-0">
+                                                                        <Row>
+                                                                            <div className="col-md-3 col-lg-3 col-xl-3">
+                                                                                <div className="text-center border-theme">
+                                                                                    <p class="mb-1 text-capitalize">Total Ticket</p>
+                                                                                    <h3 class="mb-0 theme-text font-w600">{Listitems.reduce((total, item) => total + (item.quantity * item.groupqty), 0)}</h3>
+                                                                                </div>
                                                                             </div>
-                                                                        </Col>
-                                                                        <Col md={8}>
-                                                                            <div>
-                                                                                <Row className="py-4">
-                                                                                    <Col md={3} className="ticket-sts-box  text-center border-right">
-                                                                                        <p>Total Ticket</p>
-                                                                                        <h2>{item.quantity * item.groupqty}</h2>
-                                                                                    </Col>
-                                                                                    <Col md={3} className="ticket-sts-box  text-center  border-right">
-                                                                                        <p>Ticket Sold</p>
-                                                                                        <h2>{CountTicketSold(item.id) * item.groupqty}</h2>
-                                                                                    </Col>
-                                                                                    <Col md={3} className="ticket-sts-box  text-center  border-right">
-                                                                                        <p>Ticket Available</p>
-                                                                                        <h2><h2>{parseInt(item.quantity, 10) * item.groupqty - parseInt(CountTicketSold(item.id), 10) * item.groupqty}</h2></h2>
-                                                                                    </Col>
-                                                                                    <Col md={3} className="ticket-sts-box  text-center">
-                                                                                        <p>Revenue</p>
-                                                                                        <h2>
+                                                                            <div className="col-md-3 col-lg-3 col-xl-3">
+                                                                                <div className="text-center border-theme">
+                                                                                    <p class="mb-1 text-capitalize">Ticket Sold</p>
+                                                                                    <h3 class="mb-0 theme-text font-w600">{Listitems.reduce((total, item) => total + (CountTicketSold(item.id) * item.groupqty), 0)}</h3>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="col-md-3 col-lg-3 col-xl-3">
+                                                                                <div className="text-center border-theme">
+                                                                                    <p class="mb-1 text-capitalize">Ticket Available</p>
+                                                                                    <h3 class="mb-0 theme-text font-w600">{totalAvailableTickets}</h3>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="col-md-3 col-lg-3 col-xl-3">
+                                                                                <div className="text-center border-theme">
+                                                                                    <p class="mb-1 text-capitalize">Revenue</p>
+                                                                                    <h3 class="mb-0 theme-text font-w600">{Eventdata.countrysymbol}{totalRevenue}</h3>
+                                                                                </div>
+                                                                            </div>
+                                                                        </Row>
+                                                                    </Col>
+                                                                )}
+                                                                <Col md={12} className="event_list_box_main in-ticket-list-1 p-0">
+                                                                    <button onClick={() => navigate(`${organizer_url}event/mange-attendee/${Eventdata._id}/${Eventdata.name}/${item.id}`)} className="list-active-ticket-btn" type="button">Attendee  <img src={ArrowPng} className="arraw-svg ml-3" alt="" /></button>
+                                                                    <div className="event_list_box p-0">
+                                                                        <Row>
+                                                                            <Col md={2} className="d-flex align-items-center justify-content-center">
+                                                                                <div className="text-center pl-1">
+                                                                                    <span className="ticket-list-name">{item.name}</span> <span className="cursor-pointre list-event-edit-btn editbtn-mng-tic" onClick={() => EditEvent(Eventdata._id, Eventdata.name, item.id)}><img src={EditPng} alt="" /></span>
+                                                                                    <p className="ticket-list-price_title mb-0">Price</p>
+                                                                                    <p className="ticket-list-price_value">{item.ticket_type == 1 ? Eventdata.countrysymbol + ' ' + item.price : 'Free'}</p>
+                                                                                </div>
+                                                                            </Col>
+                                                                            <Col md={8}>
+                                                                                <div>
+                                                                                    <Row className="py-4">
+                                                                                        <Col md={3} className="ticket-sts-box  text-center border-right">
+                                                                                            <p>Total Ticket</p>
+                                                                                            <h2>{item.quantity * item.groupqty}</h2>
+                                                                                        </Col>
+                                                                                        <Col md={3} className="ticket-sts-box  text-center  border-right">
+                                                                                            <p>Ticket Sold</p>
+                                                                                            <h2>{CountTicketSold(item.id) * item.groupqty}</h2>
+                                                                                        </Col>
+                                                                                        <Col md={3} className="ticket-sts-box  text-center  border-right">
+                                                                                            <p>Ticket Available</p>
+                                                                                            <h2><h2>{parseInt(item.quantity, 10) * item.groupqty - parseInt(CountTicketSold(item.id), 10) * item.groupqty}</h2></h2>
+                                                                                        </Col>
+                                                                                        <Col md={3} className="ticket-sts-box  text-center">
+                                                                                            <p>Revenue</p>
                                                                                             <h2>
-                                                                                                {item.price > 0 ? (
-                                                                                                    <>
-                                                                                                        {Eventdata.countrysymbol}{parseInt(item.price, 10) * parseInt(CountTicketSold(item.id), 10)}
-                                                                                                    </>
-                                                                                                ) : 'FREE'}
+                                                                                                <h2>
+                                                                                                    {item.price > 0 ? (
+                                                                                                        <>
+                                                                                                            {Eventdata.countrysymbol}{parseInt(item.price, 10) * parseInt(CountTicketSold(item.id), 10)}
+                                                                                                        </>
+                                                                                                    ) : 'FREE'}
 
+                                                                                                </h2>
                                                                                             </h2>
-                                                                                        </h2>
-                                                                                    </Col>
-                                                                                </Row>
-                                                                            </div>
-                                                                        </Col>
-                                                                        <Col md={2} className="d-flex align-items-center">
-                                                                            <div className="">
-                                                                                <div class="input-group mb-3 d-flex align-items-center">
-                                                                                    <input id={`sellingfirst${index}`} checked={item.isselling} onChange={(event) => handleIsSellingFast(item.id, event.target.checked)} type="checkbox" class="form-check-input" /><label className="mx-2 mb-0" style={{fontSize: '10px'}} for={`sellingfirst${index}`}>Is Selling Fast</label>
+                                                                                        </Col>
+                                                                                    </Row>
                                                                                 </div>
-                                                                                <div class="input-group mb-3  d-flex align-items-center">
-                                                                                    <input id={`soldout${index}`} checked={item.issoldout} onChange={(event) => handleIsSoldOut(item.id, event.target.checked)} type="checkbox" class="form-check-input" /><label className="mx-2  mb-0" style={{fontSize: '10px'}} for={`soldout${index}`}>Is Sold Out</label>
+                                                                            </Col>
+                                                                            <Col md={2} className="d-flex align-items-center">
+                                                                                <div className="">
+                                                                                    <div class="input-group mb-3 d-flex align-items-center">
+                                                                                        <input id={`sellingfirst${index}`} checked={item.isselling} onChange={(event) => handleIsSellingFast(item.id, event.target.checked)} type="checkbox" class="form-check-input" /><label className="mx-2 mb-0" style={{ fontSize: '10px' }} for={`sellingfirst${index}`}>Is Selling Fast</label>
+                                                                                    </div>
+                                                                                    <div class="input-group mb-3  d-flex align-items-center">
+                                                                                        <input id={`soldout${index}`} checked={item.issoldout} onChange={(event) => handleIsSoldOut(item.id, event.target.checked)} type="checkbox" class="form-check-input" /><label className="mx-2  mb-0" style={{ fontSize: '10px' }} for={`soldout${index}`}>Is Sold Out</label>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Row>
-                                                                </div>
-                                                            </Col>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </div>
+                                                                </Col>
+                                                            </>
                                                         ))}
                                                     </>
                                                 ) : (

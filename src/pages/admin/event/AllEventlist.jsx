@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import JoinStartButton from "../../../common/elements/JoinStartButton";
 import Searchicon from '../../../common/icon/searchicon.png';
 import Noimg from "../../../common/image/noimg.jpg";
+import { FiEdit, FiTrash } from "react-icons/fi";
 import {
     Modal,
     Input,
@@ -54,6 +55,172 @@ const Dashboard = ({ title }) => {
     const [valueEndtdate, setvalueEndtdate] = useState();
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [Isany, setIsany] = useState(false);
+
+    // TAX
+    const [taxEventid, settaxEventid] = useState();
+    const [EventCurrecy, setEventCurrecy] = useState();
+    const [Taxuid, setTaxuid] = useState();
+    const [Taxbtnloader, setTaxbtnloader] = useState(false);
+    const [Taxlistloader, setTaxlistloader] = useState(false);
+    const [Taxlist, setTaxlist] = useState([]);
+    const [taxTitle, settaxTitle] = useState();
+    const [taxAmount, settaxAmount] = useState();
+    const [selecttaxType, setselecttaxType] = useState();
+    const [taxTypeOption, settaxTypeOption] = useState([
+        { value: 'Percentage', label: 'Percentage' },
+        { value: 'Amount', label: 'Amount' }
+    ]);
+    const HandelTaxform = async (e) => {
+        e.preventDefault();
+        try {
+            if (!taxTitle || !taxAmount || !selecttaxType) { return toast.error("All field require") }
+            if (taxAmount && taxAmount <= 0) { return toast.error("Enter valid amount") }
+            setTaxbtnloader(true);
+            const requestData = {
+                uid: Taxuid ? Taxuid : '',
+                eventid: taxEventid,
+                taxtitle: taxTitle,
+                taxtype: selecttaxType.value,
+                taxamount: taxAmount
+            };
+            fetch(apiurl + 'admin/insert/event-tax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        toast.success("Tax added successfully");
+                        setTaxlist(data.data);
+                        Taxempty();
+                    } else {
+                        toast.error(data.message);
+                    }
+                    setTaxbtnloader(false);
+                })
+                .catch(error => {
+                    setTaxbtnloader(false);
+                    toast.error('Insert error: ' + error.message);
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            toast.error(error.message);
+            setTaxbtnloader(false);
+        }
+    }
+    const GetTaxUpdatedata = async (id) => {
+        try {
+            setTaxlistloader(true);
+            const requestData = {
+                id: id,
+            };
+            fetch(apiurl + 'admin/fetch/event-tax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        settaxAmount(data.data.taxamount);
+                        settaxTitle(data.data.taxtitle)
+                        setselecttaxType([{ value: data.data.taxtype, label: data.data.taxtype }]);
+                        setTaxuid(data.data._id);
+                    } else {
+                        toast.error(data.message);
+                    }
+                    setTaxlistloader(false);
+                })
+                .catch(error => {
+                    setTaxlistloader(false);
+                    toast.error('Insert error: ' + error.message);
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            toast.error(error.message);
+            setTaxlistloader(false);
+        }
+    }
+    const DeleteTax = async (id, eventid) => {
+        try {
+            setTaxlistloader(true);
+            const requestData = {
+                id: id,
+            };
+            fetch(apiurl + 'admin/delete/event-tax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        GetTaxlist(eventid);
+                    } else {
+                        toast.error(data.message);
+                    }
+                    setTaxlistloader(false);
+                })
+                .catch(error => {
+                    setTaxlistloader(false);
+                    toast.error('Insert error: ' + error.message);
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            toast.error(error.message);
+            setTaxlistloader(false);
+        }
+    }
+    const GetTaxlist = async (id) => {
+        try {
+            setTaxlistloader(true);
+            const requestData = {
+                id: id,
+            };
+            fetch(apiurl + 'admin/fetch/event-tax-list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        setTaxlist(data.data);
+                    } else {
+                        toast.error(data.message);
+                    }
+                    setTaxlistloader(false);
+                })
+                .catch(error => {
+                    setTaxlistloader(false);
+                    toast.error('Insert error: ' + error.message);
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            toast.error(error.message);
+            setTaxlistloader(false);
+        }
+    }
+    const HandelUpdateTax = (id, currency) => {
+        settaxEventid(id);
+        setEventCurrecy(currency);
+        GetTaxlist(id);
+        settaxaddModal(true);
+    }
+    const Taxempty = () => {
+        settaxAmount("");
+        settaxTitle("");
+        setselecttaxType("");
+    }
     const handleCategoryChange = (id) => {
         if (id == 'all') {
             setSelectedCategories([]);
@@ -336,13 +503,6 @@ const Dashboard = ({ title }) => {
     const [Tixmefee, setTixmefee] = useState();
     const [Platformfee, setPlatformfee] = useState();
     const [EventId, setEventId] = useState();
-
-    const HandelUpdateTax = (id, Tixmefee, Platformfee) => {
-        setTixmefee(Tixmefee);
-        setPlatformfee(Platformfee);
-        setEventId(id);
-        settaxaddModal(true);
-    }
     const HandelTaxaddform = async (e) => {
         e.preventDefault();
         try {
@@ -424,44 +584,92 @@ const Dashboard = ({ title }) => {
                 </ModalBody>
             </Modal>
 
-            <Modal isOpen={taxaddModal} toggle={() => settaxaddModal(!taxaddModal)} centered>
+            <Modal isOpen={taxaddModal} toggle={() => settaxaddModal(!taxaddModal)} centered size="xs">
                 <ModalHeader toggle={() => settaxaddModal(!taxaddModal)}>Add Tax</ModalHeader>
                 <ModalBody>
-                    <form onSubmit={HandelTaxaddform}>
+                    <form onSubmit={HandelTaxform}>
                         <Row>
                             <div className="col-12">
-                                <span class="">Tixme Fee (%)</span>
-                                <div class="input-group mb-3 input-warning-o">
-                                    <input
-                                        type="text"
-                                        class="form-control input-default"
-                                        value={Tixmefee}
-                                        onChange={(e) => setTixmefee(e.target.value)}
-                                        onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
-                                        placeholder="Enter Tixme Fee"
-                                        pattern="\d*"
-                                    />
+                                <div className="row">
+                                    <div className="col-12">
+                                        <label htmlFor="">Tax Title <span className="text-danger">*</span></label>
+                                        <input
+                                            type="text"
+                                            class="form-control input-default"
+                                            value={taxTitle}
+                                            onChange={(e) => settaxTitle(e.target.value)}
+                                            placeholder="Enter Tax Title"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <label htmlFor="">Tax Type <span className="text-danger">*</span></label>
+                                        <Select
+                                            className="react-select"
+                                            onChange={setselecttaxType}
+                                            value={selecttaxType}
+                                            options={taxTypeOption}
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <label htmlFor="">Tax Amount<span className="text-danger">*</span></label>
+                                        <input
+                                            type="text"
+                                            class="form-control input-default"
+                                            value={taxAmount}
+                                            onChange={(e) => settaxAmount(e.target.value)}
+                                            onInput={(e) => {
+                                                const value = e.target.value;
+                                                // Allow only numbers and a single decimal point with up to two decimal places
+                                                e.target.value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1').replace(/(\.\d{2})\d+/, '$1');
+                                            }}
+                                            placeholder="Enter Tixme Fee"
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="col-12">
-                                <span class="">Platform Fee (%)</span>
-                                <div class="input-group mb-3 input-warning-o">
-                                    <input
-                                        type="text"
-                                        class="form-control input-default"
-                                        value={Platformfee}
-                                        onChange={(e) => setPlatformfee(e.target.value)}
-                                        onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
-                                        placeholder="Enter Platform Fee"
-                                        pattern="\d*"
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-12">
-                                <button type="submit" className="w-100 btn theme-bg text-white">Submit</button>
+                            <div className="col-12 my-2">
+                                <button type={Taxbtnloader ? 'button' : 'submit'} className="w-100 btn theme-bg text-white">{Taxbtnloader ? 'Please Wait...' : 'Submit'}</button>
                             </div>
                         </Row>
                     </form>
+                    { }
+                    <Row>
+                        <div className="col-12">
+                            <h4>Tax List</h4>
+                            <hr className="my-2"></hr>
+                        </div>
+                        <div className="col-12">
+                            {Taxlistloader ? (
+                                <div className="linear-background w-100" style={{ height: '200px' }}> </div>
+                            ) : (
+                                <>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Title</th>
+                                                <th scope="col">Tax Value</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Taxlist && Taxlist.map((item) => (
+                                                <>
+                                                    <tr>
+                                                        <td scope="col">{item.taxtitle}</td>
+                                                        <td scope="col">{item.taxtype != "Percentage" && EventCurrecy}{item.taxamount} {item.taxtype == "Percentage" && '(%)'}</td>
+                                                        <td scope="col">
+                                                            <span onClick={() => GetTaxUpdatedata(item._id)} className="text-theme m-2 cursor-pointer"><FiEdit size={25} /></span>
+                                                            <span onClick={() => DeleteTax(item._id, item.eventid)} className="text-danger m-2 cursor-pointer"><FiTrash size={25} /></span>
+                                                        </td>
+                                                    </tr>
+                                                </>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </>
+                            )}
+                        </div>
+                    </Row>
                 </ModalBody>
             </Modal>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
@@ -626,11 +834,12 @@ const Dashboard = ({ title }) => {
                                                                                     <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${admin_url}event/mange-attendee/${item._id}/${item.name}`)}>ATTENDEES</button>
                                                                                 </div>
                                                                                 <div className="text-end mr-5">
-                                                                                    {!item.tixmefee || !item.platformfee ? (
+                                                                                    {/* {!item.tixmefee || !item.platformfee ? (
                                                                                         <button style={{ fontSize: '14px' }} className="btn btn-danger text-white my-1 w-100" type="button" onClick={() => HandelUpdateTax(item._id, item.tixmefee ? item.tixmefee : 1, item.platformfee ? item.platformfee : 1)}>ADD TAX</button>
                                                                                     ) : (
                                                                                         <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => HandelUpdateTax(item._id, item.tixmefee ? item.tixmefee : 1, item.platformfee ? item.platformfee : 1)}>UPDATE TAX</button>
-                                                                                    )}
+                                                                                    )} */}
+                                                                                    <button style={{ fontSize: '14px' }} className="btn btn-danger text-white my-1 w-100" type="button" onClick={() => HandelUpdateTax(item._id, item.countrysymbol)}>ADD TAX</button>
                                                                                 </div>
                                                                             </div>
                                                                         </Col>

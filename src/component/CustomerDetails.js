@@ -555,7 +555,7 @@ const Dashboard = ({ title }) => {
                                                                                         <input className="form-control" type="text" placeholder="Pincode" value={upincode} onChange={(e) => setupincode(e.target.value)}></input>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div className="col-md-12 pb-3">
+                                                                                <div className="col-md-12 pb-3 d-none">
                                                                                     <div className="form-group">
                                                                                         <p>Hobbies</p>
                                                                                         {Hobby.map((item, index) => (

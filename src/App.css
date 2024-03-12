@@ -1861,7 +1861,7 @@ img.coundown-clock {
   height: 41px;
   width: 36px;
   position: relative;
-  top: -2px;
+  top: -3px;
   margin-right: 5px;
 }
 
@@ -2248,16 +2248,16 @@ span.sidebar-icon {
   content: 'X';
   position: absolute;
   right: 3px;
-  top: 6px;
+  top: 8px;
   background: #fff;
   color: #0047ab;
   height: 14px;
   width: 14px;
   text-align: center;
-  line-height: 14px;
+  line-height: 0.9rem;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 9px;
+  font-size: 11px;
 }
 .event-page-category-filter-box1 span {
   background: #0047ab;
@@ -2324,4 +2324,23 @@ img.organiger-logo {
 .dash-icon {
     color: #0a4eaf;
     font-size: 35px;
+}
+.border-theme {
+    border: 1px solid #0047ab;
+    border-radius: 4px;
+    padding: 15px 0px;
+}
+.theme-text{
+  color: #0047ab;
+}
+span.cut_ticket_price {
+  font-size: 12px;
+  text-decoration: line-through;
+  margin: 0px 5px;
+  color: #0047ab;
+  text-decoration-thickness: 2px !important; /* Adjust the thickness as needed */
+}
+.event_page_price_title{
+  font-size: 12px;
+  height: 30px;
 }

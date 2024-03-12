@@ -109,6 +109,7 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [TicketEndtdate, setTicketEndtdate] = useState(moment());
     const [TicketEventdata, setTicketEventdata] = useState(moment());
     const [Price, setPrice] = useState();
+    const [cutPrice, setcutPrice] = useState();
     const [Tax, setTax] = useState();
     const [Pricedisable, setPricedisable] = useState(false);
     const [EditId, setEditId] = useState();
@@ -426,11 +427,17 @@ const Type = ({ title, editid, ticketeditid }) => {
     const UpdateTicket = async (id) => {
         const getticketdata = TicketList.find(ticket => ticket.id === id);
         if (getticketdata) {
+            if(getticketdata.ticket_type == 2){
+                setPricedisable(true);
+            }else{
+                setPricedisable(false);
+            }
             setTickettype(getticketdata.ticket_type);
             setTicketname(getticketdata.name);
             setTicketdesc(getticketdata.description);
             setQuantity(getticketdata.quantity);
             setPrice(getticketdata.price);
+            setcutPrice(getticketdata.cut_price || '');
             setTicketisselling(getticketdata.isselling ? true : false);
             setTicketissoldout(getticketdata.issoldout ? true : false);
             setIsgrouptickets(getticketdata.groupqty > 1 ? true : false);
@@ -906,6 +913,11 @@ const Type = ({ title, editid, ticketeditid }) => {
             if (Price <= 0 && Tickettype == 1) {
                 return toast.error('Enter valid ticket price');
             }
+            if (cutPrice) {
+                if (Tickettype == 1 && cutPrice <= 0 || cutPrice <= Price) {
+                    return toast.error('Enter valid cut price');
+                }
+            }
             if (Isgrouptickets && !GroupQty) {
                 return toast.error('Enter group quantity');
             }
@@ -943,6 +955,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                 scan_min_datetime: TicketStartdate,
                 event_min_datetime: EventSubtype == 2 ? TicketEventdata : Startdateselect,
                 price: Price,
+                cutprice: cutPrice || '',
                 isselling: Ticketisselling,
                 issoldout: Ticketissoldout,
                 groupqty: Isgrouptickets ? GroupQty : 1,
@@ -995,6 +1008,11 @@ const Type = ({ title, editid, ticketeditid }) => {
             if (Price <= 0 && Tickettype == 1) {
                 return toast.error('Enter valid ticket price');
             }
+            if (cutPrice) {
+                if (Tickettype == 1 && cutPrice <= 0 || cutPrice <= Price) {
+                    return toast.error('Enter valid cut price');
+                }
+            }
             if (Isgrouptickets && !GroupQty) {
                 return toast.error('Enter group quantity');
             }
@@ -1033,6 +1051,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                 scan_min_datetime: TicketStartdate,
                 event_min_datetime: EventSubtype == 2 ? TicketEventdata : Startdateselect,
                 price: Price,
+                cutprice: cutPrice || '',
                 isselling: Ticketisselling,
                 issoldout: Ticketissoldout,
                 groupqty: Isgrouptickets ? GroupQty : 1,
@@ -1337,7 +1356,7 @@ const Type = ({ title, editid, ticketeditid }) => {
 
                         setIsclockCountdown(data.data.is_clock_countdown)
                         setIsSellingFast(data.data.is_selling_fast)
-                        setIsSoldOut(data.data.IsSoldOut)
+                        setIsSoldOut(data.data.is_soldout)
 
                         setStartdateselect(data.data.start_data_min[0] || moment())
                         setEnddateselect(data.data.end_data_min[0] || moment())
@@ -2085,7 +2104,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                     </Col >
                 </Row >
             )}
-            <Modal isOpen={Ticketshow} className='modal-dialog-centered modal-xs'>
+            <Modal isOpen={Ticketshow} className='modal-dialog-centered modal-lg'>
                 <ModalHeader className='bg-transparent' toggle={() => setTicketshow(!Ticketshow)}>Create Event Ticket</ModalHeader>
                 <ModalBody className=''>
                     <Row>
@@ -2098,15 +2117,15 @@ const Type = ({ title, editid, ticketeditid }) => {
                             </div>
                         </Col>
                         <Col md={12} className="mb-2 mt-4">
-                            <label htmlFor="" className="text-black">Ticket name</label>
+                            <label htmlFor="" className="text-black">Ticket name <span className="text-danger">*</span></label>
                             <input type="text" class="form-control input-default" onChange={(e) => setTicketname(e.target.value)} value={Ticketname} placeholder="Ticket name" />
                         </Col>
                         <Col md={12} className="mb-2">
-                            <label htmlFor="" className="text-black">Ticket short description</label>
+                            <label htmlFor="" className="text-black">Ticket short description <span className="text-danger">*</span></label>
                             <textarea type="text" class="form-control input-default" onChange={(e) => setTicketdesc(e.target.value)} placeholder="Ticket short description" >{Ticketdesc}</textarea>
                         </Col>
-                        <Col md={6} className="mb-2">
-                            <label htmlFor="" className="text-black">Available ticket quantity</label>
+                        <Col md={4} className="mb-2">
+                            <label htmlFor="" className="text-black">Available ticket quantity <span className="text-danger">*</span></label>
                             <input
                                 type="text"
                                 class="form-control input-default"
@@ -2117,8 +2136,8 @@ const Type = ({ title, editid, ticketeditid }) => {
                                 pattern="\d*"
                             />
                         </Col>
-                        <Col md={6} className="mb-2">
-                            <label htmlFor="" className="text-black">Ticket price</label>
+                        <Col md={4} className="mb-2">
+                            <label htmlFor="" className="text-black">Price <span className="text-danger">*</span></label>
                             <input
                                 type="text"
                                 class="form-control input-default"
@@ -2126,7 +2145,19 @@ const Type = ({ title, editid, ticketeditid }) => {
                                 disabled={Pricedisable}
                                 onChange={(e) => setPrice(e.target.value)}
                                 onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
-                                placeholder="Enter Ticket price"
+                                placeholder="Enter Price"
+                                pattern="\d*"
+                            />
+                        </Col>
+                        <Col md={4} className="mb-2">
+                            <label htmlFor="" className="text-black">Cut Price</label>
+                            <input
+                                type="text"
+                                class="form-control input-default"
+                                value={cutPrice}
+                                onChange={(e) => setcutPrice(e.target.value)}
+                                onInput={(e) => e.target.value = e.target.value.replace(/\D/g, '')}
+                                placeholder="Enter Cut Price"
                                 pattern="\d*"
                             />
                         </Col>
@@ -2184,7 +2215,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                             </div>
                         </div>
                         <div className="col-12">
-                            <p className="mb-0">Ticket Scan Start From</p>
+                            <p className="mb-0">Ticket Scan Start From <span className="text-danger">*</span></p>
                         </div>
                         <Col md={6} className="mb-2 mt-1">
                             <label htmlFor="" className="text-black">Date</label>
@@ -2218,7 +2249,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                                     ) : (
                                         <>
                                             {TicketUid ? (
-                                                <button type="button" onClick={() => handelUpdateTicket(EditId)} className=" w-100 text-white btn theme-bg">Update ticket</button>
+                                                <button type="button" onClick={() => handelUpdateTicket(EditId)} className=" w-100 text-white btn theme-bg">Update Ticket</button>
                                             ) : (
                                                 <button type="button" onClick={() => handelCreateTicket(EditId)} className=" w-100 text-white btn theme-bg">Add ticket</button>
                                             )}
