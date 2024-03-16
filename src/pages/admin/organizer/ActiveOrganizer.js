@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import { apiurl, admin_url } from '../../../common/Helpers';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 import toast from "react-hot-toast";
 import withReactContent from 'sweetalert2-react-content'
@@ -15,6 +15,7 @@ import {
     ModalBody,
     ModalHeader
 } from 'reactstrap';
+import { AiFillEye } from "react-icons/ai";
 const Dashboard = ({ title }) => {
     const MySwal = withReactContent(Swal)
     // modal
@@ -113,6 +114,54 @@ const Dashboard = ({ title }) => {
             console.error('Api error:', error);
         }
     }
+    const navigate = useNavigate();
+    const HanelView = async (id) => {
+        localStorage.setItem("orgId",id);
+        navigate(`${admin_url}all-events-list`);
+    }
+    const Delete = async (id) => {
+        MySwal.fire({
+            title: 'Are you sure to delete this?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Delete',  // Change this text for the confirm button
+            denyButtonText: 'Cancel',
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                try {
+                    const requestData = {
+                        upid: id
+                    };
+                    fetch(apiurl + 'admin/delete/organizer', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success == true) {
+                                toast.success('Deleted', {
+                                    duration: 6000,
+                                });
+                                fetchList();
+                            }
+                        })
+                        .catch(error => {
+                            toast.error(error.message, {
+                                duration: 5000,
+                            });
+                        });
+                } catch (error) {
+                    console.error('Api error:', error);
+                }
+            } else if (result.isDenied) {
+
+            }
+        })
+    }
     function updateIsactive(id) {
         MySwal.fire({
             title: 'Are you sure you want to deactive?',
@@ -201,6 +250,7 @@ const Dashboard = ({ title }) => {
                                                             <th><strong>Phone Number</strong></th>
                                                             <th><strong>Country</strong></th>
                                                             <th><strong>Message</strong></th>
+                                                            <th><strong>Events</strong></th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
@@ -220,6 +270,9 @@ const Dashboard = ({ title }) => {
                                                                     )}
                                                                 </td>
                                                                 <td>
+                                                                <span onClick={() => HanelView(item._id)} className="theme-text cursor-pointer mx-2"><AiFillEye size={20} /></span>
+                                                                </td>
+                                                                <td>
                                                                     <div class="dropdown">
                                                                         <button type="button" class="btn btn-success light sharp" data-bs-toggle="dropdown">
                                                                             <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24" /><circle fill="#000000" cx="5" cy="12" r="2" /><circle fill="#000000" cx="12" cy="12" r="2" /><circle fill="#000000" cx="19" cy="12" r="2" /></g></svg>
@@ -227,6 +280,7 @@ const Dashboard = ({ title }) => {
                                                                         <div class="dropdown-menu">
                                                                             <Link to={`${admin_url}organizer-details/${item._id}/${item.name}`} class="dropdown-item">View</Link>
                                                                             <Link onClick={() => updateIsactive(item._id)} class="dropdown-item">Deactive</Link>
+                                                                            <Link onClick={() => Delete(item._id)} class="dropdown-item">Delete</Link>
                                                                         </div>
                                                                     </div>
                                                                 </td>

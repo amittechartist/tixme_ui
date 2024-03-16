@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { apiurl, admin_url } from '../../../common/Helpers';
 import { Link } from "react-router-dom";
 import Select from 'react-select'
-import { FiPlus } from "react-icons/fi";
+import { FiEdit2, FiPlus } from "react-icons/fi";
 import {
     Modal,
     Input,
@@ -24,6 +24,7 @@ const Dashboard = ({ title }) => {
     const [Addnewmodal, setAddnewmodal] = useState(false);
     const [List, setList] = useState([]);
     const [name, setname] = useState();
+    const [Upid, setUpid] = useState();
     const [point, setpoint] = useState();
     const [discount, setdiscount] = useState();
     const [currencyList, setcurrencyList] = useState([{ value: "", label: "Currency" }]);
@@ -103,6 +104,7 @@ const Dashboard = ({ title }) => {
             }
             setBtnLoader(true);
             const requestData = {
+                upid: Upid ? Upid : null,
                 name: name,
                 point: point,
                 discount: discount,
@@ -126,6 +128,7 @@ const Dashboard = ({ title }) => {
                         setdiscount('');
                         setCurrencyId('');
                         setCurrency('');
+                        setUpid("");
                         Fetchlist();
                     } else {
                         toast.error(data.message);
@@ -143,6 +146,37 @@ const Dashboard = ({ title }) => {
         }
     };
     const MySwal = withReactContent(Swal);
+
+
+
+    const CheckEdit = async (id) => {
+        try {
+            const requestData = {
+                id: id
+            };
+            fetch(apiurl + 'admin/coupon-details', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setUpid(data.data._id);
+                    setname(data.data.name);
+                    setpoint(data.data.point);
+                    setdiscount(data.data.discount);
+                    setAddnewmodal(true);
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+    }
+
     function CheckDelete(id) {
         MySwal.fire({
             title: 'Are you sure you want to delete?',
@@ -229,7 +263,7 @@ const Dashboard = ({ title }) => {
                                     </button>
                                 ) : (
                                     <button className="w-100 theme-btn" onClick={() => HandelCreateCoupon()}>
-                                        <span className="theme-btn-icon"><FiPlus /></span> <span>Create coupon</span>
+                                        <span className="theme-btn-icon"><FiPlus /></span> <span>{Upid ? 'Update' : 'Create'} coupon</span>
                                     </button>
                                 )}
                             </div>
@@ -243,7 +277,7 @@ const Dashboard = ({ title }) => {
                         <Col md={12}>
                             <Card className="">
                                 <Card.Header className="d-flex justify-content-end">
-                                <button type="button" className="btn theme-bg text-white" onClick={() => setAddnewmodal(!Addnewmodal)}><span className="theme-btn-icon"><FiPlus /></span> Add New</button>
+                                    <button type="button" className="btn theme-bg text-white" onClick={() => setAddnewmodal(!Addnewmodal)}><span className="theme-btn-icon"><FiPlus /></span> Add New</button>
                                 </Card.Header>
                                 <Card.Body className="py-4">
                                     <Row className="">
@@ -263,8 +297,9 @@ const Dashboard = ({ title }) => {
                                                                         <div className="col-md-8 p-2">
                                                                             <p className="mb-0 coupon-name w-100" style={{ fontSize: '16px', fontWeight: '600' }}>{item.name}</p>
                                                                             <p className="mb-0 coupon-point" style={{ fontSize: '14px', fontWeight: '600' }}>{item.point} Points</p>
-                                                                            <div className="action-btn-div float-end mr-3" onClick={() => CheckDelete(item._id)} style={{ cursor: 'pointer' }}>
-                                                                                <span className="text-danger" style={{ border: '1px solid red', borderRadius: '20px', padding: '2px 20px', fontSize: '18px' }}><FiTrash2 /></span>
+                                                                            <div className="action-btn-div float-end mr-3" style={{ cursor: 'pointer' }}>
+                                                                                <span onClick={() => CheckEdit(item._id)} className="text-success mx-1" style={{ border: '1px solid green', borderRadius: '20px', padding: '2px 20px', fontSize: '18px' }}><FiEdit2 /></span>
+                                                                                <span onClick={() => CheckDelete(item._id)} className="text-danger" style={{ border: '1px solid red', borderRadius: '20px', padding: '2px 20px', fontSize: '18px' }}><FiTrash2 /></span>
                                                                             </div>
                                                                         </div>
                                                                     </div>

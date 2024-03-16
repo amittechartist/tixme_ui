@@ -5,7 +5,7 @@ import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
 import Footer from '../../../components/footer';
 import toast from 'react-hot-toast';
-import { apiurl, app_url, isEmail } from '../../../common/Helpers';
+import { apiurl, app_url, isEmail, RemoveSession } from '../../../common/Helpers';
 import { Link, useNavigate } from "react-router-dom";
 import 'react-phone-input-2/lib/style.css';
 import SignupImg from '../../../common/image/signup.svg';
@@ -48,6 +48,7 @@ const About = () => {
                 .then(data => {
                     setLoader(false);
                     if (data.success == true) {
+                        RemoveSession();
                         localStorage.setItem('userauth', data.token);
                         localStorage.setItem('username', data.username);
                         localStorage.setItem('customerid', data.id);

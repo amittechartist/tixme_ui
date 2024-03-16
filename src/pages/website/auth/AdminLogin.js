@@ -4,7 +4,7 @@ import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
 import { FaEnvelope } from "react-icons/fa6";
 import toast from 'react-hot-toast';
-import { apiurl, admin_url, app_url, isEmail, organizer_url } from '../../../common/Helpers';
+import { apiurl, admin_url, app_url, isEmail, RemoveSession } from '../../../common/Helpers';
 import { Link, useNavigate } from "react-router-dom";
 import SignupImg from '../../../common/image/signup.svg';
 import Swal from 'sweetalert2'
@@ -40,6 +40,7 @@ const About = () => {
                 .then(data => {
                     setLoader(false);
                     if (data.success == true) {
+                        RemoveSession();
                         localStorage.setItem('adminauth', data.token);
                         localStorage.setItem('admin_role', 1);
                         toast.success('Login successful', {

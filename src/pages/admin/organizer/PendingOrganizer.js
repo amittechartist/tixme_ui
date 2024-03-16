@@ -82,6 +82,48 @@ const Dashboard = ({ title }) => {
             setListitems(Listitemsfilter);
         }
     };
+    const Delete = async (id) => {
+        MySwal.fire({
+            title: 'Are you sure to delete this?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Delete',  // Change this text for the confirm button
+            denyButtonText: 'Cancel',
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                try {
+                    const requestData = {
+                        upid: id
+                    };
+                    fetch(apiurl + 'admin/delete/organizer', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success == true) {
+                                toast.success('Deleted', {
+                                    duration: 6000,
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            toast.error(error.message, {
+                                duration: 5000,
+                            });
+                        });
+                } catch (error) {
+                    console.error('Api error:', error);
+                }
+            } else if (result.isDenied) {
+
+            }
+        })
+    }
     const ActiveOrganizer = async (id) => {
         try {
             const requestData = {
@@ -169,7 +211,7 @@ const Dashboard = ({ title }) => {
                                 <Card.Body>
                                     <div className="row">
                                         <div className="col-7">
-                                            <h5 className="text-capitalize mb-0">Active Organizers</h5>
+                                            <h5 className="text-capitalize mb-0">Pending Organizers</h5>
                                         </div>
                                         <div className="col-3 d-flex justify-content-end">
                                             <Select
@@ -226,6 +268,7 @@ const Dashboard = ({ title }) => {
                                                                         <div class="dropdown-menu">
                                                                             <Link to={`${admin_url}organizer-details/${item._id}/${item.name}`} class="dropdown-item">View</Link>
                                                                             <Link onClick={() => ActiveOrganizer(item._id)} class="dropdown-item">{item.issignupcomplete === 0 ? 'Active' : 'Resend Link'}</Link>
+                                                                            <Link onClick={() => Delete(item._id)} class="dropdown-item">Delete</Link>
                                                                         </div>
                                                                     </div>
                                                                 </td>

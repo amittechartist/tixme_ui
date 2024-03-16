@@ -5,22 +5,31 @@ export const admin_url = app_url + 'admin/';
 export const organizer_url = app_url + 'organizer/';
 export const customer_url = app_url + 'customer/';
 
-// export const apiurl = 'http://localhost:5001/api/v1/';
-// export const imgurl = 'http://localhost:5001/uploads/';
-// export const qr_url = 'http://localhost:3001/scanner/organizer/qr/';
+export const apiurl = 'http://localhost:5001/api/v1/';
+export const imgurl = 'http://localhost:5001/uploads/';
+export const qr_url = 'http://localhost:3001/scanner/organizer/qr/';
 
-export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
-export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
-export const qr_url = 'https://tixme.co/scanner/organizer/qr/';
+// export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
+// export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
+// export const qr_url = 'https://tixme.co/scanner/organizer/qr/';
 
-
-
+export function RemoveSession() {
+    localStorage.removeItem('userauth');
+    localStorage.removeItem('username');
+    localStorage.removeItem('customerid');
+    localStorage.removeItem('user_role');
+    localStorage.removeItem('organizerid');
+    localStorage.removeItem('organizername');
+    localStorage.removeItem('organizer_role');
+    localStorage.removeItem('adminauth');
+    localStorage.removeItem('admin_role');
+}
 
 export function get_percentage(per, type, total) {
     let TotalTax = 0;
-    if(type =="Amount"){
+    if (type == "Amount") {
         TotalTax = per;
-    }else{
+    } else {
         TotalTax = ((total * per) / 100).toFixed(2);
     }
     return TotalTax; // Returns a string with two decimal places
@@ -32,16 +41,16 @@ export function isEmail(email) {
     return regex.test(email);
 }
 export const get_date_time = (date) => {
-    if(date){
+    if (date) {
 
         const options = { day: 'numeric', month: 'short', year: 'numeric' };
         const dateParts = new Intl.DateTimeFormat('en-US', options).formatToParts(new Date(date));
-        
+
         const Dateview = dateParts[2].value + ' ' + dateParts[0].value + ' ' + dateParts[4].value;
         const Timeview = new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
+
         return [{ Dateview, Timeview }];
-    }else{
+    } else {
         return null;
     }
 };

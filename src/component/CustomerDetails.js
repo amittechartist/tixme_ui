@@ -6,10 +6,12 @@ import Nouserphoto from '../common/image/nouser.png';
 import { useNavigate } from "react-router-dom";
 import { Country, State, City } from 'country-state-city';
 import toast from "react-hot-toast";
+// COMPONENT
+import UserReward from '../pages/customer/MyrewardsComponent';
 const Dashboard = ({ title }) => {
     const navigate = useNavigate();
-    const Beartoken = localStorage.getItem('userauth');
     const Customerid = localStorage.getItem('customerid');
+    const Adminauth = localStorage.getItem('adminauth');
     const [Loader, setLoader] = useState(false);
     const [ApiLoader, setApiLoader] = useState(false);
 
@@ -419,6 +421,10 @@ const Dashboard = ({ title }) => {
                                                             </li>
                                                             <li className="nav-item"><a href="#password-settings" data-bs-toggle="tab" className="nav-link">Change Password</a>
                                                             </li>
+                                                            {Adminauth && (
+                                                                <li className="nav-item"><a href="#CouponList" data-bs-toggle="tab" className="nav-link">Coupon</a>
+                                                                </li>
+                                                            )}
                                                         </ul>
                                                         <div className="tab-content pt-3">
                                                             <div id="about-me" className="tab-pane active show">
@@ -558,7 +564,7 @@ const Dashboard = ({ title }) => {
                                                                                 <div className="col-md-12 pb-3 d-none">
                                                                                     <div className="form-group">
                                                                                         <p>Hobbies</p>
-                                                                                        {Hobby.map((item, index) => (
+                                                                                        {/* {Hobby.map((item, index) => (
                                                                                             <span
                                                                                                 key={item.name}
                                                                                                 className={`hobby-box ${selectedHobbies.includes(item.name) || userHobbies.includes(item.name) ? 'hobby-active' : ''}`}
@@ -566,7 +572,7 @@ const Dashboard = ({ title }) => {
                                                                                             >
                                                                                                 {item.name}
                                                                                             </span>
-                                                                                        ))}
+                                                                                        ))} */}
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -647,6 +653,11 @@ const Dashboard = ({ title }) => {
                                                                             )}
                                                                         </form>
                                                                     </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="CouponList" className="tab-pane">
+                                                                <div className="pt-3">
+                                                                    <UserReward />
                                                                 </div>
                                                             </div>
                                                         </div>

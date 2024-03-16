@@ -6,6 +6,7 @@ import { FaDollarSign, FaCalendarAlt, FaTicketAlt, FaUsers } from 'react-icons/f
 const Dashboard = ({ title }) => {
     const [Apiloader, setApiloader] = useState(false);
     const [fetchdata, setFetchdata] = useState([]);
+    const [intervalId, setIntervalId] = useState(null);
     const fetchEvent = async () => {
         try {
             setApiloader(true)
@@ -31,6 +32,13 @@ const Dashboard = ({ title }) => {
             setApiloader(false)
         }
     }
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchEvent();
+        }, 3000);
+        setIntervalId(interval);
+        return () => clearInterval(interval);
+    }, []);
     useEffect(() => {
         fetchEvent();
     }, []);
@@ -87,8 +95,8 @@ const Dashboard = ({ title }) => {
                                                     <FaTicketAlt />
                                                 </span>
                                                 <div class="media-body ms-1">
-                                                    <p class="mb-1 text-capitalize">TOTAL TICKETS SOLD</p>
-                                                    <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.TotalTicketSold : 0}</h3>
+                                                    <p class="mb-1 text-capitalize">TOTAL Active Organizer</p>
+                                                    <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.TotalActiveOrg : 0}</h3>
                                                 </div>
                                             </div>
                                         </div>

@@ -27,7 +27,7 @@ import Lottie from "lottie-react";
 import TicketLotte from '../../lotte/ticketanimation.json';
 import '../../common/css/wiz.css';
 import TimezoneSelect from 'react-timezone-select'
-import { isTickettimeValid, isEndDateValid, shortPer, apiurl, get_date_time, get_min_date, organizer_url, formatDateToYYYYMMDD } from '../../common/Helpers';
+import { isTickettimeValid, isEndDateValid, shortPer, apiurl, get_date_time, get_min_date, organizer_url, formatDateToYYYYMMDD, admin_url } from '../../common/Helpers';
 import {
     Modal,
     Input,
@@ -124,7 +124,7 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [Pincode, setPincode] = useState();
     const [selectedImage, setSelectedImage] = useState(null);
     const [Bannerimg, setBannerimg] = useState(null);
-    const organizerid = localStorage.getItem('organizerid')
+    const organizerid = localStorage.getItem('organizerid');
     const [image, setImage] = useState(null);
     const [ThumbnailLoader, setThumbnailLoader] = useState(false);
     const [ThumbnailSuccess, setThumbnailSuccess] = useState(false);
@@ -891,7 +891,12 @@ const Type = ({ title, editid, ticketeditid }) => {
             confirmButtonText: 'View My All Events',
         }).then((result) => {
             if (result.isConfirmed) {
-                navigate(organizer_url + 'event/all-event-list');
+                const Adminauth = localStorage.getItem('adminauth');
+                if(Adminauth){
+                    navigate(admin_url + 'all-events-list/' + Countryname);
+                }else{
+                    navigate(organizer_url + 'event/all-event-list');
+                }
             }
         })
     }

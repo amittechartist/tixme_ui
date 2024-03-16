@@ -45,6 +45,7 @@ const Dashboard = ({ title }) => {
     const [CatDropdownopen, setCatDropdownopen] = useState(false);
     const [CategoryList, setCategoryList] = useState([]);
     const organizerid = localStorage.getItem('organizerid')
+    const orgfilterId = localStorage.getItem('orgId')
     const MySwal = withReactContent(Swal);
 
     const [Startdate, setStartdate] = useState(new Date());

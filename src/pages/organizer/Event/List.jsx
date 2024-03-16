@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import JoinStartButton from "../../../common/elements/JoinStartButton";
 import Searchicon from '../../../common/icon/searchicon.png';
 import Noimg from "../../../common/image/noimg.jpg";
+import { FaRegTrashCan } from "react-icons/fa6";
 import {
     Modal,
     Input,
@@ -14,8 +14,8 @@ import { Button, Col, Row } from "react-bootstrap";
 import Card from 'react-bootstrap/Card';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
-import Timelogo from "../../../common/icon/time 1.svg";
 import withReactContent from 'sweetalert2-react-content';
+import Timelogo from "../../../common/icon/time 1.svg";
 import LocationIcon from "../../../common/icon/location.svg";
 import Eimage from "../../../common/image/eimage.png";
 import EditPng from '../../../common/icon/editorg.svg';
@@ -27,7 +27,8 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 import Select from 'react-select'
 import { Link, useNavigate } from "react-router-dom";
-const Dashboard = ({ title }) => {
+const Dashboard = ({ title, Country }) => {
+    console.log(Country);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const statusOptions = [
         { value: '', label: 'Any' },
@@ -43,7 +44,13 @@ const Dashboard = ({ title }) => {
     const [visibilityFilter, setVisibilityFilter] = useState('');
     const [CatDropdownopen, setCatDropdownopen] = useState(false);
     const [CategoryList, setCategoryList] = useState([]);
-    const organizerid = localStorage.getItem('organizerid')
+    const organizerid = localStorage.getItem('organizerid');
+    const Adminauth = localStorage.getItem('adminauth');
+
+    const [Organizermodal, setOrganizermodal] = useState(false);
+    const [SelectedOrganizer, setSelectedOrganizer] = useState();
+    const [OrganizerList, setOrganizerList] = useState([]);
+
     const MySwal = withReactContent(Swal);
 
     const [Startdate, setStartdate] = useState(new Date());
@@ -56,6 +63,33 @@ const Dashboard = ({ title }) => {
     const [Isany, setIsany] = useState(false);
     const [isDatefilter, setisDatefilter] = useState(false);
     const [Datetype, setDatetype] = useState();
+
+    const getActiveOrganizer = async () => {
+        try {
+            const requestData = {
+                isactive: 1,
+            };
+            fetch(apiurl + 'admin/get-organizer-list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        setOrganizerList(data.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+    }
+
     const handleCategoryChange = (id) => {
         if (id == 'all') {
             setSelectedCategories([]);
@@ -155,14 +189,14 @@ const Dashboard = ({ title }) => {
             }
         } else {
             if (valueStartdate) {
-                console.log("op",valueStartdate);
+                console.log("op", valueStartdate);
                 const filteredEvents = allEvents.filter(event => {
                     const eventStart = event.start_mindate;
                     console.log(eventStart);
                     return eventStart == valueStartdate;
                 });
                 console.log([allEvents]);
-                console.log("dsds",filteredEvents);
+                console.log("dsds", filteredEvents);
                 setListitems(filteredEvents);
                 setDaterange(!Daterange);
             } else {
@@ -250,7 +284,8 @@ const Dashboard = ({ title }) => {
             const requestData = {
                 id: id,
                 isstatus: type,
-                organizerid: organizerid
+                organizerid: organizerid,
+                is_admin: Adminauth ? 1 : null,
             };
             fetch(apiurl + 'event/update-status', {
                 method: 'POST',
@@ -273,42 +308,12 @@ const Dashboard = ({ title }) => {
             console.error('Api error:', error);
         }
     }
-    const Delete = async (id) => {
-        try {
-            setLoader(true)
-            const requestData = {
-                id: id,
-                isdelete: 1
-            };
-            fetch(apiurl + 'category/delete-category', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
-                },
-                body: JSON.stringify(requestData),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success == true) {
-                        toast.success('Deleted successfully');
-                        fetchmyEvent();
-                    }
-                    setLoader(false)
-                })
-                .catch(error => {
-                    console.error('Insert error:', error);
-                    setLoader(false)
-                });
-        } catch (error) {
-            console.error('Api error:', error);
-            setLoader(false)
-        }
-    }
     const fetchmyEvent = async () => {
         try {
             setLoader(true)
             const requestData = {
-                id: organizerid,
+                id: organizerid ? organizerid : '',
+                countryname: Country ? Country : '',
             };
             fetch(apiurl + 'event/list', {
                 method: 'POST',
@@ -367,12 +372,17 @@ const Dashboard = ({ title }) => {
         }
     }
     const EditEvent = async (id, name) => {
-        navigate(`${organizer_url}event/edit-event/${id}/${name}`);
+        if (Adminauth) {
+            navigate(`${admin_url}event/edit-event/${id}/${name}`);
+        } else {
+            navigate(`${organizer_url}event/edit-event/${id}/${name}`);
+        }
     }
     useEffect(() => {
         fetchmyEvent();
         fetchCategory();
-    }, []);
+        getActiveOrganizer();
+    }, [Country]);
 
 
     const handleVisibilityChange = (selectedVisibility) => {
@@ -424,7 +434,63 @@ const Dashboard = ({ title }) => {
             options: CategoryList
         }
     ]
+    const selectOrganizer = () => {
+        setOrganizermodal(true);
+        setSelectedOrganizer();
+    }
+    console.log(SelectedOrganizer);
+    const HandelSelectOrganizer = () => {
+        if (SelectedOrganizer && SelectedOrganizer) {
+            localStorage.setItem('organizerid', SelectedOrganizer);
+            navigate(admin_url + 'event/add-event');
+        } else {
+            toast.error("Select organizer");
+        }
+    }
+    const Delete = async (id, orgid) => {
+        MySwal.fire({
+            title: 'Are you sure to delete this?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Delete',  // Change this text for the confirm button
+            denyButtonText: 'Cancel',
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                try {
+                    const requestData = {
+                        upid: id,
+                        orgid: orgid,
+                    };
+                    fetch(apiurl + 'event/event-delete', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success == true) {
+                                toast.success('Deleted', {
+                                    duration: 6000,
+                                });
+                                fetchmyEvent();
+                            }
+                        })
+                        .catch(error => {
+                            toast.error(error.message, {
+                                duration: 5000,
+                            });
+                        });
+                } catch (error) {
+                    console.error('Api error:', error);
+                }
+            } else if (result.isDenied) {
 
+            }
+        })
+    }
     return (
         <>
             <Modal isOpen={Daterange} toggle={() => setDaterange(!Daterange)} centered>
@@ -490,13 +556,42 @@ const Dashboard = ({ title }) => {
                     </form>
                 </ModalBody>
             </Modal>
+            <Modal isOpen={Organizermodal} toggle={() => setOrganizermodal(!Organizermodal)} centered>
+                <ModalHeader toggle={() => setOrganizermodal(!Organizermodal)}>Select Organizer</ModalHeader>
+                <ModalBody>
+                    <Row className="d-flex justify-content-center">
+                        <Col md={7}>
+                            <select
+                                className="form-select category me-4"
+                                aria-label="Default select example"
+                                value={SelectedOrganizer}
+                                onChange={(event) => { setSelectedOrganizer(event.target.value) }}
+                                style={{ paddingTop: '8px', height: '40px', color: '#0047ab' }}
+                            >
+                                <option value=''>Select Organizer</option>
+                                {OrganizerList && OrganizerList.map((item) => (
+                                    <option value={item._id}>{item.name}</option>
+                                ))}
+                            </select>
+                            <div className="text-center mt-4">
+                                <button type="button" className="btn theme-bg text-white" onClick={() => HandelSelectOrganizer()}>Create Event</button>
+                            </div>
+                        </Col>
+                    </Row>
+                </ModalBody>
+            </Modal>
             <div className="content-body org-event-list" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
                     <Row className="justify-content-center">
                         <Col md={12}>
-                            <Card className="py-4 grey-bg">
+                            <Card className="py-2 grey-bg">
                                 <Card.Body>
                                     <Row className="justify-content-center">
+                                        {Country && (
+                                            <Col md={12} className="mb-4">
+                                                <h5 className="text-capitalize mb-0">{Country && Country + ' Events'}</h5>
+                                            </Col>
+                                        )}
                                         <Col md={12} style={{ position: 'relative', zIndex: '2' }}>
                                             <Row>
                                                 <Col md={6} xl={2}>
@@ -589,9 +684,15 @@ const Dashboard = ({ title }) => {
                                                 </Col>
 
                                                 <Col md={4} xl={2} style={{ marginBottom: 20 }}>
-                                                    <button className="w-100 theme-btn" onClick={() => navigate(organizer_url + 'event/add-event')}>
-                                                        <span className="theme-btn-icon"><FiPlus /></span> <span>Add event</span>
-                                                    </button>
+                                                    {Adminauth ? (
+                                                        <button className="w-100 theme-btn" onClick={() => selectOrganizer()}>
+                                                            <span className="theme-btn-icon"><FiPlus /></span> <span>Add event</span>
+                                                        </button>
+                                                    ) : (
+                                                        <button className="w-100 theme-btn" onClick={() => navigate(organizer_url + 'event/add-event')}>
+                                                            <span className="theme-btn-icon"><FiPlus /></span> <span>Add event</span>
+                                                        </button>
+                                                    )}
                                                 </Col>
                                             </Row>
                                         </Col>
@@ -603,7 +704,7 @@ const Dashboard = ({ title }) => {
                                                     <>
                                                         {Listitems.map((item, index) => (
                                                             <Col md={12} className="event_list_box_main">
-                                                                <Link to={`${organizer_url}support-tickets`}><button className="list-rais-ticket-btn" type="button">Support</button></Link>
+                                                                {organizerid && (<Link to={`${organizer_url}support-tickets`}><button className="list-rais-ticket-btn" type="button">Support</button></Link>)}
                                                                 <button onClick={() => HandelChangeStatus(item._id)} className="list-active-ticket-btn" type="button">{item.visibility == 1 ? 'Active' : 'Deactive'}<img src={ArrowPng} className="arraw-svg ml-3" alt="" /></button>
                                                                 <div className="event_list_box">
                                                                     <Row>
@@ -614,7 +715,9 @@ const Dashboard = ({ title }) => {
                                                                         </Col>
                                                                         <Col md={5} className="list-data">
                                                                             <div>
-                                                                                <span className="list-event-name text-capitalize">{shortPer(item.name, 30)}</span> <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} height={'auto'} width={'30px'} src={EditPng} alt="" /><span className="theme-color">Edit</span></span>
+                                                                                <span className="list-event-name text-capitalize">{shortPer(item.name, 30)}</span>
+                                                                                <span className="cursor-pointre list-event-edit-btn"><img onClick={() => EditEvent(item._id, item.name)} height={'auto'} width={'30px'} src={EditPng} alt="" /><span className="theme-color">Edit</span></span>
+                                                                                <span>{" | "}</span><span onClick={() => Delete(item._id, item.organizer_id)} className="text-danger cursor-pointer"> <FaRegTrashCan size={20} /></span>
                                                                                 <p className="list-event-desc mb-0">{shortPer(item.event_desc, 30)}</p>
                                                                             </div>
                                                                             <div className="my-2">
@@ -679,12 +782,26 @@ const Dashboard = ({ title }) => {
                                                                                 <div className="text-end mr-5 mb-2">
                                                                                     <span className="list-event-category-img">{item.category_name}</span>
                                                                                 </div>
-                                                                                <div className="text-end mr-5">
-                                                                                    <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/manage-ticket/${item._id}/${item.name}`)}>TICKETS</button>
-                                                                                </div>
-                                                                                <div className="text-end mr-5">
-                                                                                    <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/mange-attendee/${item._id}/${item.name}`)}>ATTENDEES</button>
-                                                                                </div>
+                                                                                {Adminauth ? (
+                                                                                    <>
+                                                                                        <div className="text-end mr-5">
+                                                                                            <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${admin_url}event/manage-ticket/${item._id}/${item.name}`)}>TICKETS</button>
+                                                                                        </div>
+                                                                                        <div className="text-end mr-5">
+                                                                                            <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${admin_url}event/mange-attendee/${item._id}/${item.name}`)}>ATTENDEES</button>
+                                                                                        </div>
+                                                                                    </>
+                                                                                ) : (
+                                                                                    <>
+                                                                                        <div className="text-end mr-5">
+                                                                                            <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/manage-ticket/${item._id}/${item.name}`)}>TICKETS</button>
+                                                                                        </div>
+                                                                                        <div className="text-end mr-5">
+                                                                                            <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/mange-attendee/${item._id}/${item.name}`)}>ATTENDEES</button>
+                                                                                        </div>
+                                                                                    </>
+                                                                                )}
+
                                                                                 {/* <div className="text-end mr-5">
                                                                                     <button style={{ fontSize: '14px' }} className="btn theme-bg text-white my-1 w-100" type="button" onClick={() => navigate(`${organizer_url}event/manage-ticket/${item._id}/${item.name}`)}>REPORTS & ANALYTICS</button>
                                                                                 </div> */}
@@ -705,7 +822,7 @@ const Dashboard = ({ title }) => {
                             </Card>
                         </Col>
                     </Row>
-                </div>
+                </div >
             </div >
 
         </>
