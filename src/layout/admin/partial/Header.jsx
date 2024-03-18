@@ -1,16 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import WhitestarBtn from '../../../component/Whitestarbtn';
 import Btn from '../../../component/BlueStarwhite';
 import UserImg from '../../../common/image/Ellipse 73.png';
 import Nouserphoto from '../../../common/image/nouser.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiChevronDown } from "react-icons/fi";
-import { admin_url, app_url } from '../../../common/Helpers';
+import { admin_url, apiurl, app_url, laravel_asset } from '../../../common/Helpers';
 const Header = ({ title }) => {
     const navigate = useNavigate();
+
+    const [counter, setCounter] = useState(0);
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setCounter((prevCounter) => prevCounter + 1); // Increment the counter to trigger a re-render
+        }, 3000); // 3000 milliseconds = 3 seconds
+    
+        return () => clearInterval(interval); // Clear the interval when the component unmounts
+      }, []);
+
     function Logout() {
         localStorage.removeItem('adminauth');
     }
+    const [Bannerimg, setBannerimg] = useState(null);
+    useEffect(() => {
+        fetchDetails();
+    }, [counter]);
+    const fetchDetails = async () => {
+        try {
+            fetch(apiurl + 'admin/get-admin-details', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        setBannerimg(data.data.picture ? laravel_asset + data.data.picture : null);
+                    }
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+        }
+    }
+    useEffect(() => {
+        fetchDetails();
+    }, []);
     return (
         <>
             <div className="header">
@@ -31,7 +69,7 @@ const Header = ({ title }) => {
                                 </li>
                                 <li class="nav-item dropdown header-profile">
                                     <a class="nav-link new_user_menu_header" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-                                        <img src={Nouserphoto} width="20" alt="" />
+                                        <img src={Bannerimg ? Bannerimg : Nouserphoto} width="20" alt="" />
                                         <span className="user_name">Admin</span>
                                         <span className="user_drop_icon"><FiChevronDown /></span>
                                     </a>

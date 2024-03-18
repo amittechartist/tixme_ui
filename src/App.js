@@ -6,6 +6,7 @@ import AdminDashboard from './pages/admin/Dashboard';
 import AdminCountryDashboard from './pages/admin/AdminCountryDashboard';
 import AddCategory from './pages/admin/category/AddCategory';
 import AllCategory from './pages/admin/category/AllCategory';
+import Ourpartners from './pages/admin/category/Ourpartners';
 import AllCustomers from './pages/admin/customers/AllCustomers';
 import AllUsers from './pages/admin/customers/AllUsers';
 import AddEventtype from './pages/admin/eventtype/Add';
@@ -27,6 +28,7 @@ import AdminOrganizerProfile from './pages/admin/OrganizerProfile';
 import AdminPayoutrequest from './pages/admin/payout/list';
 import AdminMailing from './pages/admin/AdminMailing';
 import Taxadd from './pages/admin/payout/taxadd';
+import AdminSettings from './pages/admin/settings/AdminSettings';
 import AdminLayout from './layout/admin/Layout'
 // Customer
 import CustomerDashboard from './pages/customer/Dashboard';
@@ -169,6 +171,7 @@ function App() {
           <Route path={admin_url + 'countrydashboard/:name'} element={<AdminLayout title={'Dashboard'}> <AdminCountryDashboard /> </AdminLayout>} />
           <Route path={admin_url + 'add-category'} element={<AdminLayout title={'Add Category'}> <AddCategory /> </AdminLayout>} />
           <Route path={admin_url + 'all-category'} element={<AdminLayout title={'All Category'}> <AllCategory /> </AdminLayout>} />
+          <Route path={admin_url + 'our-partners'} element={<AdminLayout title={'Our partners'}> <Ourpartners /> </AdminLayout>} />
           <Route path={admin_url + 'add-event-type'} element={<AdminLayout title={'Add Event Type'}> <AddEventtype /> </AdminLayout>} />
           <Route path={admin_url + 'all-event-type'} element={<AdminLayout title={'All Event Type'}> <AllEventtype /> </AdminLayout>} />
           <Route path={admin_url + 'all-events-list'} element={<AdminLayout title={'All Events'}> <AllEventlist/> </AdminLayout>} />
@@ -195,6 +198,7 @@ function App() {
           <Route path={admin_url + 'addcoupon'} element={<AdminLayout title={'Add Coupon'}> <Addcoupon /> </AdminLayout>} />
           <Route path={admin_url + 'mailing'} element={<AdminLayout title={'Mailing By Invitation'}> <AdminMailing /> </AdminLayout>} />
           <Route path={admin_url + 'event/add-event'} element={<AdminLayout> <EventType title={'Create new event'} /> </AdminLayout>} />
+          <Route path={admin_url + 'settings'} element={<AdminLayout title={'Settings'}> <AdminSettings /> </AdminLayout>} />
         </Routes>
       </BrowserRouter>
     </>

@@ -8,9 +8,11 @@ import { FaHeadset } from 'react-icons/fa';
 import { FaUsers } from "react-icons/fa6";
 import { MdEvent } from 'react-icons/md';
 import { FaUserCheck } from 'react-icons/fa';
-
+import { FaBullhorn } from "react-icons/fa6";
 import { FaHome, FaListAlt, FaUserClock, FaCalendarAlt, FaMoneyCheckAlt } from 'react-icons/fa';
 import { FiFlag } from "react-icons/fi";
+import { FiSettings } from "react-icons/fi";
+import { FaUserPen } from "react-icons/fa6";
 import { MdAddCircleOutline, MdCardMembership, MdMailOutline, MdContactMail, MdExitToApp } from 'react-icons/md';
 const Sidebar = () => {
     const [Listitems, setListitems] = useState([]);
@@ -195,16 +197,37 @@ const Sidebar = () => {
                             </Link>
                         </li >
                         <li onClick={() => d()}>
-                            <Link to={admin_url + 'all-category'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><FaListAlt /></span>
-                                <span className="nav-text">Category</span>
+                            <Link to={admin_url + 'newsletter'} className="ai-icon" aria-expanded="false">
+                                <span className='sidebar-icon'><MdMailOutline /></span>
+                                <span className="nav-text">Newsletter</span>
                             </Link>
                         </li>
-
                         <li><Link to={admin_url + 'mailing'} className="ai-icon" aria-expanded="false">
                             {/* <img src={<FiMail />} alt="Your Logo" /> */}
-                            <span className='sidebar-icon'><FiMail /></span>
-                            <span className="nav-text">Mailing</span>
+                            <span className='sidebar-icon'><FaBullhorn /></span>
+                            <span className="nav-text">Communication</span>
+                        </Link>
+                        </li>
+                        <li onClick={() => { d(); handleDropdown("WEBSITE-ACCESS"); }}>
+                            <a href="javascript:void(0);" class="has-arrow ai-icon" aria-expanded="false">
+                                <span className='sidebar-icon'><FiSettings /></span>
+                                <span class="nav-text">Website Access</span>
+                            </a>
+                            {openDropdown === "WEBSITE-ACCESS" && (
+                                <ul aria-expanded="false">
+                                    <li>
+                                        <Link to={admin_url + 'all-category'} className='text-black text-capitalize' >Category</Link>
+                                    </li>
+                                    <li>
+                                        <Link to={admin_url + 'our-partners'} className='text-black text-capitalize'>Our Partners</Link>
+                                    </li>
+                                </ul>
+                            )}
+                        </li>
+                        <li><Link to={admin_url + 'settings'} className="ai-icon" aria-expanded="false">
+                            {/* <img src={<FiMail />} alt="Your Logo" /> */}
+                            <span className='sidebar-icon'><FaUserPen /></span>
+                            <span className="nav-text">Settings</span>
                         </Link>
                         </li>
                         {/* <li onClick={() => d()}>
@@ -237,13 +260,6 @@ const Sidebar = () => {
                                 ))}
                             </ul>
                         </li>
-                        <li onClick={() => d()}>
-                            <Link to={admin_url + 'newsletter'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdMailOutline /></span>
-                                <span className="nav-text">Newsletter</span>
-                            </Link>
-                        </li>
-
                         <li onClick={() => d()}>
                             <a onClick={() => Logout()} className="ai-icon cursor-pointer" aria-expanded="false">
                                 <span className='sidebar-icon'><MdExitToApp /></span>

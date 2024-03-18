@@ -4,6 +4,8 @@ export const app_url = '/tixme_ui/';
 export const admin_url = app_url + 'admin/';
 export const organizer_url = app_url + 'organizer/';
 export const customer_url = app_url + 'customer/';
+export const laravelapi = 'https://tixme.co/tixme_storage/api/';
+export const laravel_asset = 'https://tixme.co/tixme_storage/storage/app/public/';
 
 export const apiurl = 'http://localhost:5001/api/v1/';
 export const imgurl = 'http://localhost:5001/uploads/';
