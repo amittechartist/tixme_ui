@@ -52166,9 +52166,13 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 @media (max-width: 991px) {
   .banner-child-cust,
   .banner-child-login,
-  .faq-content-area .banner-child,
-  .about-content-area .banner-child{
+  .faq-content-area .banner-child.bg-white,
+  .about-content-area .banner-child.bg-white{
     margin-top: -330px !important;
+  }
+
+  .about-content-area .sponser-sec{
+    padding-top:0 !important;
   }
 
   .banner-event{
@@ -52180,8 +52184,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 @media (max-width: 767px) {
   .banner-child-cust,
   .banner-child-login,
-  .faq-content-area .banner-child,
-  .about-content-area .banner-child {
+  .faq-content-area .banner-child.bg-white,
+  .about-content-area .banner-child.bg-white {
     margin-top: -180px !important;
   }
   .cust-field-dashboard{
@@ -52209,8 +52213,8 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 @media (max-width: 576px) {
   .banner-child-cust,
   .banner-child-login,
-  .faq-content-area .banner-child,
-  .about-content-area .banner-child{
+  .faq-content-area .banner-child.bg-white,
+  .about-content-area .banner-child.bg-white{
     margin-top: -170px !important;
   }
 
@@ -52264,6 +52268,9 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   .banner-event .cust-event-css{
     margin-left: 0 !important;
     margin-right: 0 !important;
+  }
+  .row.evnt-page-save-shear-box div{
+    padding-left: 29px;
   }
 }
 
