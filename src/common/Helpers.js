@@ -7,13 +7,13 @@ export const customer_url = app_url + 'customer/';
 export const laravelapi = 'https://tixme.co/tixme_storage/api/';
 export const laravel_asset = 'https://tixme.co/tixme_storage/storage/app/public/';
 
-export const apiurl = 'http://localhost:5001/api/v1/';
-export const imgurl = 'http://localhost:5001/uploads/';
-export const qr_url = 'http://localhost:3001/scanner/organizer/qr/';
+// export const apiurl = 'http://localhost:5001/api/v1/';
+// export const imgurl = 'http://localhost:5001/uploads/';
+// export const qr_url = 'http://localhost:3001/scanner/organizer/qr/';
 
-// export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
-// export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
-// export const qr_url = 'https://tixme.co/scanner/organizer/qr/';
+export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
+export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
+export const qr_url = 'https://tixme.co/scanner/organizer/qr/';
 
 export function RemoveSession() {
     localStorage.removeItem('userauth');

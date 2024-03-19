@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { apiurl, organizer_url, getSupportbagecolor, get_date_time, onlyDayMonth, shortPer } from '../../common/Helpers';
 import { Col, Row } from "react-bootstrap";
+import JoditEditor from 'jodit-react';
 import arrow from "../../assets/arrow.svg";
 import Card from 'react-bootstrap/Card';
 import { Link, useNavigate } from "react-router-dom";
@@ -40,6 +41,7 @@ const Dashboard = () => {
     const [EventData, setEventData] = useState();
     const [Messge, setMessge] = useState();
     const [Myfollwers, selMyfollwers] = useState(false);
+    const [Selectedtype, setSelectedtype] = useState();
 
 
     const Follwer = [
@@ -68,6 +70,10 @@ const Dashboard = () => {
             options: ticketOptions
         }
     ]
+
+    const editor = useRef(null);
+    const [content, setContent] = useState('');
+
 
     const HandelSelectPreEvents = (selectedOptions) => {
         if (selectedOptions.some(option => option.value === 'selectAll')) {
@@ -332,15 +338,15 @@ const Dashboard = () => {
             if (!AttendanceSelected && !Myfollwers) {
                 return toast.error("No user are selected");
             }
-            if (!Eventselected) {
+            if (Selectedtype && Selectedtype.value == 2 && !Eventselected) {
                 return toast.error("Select your event");
             }
             setSendmailLoader(true);
             const requestData = {
                 orgid: organizerid,
-                eventid: Eventselected.value,
+                eventid: Eventselected && Eventselected.value ? Eventselected.value : null,
                 userlist: AttendanceSelected,
-                message: Messge,
+                message: content,
                 // myfollwers: Myfollwers,
                 myfollwerslist: Follwersselected,
                 usertype: "Organizer",
@@ -406,6 +412,7 @@ const Dashboard = () => {
     }
 
     const emptyfield = () => {
+        setContent('');
         setAttendanceSelected("");
         setEventselected("");
         setEventPreselected("");
@@ -451,17 +458,36 @@ const Dashboard = () => {
                                                         <div className="row">
                                                             <div className="col-md-12">
                                                                 <div className="form-group">
-                                                                    <p>Select Your Event</p>
+                                                                    <p>Select Type</p>
                                                                     <Select
                                                                         isClearable={false}
-                                                                        options={EventOption}
+                                                                        options={[
+                                                                            { value: 1, label: "Normal Text" },
+                                                                            { value: 2, label: "Event Reminder" },
+                                                                        ]}
                                                                         className='react-select'
                                                                         classNamePrefix='select'
-                                                                        onChange={setEventselected}
-                                                                        value={Eventselected}
+                                                                        onChange={setSelectedtype}
+                                                                        value={Selectedtype}
                                                                     />
                                                                 </div>
                                                             </div>
+                                                            {Selectedtype && Selectedtype.value ==  2 && (
+                                                                <div className="col-md-12">
+                                                                    <div className="form-group">
+                                                                        <p>Select Your Event</p>
+                                                                        <Select
+                                                                            isClearable={false}
+                                                                            options={EventOption}
+                                                                            className='react-select'
+                                                                            classNamePrefix='select'
+                                                                            onChange={setEventselected}
+                                                                            value={Eventselected}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
                                                             {Apiloader ? (
                                                                 <div className="linear-background w-100" style={{ height: '250px' }}> </div>
                                                             ) : (
@@ -523,7 +549,18 @@ const Dashboard = () => {
 
                                                             <div className="col-md-12">
                                                                 <h4>Body</h4>
-                                                                <textarea class="form-control" onChange={(e) => setMessge(e.target.value)} id="exampleFormControlTextarea1" rows="9" placeholder="Enter your message" value={Messge}>{Messge}</textarea>
+                                                                {/* <textarea class="form-control" onChange={(e) => setMessge(e.target.value)} id="exampleFormControlTextarea1" rows="9" placeholder="Enter your message" value={Messge}>{Messge}</textarea> */}
+                                                                <JoditEditor
+                                                                    ref={editor}
+                                                                    value={content}
+                                                                    config={{
+                                                                        readonly: false, // all options from https://xdsoft.net/jodit/docs/,
+                                                                        placeholder: 'Start typings...'
+                                                                    }}
+                                                                    tabIndex={1} // tabIndex of textarea
+                                                                    onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+                                                                    onChange={newContent => { }}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </Card.Text>

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { apiurl, organizer_url, getSupportbagecolor, get_date_time, onlyDayMonth, shortPer } from '../../common/Helpers';
 import { Col, Row } from "react-bootstrap";
 import arrow from "../../assets/arrow.svg";
+import JoditEditor from 'jodit-react';
 import Card from 'react-bootstrap/Card';
 import { Link, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
@@ -41,7 +42,8 @@ const Dashboard = () => {
     const [Customerselected, setCustomerselected] = useState();
     const [EventData, setEventData] = useState();
     const [Messge, setMessge] = useState();
-
+    const editor = useRef(null);
+    const [content, setContent] = useState('');
 
     const EventOption = [
         {
@@ -266,7 +268,7 @@ const Dashboard = () => {
             const requestData = {
                 membershipid: selectedMemberplan,
                 organizersid: SelectedOrg,
-                message: Messge,
+                message: content,
                 usertype: "Admin",
                 eventid: Eventselected.value,
             };
@@ -331,6 +333,7 @@ const Dashboard = () => {
     }
 
     const emptyfield = () => {
+        setContent('');
         setAttendanceSelected("");
         setEventselected("");
         setEventPreselected("");
@@ -449,7 +452,18 @@ const Dashboard = () => {
 
                                                             <div className="col-md-12">
                                                                 <h4>Body</h4>
-                                                                <textarea class="form-control" onChange={(e) => setMessge(e.target.value)} id="exampleFormControlTextarea1" rows="9" placeholder="Enter your message" value={Messge}>{Messge}</textarea>
+                                                                {/* <textarea class="form-control" onChange={(e) => setMessge(e.target.value)} id="exampleFormControlTextarea1" rows="9" placeholder="Enter your message" value={Messge}>{Messge}</textarea> */}
+                                                                <JoditEditor
+                                                                    ref={editor}
+                                                                    value={content}
+                                                                    config={{
+                                                                        readonly: false, // all options from https://xdsoft.net/jodit/docs/,
+                                                                        placeholder: 'Start typings...'
+                                                                    }}
+                                                                    tabIndex={1} // tabIndex of textarea
+                                                                    onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+                                                                    onChange={newContent => { }}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </Card.Text>

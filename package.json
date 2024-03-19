@@ -17,6 +17,7 @@
     "firebase": "^10.6.0",
     "highcharts": "^10.3.3",
     "highcharts-react-official": "^3.2.1",
+    "jodit-react": "^4.0.15",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
     "lottie-react": "^2.4.0",
