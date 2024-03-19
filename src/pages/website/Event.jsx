@@ -5,10 +5,9 @@ import HeaderMenu from '../../components/headermenu';
 import OrganizerProfile from '../../component/organizer/organizerprofile';
 import MobileMenu from '../../components/mobilemenu';
 import CoundownDiv from '../../component/coundown';
-
 import moment from 'moment';
 import { FaTimes } from 'react-icons/fa';
-import { apiurl, onlyDayMonth, shortPer, app_url, getDayName, getDay, getMonthName } from "../../common/Helpers";
+import { apiurl, onlyDayMonth, shortPer, app_url, getDayName, getDay, getMonthName,get_min_date  } from "../../common/Helpers";
 import { useNavigate, Link } from "react-router-dom";
 import Nouserphoto from '../../common/image/nouser.png';
 import locationIcon from "../../assets/location (5) 1.svg";
@@ -445,11 +444,12 @@ const Home = () => {
     const totalQuantity = TicketsSelledList.filter((i) => i.ticket_id == item.id)
       .reduce((acc, item) => acc + item.quantity, 0);
     const existingItem = cartItems.find((cartItem) => cartItem.name === item.name);
-    const qty_avl = Number(item.quantity) - Number(totalQuantity);
+    const CountQty = Number(item.quantity) - Number(totalQuantity);
+    const qty_avl = CountQty > 10 ? 10 : CountQty;
     localStorage.setItem('inside_cart_id', id);
 
     if (qty_avl == 0) {
-      return toast.error("Cannot add more than the available quantity");
+      return toast.error("Cannot add quantity");
     }
     // Set payment gateway and currency symbol based on currency code
     if (Eventdata.currencycode.trim() === "USD") {
@@ -872,6 +872,23 @@ const Home = () => {
                   </div>
                   <div className="col-12 col-md-5 col-lg-4 col-xl-4">
                     {Eventdata.start_mindate && Eventdata.is_clock_countdown && Eventdata.start_time ? (
+                      // <>
+                      //   {Eventdata.event_subtype_id == 2 ? (
+                      //     <>
+                      //       {Eventdata.event_dates.sort(compareDatesAndTimes).map((items, index) => (
+                      //         <>
+                      //           {items.is_delete === 0 && (
+                      //             <>
+                      //             {"XXX"}{get_min_date(items.mindate[0])} {items.time}
+                      //             </>
+                      //           )}
+                      //         </>
+                      //       ))}
+                      //     </>
+                      //   ) : (
+                      //     <CoundownDiv date={Eventdata.start_mindate} time={Eventdata.start_time} />
+                      //   )}
+                      // </>
                       <CoundownDiv date={Eventdata.start_mindate} time={Eventdata.start_time} />
                     ) : ''}
                     <div className="start-in-box eventpage-box-style-event-view mb-5 my-5 event-page-ticket" style={{ position: 'relative' }}>
@@ -880,143 +897,193 @@ const Home = () => {
                           <div className="col-6 d-flex justify-content-start">
                             <span><Flip left cascade>Tickets</Flip></span>
                           </div>
-                          {Eventdata.is_selling_fast && (
+                          {Eventdata.is_selling_fast && !Eventdata.is_soldout && (
                             <div className="col-6 d-flex justify-content-end">
-                              <span className="selling-f-box">Selling Fast</span>
+                              <span className="selling-f-box text-uppercase">Selling Fast</span>
                             </div>
                           )}
                         </div>
                       </div>
-                      {Eventdata.event_subtype_id == 2 ? (
+                      {Eventdata.is_soldout ? (
                         <>
-                          <div className="row">
-                            {Eventdata.allprice ? (
-                              <>
-                                {Eventdata.event_dates.sort(compareDatesAndTimes).map((items, index) => (
+                          <button type="button" className="my-2 btn w-100 theme-bg text-white text-uppercase cusrsor-default">sold out</button>
+                        </>
+                      ) : (
+                        <>
+                          {Eventdata.event_subtype_id == 2 ? (
+                            <>
+                              <div className="row">
+                                {Eventdata.allprice ? (
                                   <>
-                                    {items.is_delete === 0 && (
+                                    {Eventdata.event_dates.sort(compareDatesAndTimes).map((items, index) => (
                                       <>
-                                        <div className="col-12 my-3">
-                                          <div className="mx-2">
-                                            <div className={`row new-week-ticket-box ${SelectedTicketId == items.id && 'new-week-ticket-box-active'}`} onClick={() => handelTicketselect(items.id)}>
-                                              <div className="col-6  d-flex align-items-end">
-                                                <div className="d-flex align-items-center">
-                                                  <div className="day-box-1">
-                                                    <p className="day-name-1">{getDay(items.date)}</p>
+                                        {items.is_delete === 0 && (
+                                          <>
+                                            <div className="col-12 my-3">
+                                              <div className="mx-2">
+                                                <div className={`row new-week-ticket-box ${SelectedTicketId == items.id && 'new-week-ticket-box-active'}`} onClick={() => handelTicketselect(items.id)}>
+                                                  <div className="col-6  d-flex align-items-end">
+                                                    <div className="d-flex align-items-center">
+                                                      <div className="day-box-1">
+                                                        <p className="day-name-1">{getDay(items.date)}</p>
+                                                      </div>
+                                                      <div>
+                                                        <p className="week-name-1">{getDayName(items.date)}</p>
+                                                        <p className="month-name-1">{getMonthName(items.date)}</p>
+                                                      </div>
+                                                    </div>
                                                   </div>
-                                                  <div>
-                                                    <p className="week-name-1">{getDayName(items.date)}</p>
-                                                    <p className="month-name-1">{getMonthName(items.date)}</p>
+                                                  <div className="col-6 text-end d-flex align-items-end justify-content-end">
+                                                    <p className="time-name-1">{items.time}</p>
                                                   </div>
                                                 </div>
                                               </div>
-                                              <div className="col-6 text-end d-flex align-items-end justify-content-end">
-                                                <p className="time-name-1">{items.time}</p>
+                                            </div>
+                                          </>
+                                        )}
+                                      </>
+                                    ))}
+                                    {selectedTicket && (
+                                      <>
+                                        {selectedTicket.map((item) => (
+                                          <div className="col-12">
+                                            <div className="row my-3">
+                                              {item.isselling && !item.issoldout && (
+                                                <>
+                                                  <div className="col-6"></div>
+                                                  <div className="col-6 d-flex justify-content-center">
+                                                    <>
+                                                      <button type="button" className="btn-sm btn theme-bg text-white">SELLING FAST</button>
+                                                    </>
+                                                  </div>
+                                                </>
+                                              )}
+                                              <div className="col-6 justify-content-center">
+                                                <p className="mb-0  event_page_price_title">Ticket Type</p>
+                                                <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{item.name}</p></div>
                                               </div>
+                                              <div className="col-6 d-flex justify-content-center">
+                                                <div className="d-inline-block">
+                                                  <div className="text-center">
+                                                    <p className="mb-0  event_page_price_title">Price : {item.ticket_type == 1 ? Eventdata.countrysymbol + (item.price % 1 === 0 ? item.price.toFixed(2) : item.price) : 'Free'}{item.cut_price && (<span className="cut_ticket_price">{Eventdata.countrysymbol}{item.cut_price}</span>)}</p>
+                                                  </div>
+                                                  <div className="">
+                                                    {item.issoldout ? (
+                                                      <>
+                                                        <button type="button" className="btn theme-bg btn-sm text-white w-100">SOLD OUT</button>
+                                                      </>
+                                                    ) : (
+                                                      <>
+                                                        {CountSoldOut(item) ? (
+                                                          <>
+                                                            <div className="row grediant-border d-flex align-items-center mx-1">
+                                                              <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.id, localQuantities[item.id] || 0)}>-</span></div>
+                                                              <div className="col-4"><span>{localQuantities[item.id] || 0}</span></div>
+                                                              <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item, Eventdata._id)}>+</span></div>
+                                                            </div>
+                                                          </>
+                                                        ) : (
+                                                          <>
+                                                            <button type="button" className="btn  btn-sm theme-bg text-white w-100">{CountSoldOut(item) ? 'SOLD OUT' : 'SELLING FAST'}</button>
+                                                          </>
+                                                        )}
+                                                      </>
+                                                    )}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              {item.description && (
+                                                <div className="col-12 ticket-type-dsc">
+                                                  <p>{item.description}</p>
+                                                </div>
+                                              )}
                                             </div>
                                           </div>
-                                        </div>
+                                        ))}
                                       </>
                                     )}
                                   </>
-                                ))}
-                                {selectedTicket && (
-                                  <>
-                                    {selectedTicket.map((item) => (
-                                      <div className="col-12">
+                                ) : (
+                                  <></>
+                                )}
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              {Eventdata.allprice ? (
+                                <>
+                                  {Eventdata.allprice.map((items, index) => (
+                                    <>
+                                      {items.isdelete === 0 && (
                                         <div className="row my-3">
+                                          {items.isselling && !items.issoldout && (
+                                            <>
+                                              <div className="col-6"></div>
+                                              <div className="col-6 d-flex justify-content-center">
+                                                <>
+                                                  <button type="button" className="btn-sm btn theme-bg text-white">SELLING FAST</button>
+                                                </>
+                                              </div>
+                                            </>
+                                          )}
                                           <div className="col-6 justify-content-center">
-                                            <p className="mb-0" style={{ fontSize: '15px', height: '30px' }}>Ticket Type</p>
-                                            <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{item.name}</p></div>
+                                            <p className="mb-0  event_page_price_title">Ticket Type</p>
+                                            <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{items.name}</p></div>
                                           </div>
                                           <div className="col-6 d-flex justify-content-center">
                                             <div className="d-inline-block">
                                               <div className="text-center">
-                                                <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price : {item.ticket_type == 1 ? Eventdata.countrysymbol + item.price + '.00' : 'Free'}</p>
+                                                <p className="mb-0 event_page_price_title">Price : {items.ticket_type == 1 ? Eventdata.countrysymbol + (items.price % 1 === 0 ? items.price.toFixed(2) : items.price) : 'Free'}{items.cut_price && (<span className="cut_ticket_price">{Eventdata.countrysymbol}{items.cut_price}</span>)}</p>
                                               </div>
                                               <div className="">
-                                                <div className="row grediant-border d-flex align-items-center mx-1">
-                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.id, localQuantities[item.id] || 0)}>-</span></div>
-                                                  <div className="col-4"><span>{localQuantities[item.id] || 0}</span></div>
-                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item, Eventdata._id)}>+</span></div>
-                                                </div>
+                                                {items.issoldout ? (
+                                                  <>
+                                                    <button type="button" className="btn btn-sm theme-bg text-white w-100">SOLD OUT</button>
+                                                  </>
+                                                ) : (
+                                                  <>
+                                                    {CountSoldOut(items) ? (
+                                                      <>
+                                                        <div className="row grediant-border d-flex align-items-center mx-1">
+                                                          <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.id, localQuantities[items.id] || 0)}>-</span></div>
+                                                          <div className="col-4"><span>{localQuantities[items.id] || 0}</span></div>
+                                                          <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span></div>
+                                                        </div>
+                                                      </>
+                                                    ) : (
+                                                      <>
+                                                        <button type="button" className="btn btn-sm theme-bg text-white w-100">{CountSoldOut(items) ? 'SOLD OUT' : 'SELLING FAST'}</button>
+                                                      </>
+                                                    )}
+                                                  </>
+                                                )}
                                               </div>
                                             </div>
                                           </div>
-                                          {item.description && (
-                                            <div className="col-12 ticket-type-dsc">
-                                              <p>{item.description}</p>
-                                            </div>
-                                          )}
                                         </div>
-                                      </div>
-                                    ))}
-                                  </>
-                                )}
-                              </>
-                            ) : (
-                              <></>
-                            )}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          {Eventdata.allprice ? (
-                            <>
-                              {/* {items.name}
-                            {Eventdata.countrysymbol}{items.price}
-                            {items.ticket_type == 1 ? () : ()}
-                            onClick={() => removeFromCart(items.name, localQuantities[items.name] || 0)}
-                            {localQuantities[items.name] || 0}
-                            onClick={() => addToCart(items, Eventdata._id)} */}
-                              {Eventdata.allprice.map((items, index) => (
-                                <>
-                                  {items.isdelete === 0 && (
-                                    <div className="row my-3">
-                                      <div className="col-6 justify-content-center">
-                                        <p className="mb-0" style={{ fontSize: '15px', height: '30px' }}>Ticket Type</p>
-                                        <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{items.name}</p></div>
-                                      </div>
-                                      <div className="col-6 d-flex justify-content-center">
-                                        <div className="d-inline-block">
-                                          <div className="text-center">
-                                            <p className="mb-0" style={{ fontSize: '16px', height: '30px' }}>Price : {items.ticket_type == 1 ? Eventdata.countrysymbol + items.price + '.00' : 'Free'}</p>
-                                          </div>
-                                          <div className="">
-                                            {CountSoldOut(items) ? (
-                                              <>
-                                                <div className="row grediant-border d-flex align-items-center mx-1">
-                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.id, localQuantities[items.id] || 0)}>-</span></div>
-                                                  <div className="col-4"><span>{localQuantities[items.id] || 0}</span></div>
-                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span></div>
-                                                </div>
-                                              </>
-                                            ) : (
-                                              <>
-                                                <button type="button" className="btn theme-bg text-white w-100">Sold Out</button>
-                                              </>
-                                            )}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  )}
+                                      )}
+                                    </>
+                                  ))}
                                 </>
-                              ))}
+                              ) : (
+                                <></>
+                              )}
                             </>
-                          ) : (
-                            <></>
                           )}
                         </>
                       )}
-                      <div className="text-center py-2">
-                        <span className="main-title">Total Price : {Eventdata.countrysymbol}{eventTotalPrice.toFixed(2)}</span>{" "}
-                      </div>
-                      <div className="text-center">
-                        {Paynowbtnstatus ? (
-                          <button onClick={() => saveCartToLocalStorage()} type="button" className="btn theme-bg text-white mt-3 w-100">Pay Now</button>
-                        ) : ''}
-                      </div>
+                      {Eventdata.is_soldout ? '' : (
+                        <>
+                          <div className="text-center py-2">
+                            <span className="main-title">Total Price : {Eventdata.countrysymbol}{eventTotalPrice.toFixed(2)}</span>{" "}
+                          </div>
+                          <div className="text-center">
+                            {Paynowbtnstatus ? (
+                              <button onClick={() => saveCartToLocalStorage()} type="button" className="btn theme-bg text-white mt-3 w-100">Pay Now</button>
+                            ) : ''}
+                          </div>
+                        </>
+                      )}
                     </div>
                     <OrganizerProfile props={Organizerdata} />
                   </div>
@@ -1141,7 +1208,7 @@ const Home = () => {
             </div>
           </div>
         )}
-      </div>
+      </div >
       <Footer />
     </>
   );

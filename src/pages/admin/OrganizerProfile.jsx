@@ -98,7 +98,7 @@ const Dashboard = ({ title }) => {
                                     </div>
                                     <div className="profile-info">
                                         <div className="profile-photo">
-                                            <img src={Orgdata.picture ? Orgdata.picture : Nouserphoto} className="img-fluid rounded-circle" alt="" />
+                                            <img src={Orgdata && Orgdata.picture ? Orgdata.picture : Nouserphoto} className="img-fluid rounded-circle" alt="" />
                                         </div>
                                         <div className="profile-details">
 

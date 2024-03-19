@@ -14,9 +14,8 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import toast from "react-hot-toast";
 const Dashboard = ({ title }) => {
-    const MySwal = withReactContent(Swal);
     const navigate = useNavigate();
-    const { id, name } = useParams();
+    const { countryid } = useParams();
     const [Loader, setLoader] = useState(false);
     const [Listitems, setListitems] = useState([]);
     const [Listitemsfilter, setListitemsfilter] = useState([]);
@@ -24,7 +23,8 @@ const Dashboard = ({ title }) => {
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [countries, setCountries] = useState([]);
     const selectedCountryRef = useRef(selectedCountry);
-    const membershipid = useRef(id);
+    const membershipid = useRef(countryid);
+    const MySwal = withReactContent(Swal);
     useEffect(() => {
         setCountries(Country.getAllCountries().map(({ isoCode, name }) => ({ value: isoCode, label: name })));
     }, []);
@@ -33,9 +33,9 @@ const Dashboard = ({ title }) => {
             setLoader(true)
             const currentMembershipId = membershipid.current;
             const requestData = {
-                membershipid: currentMembershipId
+                country: currentMembershipId
             };
-            fetch(apiurl + 'admin/get-customer-list', {
+            fetch(apiurl + 'admin/get-users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Set the Content-Type header to JSON
@@ -47,11 +47,6 @@ const Dashboard = ({ title }) => {
                     if (data.success == true) {
                         const currentSelectedCountry = selectedCountryRef.current;
                         let Filterlist = data.data;
-                        if (currentMembershipId) {
-                            Filterlist = Filterlist.filter(item =>
-                                item.planid === currentMembershipId
-                            );
-                        }
                         if (currentSelectedCountry && currentSelectedCountry.label) {
                             Filterlist = Filterlist.filter(item =>
                                 item.country === currentSelectedCountry.label
@@ -75,9 +70,9 @@ const Dashboard = ({ title }) => {
         }
     }
     useEffect(() => {
-        membershipid.current = id;
+        membershipid.current = countryid;
         fetchList();
-    }, [id]);
+    }, [countryid]);
     useEffect(() => {
         const interval = setInterval(() => {
             fetchList();
@@ -135,7 +130,6 @@ const Dashboard = ({ title }) => {
                                 toast.success('Deleted', {
                                     duration: 6000,
                                 });
-                                fetchList();
                             }
                         })
                         .catch(error => {
@@ -151,6 +145,7 @@ const Dashboard = ({ title }) => {
             }
         })
     }
+
     return (
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
@@ -161,19 +156,7 @@ const Dashboard = ({ title }) => {
                                 <Card.Body className="py-4">
                                     <div className="row">
                                         <div className="col-7">
-                                            <h5 className="text-capitalize mb-0">{name && name + ' Customers'}</h5>
-                                        </div>
-                                        <div className="col-3 d-flex justify-content-end">
-                                            <Select
-                                                options={countries}
-                                                value={selectedCountry}
-                                                className="w-100"
-                                                onChange={HandelCountrychange}
-                                                placeholder="Select Country"
-                                            />
-                                        </div>
-                                        <div className="col-2 d-flex justify-content-end">
-                                            <button type="button" onClick={() => emptyData()} className="btn btn-dark w-100">Reset</button>
+                                            <h5 className="text-capitalize mb-0">{countryid && countryid + ' Customers'}</h5>
                                         </div>
                                     </div>
                                     <hr></hr>
@@ -193,7 +176,7 @@ const Dashboard = ({ title }) => {
                                                                         <th><strong>Name</strong></th>
                                                                         <th><strong>Email</strong></th>
                                                                         <th><strong>Phone Number</strong></th>
-                                                                        <th><strong>Country</strong></th>
+                                                                        <th><strong>Membership</strong></th>
                                                                         <th></th>
                                                                     </tr>
                                                                 </thead>
@@ -204,7 +187,7 @@ const Dashboard = ({ title }) => {
                                                                             <td>{item.name}</td>
                                                                             <td>{item.email}</td>
                                                                             <td>+{item.phone_number}</td>
-                                                                            <td>{item.country}</td>
+                                                                            <td>{item.plan_name ? (<span className="badge badge-pill badge-warning">{item.plan_name}</span>) : 'N/A'}</td>
                                                                             <td>
                                                                                 <span onClick={() => HanelView(item._id)} className="theme-text cursor-pointer mx-2"><AiFillEye size={20} /></span>
                                                                                 <span onClick={() => HanelView(item._id)} className="text-success cursor-pointer mx-2"><AiFillEdit size={20} /></span>

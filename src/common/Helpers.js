@@ -4,20 +4,36 @@ export const app_url = '/tixme_ui/';
 export const admin_url = app_url + 'admin/';
 export const organizer_url = app_url + 'organizer/';
 export const customer_url = app_url + 'customer/';
+export const laravelapi = 'https://tixme.co/tixme_storage/api/';
+export const laravel_asset = 'https://tixme.co/tixme_storage/storage/app/public/';
 
-// export const apiurl = 'http://localhost:5001/api/v1/';
-// export const imgurl = 'http://localhost:5001/uploads/';
-// export const qr_url = 'http://localhost:3001/scanner/organizer/tixme-scanner-page/';
+export const apiurl = 'http://localhost:5001/api/v1/';
+export const imgurl = 'http://localhost:5001/uploads/';
+export const qr_url = 'http://localhost:3001/scanner/organizer/qr/';
 
-export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
-export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
-export const qr_url = 'https://tixme.co/scanner/organizer/tixme-scanner-page';
+// export const apiurl = 'https://nodejsapidev.vercel.app/api/v1/';
+// export const imgurl = 'https://nodejsapidev.vercel.app/uploads/';
+// export const qr_url = 'https://tixme.co/scanner/organizer/qr/';
 
+export function RemoveSession() {
+    localStorage.removeItem('userauth');
+    localStorage.removeItem('username');
+    localStorage.removeItem('customerid');
+    localStorage.removeItem('user_role');
+    localStorage.removeItem('organizerid');
+    localStorage.removeItem('organizername');
+    localStorage.removeItem('organizer_role');
+    localStorage.removeItem('adminauth');
+    localStorage.removeItem('admin_role');
+}
 
-
-
-export function get_percentage(per, total) {
-    const TotalTax = ((total * per) / 100).toFixed(2);
+export function get_percentage(per, type, total) {
+    let TotalTax = 0;
+    if (type == "Amount") {
+        TotalTax = per;
+    } else {
+        TotalTax = ((total * per) / 100).toFixed(2);
+    }
     return TotalTax; // Returns a string with two decimal places
 }
 
@@ -27,13 +43,18 @@ export function isEmail(email) {
     return regex.test(email);
 }
 export const get_date_time = (date) => {
-    const options = { day: 'numeric', month: 'short', year: 'numeric' };
-    const dateParts = new Intl.DateTimeFormat('en-US', options).formatToParts(new Date(date));
+    if (date) {
 
-    const Dateview = dateParts[2].value + ' ' + dateParts[0].value + ' ' + dateParts[4].value;
-    const Timeview = new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        const dateParts = new Intl.DateTimeFormat('en-US', options).formatToParts(new Date(date));
 
-    return [{ Dateview, Timeview }];
+        const Dateview = dateParts[2].value + ' ' + dateParts[0].value + ' ' + dateParts[4].value;
+        const Timeview = new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        return [{ Dateview, Timeview }];
+    } else {
+        return null;
+    }
 };
 export const formatDateToYYYYMMDD = (date) => {
     const d = new Date(date);

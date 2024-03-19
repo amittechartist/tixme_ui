@@ -127,6 +127,13 @@
     .font-nav {
         font-size: 9px !important;
     }
+    .event_page_price_title{
+        font-size: 10px;
+    }
+    span.cut_ticket_price {
+        font-size: 8px !important;
+        text-decoration-thickness: 1px !important;
+    }
     img.organiger-logo {
         height: auto;
         width: 40px;

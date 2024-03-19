@@ -7,6 +7,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import toast from "react-hot-toast";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { FiPlus } from "react-icons/fi";
 const Dashboard = ({ title }) => {
     const MySwal = withReactContent(Swal);
     const [Loader, setLoader] = useState(false);
@@ -230,13 +231,13 @@ const Dashboard = ({ title }) => {
                         ) : (
                             <Col md={12}>
                                 {Editid ? (
-                                    <span onClick={() => DoEdit()}>
-                                        <Whitestarbtn title={'Update plan'} />
-                                    </span>
+                                    <button className="w-100 theme-btn" onClick={() => DoEdit()}>
+                                        <span className="theme-btn-icon"><FiPlus /></span> <span>Update plan</span>
+                                    </button>
                                 ) : (
-                                    <span onClick={() => HandelPlancreate()}>
-                                        <Whitestarbtn title={'Create plan'} />
-                                    </span>
+                                    <button className="w-100 theme-btn" onClick={() => HandelPlancreate()}>
+                                        <span className="theme-btn-icon"><FiPlus /></span> <span>Create plan</span>
+                                    </button>
                                 )}
                             </Col>
                         )}
@@ -250,13 +251,12 @@ const Dashboard = ({ title }) => {
             </Modal>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
-                    <div className="page-titles">
-                        <span onClick={() => setModal(true)} className="position-right"><Whitestarbtn title={'Add plan'} /></span>
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item">{title}</li>
-                        </ol>
-                    </div>
                     <Row className="justify-content-center">
+                        <Col md={12} className="d-flex justify-content-end my-2">
+                            <button className="theme-btn" onClick={() => setModal(true)}>
+                                <span className="theme-btn-icon"><FiPlus /></span> <span>Add plan</span>
+                            </button>
+                        </Col>
                         <Col md={12}>
                             <Card className="py-4">
                                 <Card.Body>

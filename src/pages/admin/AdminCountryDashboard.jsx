@@ -8,6 +8,14 @@ const Dashboard = ({ title }) => {
     const { name } = useParams();
     const [Apiloader, setApiloader] = useState(false);
     const [fetchdata, setFetchdata] = useState([]);
+    const [counter, setCounter] = useState(0);
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setCounter((prevCounter) => prevCounter + 1); // Increment the counter to trigger a re-render
+        }, 3000); // 3000 milliseconds = 3 seconds
+    
+        return () => clearInterval(interval); // Clear the interval when the component unmounts
+      }, []);
     const fetchEvent = async () => {
         try {
             setApiloader(true)
@@ -39,7 +47,7 @@ const Dashboard = ({ title }) => {
     }
     useEffect(() => {
         fetchEvent();
-    }, [name]);
+    }, [counter, name]);
 
     return (
         <>

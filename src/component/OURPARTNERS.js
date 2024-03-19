@@ -12,7 +12,41 @@ import d from "../assets/our/d.png";
 import e from '../assets/our/e.png';
 import f from '../assets/our/f.png';
 import Slider from "react-slick";
+import { apiurl, laravel_asset } from "../common/Helpers";
 const Component = () => {
+    const [Loader, setLoader] = useState(false);
+    const [Listitems, setListitems] = useState([]);
+    const fetchList = async () => {
+        try {
+            setLoader(true)
+            fetch(apiurl + 'website/partnerslist', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        setListitems(data.data);
+                    } else {
+
+                    }
+                    setLoader(false)
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                    setLoader(false)
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+            setLoader(false)
+        }
+    }
+    useEffect(() => {
+        fetchList();
+    }, []);
+
     function SampleNextArrow(props) {
         const { className, style, onClick } = props;
         return (
@@ -51,40 +85,19 @@ const Component = () => {
             <h3 className="fw-bold text-primary-color mb-0 text-center mb-0 animate__animated animate__bounce OURPARTNER-padding">
                 OUR PARTNERS
             </h3>
-            <div className="partnetSlider">
-                <Slider {...settings}>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={google} alt="google" />
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={airBNB} alt="google" />
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={booking} alt="google" />
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={expedia} alt="google" />
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={a} alt="google" />
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={b} alt="google" />
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={c} alt="google" />
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={d} alt="google" />
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={e} alt="google" />
-                    </div>
-                    <div className="d-flex justify-content-center">
-                        <img className="company_logo" src={f} alt="google" />
-                    </div>
-                </Slider>
-            </div>
+            {Loader ? (
+                <div className="linear-background w-100" style={{ height: '100px' }}> </div>
+            ) : (
+                <div className="partnetSlider">
+                    <Slider {...settings}>
+                        {Listitems && Listitems.map((item) => (
+                            <div className="d-flex justify-content-center">
+                                <img className="company_logo" src={laravel_asset + item.img_url} alt="google" />
+                            </div>
+                        ))}
+                    </Slider>
+                </div>
+            )}
         </div>
     )
 }

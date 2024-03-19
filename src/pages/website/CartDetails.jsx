@@ -52,18 +52,24 @@ const Home = () => {
     const [PaymentGatwayname, setPaymentGatwayname] = useState('');
     const [TicketsSelledList, setTicketsSelledList] = useState([]);
     const [Loader, setLoader] = useState(false);
+    // CHECK TAX
     //coupon check
     const [CouponId, setCouponId] = useState('');
     const [CouponData, setCouponData] = useState('');
     const [CustomerCouponData, setCustomerCouponData] = useState('');
     const [Iscoupon, setIscoupon] = useState(false);
     const [CouponCheckLoader, setCouponCheckLoader] = useState(false);
+
     const HandelRemoveToken = () => {
-        setIscoupon(false);
+        // setIscoupon(false);
+        // setCouponData('')
+        // setSubtotal(Subtotal);
+        
         setCouponId('');
-        setCouponData('')
         setDiscountAmount('');
-        setSubtotal(Subtotal);
+        setCouponData("");
+        setCustomerCouponData("");
+        setIscoupon(false);
     }
     const HandelCouponCheck = async () => {
         try {
@@ -100,16 +106,17 @@ const Home = () => {
                         toast.success("Coupon applied");
                         setCouponData(data.data);
                         setCustomerCouponData(data.customer_coupon);
-                        const checkCartamount = Subtotal;
+                        // const checkCartamount = Subtotal;
                         const checkCouponamount = parseInt(data.data.discount).toFixed(2);
-                        if (checkCartamount > checkCouponamount) {
-                            setDiscountAmount(checkCouponamount);
-                            const CountSubtotal = checkCartamount - checkCouponamount;
-                            setSubtotal(CountSubtotal.toFixed(2));
-                        } else if (checkCartamount <= checkCouponamount) {
-                            setDiscountAmount(checkCartamount);
-                            setSubtotal(0.00);
-                        }
+                        setDiscountAmount(checkCouponamount);
+                        // if (checkCartamount > checkCouponamount) {
+                        //     setDiscountAmount(checkCouponamount);
+                        //     const CountSubtotal = checkCartamount - checkCouponamount;
+                        //     setSubtotal(CountSubtotal.toFixed(2));
+                        // } else if (checkCartamount <= checkCouponamount) {
+                        //     setDiscountAmount(checkCartamount);
+                        //     setSubtotal(0.00);
+                        // }
                         setIscoupon(true);
                     } else {
                         toast.error(data.message);
@@ -212,12 +219,12 @@ const Home = () => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        setTaxlist(data.data);
                         if (data.data) {
                             const totalTax = data.data.reduce((accumulator, item) => {
                                 return accumulator + (item.taxamount || 0);
                             }, 0);
                             setTotaltaxamount(totalTax);
+                            setTaxlist(data.data);
                         }
                     }
                     setTaxlistLoader(false);
@@ -275,10 +282,10 @@ const Home = () => {
 
         // Function to calculate and update taxlist with percentage_amount
         const updateTaxListWithPercentage = () => {
-            if (taxlist.length > 0 && totaltaxamount > 0) {
+            if (taxlist.length > 0) {
                 const updatedTaxList = taxlist.map(item => ({
                     ...item,
-                    percentage_amount: (item.taxamount / totaltaxamount) * 100
+                    percentage_amount: item.taxtype == "Amount" ? item.taxamount.toFixed(2) : ((item.taxamount / totaltaxamount) * 100).toFixed(2)
                 }));
                 setTaxlist(updatedTaxList);
             }
@@ -296,7 +303,7 @@ const Home = () => {
         if (moneyLoader) {
         }
         calculateTotalPrice();
-    }, [cartItems, moneyLoader, rewardPoints]);
+    }, [cartItems, moneyLoader, rewardPoints, DiscountAmount]);
     useEffect(() => {
         if (isFirstRender) {
             localStorage.setItem('cart', JSON.stringify({ items: cartItems, quantities: localQuantities }));
@@ -390,8 +397,9 @@ const Home = () => {
         // Initialize cartItems as an empty array if it's undefined
         const totalQuantity = TicketsSelledList.filter((i) => i.ticket_id == item.id)
             .reduce((acc, item) => acc + item.quantity, 0);
-        const qty_avl = Number(item.quantity) - Number(totalQuantity);
-        console.log(qty_avl, "fuct");
+        const CountQty = Number(item.quantity) - Number(totalQuantity);
+        const qty_avl = CountQty > 10 ? 10 : CountQty;
+
         const existingItem = cartItems.find((cartItem) => cartItem.name === item.name);
 
         if (existingItem.quantity + 1 <= qty_avl) {
@@ -401,7 +409,7 @@ const Home = () => {
             );
             setCartItems(updatedCart);
         } else {
-            toast.error("Cannot add more than the available quantity");
+            toast.error("Cannot add more quantity");
         }
         // Update local quantity state
         setLocalQuantities({
@@ -441,7 +449,21 @@ const Home = () => {
         total = total.toFixed(2);
         let TotalTax = 0;
         if (totaltaxamount > 0) {
-            TotalTax = ((Number(total) * Number(totaltaxamount)) / 100).toFixed(2);
+            taxlist.forEach(tax => {
+                if (tax.taxtype === "Amount") {
+                    TotalTax += Number(tax.taxamount);
+                } else if (tax.taxtype === "Percentage") {
+                    TotalTax += Number(get_percentage(tax.taxamount, tax.taxtype, total));
+                }
+            });
+
+            TotalTax = TotalTax;
+        }
+        let Discount = 0.00;
+        if (CouponData && CouponData.discount) {
+            Discount = CouponData.discount.toFixed(2);
+            console.log("coupon_deta", [total, Discount, CouponData.discount.toFixed(2)]);
+            setDiscountAmount(Discount);
         }
         if (rewardPoints) {
             const discountAmount = rewardPoints;
@@ -452,8 +474,8 @@ const Home = () => {
             setSubtotal(roundedSubtotal);
         } else {
             setAllItemsTotalPrice(total);
-            setDiscountAmount(0);
-            setSubtotal(parseFloat(Number(total) + Number(TotalTax)).toFixed(2));
+            // setDiscountAmount(0);
+            setSubtotal((Number(total) + Number(TotalTax)).toFixed(2) - Number(Discount || 0).toFixed(2));
         }
         console.log("sss");
     };
@@ -895,7 +917,7 @@ const Home = () => {
                                                                                                     <h5 className="cart-amount-small-title">{item.name}</h5>
                                                                                                 </div>
                                                                                                 <div className="col-md-6 col-6 my-2 text-end">
-                                                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, allItemsTotalPrice)} </h5>
+                                                                                                    <h5 className="cart-amount-small-amount">{currency_symble} {get_percentage(item.taxamount, item.taxtype, allItemsTotalPrice)}</h5>
                                                                                                 </div>
                                                                                             </>
                                                                                         ))}
@@ -917,10 +939,10 @@ const Home = () => {
                                                                         <Col md={12} className="py-3">
                                                                             <div className="border-bottom"></div>
                                                                         </Col>
-                                                                        <div className="col-6">
+                                                                        <div className="col-4">
                                                                             <h3 className="cart-amount-small-title theme-color font-600">Total</h3>
                                                                         </div>
-                                                                        <div className="col-6 text-end">
+                                                                        <div className="col-8 text-end">
                                                                             <h3 className="cart-amount-small-amount theme-color font-600">{currency_symble} {Subtotal}</h3>
                                                                         </div>
                                                                         <Col md={12} style={{ borderTop: '1px solid #eee' }} className="pt-3">

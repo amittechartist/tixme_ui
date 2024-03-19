@@ -367,13 +367,13 @@ const Dashboard = ({ title }) => {
                         localStorage.setItem("qrid", id);
                         localStorage.setItem("qrtype", type);
                         if (type == 2) {
-                            const filteredItems = data.data.orderitemlist.filter(item => item.owner_id === data.data.ordersavedata.customer_id);
-                            setOrderitemlist(filteredItems);
+                            const filteredOrderItems = data.data.orderitemlist.filter(item => item.owner_id === data.data.ordersavedata.customer_id);
+                            setOrderitemlist(filteredOrderItems);
                         } else {
                             setOrderitemlist(data.data.orderitemlist);
                         }
                         setOrdersavedata(data.data.ordersavedata);
-                        console.log("sp", data.data.orderitemlist.length)
+                        setOrderid(id);
                         if (data.data.orderitemlist.length > 0) {
                             const check = data.data.orderitemlist.every(item => item.scan_status === "1");
                             setIsscan(check);
@@ -510,6 +510,11 @@ const Dashboard = ({ title }) => {
         setModal(!modal);
         removeQrlocaldata();
     }
+    const HandelTransfer = () => {
+        setModal(!modal);
+        setModalTT(!modalTT);
+        setModalLoader(false);
+    }
     return (
         <>
             <Modal isOpen={modal} toggle={() => setModal(() => handelQrviewModal())} centered size={'xl'} onClosed={() => removeQrlocaldata()}>
@@ -642,6 +647,7 @@ const Dashboard = ({ title }) => {
                                                                             <p className="mb-0 mt-1" style={{ fontWeight: 600, color: '#000' }}>Scan status</p>
                                                                             <span class="mt-0 badge-theme-warning badge-theme mt-3 mb-3 d-block w-100"><FaClock /> Pending</span>
                                                                             {/* <button type="button" onClick={() => { handleCheckboxChange(item._id); setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button> */}
+                                                                            <button type="button" onClick={() => { checkedItemIds.length > 0 ? HandelTransfer() : toast.error("No Ticket selected"); }} className="w-100 btn btn-success">Transfer</button>
                                                                         </div>
                                                                     </>
                                                                 ) : (
@@ -659,14 +665,14 @@ const Dashboard = ({ title }) => {
                                                 </div>
                                             </Col>
                                         ))}
-                                        {checkedItemIds.length > 0 ? (
+                                        {/* {checkedItemIds.length > 0 ? (
                                             <>
                                                 <Col md={12}></Col>
                                                 <Col md={3}>
                                                     <button type="button" onClick={() => { setModal(!modal); setModalTT(!modalTT); setModalLoader(false) }} className="w-100 btn btn-success">Transfer</button>
                                                 </Col>
                                             </>
-                                        ) : ''}
+                                        ) : ''} */}
                                     </Row>
                                 </Col>
                             </>
@@ -675,51 +681,48 @@ const Dashboard = ({ title }) => {
                 </ModalBody>
             </Modal>
             <Modal isOpen={modalTT} toggle={() => setModalTT(!modalTT)} centered size={'lg'}>
-                <ModalHeader toggle={!modalTT}>
+                <ModalHeader toggle={() => setModalTT(!modalTT)}>
                     Transfer Ticket
-                    <button className="close p-0" onClick={() => setModalTT(!modalTT)} style={{ position: 'absolute', top: '5px', right: '10px', border: 'none', background: 'transparent' }}>
-                        <FaTimes />
-                    </button>
                 </ModalHeader>
                 <ModalBody>
                     <Row>
-                        {ModalLoader ? (
+                        {/* {ModalLoader ? (
                             <>
                                 <Col md={6}><div className="linear-background w-100"> </div></Col>
                                 <Col md={6}><div className="linear-background w-100"> </div></Col>
                             </>
-                        ) : (
-                            <>
-                                <Col md={6}>
-                                    <h3 style={{ fontWeight: '600', color: '#0047AB' }} className="mb-4">Transfer Ticket</h3>
-                                    <div class="input-group input-warning-o">
-                                        <input type="text" class="form-control px-2 py-3 mb-3" onChange={(e) => setEmailid(e.target.value)} value={Emailid} placeholder="Email Id" />
-                                    </div>
-                                    <div>
-                                        <h5 className="text-bold">total Ticket :</h5>
-                                        <p>{checkedItemIds.length}</p>
-                                    </div>
-                                    {TransferLoader ? (
-                                        <button disabled className="mb-0 mr-5 btn btn-dark list-Ticket-mng-1" type="button">Please wait...</button>
-                                    ) : (
-                                        <>
-                                            {checkedItemIds.length > 0 ? (
-                                                <div className="mr-5 pt-5">
-                                                    <button onClick={() => HandelTransferTicket()} className="mb-0 mr-5  btn btn-success list-Ticket-mng-1" type="button">Transfer Ticket</button>
-                                                </div>
-                                            ) : (
-                                                <div className="mr-5 pt-5">
-                                                    <button disabled className="mb-0 mr-5 btn btn-dark list-Ticket-mng-1" type="button">No Ticket Found</button>
-                                                </div>
-                                            )}
-                                        </>
-                                    )}
-                                </Col>
-                                <Col md={6}>
-                                    <img className="TranferImg-css" src={TranferImg}></img>
-                                </Col>
-                            </>
-                        )}
+                        ) : ( */}
+                        <>
+                            <Col md={6}>
+                                <h3 style={{ fontWeight: '600', color: '#0047AB' }} className="mb-4">Transfer Ticket</h3>
+                                <div class="input-group input-warning-o">
+                                    <input type="text" class="form-control px-2 py-3 mb-3" onChange={(e) => setEmailid(e.target.value)} value={Emailid} placeholder="Email Id" />
+                                </div>
+                                <div>
+                                    <h5 className="text-bold">Total Ticket :</h5>
+                                    <p>{checkedItemIds.length}</p>
+                                </div>
+                                {TransferLoader ? (
+                                    <button disabled className="mb-0 mr-5 btn btn-dark list-Ticket-mng-1" type="button">Please wait...</button>
+                                ) : (
+                                    <>
+                                        {checkedItemIds.length > 0 ? (
+                                            <div className="mr-5 pt-5">
+                                                <button onClick={() => HandelTransferTicket()} className="mb-0 mr-5  btn btn-success list-Ticket-mng-1" type="button">Transfer Ticket</button>
+                                            </div>
+                                        ) : (
+                                            <div className="mr-5 pt-5">
+                                                <button disabled className="mb-0 mr-5 btn btn-dark list-Ticket-mng-1" type="button">No Ticket Found</button>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </Col>
+                            <Col md={6}>
+                                <img className="TranferImg-css" src={TranferImg}></img>
+                            </Col>
+                        </>
+                        {/* )} */}
                     </Row>
                 </ModalBody>
             </Modal>
@@ -810,7 +813,7 @@ const Dashboard = ({ title }) => {
                                                 </Col>
                                                 <Col md={6} xl={3} className="cust-field-dashboard">
                                                     <div class="dropdown dropdown-category">
-                                                        <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{paddingRight: '30px'}}>
                                                             {selectedCategories.length > 0 ? (
                                                                 <>
                                                                     {selectedCategories.map((item, index) => (

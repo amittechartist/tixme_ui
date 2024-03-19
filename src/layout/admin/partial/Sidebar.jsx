@@ -8,9 +8,11 @@ import { FaHeadset } from 'react-icons/fa';
 import { FaUsers } from "react-icons/fa6";
 import { MdEvent } from 'react-icons/md';
 import { FaUserCheck } from 'react-icons/fa';
-
+import { FaBullhorn } from "react-icons/fa6";
 import { FaHome, FaListAlt, FaUserClock, FaCalendarAlt, FaMoneyCheckAlt } from 'react-icons/fa';
 import { FiFlag } from "react-icons/fi";
+import { FiSettings } from "react-icons/fi";
+import { FaUserPen } from "react-icons/fa6";
 import { MdAddCircleOutline, MdCardMembership, MdMailOutline, MdContactMail, MdExitToApp } from 'react-icons/md';
 const Sidebar = () => {
     const [Listitems, setListitems] = useState([]);
@@ -112,17 +114,20 @@ const Sidebar = () => {
                         </li>
                         {Countrylist && Countrylist.map((item, index) => (
                             <li onClick={() => { d(); handleDropdown("country-" + index); }} key={index}>
-                                <Link to={admin_url + 'countrydashboard/' + item.name} class="has-arrow ai-icon" aria-expanded="false">
-                                    <span className='sidebar-icon'><FiFlag /></span>
+                                <a href="javascript:void(0);" class="has-arrow ai-icon" aria-expanded="false">
+                                    <span className='sidebar-icon'><FaHome /></span>
                                     <span class="nav-text text-capitalize">{item.name}</span>
-                                </Link>
+                                </a>
                                 {openDropdown === "country-" + index && (
                                     <ul aria-expanded="false">
                                         <li>
-                                            <Link className='text-black text-capitalize' >Ticket Managment</Link>
+                                            <Link to={admin_url + 'countrydashboard/' + item.name} className='text-black text-capitalize' >Dashboard</Link>
                                         </li>
                                         <li>
-                                            <Link className='text-black text-capitalize'>Events Managment</Link>
+                                            <Link to={admin_url + 'users/' + item.name} className='text-black text-capitalize' >Users</Link>
+                                        </li>
+                                        <li>
+                                            <Link to={admin_url + 'all-events-list/' + item.name} className='text-black text-capitalize'>Events</Link>
                                         </li>
                                     </ul>
                                 )}
@@ -146,10 +151,10 @@ const Sidebar = () => {
                             )}
                         </li>
                         <li onClick={() => { d(); handleDropdown("organizer-menu"); }}>
-                            <Link class="has-arrow ai-icon" aria-expanded="false">
+                            <a href="javascript:void(0);" class="has-arrow ai-icon" aria-expanded="false">
                                 <span className='sidebar-icon'><FaUserClock /></span>
-                                <span class="nav-text text-capitalize">Organizers</span>
-                            </Link>
+                                <span class="nav-text">Organizers</span>
+                            </a>
                             {openDropdown === "organizer-menu" && (
                                 <ul aria-expanded="false">
                                     <li>
@@ -160,12 +165,6 @@ const Sidebar = () => {
                                     </li>
                                 </ul>
                             )}
-                        </li>
-                        <li onClick={() => d()}>
-                            <Link to={admin_url + 'all-category'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><FaListAlt /></span>
-                                <span className="nav-text">Category</span>
-                            </Link>
                         </li>
                         <li onClick={() => d()}>
                             <Link to={admin_url + 'all-event-type'} className="ai-icon" aria-expanded="false">
@@ -179,10 +178,56 @@ const Sidebar = () => {
                                 <span className="nav-text">All Event</span>
                             </Link>
                         </li>
+                        <li onClick={() => d()}>
+                            <Link to={admin_url + 'membership'} className="ai-icon" aria-expanded="false">
+                                <span className='sidebar-icon'><MdCardMembership /></span>
+                                <span className="nav-text">Membership</span>
+                            </Link>
+                        </li>
+                        <li onClick={() => d()}>
+                            <Link to={admin_url + 'addcoupon'} className="ai-icon" aria-expanded="false">
+                                <span className='sidebar-icon'><MdAddCircleOutline /></span>
+                                <span className="nav-text">Add Coupon</span>
+                            </Link>
+                        </li>
+                        <li onClick={() => d()}>
+                            <Link to={admin_url + 'contact-us'} className="ai-icon" aria-expanded="false">
+                                <span className='sidebar-icon'><MdContactMail /></span>
+                                <span className="nav-text">Contact Us</span>
+                            </Link>
+                        </li >
+                        <li onClick={() => d()}>
+                            <Link to={admin_url + 'newsletter'} className="ai-icon" aria-expanded="false">
+                                <span className='sidebar-icon'><MdMailOutline /></span>
+                                <span className="nav-text">Newsletter</span>
+                            </Link>
+                        </li>
                         <li><Link to={admin_url + 'mailing'} className="ai-icon" aria-expanded="false">
                             {/* <img src={<FiMail />} alt="Your Logo" /> */}
-                            <span className='sidebar-icon'><FiMail /></span>
-                            <span className="nav-text">Mailing</span>
+                            <span className='sidebar-icon'><FaBullhorn /></span>
+                            <span className="nav-text">Communication</span>
+                        </Link>
+                        </li>
+                        <li onClick={() => { d(); handleDropdown("WEBSITE-ACCESS"); }}>
+                            <a href="javascript:void(0);" class="has-arrow ai-icon" aria-expanded="false">
+                                <span className='sidebar-icon'><FiSettings /></span>
+                                <span class="nav-text">Website Access</span>
+                            </a>
+                            {openDropdown === "WEBSITE-ACCESS" && (
+                                <ul aria-expanded="false">
+                                    <li>
+                                        <Link to={admin_url + 'all-category'} className='text-black text-capitalize' >Category</Link>
+                                    </li>
+                                    <li>
+                                        <Link to={admin_url + 'our-partners'} className='text-black text-capitalize'>Our Partners</Link>
+                                    </li>
+                                </ul>
+                            )}
+                        </li>
+                        <li><Link to={admin_url + 'settings'} className="ai-icon" aria-expanded="false">
+                            {/* <img src={<FiMail />} alt="Your Logo" /> */}
+                            <span className='sidebar-icon'><FaUserPen /></span>
+                            <span className="nav-text">Settings</span>
                         </Link>
                         </li>
                         {/* <li onClick={() => d()}>
@@ -191,24 +236,12 @@ const Sidebar = () => {
                                 <span className="nav-text">Support</span>
                             </Link>
                         </li > */}
-                        <li onClick={() => d()}>
-                            <Link to={admin_url + 'addcoupon'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdAddCircleOutline /></span>
-                                <span className="nav-text">Add Coupon</span>
-                            </Link>
-                        </li>
                         {/* <li onClick={() => d()}>
                             <Link to={admin_url + 'taxadd'} className="ai-icon" aria-expanded="false">
                                 <img src={DashboardIcon} alt="Your Logo" />
                                 <span className="nav-text">Add Tax</span>
                             </Link>
                         </li> */}
-                        <li onClick={() => d()}>
-                            <Link to={admin_url + 'membership'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdCardMembership /></span>
-                                <span className="nav-text">Membership</span>
-                            </Link>
-                        </li>
                         {/* <li onClick={() => d()}>
                             <Link to={admin_url + 'payout-request'} className="ai-icon" aria-expanded="false">
                                 <img src={DashboardIcon} alt="Your Logo" />
@@ -227,18 +260,6 @@ const Sidebar = () => {
                                 ))}
                             </ul>
                         </li>
-                        <li onClick={() => d()}>
-                            <Link to={admin_url + 'newsletter'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdMailOutline /></span>
-                                <span className="nav-text">Newsletter</span>
-                            </Link>
-                        </li>
-                        <li onClick={() => d()}>
-                            <Link to={admin_url + 'contact-us'} className="ai-icon" aria-expanded="false">
-                                <span className='sidebar-icon'><MdContactMail /></span>
-                                <span className="nav-text">Contact Us</span>
-                            </Link>
-                        </li >
                         <li onClick={() => d()}>
                             <a onClick={() => Logout()} className="ai-icon cursor-pointer" aria-expanded="false">
                                 <span className='sidebar-icon'><MdExitToApp /></span>

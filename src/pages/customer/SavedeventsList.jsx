@@ -239,7 +239,7 @@ const Dashboard = ({ title }) => {
                                                         value={SelectCategoryValue}
                                                     /> */}
                                                     <div class="dropdown dropdown-category">
-                                                        <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <div className="event-page-category-filter-box event-page-category-filter-box1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{paddingRight: '30px'}}>
                                                             {selectedCategories.length > 0 ? (
                                                                 <>
                                                                     {selectedCategories.map((item, index) => (
@@ -299,13 +299,12 @@ const Dashboard = ({ title }) => {
                                                                             <Col md={12} className="event_list_box_main">
                                                                                 <div className="event_list_box">
                                                                                     <Row>
-                                                                                        <Col md={5}>
+                                                                                        <Col md={4}>
                                                                                             <img src={item.thum_image} className="list-thum-img" alt="" />
                                                                                         </Col>
-                                                                                        <Col md={4} className="list-data pt-3">
-                                                                                            <div className="mb-4">
+                                                                                        <Col md={5} className="list-data pt-3">
+                                                                                            <div className="mb-2">
                                                                                                 <Link to={`${app_url}event/${item._id}/${item.name}`}><span className="list-event-name">{item.display_name}</span> </Link>
-                                                                                                <p className="list-event-desc mb-0">{shortPer(item.event_desc, 100)}</p>
                                                                                             </div>
                                                                                             <div className="list-event-location mb-4">
                                                                                                 <div className="d-flex align-items-center text-center location-name">
@@ -315,12 +314,12 @@ const Dashboard = ({ title }) => {
                                                                                                         src={LocationIcon}
                                                                                                         alt=""
                                                                                                     />{" "}
-                                                                                                    <span>{item.location}</span>
+                                                                                                    <span>{item.displayaddress || item.location}</span>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div className="desc_data">
                                                                                                 <div className="organizer-name-sec px-2 py-2">
-                                                                                                    <div className="d-inline-flex align-items-center border-right event-time-area">
+                                                                                                    <div className="d-inline-flex align-items-center event-time-area">
                                                                                                         <div className="d-inline-block mr-1">
                                                                                                             <img height={30} width={30} src={Timelogo} alt="" />
                                                                                                         </div>
@@ -329,22 +328,6 @@ const Dashboard = ({ title }) => {
                                                                                                                 Event Time
                                                                                                             </span>
                                                                                                             <span className="event-time d-block">{item.start_time}</span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div className="d-inline-flex align-items-center">
-                                                                                                        <div className="d-inline-block mr-1">
-                                                                                                            <img
-                                                                                                                height={30}
-                                                                                                                width={30}
-                                                                                                                src={Hourglasslogo}
-                                                                                                                alt=""
-                                                                                                            />
-                                                                                                        </div>
-                                                                                                        <div className="d-inline-block">
-                                                                                                            <span className="event-duration d-block">
-                                                                                                                Event Duration
-                                                                                                            </span>
-                                                                                                            <span className="event-time d-block">{item.event_duration}</span>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>

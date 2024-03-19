@@ -33,6 +33,8 @@ const Dashboard = () => {
     const [Eventselected, setEventselected] = useState();
     const [EventPreselected, setEventPreselected] = useState();
     const [ticketOptions, setTicketOptions] = useState([]);
+    const [FollwersOption, setFollwersOption] = useState([]);
+    const [Follwersselected, setFollwersselected] = useState();
     const [Ticketselected, setTicketselected] = useState();
     const [Customerselected, setCustomerselected] = useState();
     const [EventData, setEventData] = useState();
@@ -40,6 +42,11 @@ const Dashboard = () => {
     const [Myfollwers, selMyfollwers] = useState(false);
 
 
+    const Follwer = [
+        {
+            options: FollwersOption
+        }
+    ]
     const EventOption = [
         {
             options: EventListOption
@@ -47,7 +54,7 @@ const Dashboard = () => {
     ]
     const EventPreOption = [
         {
-            options: EventPreListOption
+            options: EventListOption
             // EventPreListOption
         }
     ]
@@ -64,7 +71,7 @@ const Dashboard = () => {
 
     const HandelSelectPreEvents = (selectedOptions) => {
         if (selectedOptions.some(option => option.value === 'selectAll')) {
-            setEventPreselected(EventListOption.slice(1));
+            setEventPreselected(EventPreListOption.slice(1));
         } else {
             setEventPreselected(selectedOptions);
         }
@@ -81,6 +88,13 @@ const Dashboard = () => {
             setAttendanceSelected(AttendanceListOption.slice(1));
         } else {
             setAttendanceSelected(selectedOptions);
+        }
+    };
+    const handleSelectFollwer = (selectedOptions) => {
+        if (selectedOptions.some(option => option.value === 'selectAll')) {
+            setFollwersselected(FollwersOption.slice(1));
+        } else {
+            setFollwersselected(selectedOptions);
         }
     };
     useEffect(() => {
@@ -108,6 +122,44 @@ const Dashboard = () => {
         }
         setTicketOptions(newTicketOptions);
     };
+
+    const getMyFollowers = async () => {
+        try {
+            setLoader(true)
+            const requestData = {
+                id: organizerid,
+            };
+            fetch(apiurl + 'event/organizer-followers-list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+                body: JSON.stringify(requestData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        const upcomingEvents = data.data;
+                        const upcomingOptions = [
+                            { value: 'selectAll', label: 'Select All' },
+                            ...upcomingEvents.map(customer => ({
+                                value: customer.useremail,
+                                label: customer.useremail
+                            }))
+                        ];
+                        setFollwersOption(upcomingOptions);
+                    }
+                    setLoader(false)
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+                    setLoader(false)
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+            setLoader(false)
+        }
+    }
     const getMyEvents = async () => {
         try {
             setLoader(true)
@@ -130,7 +182,6 @@ const Dashboard = () => {
                         const upcomingEvents = data.data.filter(event => event.end_mindate >= today);
                         const pastEvents = data.data.filter(event => event.end_mindate < today);
                         const upcomingOptions = [
-                            { value: 'selectAll', label: 'Select All' },
                             ...upcomingEvents.map(customer => ({
                                 value: customer._id,
                                 label: customer.display_name
@@ -290,7 +341,8 @@ const Dashboard = () => {
                 eventid: Eventselected.value,
                 userlist: AttendanceSelected,
                 message: Messge,
-                myfollwers: Myfollwers,
+                // myfollwers: Myfollwers,
+                myfollwerslist: Follwersselected,
                 usertype: "Organizer",
             };
             fetch(apiurl + 'event/organizer-eventmail-send', {
@@ -360,6 +412,7 @@ const Dashboard = () => {
         setTicketselected("");
         setEventData("");
         setMessge("");
+        setFollwersselected("");
         setisAllcustomer(false);
     }
     const removeAllcustomer = () => {
@@ -369,6 +422,7 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
+        getMyFollowers();
         getMyEvents();
     }, []);
     useEffect(() => {
@@ -552,13 +606,25 @@ const Dashboard = () => {
                                                                                 value={AttendanceSelected}
                                                                             />
                                                                         </div>
-                                                                        {!isAllcustomer &&
+                                                                        {/* {!isAllcustomer &&
                                                                             (
                                                                                 <div className="my-2">
                                                                                     <button onClick={() => selMyfollwers(!Myfollwers)} type="button" class={`btn ${Myfollwers ? 'theme-bg text-white' : 'btn-outline-secondary'} text-capitalize w-100`}>Select My Follwers</button>
                                                                                 </div>
                                                                             )
-                                                                        }
+                                                                        } */}
+                                                                        <div className="form-group">
+                                                                            <p>My Follwers</p>
+                                                                            <Select
+                                                                                isClearable={false}
+                                                                                options={Follwer}
+                                                                                className='react-select'
+                                                                                isMulti
+                                                                                classNamePrefix='select'
+                                                                                onChange={handleSelectFollwer}
+                                                                                value={Follwersselected}
+                                                                            />
+                                                                        </div>
                                                                     </>
                                                                 )}
                                                                 <div>

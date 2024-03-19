@@ -3,7 +3,7 @@ import HeaderMenu from '../../../components/headermenu';
 import MobileMenu from '../../../components/mobilemenu';
 import Footer from '../../../components/footer';
 import toast from 'react-hot-toast';
-import { apiurl, app_url, isEmail, organizer_url } from '../../../common/Helpers';
+import { apiurl, app_url, isEmail, organizer_url, RemoveSession } from '../../../common/Helpers';
 import { Link, useNavigate } from "react-router-dom";
 import 'react-phone-input-2/lib/style.css';
 import SignupImg from '../../../common/image/signup.svg';
@@ -41,6 +41,7 @@ const About = () => {
                     setLoader(false);
                     if (data.success == true) {
                         console.warn("k", data.data._id);
+                        RemoveSession();
                         localStorage.setItem('organizerid', data.data._id);
                         localStorage.setItem('organizername', data.data.name);
                         localStorage.setItem('organizer_role', 1);
