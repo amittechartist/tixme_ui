@@ -335,7 +335,7 @@ const Dashboard = () => {
     }
     const handelSendmail = async () => {
         try {
-            if (!AttendanceSelected && !Myfollwers) {
+            if (!AttendanceSelected && !Follwersselected) {
                 return toast.error("No user are selected");
             }
             if (Selectedtype && Selectedtype.value == 2 && !Eventselected) {
@@ -362,7 +362,8 @@ const Dashboard = () => {
                 .then(data => {
                     if (data.success == true) {
                         toast.success(data.message);
-                        var eventID = Eventselected.value;
+                        var eventID = Eventselected && Eventselected.value ? Eventselected.value : 'text';
+                            
                         emptyfield();
                         handelSender(eventID);
                     } else {
@@ -419,7 +420,7 @@ const Dashboard = () => {
         setTicketselected("");
         setEventData("");
         setMessge("");
-        setFollwersselected("");
+        setFollwersselected([]);
         setisAllcustomer(false);
     }
     const removeAllcustomer = () => {

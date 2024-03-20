@@ -18,6 +18,7 @@ import {
 import { AiFillEye } from "react-icons/ai";
 const Dashboard = ({ title }) => {
     const MySwal = withReactContent(Swal)
+    const CountryFilter = localStorage.getItem("filtercountry");
     // modal
     const [MessageModal, setMessageModal] = useState(false);
 
@@ -56,6 +57,10 @@ const Dashboard = ({ title }) => {
                         if (currentSelectedCountry && currentSelectedCountry.label) {
                             Filterlist = Filterlist.filter(item =>
                                 item.countryname === currentSelectedCountry.label
+                            );
+                        }else if(CountryFilter){
+                            Filterlist = Filterlist.filter(item =>
+                                item.countryname === CountryFilter
                             );
                         }
                         console.log("Total Organizer", Filterlist.length);
@@ -116,7 +121,7 @@ const Dashboard = ({ title }) => {
     }
     const navigate = useNavigate();
     const HanelView = async (id) => {
-        localStorage.setItem("orgId",id);
+        localStorage.setItem("orgId", id);
         navigate(`${admin_url}all-events-list`);
     }
     const Delete = async (id) => {
@@ -219,20 +224,24 @@ const Dashboard = ({ title }) => {
                                 <Card.Body>
                                     <div className="row">
                                         <div className="col-7">
-                                            <h5 className="text-capitalize mb-0">Active Organizers</h5>
+                                            <h5 className="text-capitalize mb-0">{CountryFilter && CountryFilter} Active Organizers</h5>
                                         </div>
-                                        <div className="col-3 d-flex justify-content-end">
-                                            <Select
-                                                options={countries}
-                                                value={selectedCountry}
-                                                className="w-100"
-                                                onChange={HandelCountrychange}
-                                                placeholder="Select Country"
-                                            />
-                                        </div>
-                                        <div className="col-2 d-flex justify-content-end">
-                                            <button type="button" onClick={() => emptyData()} className="btn btn-dark w-100">Reset</button>
-                                        </div>
+                                        {!CountryFilter && (
+                                            <>
+                                                <div className="col-3 d-flex justify-content-end">
+                                                    <Select
+                                                        options={countries}
+                                                        value={selectedCountry}
+                                                        className="w-100"
+                                                        onChange={HandelCountrychange}
+                                                        placeholder="Select Country"
+                                                    />
+                                                </div>
+                                                <div className="col-2 d-flex justify-content-end">
+                                                    <button type="button" onClick={() => emptyData()} className="btn btn-dark w-100">Reset</button>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                     <hr></hr>
                                     <Row className="justify-content-center">
@@ -270,7 +279,7 @@ const Dashboard = ({ title }) => {
                                                                     )}
                                                                 </td>
                                                                 <td>
-                                                                <span onClick={() => HanelView(item._id)} className="theme-text cursor-pointer mx-2"><AiFillEye size={20} /></span>
+                                                                    <span onClick={() => HanelView(item._id)} className="theme-text cursor-pointer mx-2"><AiFillEye size={20} /></span>
                                                                 </td>
                                                                 <td>
                                                                     <div class="dropdown">

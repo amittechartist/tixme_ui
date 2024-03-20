@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { apiurl, app_url } from "../../common/Helpers";
+import { admin_url, apiurl, app_url } from "../../common/Helpers";
 import { FaDollarSign, FaCalendarAlt, FaTicketAlt, FaUsers } from 'react-icons/fa';
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 const Dashboard = ({ title }) => {
     const { name } = useParams();
     const [Apiloader, setApiloader] = useState(false);
@@ -11,11 +11,11 @@ const Dashboard = ({ title }) => {
     const [counter, setCounter] = useState(0);
     useEffect(() => {
         const interval = setInterval(() => {
-          setCounter((prevCounter) => prevCounter + 1); // Increment the counter to trigger a re-render
+            setCounter((prevCounter) => prevCounter + 1); // Increment the counter to trigger a re-render
         }, 3000); // 3000 milliseconds = 3 seconds
-    
+
         return () => clearInterval(interval); // Clear the interval when the component unmounts
-      }, []);
+    }, []);
     const fetchEvent = async () => {
         try {
             setApiloader(true)
@@ -48,7 +48,15 @@ const Dashboard = ({ title }) => {
     useEffect(() => {
         fetchEvent();
     }, [counter, name]);
-
+    const navigate = useNavigate();
+    const HandelViewOrganizer = (type) => {
+        localStorage.setItem("filtercountry", name);
+        if (type == 0) {
+            navigate(admin_url + 'pending-organizer');
+        } else {
+            navigate(admin_url + 'active-organizer');
+        }
+    }
     return (
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
@@ -62,64 +70,70 @@ const Dashboard = ({ title }) => {
                             </div>
                         </div>
                         <div className="col-md-6 col-lg-6 col-xl-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="media align-items-center">
-                                        <div>
-                                            <div class="media align-items-center">
-                                                <span class="me-2 dash-icon">
-                                                    <FaDollarSign />
-                                                </span>
-                                                <div class="media-body ms-1">
-                                                    <p class="mb-1 text-capitalize">TOTAL ACTIVE EVENTS</p>
-                                                    <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.ActiveEvent : 0}</h3>
+                            <Link to={admin_url + 'all-events-list/' + name}>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="media align-items-center">
+                                            <div>
+                                                <div class="media align-items-center">
+                                                    <span class="me-2 dash-icon">
+                                                        <FaDollarSign />
+                                                    </span>
+                                                    <div class="media-body ms-1">
+                                                        <p class="mb-1 text-capitalize">TOTAL ACTIVE EVENTS</p>
+                                                        <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.ActiveEvent : 0}</h3>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                         <div className="col-md-6 col-lg-6 col-xl-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="media align-items-center">
-                                        <div>
-                                            <div class="media align-items-center">
-                                                <span class="me-2 dash-icon">
-                                                    <FaCalendarAlt />
-                                                </span>
-                                                <div class="media-body ms-1">
-                                                    <p class="mb-1 text-capitalize">TOTAL UPCOMING EVENTS</p>
-                                                    <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.UpcomingEvents : 0}</h3>
+                            <Link to={admin_url + 'all-events-list/' + name}>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="media align-items-center">
+                                            <div>
+                                                <div class="media align-items-center">
+                                                    <span class="me-2 dash-icon">
+                                                        <FaCalendarAlt />
+                                                    </span>
+                                                    <div class="media-body ms-1">
+                                                        <p class="mb-1 text-capitalize">TOTAL UPCOMING EVENTS</p>
+                                                        <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.UpcomingEvents : 0}</h3>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                         <div className="col-md-6 col-lg-6 col-xl-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="media align-items-center">
-                                        <div>
-                                            <div class="media align-items-center">
-                                                <span class="me-2 dash-icon">
-                                                    <FaTicketAlt />
-                                                </span>
-                                                <div class="media-body ms-1">
-                                                    <p class="mb-1 text-capitalize">TOTAL ACTIVE USERS</p>
-                                                    <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.Activeuser : 0}</h3>
+                            <Link to={admin_url + 'users/' + name}>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="media align-items-center">
+                                            <div>
+                                                <div class="media align-items-center">
+                                                    <span class="me-2 dash-icon">
+                                                        <FaTicketAlt />
+                                                    </span>
+                                                    <div class="media-body ms-1">
+                                                        <p class="mb-1 text-capitalize">TOTAL ACTIVE USERS</p>
+                                                        <h3 class="mb-0 text-black font-w600">{fetchdata ? fetchdata.Activeuser : 0}</h3>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                         <div className="col-md-6 col-lg-6 col-xl-6">
-                            <div class="card">
+                            <div class="card cursor-pointer" onClick={() => { HandelViewOrganizer(1) }}>
                                 <div class="card-body">
                                     <div class="media align-items-center">
                                         <div>
@@ -138,7 +152,7 @@ const Dashboard = ({ title }) => {
                             </div>
                         </div>
                         <div className="col-md-6 col-lg-6 col-xl-6">
-                            <div class="card">
+                            <div class="card  cursor-pointer" onClick={() => { HandelViewOrganizer(0) }}>
                                 <div class="card-body">
                                     <div class="media align-items-center">
                                         <div>

@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 const Dashboard = ({ title }) => {
     const MySwal = withReactContent(Swal)
+    const CountryFilter = localStorage.getItem("filtercountry");
     // modal
     const [MessageModal, setMessageModal] = useState(false);
 
@@ -55,6 +56,10 @@ const Dashboard = ({ title }) => {
                         if (currentSelectedCountry && currentSelectedCountry.label) {
                             Filterlist = Filterlist.filter(item =>
                                 item.countryname === currentSelectedCountry.label
+                            );
+                        } else if (CountryFilter) {
+                            Filterlist = Filterlist.filter(item =>
+                                item.countryname === CountryFilter
                             );
                         }
                         console.log("Total Organizer", Filterlist.length);
@@ -141,7 +146,7 @@ const Dashboard = ({ title }) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        toast.success("Organizer status change to active");
+                        toast.success("An account activation link send to organiger email id");
                         fetchList();
                     } else {
 
@@ -211,20 +216,24 @@ const Dashboard = ({ title }) => {
                                 <Card.Body>
                                     <div className="row">
                                         <div className="col-7">
-                                            <h5 className="text-capitalize mb-0">Pending Organizers</h5>
+                                            <h5 className="text-capitalize mb-0">{CountryFilter && CountryFilter} Pending Organizers</h5>
                                         </div>
-                                        <div className="col-3 d-flex justify-content-end">
-                                            <Select
-                                                options={countries}
-                                                value={selectedCountry}
-                                                className="w-100"
-                                                onChange={HandelCountrychange}
-                                                placeholder="Select Country"
-                                            />
-                                        </div>
-                                        <div className="col-2 d-flex justify-content-end">
-                                            <button type="button" onClick={() => emptyData()} className="btn btn-dark w-100">Reset</button>
-                                        </div>
+                                        {!CountryFilter && (
+                                            <>
+                                                <div className="col-3 d-flex justify-content-end">
+                                                    <Select
+                                                        options={countries}
+                                                        value={selectedCountry}
+                                                        className="w-100"
+                                                        onChange={HandelCountrychange}
+                                                        placeholder="Select Country"
+                                                    />
+                                                </div>
+                                                <div className="col-2 d-flex justify-content-end">
+                                                    <button type="button" onClick={() => emptyData()} className="btn btn-dark w-100">Reset</button>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                     <hr></hr>
                                     <Row className="justify-content-center">

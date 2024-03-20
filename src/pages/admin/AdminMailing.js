@@ -31,6 +31,8 @@ const Dashboard = () => {
     const [EventPreListOption, setEventPreListOption] = useState([]);
     const [AttendanceListOption, setAttendanceListOption] = useState([]);
     const [OrganizersOption, setOrganizersOption] = useState([]);
+    const [NewsletterOption, setNewsletterOption] = useState([]);
+    const [SelectedNewsletter, setSelectedNewsletter] = useState([]);
     const [SelectedOrg, setSelectedOrg] = useState([]);
     const [AttendanceSelected, setAttendanceSelected] = useState([]);
     const [Membershiplist, setMembershiplist] = useState([]);
@@ -44,7 +46,7 @@ const Dashboard = () => {
     const [Messge, setMessge] = useState();
     const editor = useRef(null);
     const [content, setContent] = useState('');
-
+    const [Selectedtype, setSelectedtype] = useState();
     const EventOption = [
         {
             options: EventListOption
@@ -94,6 +96,13 @@ const Dashboard = () => {
             setSelectedOrg(selectedOptions);
         }
     };
+    const HandelNewsletterSelect = (selectedOptions) => {
+        if (selectedOptions.some(option => option.value === 'selectAll')) {
+            setSelectedNewsletter(NewsletterOption.slice(1));
+        } else {
+            setSelectedNewsletter(selectedOptions);
+        }
+    };
     useEffect(() => {
         if (Eventselected) {
             getEventData(Eventselected.value);
@@ -119,6 +128,41 @@ const Dashboard = () => {
         }
         setTicketOptions(newTicketOptions);
     };
+    const fetchNewsletterList = async () => {
+        try {
+
+            fetch(apiurl + 'admin/newsletterlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Set the Content-Type header to JSON
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success == true) {
+                        const orglistOptions = [
+                            { value: 'selectAll', label: 'Select All' },
+                            ...data.data.map(customer => ({
+                                value: customer.email,
+                                label: customer.email
+                            }))
+                        ];
+                        //                         setNewsletterOption
+                        // setSelectedNewsletter
+                        setNewsletterOption(orglistOptions);
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Insert error:', error);
+
+                });
+        } catch (error) {
+            console.error('Api error:', error);
+
+        }
+
+    }
     const getMembershiip = async () => {
         try {
             fetch(apiurl + 'admin/package-plan-list', {
@@ -258,19 +302,21 @@ const Dashboard = () => {
 
     const handelSendmail = async () => {
         try {
-            if (!Eventselected) {
+            if (Selectedtype && Selectedtype.value == 2 && !Eventselected) {
                 return toast.error("No event selected");
             }
-            if (!selectedMemberplan && !SelectedOrg) {
+            
+            if (selectedMemberplan.length < 1 && SelectedOrg.length < 1 && SelectedNewsletter.length < 1) {
                 return toast.error("No user selected");
             }
             setSendmailLoader(true);
             const requestData = {
                 membershipid: selectedMemberplan,
                 organizersid: SelectedOrg,
+                newsletter: SelectedNewsletter,
                 message: content,
                 usertype: "Admin",
-                eventid: Eventselected.value,
+                eventid: Eventselected && Eventselected.value ? Eventselected.value : null,
             };
             fetch(apiurl + 'event/admin-eventmail-send', {
                 method: 'POST',
@@ -283,7 +329,7 @@ const Dashboard = () => {
                 .then(data => {
                     if (data.success == true) {
                         toast.success(data.message);
-                        var eventID = Eventselected.value;
+                        var eventID = Eventselected && Eventselected.value ? Eventselected.value : 'text';
                         emptyfield();
                         handelSender(eventID);
                     } else {
@@ -354,6 +400,7 @@ const Dashboard = () => {
         getMyEvents();
         getMembershiip();
         getOrganizerlist();
+        fetchNewsletterList();
     }, []);
     useEffect(() => {
         handleEventChange();
@@ -380,17 +427,35 @@ const Dashboard = () => {
                                                         <div className="row">
                                                             <div className="col-md-12">
                                                                 <div className="form-group">
-                                                                    <p>Select Your Event</p>
+                                                                    <p>Select Type</p>
                                                                     <Select
                                                                         isClearable={false}
-                                                                        options={EventOption}
+                                                                        options={[
+                                                                            { value: 1, label: "Normal Text" },
+                                                                            { value: 2, label: "Event Reminder" },
+                                                                        ]}
                                                                         className='react-select'
                                                                         classNamePrefix='select'
-                                                                        onChange={setEventselected}
-                                                                        value={Eventselected}
+                                                                        onChange={setSelectedtype}
+                                                                        value={Selectedtype}
                                                                     />
                                                                 </div>
                                                             </div>
+                                                            {Selectedtype && Selectedtype.value == 2 && (
+                                                                <div className="col-md-12">
+                                                                    <div className="form-group">
+                                                                        <p>Select Your Event</p>
+                                                                        <Select
+                                                                            isClearable={false}
+                                                                            options={EventOption}
+                                                                            className='react-select'
+                                                                            classNamePrefix='select'
+                                                                            onChange={setEventselected}
+                                                                            value={Eventselected}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            )}
                                                             {Apiloader ? (
                                                                 <div className="linear-background w-100" style={{ height: '250px' }}> </div>
                                                             ) : (
@@ -499,6 +564,20 @@ const Dashboard = () => {
                                                                         classNamePrefix='select'
                                                                         onChange={HandelOrgSelect}
                                                                         value={SelectedOrg}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-12 mt-3">
+                                                                <div className="form-group">
+                                                                    <p>Select Newsletter Users</p>
+                                                                    <Select
+                                                                        isClearable={false}
+                                                                        options={NewsletterOption}
+                                                                        isMulti
+                                                                        className='react-select'
+                                                                        classNamePrefix='select'
+                                                                        onChange={HandelNewsletterSelect}
+                                                                        value={SelectedNewsletter}
                                                                     />
                                                                 </div>
                                                             </div>

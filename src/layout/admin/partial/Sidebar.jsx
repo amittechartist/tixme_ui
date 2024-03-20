@@ -76,6 +76,7 @@ const Sidebar = () => {
     }, []);
     const navigate = useNavigate();
     function d() {
+        localStorage.removeItem("filtercountry");
         const mainWrapperView = document.getElementById('main-wrapper view');
         const xyx = document.getElementsByClassName('hamburger');
         if (mainWrapperView) {
