@@ -27,7 +27,7 @@ import Lottie from "lottie-react";
 import TicketLotte from '../../lotte/ticketanimation.json';
 import '../../common/css/wiz.css';
 import TimezoneSelect from 'react-timezone-select'
-import { isTickettimeValid, isEndDateValid, shortPer, apiurl, get_date_time, get_min_date, organizer_url, formatDateToYYYYMMDD, admin_url } from '../../common/Helpers';
+import { isTickettimeValid, isEndDateValid, shortPer, apiurl, get_date_time, get_min_date, organizer_url, formatDateToYYYYMMDD, admin_url, app_url } from '../../common/Helpers';
 import {
     Modal,
     Input,
@@ -75,6 +75,7 @@ const Type = ({ title, editid, ticketeditid }) => {
     const [EventStarttime, setEventStarttime] = useState(moment());
     const [EventEndtime, setEventEndtime] = useState(moment());
     const [IsclockCountdown, setIsclockCountdown] = useState(false);
+    const [seatmap, setseatmap] = useState(false);
     const [IsSellingFast, setIsSellingFast] = useState(false);
     const [IsSoldOut, setIsSoldOut] = useState(false);
     const [Isgrouptickets, setIsgrouptickets] = useState(false);
@@ -427,9 +428,9 @@ const Type = ({ title, editid, ticketeditid }) => {
     const UpdateTicket = async (id) => {
         const getticketdata = TicketList.find(ticket => ticket.id === id);
         if (getticketdata) {
-            if(getticketdata.ticket_type == 2){
+            if (getticketdata.ticket_type == 2) {
                 setPricedisable(true);
-            }else{
+            } else {
                 setPricedisable(false);
             }
             setTickettype(getticketdata.ticket_type);
@@ -493,6 +494,9 @@ const Type = ({ title, editid, ticketeditid }) => {
     };
     const handleIsclockCountdown = (event) => {
         setIsclockCountdown(event.target.checked); // Update state based on checkbox checked status
+    };
+    const handleSeatmap = (event) => {
+        setseatmap(event.target.checked); // Update state based on checkbox checked status
     };
     const handleDisplaystarttime = (event) => {
         setDisplaystarttime(event.target.checked); // Update state based on checkbox checked status
@@ -655,6 +659,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                 pincode: Eventtype == 2 ? Pincode : null,
                 displayaddress: Eventtype == 2 ? displayaddress : null,
                 eventjoinurl: Eventtype == 1 ? eventjoinurl : null,
+                seatmap: seatmap
             };
             fetch(apiurl + 'event/update', {
                 method: 'POST',
@@ -802,6 +807,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                 pincode: Eventtype == 2 ? Pincode : null,
                 displayaddress: Eventtype == 2 ? displayaddress : null,
                 eventjoinurl: Eventtype == 1 ? eventjoinurl : null,
+                seatmap: seatmap
             };
             fetch(apiurl + 'event/create', {
                 method: 'POST',
@@ -892,9 +898,9 @@ const Type = ({ title, editid, ticketeditid }) => {
         }).then((result) => {
             if (result.isConfirmed) {
                 const Adminauth = localStorage.getItem('adminauth');
-                if(Adminauth){
+                if (Adminauth) {
                     navigate(admin_url + 'all-events-list/' + Countryname);
-                }else{
+                } else {
                     navigate(organizer_url + 'event/all-event-list');
                 }
             }
@@ -1389,6 +1395,7 @@ const Type = ({ title, editid, ticketeditid }) => {
                         setTicketList(data.data.allprice)
                         setTags(data.data.tags)
                         seteventjoinurl(data.data.eventjoinurl)
+                        setseatmap(data.data.seatmap);
                         if (data.data.event_desc) {
                             setEventdesc(data.data.event_desc)
                         }
@@ -1428,6 +1435,12 @@ const Type = ({ title, editid, ticketeditid }) => {
             getEditdata(editid)
         }
     }, []);
+    const CreateSeatmap = (id) => {
+        HandelUpdatedetails();
+        localStorage.setItem("event_edit_id", id);
+        navigate(`${app_url}event/editseatmap`);
+    }
+    
     return (
         <>
             {/* multiple date and time selector modal */}
@@ -2092,6 +2105,22 @@ const Type = ({ title, editid, ticketeditid }) => {
                                                     )}
                                             </>
                                         )}
+                                        <Col md={6} className="">
+                                            <div className="row">
+                                                <div className="col-md-1">
+                                                    <div class="input-group mb-3">
+                                                        <input checked={seatmap} onChange={handleSeatmap} type="checkbox" class="form-check-input" />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-10">
+                                                    <p className="mb-0">Seatmap for this event</p>
+                                                    <p className="mb-0">Seatmap of your event will be displayed to attendess.</p>
+                                                </div>
+                                            </div>
+                                            {seatmap && (
+                                                <button type="button" onClick={() => CreateSeatmap(EditId)} className="text-white btn theme-bg">Create Seatmap</button>
+                                            )}
+                                        </Col>
                                         <div className="col-md-12 mt-2">
                                             <div className="button-group mt-10">
                                                 <button type="button" onClick={() => setFormSection(3)} className="m-1 text-white btn theme-bg">Back</button>

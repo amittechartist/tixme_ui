@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 // COMPONENT
+import Draggable from 'react-draggable';
 import Footer from '../../components/footer';
 import HeaderMenu from '../../components/headermenu';
 import OrganizerProfile from '../../component/organizer/organizerprofile';
@@ -7,7 +8,7 @@ import MobileMenu from '../../components/mobilemenu';
 import CoundownDiv from '../../component/coundown';
 import moment from 'moment';
 import { FaTimes } from 'react-icons/fa';
-import { apiurl, onlyDayMonth, shortPer, app_url, getDayName, getDay, getMonthName,get_min_date  } from "../../common/Helpers";
+import { apiurl, onlyDayMonth, shortPer, app_url, getDayName, getDay, getMonthName, get_min_date, laravel_asset } from "../../common/Helpers";
 import { useNavigate, Link } from "react-router-dom";
 import Nouserphoto from '../../common/image/nouser.png';
 import locationIcon from "../../assets/location (5) 1.svg";
@@ -20,7 +21,7 @@ import Col from "react-bootstrap/Col";
 import Noimg from "../../common/image/noimg.jpg";
 import calendar from "../../assets/calendar.svg";
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Tooltip } from 'reactstrap';
 import WhiteShareIcon from "../../common/icon/whiteshear.svg";
 import EventImg from "../../common/event1.png";
 import Flip from "react-reveal/Flip";
@@ -40,6 +41,16 @@ const Home = () => {
   const Beartoken = localStorage.getItem('userauth');
   const { id, name } = useParams();
   const [Apiloader, setApiloader] = useState(true);
+
+  const [seatmapModal, setseatmapModal] = useState(false);
+  const [seatmapHeight, setSeatmapHeight] = useState();
+  const [seatmapWidth, setSeatmapWidth] = useState();
+  const [image, setImage] = useState(null);
+  const [sections, setSections] = useState([]);
+  const [tooltipOpen, setTooltipOpen] = useState(null);
+  const [selectedSeats, setSelectedSeats] = useState([]);
+
+
   const [FollowApi, setFollowApi] = useState(false);
   const [Eventsaveapi, setEventsaveapi] = useState(true);
   const [isFirstRender, setIsFirstRender] = useState(false);
@@ -60,6 +71,28 @@ const Home = () => {
   const [IsMap, setIsMap] = useState(false);
   const [OrganizerEventlist, setOrganizerEventlist] = useState([]);
 
+  const handleSeatSelection = (sectionIndex, seatIndex) => {
+    const seatIdentifier = `${sectionIndex}-${seatIndex}`;
+    let updatedSelectedSeats = [];
+    if (selectedSeats.includes(seatIdentifier)) {
+      // If the seat is already selected, remove it from the array
+      updatedSelectedSeats = selectedSeats.filter(seat => seat !== seatIdentifier);
+    } else {
+      // If the seat is not selected, add it to the array
+      updatedSelectedSeats = [...selectedSeats, seatIdentifier];
+    }
+    setSelectedSeats(updatedSelectedSeats);
+    localStorage.setItem('selectedSeats', JSON.stringify(updatedSelectedSeats));
+  };
+
+  useEffect(() => {
+    const storedSelectedSeats = localStorage.getItem('selectedSeats');
+    if (storedSelectedSeats) {
+      setSelectedSeats(JSON.parse(storedSelectedSeats));
+    }
+  }, []);
+
+
   function getCountryFlagImage(country) {
     if (country == "India") {
     } else if (country == "United states") {
@@ -79,7 +112,7 @@ const Home = () => {
     }
   }, [Eventdata]); // Run this effect only once
 
-  console.log(position);
+
   const CopyUrlhandel = async () => {
     await navigator.clipboard.writeText(currentUrl);
     toast.success("Copied");
@@ -303,6 +336,11 @@ const Home = () => {
         .then(data => {
           if (data.success == true) {
             setEventdata(data.data);
+            setSeatmapHeight(data.data.pageheight ? data.data.pageheight : null);
+            setSeatmapWidth(data.data.pageweight ? data.data.pageweight : null);
+            if (data.data.seatmapimage) {
+              setImage(data.data.seatmapimage && laravel_asset + data.data.seatmapimage);
+            }
             setTicketsSelledList(data.orderqtylist)
             setTicketsList(data.data.allprice.filter(item => item.isdelete === 0));
             if (data.data.organizer_id) {
@@ -354,10 +392,50 @@ const Home = () => {
       console.error("Login api error:", error);
     }
   };
+  const getSeatmapData = async () => {
+    try {
+      const requestData = {
+        id: id
+      };
+      fetch(apiurl + 'event/getseatmap', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Set the Content-Type header to JSON
+        },
+        body: JSON.stringify(requestData),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success == true) {
+            if (data.data) {
+              const newSections = data.data.map(seat => ({
+                name: seat.sectionname,
+                rows: seat.rows,
+                seatsPerRow: seat.seatsPerRow,
+                ticketPrice: seat.ticketid, // Assuming ticketPrice should be set to ticketid
+                position: seat.position,
+                seatColor: seat.seatColor,
+                rotationAngle: seat.rotationAngle,
+                ticketName: seat.ticketdetails ? seat.ticketdetails.name : '',
+                ticketCurrentValue: seat.ticketdetails ? seat.ticketdetails.price : 0,
+                ticketdetails: seat.ticketdetails
+              }));
+              setSections(newSections);
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Insert error:', error);
+        });
+
+    } catch (error) {
+      console.error('Api error:', error);
+    }
+  }
   useEffect(() => {
     fetchData();
     fetchEvent();
-
+    getSeatmapData();
   }, []);
   useEffect(() => {
 
@@ -510,6 +588,13 @@ const Home = () => {
     });
     setIsFirstRender(true)
   };
+  const removeSeatmapFromCart = (Id) => {
+    const updatedCart = cartItems.map((cartItem) =>
+      cartItem.id === Id ? { ...cartItem, quantity: cartItem.quantity > 0 ? cartItem.quantity - 1 : 0 } : cartItem
+    );
+    const filteredCart = updatedCart.filter((cartItem) => cartItem.quantity > 0);
+    setCartItems(filteredCart);
+  };
 
   const calculateTotalPrice = () => {
     if (!cartItems || cartItems.length === 0) {
@@ -591,7 +676,9 @@ const Home = () => {
     const dateTimeB = moment(`${b.date} ${b.time}`, 'DD MMM YYYY hh:mm A');
     return dateTimeA - dateTimeB; // For descending order
   };
-
+  const handelOpenSeatmapmodal = () => {
+    setseatmapModal(true);
+  }
   return (
     <>
       {!Apiloader && (
@@ -608,6 +695,105 @@ const Home = () => {
       )}
       {" "}
       <div className="content-area">
+        <Modal isOpen={seatmapModal} toggle={() => setseatmapModal(!seatmapModal)} centered size="xl">
+          <ModalHeader toggle={() => setseatmapModal(!seatmapModal)}>Select Event seats
+          </ModalHeader>
+          <ModalBody>
+            <div>
+              <div>
+                <div className="row">
+                  <div className="col-xl-12">
+                    <div className="text-center py-2">
+                      <span className="main-title">Total Price : {Eventdata && Eventdata.countrysymbol}{eventTotalPrice.toFixed(2)}</span>{" "}
+                    </div>
+                    <div className="text-center">
+                      {Paynowbtnstatus ? (
+                        <button onClick={() => saveCartToLocalStorage()} type="button" className="btn theme-bg text-white mt-3 w-100">Pay Now</button>
+                      ) : ''}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style={{ overflow: 'auto', width: '100%', height: '100%' }}>
+                <div
+                  style={{
+                    width: `${seatmapWidth}px`, // Update this line
+                    height: `${seatmapHeight}px`, // Update this line
+                    // width: `${seatmapWidth * zoomLevel}px`, // Update this line
+                    // height: `${seatmapHeight * zoomLevel}px`, // Update this line
+                    backgroundImage: `url(${image})`,
+                    backgroundSize: '100% 100%',
+                    backgroundRepeat: 'no-repeat',
+                    position: 'relative',
+                    // transform: `scale(${zoomLevel})`,
+                    transformOrigin: 'top left', // Add this line
+                  }}
+                >
+                  {sections.map((section, index) => (
+                    <Draggable
+                      key={section.name}
+                      position={section.position}
+                      bounds="parent"
+                      disabled={true}
+                    >
+                      <div
+                        style={{
+                          width: `${section.seatsPerRow * 20}px`,
+                          height: `${section.rows * 20}px`,
+                          transformOrigin: 'center',
+
+                        }}
+                        id={`tooltip-${index}`}
+                      >
+                        <div
+                          className={`seatmap_box`}
+                          style={{
+                            // backgroundColor: selectedSection === section.name ? 'lightblue' : '#eee',
+                            transform: `rotate(${section.rotationAngle || 0}deg)`,
+                          }}
+                        >
+                          {Array.from({ length: section.rows }).map((_, rowIndex) => (
+                            <div key={rowIndex} style={{ display: 'flex' }}>
+                              {Array.from({ length: section.seatsPerRow }).map((_, seatIndex) => (
+                                <>
+                                  {selectedSeats.includes(`${index}-${seatIndex}`) ? (
+                                    <div
+                                      onClick={() => {
+                                        removeSeatmapFromCart(section.ticketPrice);
+                                        handleSeatSelection(index, seatIndex);
+                                      }}
+                                      className={`seatmap_seat dd ${selectedSeats.includes(`${index}-${seatIndex}`) ? 'seatmap-selected-bg' : ''}`} key={seatIndex} style={{ backgroundColor: section.seatColor, cursor: 'pointer', }}></div>
+                                  ) : (
+                                    <div
+                                      onClick={() => {
+                                        addToCart(section.ticketdetails, Eventdata._id);
+                                        handleSeatSelection(index, seatIndex);
+                                      }}
+                                      className={`seatmap_seat ${selectedSeats.includes(`${index}-${seatIndex}`) ? 'seatmap-selected-bg' : ''}`} key={seatIndex} style={{ backgroundColor: section.seatColor, cursor: 'pointer', }}></div>
+                                  )
+                                  }
+                                </>
+                              ))}
+                            </div>
+                          ))}
+                          <Tooltip
+                            placement="top"
+                            isOpen={tooltipOpen === section.name}
+                            target={`tooltip-${index}`}
+                            toggle={() => setTooltipOpen(tooltipOpen === section.name ? null : section.name)}
+                          >
+                            {`Section: ${section.name}, Rows: ${section.rows}, Seats/Row: ${section.seatsPerRow}, Ticket: ${section.ticketName}, Price:  ${Eventdata && Eventdata.countrysymbol} ${section.ticketCurrentValue}`}
+                          </Tooltip>
+
+                        </div>
+                      </div>
+                    </Draggable>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </ModalBody>
+        </Modal>
         <Modal isOpen={newmodal} toggle={() => setNewModal(!newmodal)} centered>
           <ModalHeader toggle={() => setNewModal(!newmodal)}>Share this event
           </ModalHeader>
@@ -891,64 +1077,162 @@ const Home = () => {
                       // </>
                       <CoundownDiv date={Eventdata.start_mindate} time={Eventdata.start_time} />
                     ) : ''}
-                    <div className="start-in-box eventpage-box-style-event-view mb-5 my-5 event-page-ticket" style={{ position: 'relative' }}>
-                      <div className={`right-box-title`}>
-                        <div className="row border-bottom-1">
-                          <div className="col-6 d-flex justify-content-start">
-                            <span><Flip left cascade>Tickets</Flip></span>
-                          </div>
-                          {Eventdata.is_selling_fast && !Eventdata.is_soldout && (
-                            <div className="col-6 d-flex justify-content-end">
-                              <span className="selling-f-box text-uppercase">Selling Fast</span>
+                    {Eventdata.seatmap ? (
+                      <>
+                        <div className="start-in-box eventpage-box-style-event-view mb-5 my-5 event-page-ticket" style={{ position: 'relative' }}>
+                          <div className={`right-box-title`}>
+                            <div className="row border-bottom-1">
+                              <div className="col-6 d-flex justify-content-start">
+                                <span><Flip left cascade>Tickets</Flip></span>
+                              </div>
+                              {Eventdata.is_selling_fast && !Eventdata.is_soldout && (
+                                <div className="col-6 d-flex justify-content-end">
+                                  <span className="selling-f-box text-uppercase">Selling Fast</span>
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </div>
-                      {Eventdata.is_soldout ? (
-                        <>
-                          <button type="button" className="my-2 btn w-100 theme-bg text-white text-uppercase cusrsor-default">sold out</button>
-                        </>
-                      ) : (
-                        <>
-                          {Eventdata.event_subtype_id == 2 ? (
+                          </div>
+                          {Eventdata.is_soldout ? (
+                            <>
+                              <button type="button" className="my-2 btn w-100 theme-bg text-white text-uppercase cusrsor-default">sold out</button>
+                            </>
+                          ) : (
                             <>
                               <div className="row">
-                                {Eventdata.allprice ? (
-                                  <>
-                                    {Eventdata.event_dates.sort(compareDatesAndTimes).map((items, index) => (
+                                <button onClick={() => handelOpenSeatmapmodal()} type="button" className="btn theme-bg text-white mt-3 w-100">Select Seats</button>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="start-in-box eventpage-box-style-event-view mb-5 my-5 event-page-ticket" style={{ position: 'relative' }}>
+                          <div className={`right-box-title`}>
+                            <div className="row border-bottom-1">
+                              <div className="col-6 d-flex justify-content-start">
+                                <span><Flip left cascade>Tickets</Flip></span>
+                              </div>
+                              {Eventdata.is_selling_fast && !Eventdata.is_soldout && (
+                                <div className="col-6 d-flex justify-content-end">
+                                  <span className="selling-f-box text-uppercase">Selling Fast</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          {Eventdata.is_soldout ? (
+                            <>
+                              <button type="button" className="my-2 btn w-100 theme-bg text-white text-uppercase cusrsor-default">sold out</button>
+                            </>
+                          ) : (
+                            <>
+                              {Eventdata.event_subtype_id == 2 ? (
+                                <>
+                                  <div className="row">
+                                    {Eventdata.allprice ? (
                                       <>
-                                        {items.is_delete === 0 && (
+                                        {Eventdata.event_dates.sort(compareDatesAndTimes).map((items, index) => (
                                           <>
-                                            <div className="col-12 my-3">
-                                              <div className="mx-2">
-                                                <div className={`row new-week-ticket-box ${SelectedTicketId == items.id && 'new-week-ticket-box-active'}`} onClick={() => handelTicketselect(items.id)}>
-                                                  <div className="col-6  d-flex align-items-end">
-                                                    <div className="d-flex align-items-center">
-                                                      <div className="day-box-1">
-                                                        <p className="day-name-1">{getDay(items.date)}</p>
+                                            {items.is_delete === 0 && (
+                                              <>
+                                                <div className="col-12 my-3">
+                                                  <div className="mx-2">
+                                                    <div className={`row new-week-ticket-box ${SelectedTicketId == items.id && 'new-week-ticket-box-active'}`} onClick={() => handelTicketselect(items.id)}>
+                                                      <div className="col-6  d-flex align-items-end">
+                                                        <div className="d-flex align-items-center">
+                                                          <div className="day-box-1">
+                                                            <p className="day-name-1">{getDay(items.date)}</p>
+                                                          </div>
+                                                          <div>
+                                                            <p className="week-name-1">{getDayName(items.date)}</p>
+                                                            <p className="month-name-1">{getMonthName(items.date)}</p>
+                                                          </div>
+                                                        </div>
                                                       </div>
-                                                      <div>
-                                                        <p className="week-name-1">{getDayName(items.date)}</p>
-                                                        <p className="month-name-1">{getMonthName(items.date)}</p>
+                                                      <div className="col-6 text-end d-flex align-items-end justify-content-end">
+                                                        <p className="time-name-1">{items.time}</p>
                                                       </div>
                                                     </div>
                                                   </div>
-                                                  <div className="col-6 text-end d-flex align-items-end justify-content-end">
-                                                    <p className="time-name-1">{items.time}</p>
+                                                </div>
+                                              </>
+                                            )}
+                                          </>
+                                        ))}
+                                        {selectedTicket && (
+                                          <>
+                                            {selectedTicket.map((item) => (
+                                              <div className="col-12">
+                                                <div className="row my-3">
+                                                  {item.isselling && !item.issoldout && (
+                                                    <>
+                                                      <div className="col-6"></div>
+                                                      <div className="col-6 d-flex justify-content-center">
+                                                        <>
+                                                          <button type="button" className="btn-sm btn theme-bg text-white">SELLING FAST</button>
+                                                        </>
+                                                      </div>
+                                                    </>
+                                                  )}
+                                                  <div className="col-6 justify-content-center">
+                                                    <p className="mb-0  event_page_price_title">Ticket Type</p>
+                                                    <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{item.name}</p></div>
                                                   </div>
+                                                  <div className="col-6 d-flex justify-content-center">
+                                                    <div className="d-inline-block">
+                                                      <div className="text-center">
+                                                        <p className="mb-0  event_page_price_title">Price : {item.ticket_type == 1 ? Eventdata.countrysymbol + (item.price % 1 === 0 ? item.price.toFixed(2) : item.price) : 'Free'}{item.cut_price && (<span className="cut_ticket_price">{Eventdata.countrysymbol}{item.cut_price}</span>)}</p>
+                                                      </div>
+                                                      <div className="">
+                                                        {item.issoldout ? (
+                                                          <>
+                                                            <button type="button" className="btn theme-bg btn-sm text-white w-100">SOLD OUT</button>
+                                                          </>
+                                                        ) : (
+                                                          <>
+                                                            {CountSoldOut(item) ? (
+                                                              <>
+                                                                <div className="row grediant-border d-flex align-items-center mx-1">
+                                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.id, localQuantities[item.id] || 0)}>-</span></div>
+                                                                  <div className="col-4"><span>{localQuantities[item.id] || 0}</span></div>
+                                                                  <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item, Eventdata._id)}>+</span></div>
+                                                                </div>
+                                                              </>
+                                                            ) : (
+                                                              <>
+                                                                <button type="button" className="btn  btn-sm theme-bg text-white w-100">{CountSoldOut(item) ? 'SOLD OUT' : 'SELLING FAST'}</button>
+                                                              </>
+                                                            )}
+                                                          </>
+                                                        )}
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  {item.description && (
+                                                    <div className="col-12 ticket-type-dsc">
+                                                      <p>{item.description}</p>
+                                                    </div>
+                                                  )}
                                                 </div>
                                               </div>
-                                            </div>
+                                            ))}
                                           </>
                                         )}
                                       </>
-                                    ))}
-                                    {selectedTicket && (
-                                      <>
-                                        {selectedTicket.map((item) => (
-                                          <div className="col-12">
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  {Eventdata.allprice ? (
+                                    <>
+                                      {Eventdata.allprice.map((items, index) => (
+                                        <>
+                                          {items.isdelete === 0 && (
                                             <div className="row my-3">
-                                              {item.isselling && !item.issoldout && (
+                                              {items.isselling && !items.issoldout && (
                                                 <>
                                                   <div className="col-6"></div>
                                                   <div className="col-6 d-flex justify-content-center">
@@ -960,31 +1244,31 @@ const Home = () => {
                                               )}
                                               <div className="col-6 justify-content-center">
                                                 <p className="mb-0  event_page_price_title">Ticket Type</p>
-                                                <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{item.name}</p></div>
+                                                <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{items.name}</p></div>
                                               </div>
                                               <div className="col-6 d-flex justify-content-center">
                                                 <div className="d-inline-block">
                                                   <div className="text-center">
-                                                    <p className="mb-0  event_page_price_title">Price : {item.ticket_type == 1 ? Eventdata.countrysymbol + (item.price % 1 === 0 ? item.price.toFixed(2) : item.price) : 'Free'}{item.cut_price && (<span className="cut_ticket_price">{Eventdata.countrysymbol}{item.cut_price}</span>)}</p>
+                                                    <p className="mb-0 event_page_price_title">Price : {items.ticket_type == 1 ? Eventdata.countrysymbol + (items.price % 1 === 0 ? items.price.toFixed(2) : items.price) : 'Free'}{items.cut_price && (<span className="cut_ticket_price">{Eventdata.countrysymbol}{items.cut_price}</span>)}</p>
                                                   </div>
                                                   <div className="">
-                                                    {item.issoldout ? (
+                                                    {items.issoldout ? (
                                                       <>
-                                                        <button type="button" className="btn theme-bg btn-sm text-white w-100">SOLD OUT</button>
+                                                        <button type="button" className="btn btn-sm theme-bg text-white w-100">SOLD OUT</button>
                                                       </>
                                                     ) : (
                                                       <>
-                                                        {CountSoldOut(item) ? (
+                                                        {CountSoldOut(items) ? (
                                                           <>
                                                             <div className="row grediant-border d-flex align-items-center mx-1">
-                                                              <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(item.id, localQuantities[item.id] || 0)}>-</span></div>
-                                                              <div className="col-4"><span>{localQuantities[item.id] || 0}</span></div>
-                                                              <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(item, Eventdata._id)}>+</span></div>
+                                                              <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.id, localQuantities[items.id] || 0)}>-</span></div>
+                                                              <div className="col-4"><span>{localQuantities[items.id] || 0}</span></div>
+                                                              <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span></div>
                                                             </div>
                                                           </>
                                                         ) : (
                                                           <>
-                                                            <button type="button" className="btn  btn-sm theme-bg text-white w-100">{CountSoldOut(item) ? 'SOLD OUT' : 'SELLING FAST'}</button>
+                                                            <button type="button" className="btn btn-sm theme-bg text-white w-100">{CountSoldOut(items) ? 'SOLD OUT' : 'SELLING FAST'}</button>
                                                           </>
                                                         )}
                                                       </>
@@ -992,99 +1276,34 @@ const Home = () => {
                                                   </div>
                                                 </div>
                                               </div>
-                                              {item.description && (
-                                                <div className="col-12 ticket-type-dsc">
-                                                  <p>{item.description}</p>
-                                                </div>
-                                              )}
                                             </div>
-                                          </div>
-                                        ))}
-                                      </>
-                                    )}
-                                  </>
-                                ) : (
-                                  <></>
-                                )}
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              {Eventdata.allprice ? (
-                                <>
-                                  {Eventdata.allprice.map((items, index) => (
-                                    <>
-                                      {items.isdelete === 0 && (
-                                        <div className="row my-3">
-                                          {items.isselling && !items.issoldout && (
-                                            <>
-                                              <div className="col-6"></div>
-                                              <div className="col-6 d-flex justify-content-center">
-                                                <>
-                                                  <button type="button" className="btn-sm btn theme-bg text-white">SELLING FAST</button>
-                                                </>
-                                              </div>
-                                            </>
                                           )}
-                                          <div className="col-6 justify-content-center">
-                                            <p className="mb-0  event_page_price_title">Ticket Type</p>
-                                            <div className="grediant-border-in-ticket text-center"><p className="mb-0" style={{ fontSize: '12px' }}>{items.name}</p></div>
-                                          </div>
-                                          <div className="col-6 d-flex justify-content-center">
-                                            <div className="d-inline-block">
-                                              <div className="text-center">
-                                                <p className="mb-0 event_page_price_title">Price : {items.ticket_type == 1 ? Eventdata.countrysymbol + (items.price % 1 === 0 ? items.price.toFixed(2) : items.price) : 'Free'}{items.cut_price && (<span className="cut_ticket_price">{Eventdata.countrysymbol}{items.cut_price}</span>)}</p>
-                                              </div>
-                                              <div className="">
-                                                {items.issoldout ? (
-                                                  <>
-                                                    <button type="button" className="btn btn-sm theme-bg text-white w-100">SOLD OUT</button>
-                                                  </>
-                                                ) : (
-                                                  <>
-                                                    {CountSoldOut(items) ? (
-                                                      <>
-                                                        <div className="row grediant-border d-flex align-items-center mx-1">
-                                                          <div className="col-4"><span className="new_cart_btn" onClick={() => removeFromCart(items.id, localQuantities[items.id] || 0)}>-</span></div>
-                                                          <div className="col-4"><span>{localQuantities[items.id] || 0}</span></div>
-                                                          <div className="col-4"><span className="new_cart_btn" onClick={() => addToCart(items, Eventdata._id)}>+</span></div>
-                                                        </div>
-                                                      </>
-                                                    ) : (
-                                                      <>
-                                                        <button type="button" className="btn btn-sm theme-bg text-white w-100">{CountSoldOut(items) ? 'SOLD OUT' : 'SELLING FAST'}</button>
-                                                      </>
-                                                    )}
-                                                  </>
-                                                )}
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      )}
+                                        </>
+                                      ))}
                                     </>
-                                  ))}
+                                  ) : (
+                                    <></>
+                                  )}
                                 </>
-                              ) : (
-                                <></>
                               )}
                             </>
                           )}
-                        </>
-                      )}
-                      {Eventdata.is_soldout ? '' : (
-                        <>
-                          <div className="text-center py-2">
-                            <span className="main-title">Total Price : {Eventdata.countrysymbol}{eventTotalPrice.toFixed(2)}</span>{" "}
-                          </div>
-                          <div className="text-center">
-                            {Paynowbtnstatus ? (
-                              <button onClick={() => saveCartToLocalStorage()} type="button" className="btn theme-bg text-white mt-3 w-100">Pay Now</button>
-                            ) : ''}
-                          </div>
-                        </>
-                      )}
-                    </div>
+                          {Eventdata.is_soldout ? '' : (
+                            <>
+                              <div className="text-center py-2">
+                                <span className="main-title">Total Price : {Eventdata.countrysymbol}{eventTotalPrice.toFixed(2)}</span>{" "}
+                              </div>
+                              <div className="text-center">
+                                {Paynowbtnstatus ? (
+                                  <button onClick={() => saveCartToLocalStorage()} type="button" className="btn theme-bg text-white mt-3 w-100">Pay Now</button>
+                                ) : ''}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </>
+                    )}
+
                     <OrganizerProfile props={Organizerdata} />
                   </div>
                 </Row>

@@ -95,6 +95,7 @@ const Page = ({ title }) => {
                         setpendingLoader(true)
                     }
                     localStorage.removeItem('cart');
+                    localStorage.removeItem('selectedSeats');
                     localStorage.removeItem('paymentid_token')
                 })
                 .catch(error => {

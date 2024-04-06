@@ -64,7 +64,7 @@ const Home = () => {
         // setIscoupon(false);
         // setCouponData('')
         // setSubtotal(Subtotal);
-        
+
         setCouponId('');
         setDiscountAmount('');
         setCouponData("");
@@ -479,6 +479,8 @@ const Home = () => {
         }
         console.log("sss");
     };
+    const storedSelectedSeats = localStorage.getItem('selectedSeats');
+    const selectedSeats = storedSelectedSeats ? JSON.parse(storedSelectedSeats) : [];
 
     const saveCartToLocalStorage = async () => {
         try {
@@ -505,7 +507,8 @@ const Home = () => {
                 location: country_name,
                 discountamount: DiscountAmount > 0 ? DiscountAmount : 0,
                 couponid: CustomerCouponData ? CustomerCouponData._id : null,
-                rewardpoints: rewardPoints ? rewardPoints : null
+                rewardpoints: rewardPoints ? rewardPoints : null,
+                selectedSeats: selectedSeats
             }
             fetch(apiurl + 'order/stripe/checkout', {
                 method: 'POST',

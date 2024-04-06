@@ -47,6 +47,7 @@ import Analytics from './pages/organizer/analytics';
 import OrganizerSupportlist from './pages/organizer/support/Supportlist';
 import EventType from './pages/organizer/Event/EventCreateForm';
 import EditEvent from './pages/organizer/Event/EditEvent';
+import SeatmapForm from './pages/organizer/Event/SeatmapForm'
 import EventView from './pages/organizer/Event/EventView';
 import EventList from './pages/organizer/Event/List';
 import Ticketlist from './pages/organizer/Event/ticketlist';
@@ -148,6 +149,7 @@ function App() {
           <Route path={organizer_url + 'dashboard'} element={<OrganizerLayout title={'Organizer Dashboard'}> <Dashboard /> </OrganizerLayout>} />
           <Route path={organizer_url + 'event/add-event'} element={<OrganizerLayout> <EventType title={'Create new event'} /> </OrganizerLayout>} />
           <Route path={`${organizer_url}event/edit-event/:id/:name`} element={<OrganizerLayout title={'Edit event'}> <EditEvent /> </OrganizerLayout>} />
+          <Route path={`${app_url}event/editseatmap`} element={<OrganizerLayout title={'Event Seatmap'}> <SeatmapForm /> </OrganizerLayout>} />
           <Route path={`${organizer_url}event/edit-event/:id/:name/:ticketid`} element={<OrganizerLayout title={'Edit event'}> <EditEvent /> </OrganizerLayout>} />
           <Route path={`${organizer_url}event/view-event/:id/:name`} element={<OrganizerLayout> <EventView title={'Event details'} /> </OrganizerLayout>} />
           <Route path={`${organizer_url}event/manage-ticket/:id/:name`} element={<OrganizerLayout title={'Mange Tickets'}> <ManageTicket title={'Mange Tickets'} /> </OrganizerLayout>} />

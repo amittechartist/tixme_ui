@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import RewardComponent from './MyrewardsComponent';
-const Dashboard = ({ title }) => {
+import { useParams } from 'react-router-dom';
+import SeatmapComponent from '../../../component/event/SeatmapComponent';
+const Type = ({ title }) => {
     return (
         <>
             <div className="content-body" style={{ background: '#F1F1F1' }}>
                 <div className="container-fluid">
-                    <RewardComponent />
+                    <SeatmapComponent/>
                 </div>
             </div>
+
         </>
     )
 }
-export default Dashboard;
+export default Type;

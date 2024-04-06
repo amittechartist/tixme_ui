@@ -15,10 +15,20 @@ const Component = () => {
     const [Loader, setLoader] = useState(false);
     const [OrderData, setOrderData] = useState();
     const [ORData, setORData] = useState([]);
-    console.log(ORData);
+    const [counter, setCounter] = useState(0);
+    
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCounter((prevCounter) => prevCounter + 1);
+        }, 3000);
+        return () => clearInterval(interval); // Clear the interval when the component unmounts
+    }, []);
+
     const fetchData = async () => {
         try {
-            setLoader(true);
+            if(counter < 1){
+                setLoader(true);
+            }
             const requestData = {
                 orderid: ordreid,
             };
@@ -48,7 +58,8 @@ const Component = () => {
     }
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [counter]);
+
     return (
         <>
             <div className="container">

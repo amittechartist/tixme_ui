@@ -2344,3 +2344,25 @@ span.cut_ticket_price {
   font-size: 12px;
   height: 30px;
 }
+
+/* CUSTOM CSS */
+.seatmap_seat {
+  width: 15px;
+  height: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  margin: 2px;
+}
+.seatmap_box {
+  padding: 4px;
+  border: 1px solid transparent;
+  transform-origin: center center;
+  display: inline-block;
+  border-radius: 4px;
+}
+.seatmap_box_shadow{
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.192);
+}
+.seatmap-selected-bg{
+  background-color: #000 !important;
+}
